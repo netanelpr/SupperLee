@@ -1,8 +1,8 @@
 public enum Days {
     Sunday,
     Monday,
-    Tuseday,
-    Wenesday,
+    Tuesday,
+    Wednesday,
     Thursday,
     Friday
 }

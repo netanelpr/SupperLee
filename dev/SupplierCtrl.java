@@ -2,7 +2,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-public class SuppplierCtrl implements SupplierManagment {
+public class SupplierCtrl implements SupplierManagment {
     @Override
     public int createSupplierCard(String name, String incNum, String AccountNumber, String PaymentInfo) {
         return 0;
