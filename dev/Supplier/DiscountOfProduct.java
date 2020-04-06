@@ -1,3 +1,5 @@
+package Supplier;
+
 public class DiscountOfProduct {
     public int amount;
     public double discount;

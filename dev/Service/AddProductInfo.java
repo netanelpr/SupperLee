@@ -1,3 +1,9 @@
+package Service;
+
+import Supplier.Category;
+import Supplier.Sizes;
+import Supplier.SubCategory;
+
 import java.util.Map;
 
 public class AddProductInfo {

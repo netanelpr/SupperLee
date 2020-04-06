@@ -1,3 +1,5 @@
+package Supplier;
+
 import java.util.Map;
 
 public class ProductDiscount {

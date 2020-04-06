@@ -1,3 +1,5 @@
+package Service;
+
 public class ProductInOrder {
 
     public int productId;

@@ -1,4 +1,7 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+package Supplier;
+
+import Service.AddProductInfo;
+import Structs.Days;
 
 import java.util.List;
 
@@ -10,14 +13,13 @@ public class ContractWithSupplier {
     private List<Product> products;
 
     public ContractWithSupplier(String contractDetails, List<Days> days){
-
     }
 
     public int addProduct(AddProductInfo product){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public void addDiscountToProduct(int productId, int amount, int discount){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 }

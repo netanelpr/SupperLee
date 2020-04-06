@@ -1,3 +1,5 @@
+package Service;
+
 public class SupplierDetails {
 
     private int supplierID;

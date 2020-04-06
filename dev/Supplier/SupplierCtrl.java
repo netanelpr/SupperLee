@@ -1,3 +1,9 @@
+package Supplier;
+
+import Service.*;
+import Structs.Days;
+import Structs.OrderStatus;
+
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +45,7 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public int createNewOrder(int supplierID, Map<Integer, Double> products, DateTimeFormatter time) {
+    public int createNewOrder(int supplierID, List<ProductInOrder> products, DateTimeFormatter time) {
         return 0;
     }
 
@@ -49,7 +55,7 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public boolean updateOrderStatus(OrderStatus status) {
+    public boolean updateOrderStatus(int orderId, OrderStatus status) {
         return false;
     }
 

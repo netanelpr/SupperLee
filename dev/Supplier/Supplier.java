@@ -1,4 +1,7 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+package Supplier;
+
+import Service.AddProductInfo;
+import Structs.Days;
 
 import java.util.List;
 import java.util.Map;
@@ -10,7 +13,7 @@ public class Supplier {
     private String accountNumber;
     private String paymentInfo;
 
-    //Supplier Details
+    //Supplier.Supplier Details
     private String name;
 
     private List<ContactInfo> contacts;
@@ -23,7 +26,7 @@ public class Supplier {
     }
 
     public boolean addContactInfo(String name, String phone, String email){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -34,7 +37,7 @@ public class Supplier {
      * @return Map from catId to productID
      */
     public Map<Integer, Integer> addContractInfo(String contractDetails, List<Days> days, List<AddProductInfo> products){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -43,13 +46,16 @@ public class Supplier {
      * @return ProductId in the system
      */
     public int addProduct(AddProductInfo product){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
-    public List<ProductDiscount> getAmountDiscountReport(int supId){
-        throw new NotImplementedException();
+    public List<ProductDiscount> getAmountDiscountReport(){
+        throw new UnsupportedOperationException();
     }
 
+    public List<Product> getAllProducts(){
+        throw new UnsupportedOperationException();
+    }
     // TODO: not in class diagram
     public int getSupId(){
         return supId;

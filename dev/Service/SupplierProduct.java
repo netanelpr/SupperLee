@@ -1,3 +1,5 @@
+package Service;
+
 public class SupplierProduct {
 
     private int productCatalogNumber;

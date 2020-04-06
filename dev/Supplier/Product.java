@@ -1,4 +1,4 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+package Supplier;
 
 import java.util.List;
 
@@ -30,6 +30,6 @@ public class Product {
     }
 
     public void addDiscount(int amount, double discount){
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 }
