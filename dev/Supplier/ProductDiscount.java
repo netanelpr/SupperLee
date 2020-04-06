@@ -12,6 +12,4 @@ public class ProductDiscount {
         this.discountPerAmount = discountPerAmont;
         this.originalPrice = originalPrice;
     }
-
-
 }

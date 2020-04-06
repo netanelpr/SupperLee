@@ -11,10 +11,14 @@ public class SupplierSystem {
 
     private Map<Integer, Order> orderIdToOrder;
 
+    private ProductsManager productsManager;
+
     public SupplierSystem() {
         suppliers = new HashMap<>();
         orders = new HashMap<>();
         orderIdToOrder = new HashMap<>();
+
+        productsManager = new ProductsManager();
     }
 
     /**
@@ -102,7 +106,7 @@ public class SupplierSystem {
         if(supplier == null){
             return null;
         }
-
+        //TODO set the addContractInfo funcion on supplier to get only the needed args of the product
         return supplier.addContractInfo(contractInfo, days, products);
     }
 
@@ -191,7 +195,7 @@ public class SupplierSystem {
      * @param supplierId supplier ID
      * @return List with all the supplier product info
      */
-    public List<Product> getAllSupplierProducts(int supplierId) {
+    public List<ContractProduct> getAllSupplierProducts(int supplierId) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
 
         if(supplier == null){

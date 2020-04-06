@@ -10,7 +10,7 @@ public class ContractWithSupplier {
     private List<Days> dailyInfo;
     private String contractDetails;
 
-    private List<Product> products;
+    private List<ContractProduct> products;
 
     public ContractWithSupplier(String contractDetails, List<Days> days){
     }

@@ -53,7 +53,7 @@ public class Supplier {
         throw new UnsupportedOperationException();
     }
 
-    public List<Product> getAllProducts(){
+    public List<ContractProduct> getAllProducts(){
         throw new UnsupportedOperationException();
     }
     // TODO: not in class diagram

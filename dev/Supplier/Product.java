@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Product {
 
+    private int produceId;
     private int productCatalogNumber;
     private int systemProductId;
     private int originalPrice;
@@ -16,7 +17,8 @@ public class Product {
 
     private List<DiscountOfProduct> discounts;
 
-    public Product(int productCatalogNumber, int systemProductId, int originalPrice, String name, String manufacture, Category category, SubCategory subCategory, Sizes size, int freqSupply, List<DiscountOfProduct> discounts) {
+    public Product(int productId, int productCatalogNumber, int systemProductId, int originalPrice, String name, String manufacture, Category category, SubCategory subCategory, Sizes size, int freqSupply, List<DiscountOfProduct> discounts) {
+        this.produceId = productId;
         this.productCatalogNumber = productCatalogNumber;
         this.systemProductId = systemProductId;
         this.originalPrice = originalPrice;
@@ -27,9 +29,5 @@ public class Product {
         this.size = size;
         this.freqSupply = freqSupply;
         this.discounts = discounts;
-    }
-
-    public void addDiscount(int amount, double discount){
-        throw new UnsupportedOperationException();
     }
 }
