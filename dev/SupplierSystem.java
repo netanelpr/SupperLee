@@ -1,30 +1,70 @@
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SupplierSystem {
-    private List<Supplier> suppliers;
-    private List<Order> orders;
+
+    private Map<Integer, Supplier> suppliers;
+    private Map<Integer,Order> orders;
 
     public SupplierSystem()
     {
-        suppliers= new LinkedList<Supplier>();
-        orders= new LinkedList<Order>();
+        suppliers = new HashMap<>();
+        orders = new HashMap<>();
     }
 
-    public int createSupplierCard(String name, String incNum, String AccountNumber, String PaymentInfo) {
-        return 0;
+    //TODO: is the name parameter is necessary?
+    /**
+     * Create new supplier in the system
+     * @param name The name of the supplier
+     * @param incNum incupartion number
+     * @param accountNumber Bank account
+     * @param paymentInfo
+     * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
+     */
+    public int createSupplierCard(String name, int incNum, String accountNumber, String paymentInfo) {
+        Supplier sup = new Supplier(name, incNum, accountNumber, paymentInfo);
+
+        if(sup.getSupId() != -1){
+            return -1;
+        }
+
+        return sup.getSupId();
     }
 
 
-    public String getPaymentOptions() {
-        return null;
+    //TODO verify the function in the class diagram
+
+    /**
+     * Return the payment information of specific supplier.
+     * @param supId ID of the supplier
+     * @return null if the supplier doesnt exist in the system, otherwise its payment information
+     */
+    public String getPaymentOptions(int supId) {
+        Supplier sup = suppliers.getOrDefault(supId, null);
+
+        if(sup == null){
+            return  null;
+        }
+
+        return sup.getPaymentInfo();
     }
 
 
+    /**
+     * Return the details for each supplier in the system.
+     * @return List<SupplierDetails> for each supplier in the system.
+     */
     public List<SupplierDetails> getAllSuppliers() {
-        return null;
+        List<SupplierDetails> supDetails = new LinkedList<>();
+
+        for(Integer key : suppliers.keySet()){
+            Supplier supplier = suppliers.get(key);
+            supDetails.add(new SupplierDetails(
+                    supplier.getSupId(),
+                    supplier.getSupplierName()));
+        }
+
+        return  supDetails;
     }
 
 

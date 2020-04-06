@@ -10,9 +10,14 @@ public class Supplier {
     private String accountNumber;
     private String paymentInfo;
 
+    //Supplier Details
+    private String name;
+
     private List<ContactInfo> contacts;
     private ContractWithSupplier contract;
 
+    // TODO: Consider making this constructor private as you need to verify the data e.g
+    //  the incNum is bigger than 0. Then if you make it private create a static constructor.
     public Supplier(String name, int incNum, String accountNumber, String paymentInfo){
 
     }
@@ -43,5 +48,20 @@ public class Supplier {
 
     public List<ProductDiscount> getAmountDiscountReport(int supId){
         throw new NotImplementedException();
+    }
+
+    // TODO: not in class diagram
+    public int getSupId(){
+        return supId;
+    }
+
+    // TODO: not in class diagram
+    public String getPaymentInfo(){
+        return paymentInfo;
+    }
+
+    // TODO: not in class diagram
+    public String getSupplierName(){
+        return name;
     }
 }

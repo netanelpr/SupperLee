@@ -1,0 +1,7 @@
+Remove the attributes in the SupplierSystem because there is already connetion
+with those classes
+
+Do the TODOS in the code.
+
+Consider adding an Result<T> in order to create a better code and 
+	notify the upper layers with error details if one accord
