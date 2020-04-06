@@ -6,7 +6,7 @@ import Supplier.SubCategory;
 
 import java.util.Map;
 
-public class AddProductInfo {
+public class AddProductInfoDTO {
 
     private int productCatalogNumber;
     private Double originalPrice;
@@ -18,7 +18,7 @@ public class AddProductInfo {
     private Sizes size;
     private int freqSupply;
 
-    public AddProductInfo(int productCatalogNumber, Double originalPrice, Map<Integer, Double> discountPerAmount, String name, String manufacture, Category category, SubCategory subCategory, Sizes size, int freqSupply) {
+    public AddProductInfoDTO(int productCatalogNumber, Double originalPrice, Map<Integer, Double> discountPerAmount, String name, String manufacture, Category category, SubCategory subCategory, Sizes size, int freqSupply) {
         this.productCatalogNumber = productCatalogNumber;
         this.originalPrice = originalPrice;
         this.discountPerAmount = discountPerAmount;

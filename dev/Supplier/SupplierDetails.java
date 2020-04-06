@@ -1,4 +1,4 @@
-package Service;
+package Supplier;
 
 public class SupplierDetails {
 

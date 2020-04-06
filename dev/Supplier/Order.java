@@ -1,6 +1,5 @@
 package Supplier;
 
-import Service.ProductInOrder;
 import Structs.OrderStatus;
 
 import java.util.List;

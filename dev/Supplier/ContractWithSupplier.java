@@ -1,6 +1,6 @@
 package Supplier;
 
-import Service.AddProductInfo;
+import Service.AddProductInfoDTO;
 import Structs.Days;
 
 import java.util.List;
