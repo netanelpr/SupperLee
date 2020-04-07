@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MainMenu {
@@ -26,7 +25,9 @@ public class MainMenu {
 
         map.put("createSupplierCard", new HandleSupplierCard(supplierManagment));
         map.put("getPaymentOptions", new PaymentOptions(supplierManagment));
-        map.put("getAllSuppliers", new HandleSupplierCard(supplierManagment));
+        map.put("getAllSuppliers", new GetAllSuppliers(supplierManagment));
+        map.put("addContactInfoToSupplier", new AddContactInfoToSupplier(supplierManagment));
+        map.put("addCotractToSupplier", new AddContractToSupplier(supplierManagment));
 
 
         return map;
