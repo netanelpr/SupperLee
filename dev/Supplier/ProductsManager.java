@@ -10,4 +10,12 @@ public class ProductsManager {
     public  ProductsManager(){
         productMap = new HashMap<>();
     }
+
+    public void addIfAbsent(int productId, String manufacture, String productName){
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean exists(int productId){
+        return productMap.containsKey(productId);
+    }
 }

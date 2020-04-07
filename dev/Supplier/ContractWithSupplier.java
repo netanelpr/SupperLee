@@ -15,7 +15,7 @@ public class ContractWithSupplier {
     public ContractWithSupplier(String contractDetails, List<Days> days){
     }
 
-    public int addProduct(AddProductInfo product){
+    public int addProduct(AddProduct product){
         throw new UnsupportedOperationException();
     }
 

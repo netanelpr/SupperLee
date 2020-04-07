@@ -29,14 +29,14 @@ public class SupplierSystem {
      * @param paymentInfo
      * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
      */
-    public int createSupplierCard(String name, int incNum, String accountNumber, String paymentInfo) {
+    public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo) {
         Supplier sup = new Supplier(name, incNum, accountNumber, paymentInfo);
 
         if(sup.getSupId() != -1){
             return -1;
         }
 
-        orders.put(sup.getSupId(), new LinkedList<Order>());
+        orders.put(sup.getSupId(), new LinkedList<>());
 
         return sup.getSupId();
     }
@@ -100,12 +100,14 @@ public class SupplierSystem {
      * @param products List of product he supply
      * @return Map of <product category id, system product id>
      */
-    public Map<Integer, Integer> addContractInfo(int supplierId, String contractInfo, List<Days> days, List<AddProductInfo> products) {
+    public Map<Integer, Integer> addContractInfo(int supplierId, String contractInfo, List<Days> days, List<AddProduct> products) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
 
         if(supplier == null){
             return null;
         }
+
+        //TODO foreach product productsManager.addIfAbsent
         //TODO set the addContractInfo funcion on supplier to get only the needed args of the product
         return supplier.addContractInfo(contractInfo, days, products);
     }
@@ -116,13 +118,14 @@ public class SupplierSystem {
      * @param product Data of the product
      * @return -1 if the product wasnt added, otherwise the product id in the system
      */
-    public int addProductToContract(int supplierId, AddProductInfo product) {
+    public int addProductToContract(int supplierId, AddProduct product) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
 
         if(supplier == null){
             return -1;
         }
 
+        //TODO productsManager.addIfAbsent
         return supplier.addProduct(product);
 
     }

@@ -54,7 +54,7 @@ public interface SupplierManagment {
      * @param products List of product he supply
      * @return Map of <product category id, system product id>
      */
-    public Map<Integer,Double> addContractInfo(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products);
+    public Map<Integer,Integer> addContractInfo(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products);
 
     /**
      * Add a product to the supplier contract

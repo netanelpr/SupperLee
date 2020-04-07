@@ -2,11 +2,11 @@ package Supplier;
 
 public class SupplierDetails {
 
-    private int supplierID;
-    private String supplierName;
+    public int supplierId;
+    public String supplierName;
 
-    public SupplierDetails(int supplierID, String supplierName) {
-        this.supplierID = supplierID;
+    public SupplierDetails(int supplierId, String supplierName) {
+        this.supplierId = supplierId;
         this.supplierName = supplierName;
     }
 }
