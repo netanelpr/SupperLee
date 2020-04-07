@@ -78,11 +78,19 @@ public class AddContractToSupplier implements  Menu_Option {
 
             }
 
-            supplierManagment.addContractInfo(supId, contractInfo, days, products);
-            System.out.println("Added");
+            List<Integer> productIdError = supplierManagment.addContractToSupplier(supId, contractInfo, days, products);
+            if(productIdError == null){
+                System.out.println("Already has a contract");
+            } else {
+                if(productIdError.size() == 0){
+                    System.out.println("The contract was added");
+                } else {
+                    System.out.println("Product that wasnt added due an error : "+ productIdError.toString());
+                }
+            }
 
         } catch (NumberFormatException e){
-            System.out.println("Invalid args1");
+            System.out.println("Invalid args");
         } catch (Exception e){
             System.out.println("Error reading input");
         }

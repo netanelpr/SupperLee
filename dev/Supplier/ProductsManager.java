@@ -11,7 +11,14 @@ public class ProductsManager {
         productMap = new HashMap<>();
     }
 
-    public void addIfAbsent(int productId, String manufacture, String productName){
+    /**
+     * Add a product to the system if it does not exist
+     * @param productId Product id
+     * @param manufacture The manufacture of the product
+     * @param productName The product name
+     * @return true if the product have been added
+     */
+    public boolean addIfAbsent(int productId, String manufacture, String productName){
         throw new UnsupportedOperationException();
     }
 

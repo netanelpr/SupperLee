@@ -27,7 +27,9 @@ public class MainMenu {
         map.put("getPaymentOptions", new PaymentOptions(supplierManagment));
         map.put("getAllSuppliers", new GetAllSuppliers(supplierManagment));
         map.put("addContactInfoToSupplier", new AddContactInfoToSupplier(supplierManagment));
-        map.put("addCotractToSupplier", new AddContractToSupplier(supplierManagment));
+        map.put("addContractToSupplier", new AddContractToSupplier(supplierManagment));
+        map.put("addProductToSupplier", new AddProductToSupplier(supplierManagment));
+
 
 
         return map;

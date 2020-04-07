@@ -34,18 +34,18 @@ public class Supplier {
      * @param contractDetails
      * @param days
      * @param products
-     * @return Map from catId to productID
+     * @return List of products id with wasnt added to the supplier
      */
-    public Map<Integer, Integer> addContractInfo(String contractDetails, List<Days> days, List<AddProduct> products){
+    public List<Integer> addContractInfo(String contractDetails, List<Days> days, List<AddProduct> products){
         throw new UnsupportedOperationException();
     }
 
     /**
      *
      * @param product
-     * @return ProductId in the system
+     * @return true if the product have been added
      */
-    public int addProduct(AddProduct product){
+    public boolean addProduct(AddProduct product){
         throw new UnsupportedOperationException();
     }
 

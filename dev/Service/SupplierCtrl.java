@@ -1,14 +1,11 @@
 package Service;
 
-import Service.*;
 import Structs.Days;
 import Structs.OrderStatus;
 import Supplier.*;
 
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class SupplierCtrl implements SupplierManagment {
 
@@ -51,13 +48,19 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public Map<Integer, Integer> addContractInfo(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products) {
-        return null;
+    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products) {
+        List<AddProduct> addProducts = new LinkedList<>();
+
+        for (AddProductInfoDTO addProduct : products) {
+            addProducts.add(AddPITOToAddProduct(addProduct));
+        }
+
+        return supplierSystem.addContractToSupplier(supplierId, contractInfo, days, addProducts);
     }
 
     @Override
-    public int ProductToContract(int supplierId, AddProductInfoDTO product) {
-        return 0;
+    public boolean addProductToContract(int supplierId, AddProductInfoDTO product) {
+        return supplierSystem.addProductToContract(supplierId, AddPITOToAddProduct(product));
     }
 
     @Override

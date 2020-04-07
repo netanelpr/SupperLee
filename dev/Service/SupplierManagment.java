@@ -52,9 +52,9 @@ public interface SupplierManagment {
      * @param contractInfo Contract details
      * @param days List of days he can supply items.
      * @param products List of product he supply
-     * @return Map of <product category id, system product id>
+     * @return List of products id that wasnt added to the system
      */
-    public Map<Integer,Integer> addContractInfo(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products);
+    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products);
 
     /**
      * Add a product to the supplier contract
@@ -62,7 +62,7 @@ public interface SupplierManagment {
      * @param product Data of the product
      * @return -1 if the product wasnt added, otherwise the product id in the system
      */
-    public int ProductToContract(int supplierId, AddProductInfoDTO product);
+    public boolean addProductToContract(int supplierId, AddProductInfoDTO product);
 
     /**
      * Return to each product the given supplier his discount per amount

@@ -6,6 +6,8 @@ import java.util.*;
 
 public class SupplierSystem {
 
+    //TODO check if to make the add product an atomic procedure
+    // add to both supplier contract and the products.
     private Map<Integer, Supplier> suppliers;
     private Map<Integer,List<Order>> orders;
 
@@ -98,35 +100,42 @@ public class SupplierSystem {
      * @param contractInfo Contract details
      * @param days List of days he can supply items.
      * @param products List of product he supply
-     * @return Map of <product category id, system product id>
+     * @return List of products id that cant be add to the system, or return null if cant add the contract to the
+     *          supplier already have one.
      */
-    public Map<Integer, Integer> addContractInfo(int supplierId, String contractInfo, List<Days> days, List<AddProduct> products) {
+    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProduct> products) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
+        List<Integer> productIdError = new LinkedList<>();
 
         if(supplier == null){
             return null;
         }
 
-        //TODO foreach product productsManager.addIfAbsent
-        //TODO set the addContractInfo funcion on supplier to get only the needed args of the product
-        return supplier.addContractInfo(contractInfo, days, products);
+        for(AddProduct product : products){
+            if(!productsManager.addIfAbsent(product.produceId, product.manufacture, product.name)){
+                productIdError.add(product.produceId);
+                products.remove(product);
+            }
+        }
+
+        productIdError.addAll(supplier.addContractInfo(contractInfo, days, products));
+        return productIdError;
     }
 
     /**
      * Add a product to the supplier contract
      * @param supplierId Supplier ID
      * @param product Data of the product
-     * @return -1 if the product wasnt added, otherwise the product id in the system
+     * @return true if the product have been added
      */
-    public int addProductToContract(int supplierId, AddProduct product) {
+    public boolean addProductToContract(int supplierId, AddProduct product) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
 
         if(supplier == null){
-            return -1;
+            return false;
         }
 
-        //TODO productsManager.addIfAbsent
-        return supplier.addProduct(product);
+        return productsManager.addIfAbsent(product.produceId, product.manufacture, product.name) && supplier.addProduct(product);
 
     }
 
