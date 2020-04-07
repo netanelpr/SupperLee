@@ -117,13 +117,9 @@ public class SupplierCtrl implements SupplierManagment {
                 addProductInfoDTO.productId,
                 addProductInfoDTO.productCatalogNumber,
                 addProductInfoDTO.originalPrice,
-                /*addProductInfoDTO.name,
-                addProductInfoDTO.manufacture,
-                addProductInfoDTO.category,
-                addProductInfoDTO.subCategory,
-                addProductInfoDTO.size,
-                addProductInfoDTO.freqSupply,*/
-                addProductInfoDTO.discountPerAmount
+                addProductInfoDTO.discountPerAmount,
+                addProductInfoDTO.name,
+                addProductInfoDTO.manufacture
         );
     }
 }
