@@ -1,5 +1,4 @@
-Remove the attributes in the Supplier.SupplierSystem because there is already connetion
-with those classes
+Check the visibility of the data classes in the main module
 
 Do the TODOS in the code.
 

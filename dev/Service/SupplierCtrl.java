@@ -64,33 +64,61 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public List<ProductDiscountDTO> getAmountDiscountReport(int supplierId) {
-        return null;
+    public List<ProductDiscountDTO> getAmountDiscountReport(int supplierId){
+        List<ProductDiscount> productDiscounts = supplierSystem.getAmountDiscountReport(supplierId);
+
+        if(productDiscounts == null){
+            return null;
+        }
+
+        List<ProductDiscountDTO> productDiscountDTOS = new LinkedList<>();
+        for(ProductDiscount productDiscount : productDiscounts){
+            productDiscountDTOS.add(ProductDiscountToDTO(productDiscount));
+        }
+
+        return productDiscountDTOS;
     }
 
     @Override
-    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products, Days day) {
-        return 0;
+    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products, Days deliveryDay) {
+        List<ProductInOrder> productInOrders = new LinkedList<>();
+
+        for(ProductInOrderDTO productInOrderDTO : products){
+            productInOrders.add(ProductInOrderDTOToPIO(productInOrderDTO));
+        }
+
+        return supplierSystem.createNewOrder(supplierId, productInOrders, deliveryDay);
     }
 
     @Override
-    public boolean updateOrderArrivalTime(int supplierID, int orderID, Days day) {
-        return false;
+    public boolean updateOrderArrivalTime(int orderId, Days day) {
+        return supplierSystem.updateOrderArrivalTime(orderId, day);
     }
 
     @Override
     public boolean updateOrderStatus(int orderId, OrderStatus status) {
-        return false;
+        return supplierSystem.updateOrderStatus(orderId, status);
     }
 
     @Override
     public List<SupplierProductDTO> getAllSupplierProducts(int supplierId) {
-        return null;
+        List<SupplierProductDTO> productDTOS = new LinkedList<>();
+        List<ContractProduct> supplierProducts = supplierSystem.getAllSupplierProducts(supplierId);
+
+        if(supplierProducts == null){
+            return null;
+        }
+
+        for(ContractProduct product : supplierProducts){
+            productDTOS.add(ContractProductToSupplerProductDTO(product));
+        }
+
+        return productDTOS;
     }
 
     @Override
     public List<Integer> getPurchaseHistory(int supplierId) {
-        return null;
+        return supplierSystem.getPurchaseHistory(supplierId);
     }
 
     @Override
@@ -124,5 +152,24 @@ public class SupplierCtrl implements SupplierManagment {
                 addProductInfoDTO.name,
                 addProductInfoDTO.manufacture
         );
+    }
+
+    private static ProductDiscountDTO ProductDiscountToDTO(ProductDiscount productDiscount){
+        return new ProductDiscountDTO(
+                productDiscount.productID,
+                productDiscount.discountPerAmount,
+                productDiscount.originalPrice);
+    }
+
+    public static ProductInOrder ProductInOrderDTOToPIO(ProductInOrderDTO productInOrderDTO){
+        return new ProductInOrder(
+                productInOrderDTO.productId,
+                productInOrderDTO.amount);
+    }
+
+    public static SupplierProductDTO ContractProductToSupplerProductDTO(ContractProduct product){
+        return new SupplierProductDTO(
+                product.produceId,
+                product.productCatalogNumber);
     }
 }

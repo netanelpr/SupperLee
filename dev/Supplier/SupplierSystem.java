@@ -161,17 +161,21 @@ public class SupplierSystem {
      * Create a new order in the system
      * @param supplierId The supplier ID who need to supply the order
      * @param products The product to order
-     * @param day the day to deliver it
+     * @param deliveryDay the day to deliver it
      * @return -1 if cant create the order, otherwise return the order id
      */
-    public int createNewOrder(int supplierId, List<ProductInOrder> products, Days day) {
+    public int createNewOrder(int supplierId, List<ProductInOrder> products, Days deliveryDay) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
 
         if(supplier == null){
             return -1;
         }
 
-        Order order = Order.CreateOrder(products);
+        Order order = Order.CreateOrder(products, deliveryDay);
+        if(order == null){
+            return -1;
+        }
+
         // Add the order to the data
         orders.get(supplierId).add(order);
         orderIdToOrder.put(order.getOrderId(), order);
@@ -179,9 +183,20 @@ public class SupplierSystem {
         return order.getOrderId();
     }
 
+    /**
+     * Update the day of order arrival
+     * @param orderId The order id
+     * @param day The arrival day
+     * @return true if it was updated.
+     */
+    public boolean updateOrderArrivalTime(int orderId, Days day) {
+        Order order = orderIdToOrder.getOrDefault(orderId, null);
 
-    public boolean updateOrderArrivalTime(int supplierID, int orderID, Days time) {
-        return false;
+        if(order == null){
+            return false;
+        }
+
+        return order.updateDeliveryDay(day);
     }
 
 

@@ -1,5 +1,6 @@
 package Supplier;
 
+import Structs.Days;
 import Structs.OrderStatus;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class Order {
     private int orderId;
     private Map<Integer, Integer> products;
     private OrderStatus status;
+    private Days deliveryDay;
 
     //TODO Implement
     private Order(List<ProductInOrder> products){
@@ -24,10 +26,9 @@ public class Order {
      * Supplier.Order cant be created without at least one product.
      * @return new order
      */
-    public static Order CreateOrder(List<ProductInOrder> productsInOrder){
+    public static Order CreateOrder(List<ProductInOrder> productsInOrder, Days deliveryDay){
         if(productsInOrder.isEmpty()){
-            // modify it if you need to
-            throw new NullPointerException("Supplier.Order cant be empty");
+            return null;
         }
 
         return new Order(productsInOrder);
@@ -38,6 +39,10 @@ public class Order {
     }
 
     public boolean setStatus(OrderStatus status){
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean updateDeliveryDay(Days day){
         throw new UnsupportedOperationException();
     }
 }

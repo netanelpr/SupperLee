@@ -80,8 +80,13 @@ public interface SupplierManagment {
      */
     public int createNewOrder(int supplierId, List<ProductInOrderDTO> products, Days day);
 
-    //TODO implement
-    public boolean updateOrderArrivalTime(int supplierID, int orderID, Days day);
+    /**
+     * Update the day of order arrival
+     * @param orderId The order id
+     * @param day The arrival day
+     * @return true if it was updated.
+     */
+    public boolean updateOrderArrivalTime(int orderId, Days day);
 
     /**
      * Update the status of the given order id
