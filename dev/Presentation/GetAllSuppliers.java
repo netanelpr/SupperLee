@@ -18,7 +18,7 @@ public class GetAllSuppliers implements  Menu_Option {
     @Override
     public void apply(String[] argv) {
         if(argv.length != 0){
-            System.out.println("Invalid args");
+            System.out.println("Invalid number of args");
             return;
         }
 
@@ -28,6 +28,8 @@ public class GetAllSuppliers implements  Menu_Option {
             for (SupplierDetailsDTO supD : supplierManagment.getAllSuppliers()) {
                 System.out.println(supD.toString());
             }
+        } else {
+            System.out.println("There are not any supplier in the system");
         }
     }
 }

@@ -13,5 +13,14 @@ public class ProductDiscountDTO {
         this.originalPrice = originalPrice;
     }
 
+    public String toString(){
+        String discountStr = "";
+        for(Integer amount : discountPerAmount.keySet()){
+            discountStr = discountStr + String.format("\t%d : %f\n", amount, discountPerAmount.get(amount));
+        }
+
+        return String.format("Product ID: %d\nDiscounts : %s\nOriginal price : %f", productID, discountStr, originalPrice);
+    }
+
 
 }

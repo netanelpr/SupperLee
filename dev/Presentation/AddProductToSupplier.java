@@ -25,7 +25,7 @@ public class AddProductToSupplier implements  Menu_Option {
     @Override
     public void apply(String[] argv) {
         if(argv.length != 1){
-            System.out.println("Invalid args");
+            System.out.println("Invalid number of args");
             return;
         }
 
@@ -49,7 +49,7 @@ public class AddProductToSupplier implements  Menu_Option {
             for(String discount: discountArr){
                 String[] discountS = discount.split(":");
                 if(discountS.length != 2){
-                    System.out.println("Invalid args");
+                    System.out.println("Invalid format of discount");
                     continue;
                 }
 

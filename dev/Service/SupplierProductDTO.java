@@ -9,4 +9,8 @@ public class SupplierProductDTO {
         this.productCatalogNumber = productCatalogNumber;
         this.productID = productID;
     }
+
+    public String toString(){
+        return String.format("Product id : %d, Catalog number : %d", productID, productCatalogNumber);
+    }
 }

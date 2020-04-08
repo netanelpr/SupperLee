@@ -18,7 +18,7 @@ public class AddContactInfoToSupplier implements  Menu_Option {
     @Override
     public void apply(String[] argv) {
         if(argv.length != 4){
-            System.out.println("Invalid args");
+            System.out.println("Invalid number of args");
             return;
         }
 
@@ -26,7 +26,7 @@ public class AddContactInfoToSupplier implements  Menu_Option {
         try {
             supId = Integer.parseInt(argv[0]);
         } catch (NumberFormatException e){
-            System.out.println("Invalid args");
+            System.out.println("Invalid supplier ID");
             return;
         }
 

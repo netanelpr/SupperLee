@@ -24,8 +24,8 @@ public class AddContractToSupplier implements  Menu_Option {
 
     @Override
     public void apply(String[] argv) {
-        if(argv.length != 0){
-            System.out.println("Invalid args");
+        if(argv.length != 1){
+            System.out.println("Invalid number of args");
             return;
         }
 
@@ -33,8 +33,7 @@ public class AddContractToSupplier implements  Menu_Option {
 
         int supId = -1;
         try {
-            System.out.print("Enter supplier ID : ");
-            supId = Integer.parseInt(reader.readLine());
+            supId = Integer.parseInt(argv[0]);
 
             System.out.print("Enter contract info : ");
             String contractInfo = reader.readLine();
@@ -53,7 +52,7 @@ public class AddContractToSupplier implements  Menu_Option {
                 String[] input = reader.readLine().split(" ");
 
                 if(input.length != 6){
-                    System.out.println("Invalid args");
+                    System.out.println("Invalid number of args");
                     continue;
                 }
 
@@ -62,7 +61,7 @@ public class AddContractToSupplier implements  Menu_Option {
                 for(String discount: discountArr){
                     String[] discountS = discount.split(":");
                     if(discountS.length != 2){
-                        System.out.println("Invalid args");
+                        System.out.println("Invalid format of discount");
                         continue;
                     }
 

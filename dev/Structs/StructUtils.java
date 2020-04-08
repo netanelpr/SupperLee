@@ -1,5 +1,7 @@
 package Structs;
 
+import Supplier.Order;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,13 +12,13 @@ public class StructUtils {
     public static Map<String, Days> createDaysMap(){
         Map<String, Days> map = new HashMap<>();
 
-        map.put("Sunday", Days.Sunday);
-        map.put("Monday", Days.Monday);
-        map.put("Tuesday", Days.Tuesday);
-        map.put("Wednesday", Days.Wednesday);
-        map.put("Thursday", Days.Thursday);
-        map.put("Friday", Days.Friday);
-        map.put("Saturday", Days.Saturday);
+        map.put("SUNDAY", Days.Sunday);
+        map.put("MONDAY", Days.Monday);
+        map.put("TUESDAY", Days.Tuesday);
+        map.put("WEDNESDAY", Days.Wednesday);
+        map.put("THURSDAY", Days.Thursday);
+        map.put("FRIDAY", Days.Friday);
+        map.put("SATURDAY", Days.Saturday);
 
         return  map;
     }
@@ -31,7 +33,7 @@ public class StructUtils {
         List<Days> list = new LinkedList<>();
 
         for (String day : days) {
-            Days d =  map.getOrDefault(day, null);
+            Days d =  map.getOrDefault(day.toUpperCase(), null);
             if(d == null){
                 return null;
             }
@@ -40,5 +42,30 @@ public class StructUtils {
         }
 
         return list;
+    }
+
+    private static Map<String, OrderStatus> createStatusMap(){
+        Map<String, OrderStatus> map = new HashMap<>();
+
+        map.put("OPEN", OrderStatus.Open);
+        map.put("CLOSE", OrderStatus.Close);
+
+        return  map;
+    }
+
+    /**
+     * Return orderStatus from string
+     * @param orderStatus order Status
+     * @return null if there is not order status as the one given
+     */
+    public static OrderStatus getOrderStatus(String orderStatus){
+        Map<String, OrderStatus> map = createStatusMap();
+
+         OrderStatus orderS =  map.getOrDefault(orderStatus.toUpperCase(), null);
+         if(orderS == null){
+             return null;
+         }
+
+        return orderS;
     }
 }
