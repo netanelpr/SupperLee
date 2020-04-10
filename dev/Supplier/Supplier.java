@@ -44,10 +44,10 @@ public class Supplier {
      * @param days
      * @return List of products id with wasnt added to the supplier
      */
-    public List<Integer> addContractInfo(String contractDetails, List<Days> days){
+    public boolean addContractInfo(String contractDetails, List<Days> days){
         this.contract=new ContractWithSupplier(contractDetails,days);
-        //@TODO: delete the return value
-        return null;
+
+        return true;
     }
 
     /**

@@ -115,16 +115,21 @@ public class SupplierSystem {
      */
     public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProduct> products) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
+
         List<Integer> productIdError = new LinkedList<>();
 
         if(supplier == null){
             return null;
         }
-
+        supplier.addContractInfo(contractInfo,days);
         for(AddProduct product : products){
             if(!supplier.addProduct(product))
             {
                 productIdError.add(product.barCode);
+            }
+            else
+            {
+                productsManager.addIfAbsent(product);
             }
         }
         return productIdError;
@@ -142,8 +147,12 @@ public class SupplierSystem {
         if(supplier == null){
             return false;
         }
-
-        return productsManager.addIfAbsent(product) & supplier.addProduct(product);
+        boolean ans=false;
+        if(ans=supplier.addProduct(product))
+        {
+            productsManager.addIfAbsent(product);
+        }
+        return ans;
 
     }
 
