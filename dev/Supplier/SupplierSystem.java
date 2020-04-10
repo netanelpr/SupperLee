@@ -39,7 +39,7 @@ public class SupplierSystem {
         }
 
         orders.put(sup.getSupId(), new LinkedList<>());
-
+        suppliers.put(sup.getSupId(),sup);
         return sup.getSupId();
     }
 
@@ -54,7 +54,6 @@ public class SupplierSystem {
         if(sup == null){
             return  null;
         }
-
         return sup.getPaymentInfo();
     }
 
@@ -112,13 +111,11 @@ public class SupplierSystem {
         }
 
         for(AddProduct product : products){
-            if(!productsManager.addIfAbsent(product.produceId, product.manufacture, product.name)){
-                productIdError.add(product.produceId);
-                products.remove(product);
+            if(!supplier.addProduct(product)|!productsManager.addIfAbsent(product))
+            {
+                productIdError.add(product.barCode);
             }
         }
-
-        productIdError.addAll(supplier.addContractInfo(contractInfo, days, products));
         return productIdError;
     }
 
@@ -135,7 +132,7 @@ public class SupplierSystem {
             return false;
         }
 
-        return productsManager.addIfAbsent(product.produceId, product.manufacture, product.name) && supplier.addProduct(product);
+        return productsManager.addIfAbsent(product) & supplier.addProduct(product);
 
     }
 
@@ -145,9 +142,8 @@ public class SupplierSystem {
      * @param supplierId Supplier ID
      * @return List of ProductDiscount.
      */
-    public List<ProductDiscount> getAmountDiscountReport(int supplierId) {
+    public List<ProductDiscounts> getAmountDiscountReport(int supplierId) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
-
         if(supplier == null){
             return null;
         }
@@ -222,7 +218,7 @@ public class SupplierSystem {
      * @param supplierId supplier ID
      * @return List with all the supplier product info
      */
-    public List<ContractProduct> getAllSupplierProducts(int supplierId) {
+    public List<SupplierProductInfo> getAllSupplierProducts(int supplierId) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
 
         if(supplier == null){

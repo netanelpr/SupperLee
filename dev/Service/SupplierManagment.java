@@ -2,11 +2,8 @@ package Service;
 
 import Structs.Days;
 import Structs.OrderStatus;
-import Supplier.ProductDiscount;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 public interface SupplierManagment {
 
@@ -69,7 +66,7 @@ public interface SupplierManagment {
      * @param supplierId Supplier ID
      * @return List of ProductDiscount.
      */
-    public List<ProductDiscountDTO> getAmountDiscountReport(int supplierId);
+    public List<ProductDiscountsDTO> getAmountDiscountReport(int supplierId);
 
     /**
      * Create a new order in the system

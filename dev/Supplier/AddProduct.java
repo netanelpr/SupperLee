@@ -5,26 +5,20 @@ import java.util.Map;
 
 public class AddProduct {
 
-    public int produceId;
-    public int productCatalogNumber;
+    public int barCode;
+    public String productCatalogNumber;
     public double originalPrice;
     public String manufacture;
     public String name;
+    public ProductDiscounts productDiscounts;
 
-    private Map<Integer, Double> discounts;
-
-        public AddProduct(int productId, int productCatalogNumber, double originalPrice ,Map<Integer, Double> discounts,
+    public AddProduct(int barCode, String productCatalogNumber, double originalPrice ,ProductDiscounts productDiscounts,
                           String manufacture, String name) {
-        this.produceId = productId;
+        this.barCode=barCode;
         this.productCatalogNumber = productCatalogNumber;
         this.originalPrice = originalPrice;
         this.manufacture = manufacture;
         this.name = name;
-
-
-        this.discounts = new HashMap<>();
-        for(Integer key : discounts.keySet()){
-            this.discounts.put(key, discounts.get(key));
-        }
+        this.productDiscounts=productDiscounts;
     }
 }

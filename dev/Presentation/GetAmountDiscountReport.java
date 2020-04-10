@@ -1,6 +1,6 @@
 package Presentation;
 
-import Service.ProductDiscountDTO;
+import Service.ProductDiscountsDTO;
 import Service.SupplierManagment;
 
 import java.util.List;
@@ -30,13 +30,13 @@ public class GetAmountDiscountReport implements  Menu_Option {
             return;
         }
 
-        List<ProductDiscountDTO> discountDTOList = supplierManagment.getAmountDiscountReport(supId);
+        List<ProductDiscountsDTO> discountDTOList = supplierManagment.getAmountDiscountReport(supId);
         if(discountDTOList == null){
             System.out.println("No such supplier ID");
             return;
         }
 
-        for (ProductDiscountDTO discountDTO : discountDTOList){
+        for (ProductDiscountsDTO discountDTO : discountDTOList){
             System.out.println(discountDTO.toString());
         }
 
