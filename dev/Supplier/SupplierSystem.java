@@ -14,6 +14,7 @@ public class SupplierSystem {
     private Map<Integer, Order> orderIdToOrder;
 
     private ProductsManager productsManager;
+    private String[] paymentOptions;
 
     public SupplierSystem() {
         suppliers = new HashMap<>();
@@ -21,6 +22,7 @@ public class SupplierSystem {
         orderIdToOrder = new HashMap<>();
 
         productsManager = new ProductsManager();
+        paymentOptions = new String[]{"CASH", "CREDIT"};
     }
 
     /**
@@ -32,15 +34,24 @@ public class SupplierSystem {
      * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
      */
     public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo) {
+
+        if(Arrays.binarySearch(paymentOptions,paymentInfo.toUpperCase()) < 0){
+            return -1;
+        }
+
         Supplier sup = new Supplier(name, incNum, accountNumber, paymentInfo);
 
-        if(sup.getSupId() != -1){
+        if(sup.getSupId() < 0){
             return -1;
         }
 
         orders.put(sup.getSupId(), new LinkedList<>());
         suppliers.put(sup.getSupId(),sup);
         return sup.getSupId();
+    }
+
+    public String getPaymentOptions(){
+        return String.join(" ", paymentOptions);
     }
 
     /**
@@ -111,7 +122,7 @@ public class SupplierSystem {
         }
 
         for(AddProduct product : products){
-            if(!supplier.addProduct(product)|!productsManager.addIfAbsent(product))
+            if(!supplier.addProduct(product))
             {
                 productIdError.add(product.barCode);
             }

@@ -1,6 +1,7 @@
 package Presentation;
 
 import Service.AddProductInfoDTO;
+import Service.ProductDiscountsDTO;
 import Service.SupplierManagment;
 import Structs.Days;
 import Structs.StructUtils;
@@ -56,12 +57,12 @@ public class AddProductToSupplier implements  Menu_Option {
                 discounts.put(Integer.parseInt(discountS[0]), Double.parseDouble(discountS[1]));
             }
 
+            ProductDiscountsDTO product = new ProductDiscountsDTO(Integer.parseInt(input[0]), discounts,  Double.parseDouble(input[2]));
             boolean added = supplierManagment.addProductToContract(supId,
                                             new AddProductInfoDTO(
                                             Integer.parseInt(input[0]),
-                                            Integer.parseInt(input[1]),
-                                            Double.parseDouble(input[2]),
-                                            discounts,
+                                            input[1],
+                                            Double.parseDouble(input[2]), product,
                                             input[4], input[3]));
 
             if(added){

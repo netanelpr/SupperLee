@@ -22,7 +22,7 @@ public class SupplierCtrl implements SupplierManagment {
 
     @Override
     public String getPaymentOptions() {
-        return null;
+        return supplierSystem.getPaymentOptions();
     }
 
     @Override
@@ -144,14 +144,15 @@ public class SupplierCtrl implements SupplierManagment {
             return null;
         }
 
+        ProductDiscounts product = new ProductDiscounts(addProductInfoDTO.productId,addProductInfoDTO.discounts.discountPerAmount,addProductInfoDTO.originalPrice);
+
         return new AddProduct(
                 addProductInfoDTO.productId,
                 addProductInfoDTO.productCatalogNumber,
                 addProductInfoDTO.originalPrice,
-                new ProductDiscounts(addProductInfoDTO.productId,addProductInfoDTO.discounts.discountPerAmount,addProductInfoDTO.originalPrice),
+                product,
                 addProductInfoDTO.name,
-                addProductInfoDTO.manufacture
-        );
+                addProductInfoDTO.manufacture);
     }
 
     private static ProductDiscountsDTO ProductDiscountToDTO(ProductDiscounts productDiscounts){

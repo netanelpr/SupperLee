@@ -30,7 +30,7 @@ public class AddContactInfoToSupplier implements  Menu_Option {
             return;
         }
 
-        if(supplierManagment.addContactInfo(supId, argv[0], argv[1], argv[2])){
+        if(supplierManagment.addContactInfo(supId, argv[1], argv[2], argv[3])){
             System.out.println("The contact has been added");
         } else {
             System.out.println("The contact wasnt added");

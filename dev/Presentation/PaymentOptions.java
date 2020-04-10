@@ -30,8 +30,13 @@ public class PaymentOptions implements  Menu_Option {
                 System.out.println("getPaymentOptions <supplier ID>");
             }
 
-            System.out.println("Payment options are: " +
-                    supplierManagment.getPaymentOptions(supId));
+            String paymentOptions = supplierManagment.getPaymentOptions(supId);
+            if(paymentOptions == null){
+                System.out.println("There isnt such a supplier with id "+ supId);
+            } else {
+                System.out.println("Payment options are: " +
+                        paymentOptions);
+            }
         }
     }
 }

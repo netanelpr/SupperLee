@@ -20,28 +20,22 @@ public class Supplier {
     private List<ContactInfo> contacts;
     private ContractWithSupplier contract;
 
-    // TODO: Consider making this constructor private as you need to verify the data e.g
-    //  the incNum is bigger than 0. Then if you make it private create a static constructor.
+    //TODO verify incNum and accountNunber are numbers
     public Supplier(String name, String incNum, String accountNumber, String paymentInfo){
         this.name=name;
-        this.incNum=incNum;
         this.incNum=incNum;
         this.accountNumber=accountNumber;
         this.paymentInfo=paymentInfo;
         this.supId=SupplierIDsCounter;
         SupplierIDsCounter++;
+
+        this.contacts = new LinkedList<>();
     }
 
+    //TODO is the return is needed
     public boolean addContactInfo(String name, String phone, String email){
-        try {
-            this.contacts.add(new ContactInfo(name, phone, email));
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+        this.contacts.add(new ContactInfo(name, phone, email));
         return true;
-
     }
 
     /**

@@ -1,5 +1,6 @@
 package Supplier;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ProductDiscounts {
@@ -11,9 +12,8 @@ public class ProductDiscounts {
         this.barCode = barCode;
 
         this.originalPrice = originalPrice;
-
-        for (Integer amout:
-        discountPerAmont.keySet()) {
+        this.discountPerAmount = new HashMap<>();
+        for (Integer amout: discountPerAmont.keySet()) {
             this.discountPerAmount.put(amout,discountPerAmont.get(amout));
 
         }

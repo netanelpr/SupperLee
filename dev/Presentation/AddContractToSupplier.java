@@ -1,6 +1,7 @@
 package Presentation;
 
 import Service.AddProductInfoDTO;
+import Service.ProductDiscountsDTO;
 import Service.SupplierManagment;
 import Structs.Days;
 import Structs.StructUtils;
@@ -68,11 +69,12 @@ public class AddContractToSupplier implements  Menu_Option {
                     discounts.put(Integer.parseInt(discountS[0]), Double.parseDouble(discountS[1]));
                 }
 
+                ProductDiscountsDTO product = new ProductDiscountsDTO(Integer.parseInt(input[0]), discounts,  Double.parseDouble(input[2]));
                 products.add(new AddProductInfoDTO(
                         Integer.parseInt(input[0]),
-                        Integer.parseInt(input[1]),
+                        input[1],
                         Double.parseDouble(input[2]),
-                        discounts,
+                        product,
                         input[4], input[3]));
 
             }
@@ -91,6 +93,7 @@ public class AddContractToSupplier implements  Menu_Option {
         } catch (NumberFormatException e){
             System.out.println("Invalid args");
         } catch (Exception e){
+            e.printStackTrace();
             System.out.println("Error reading input");
         }
     }

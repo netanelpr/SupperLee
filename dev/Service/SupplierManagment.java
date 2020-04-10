@@ -17,7 +17,6 @@ public interface SupplierManagment {
      */
     public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo);
 
-    //TODO check if we need this function
     public String getPaymentOptions();
 
     /**

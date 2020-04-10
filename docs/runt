@@ -1,0 +1,7 @@
+createSupplierCard sup1 1 1 cash
+
+getPaymentOptions
+getPaymentOptions 3 
+getPaymentOptions 1
+
+getAllSuppliers
