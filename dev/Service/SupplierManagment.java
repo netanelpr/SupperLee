@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface SupplierManagment {
 
+    //TODO edit this method by adding contact info for one person 7.
     /**
      * Create new supplier in the system
      * @param name The name of the supplier
@@ -26,6 +27,24 @@ public interface SupplierManagment {
      */
     public String getPaymentOptions(int supId);
 
+    //TODO implement 1.
+    /**
+     * Add all or noting of the payments info to the supplier
+     * @param supId supplier ID
+     * @param paymentInfo list of payments options
+     * @return true if added false otherwise
+     */
+    public boolean addPaymentOptions(int supId, String[] paymentInfo);
+
+    //TODO implement 1.
+    /**
+     * Remove all or noting of the payments info from supplier
+     * @param supId supplier ID
+     * @param paymentInfo list of payments options
+     * @return true if added false otherwise
+     */
+    public boolean removePaymentOptions(int supId, String[] paymentInfo);
+
     /**
      * Return the details for each supplier in the system.
      * @return List<Service.SupplierDetails> for each supplier in the system.
@@ -42,13 +61,22 @@ public interface SupplierManagment {
      */
     public boolean addContactInfo(int supplierId, String contactPersonName, String phoneNumber, String email);
 
+    //TODO implemet 2.
+    /**
+     * Remove contact person by email if there are more then 1 in the system for the
+     * specifed supplier
+     * @param supplierId supplier ID
+     * @param email the email of the contact person
+     * @return true if the contact has been removed false otherwise.
+     */
+    public boolean removeContactPerson(int supplierId,String email);
     /**
      * Add contract with the supplier, only one contract can exist.
      * @param supplierId Supplier id
      * @param contractInfo Contract details
      * @param days List of days he can supply items.
      * @param products List of product he supply
-     * @return List of products id that wasnt added to the system
+     * @return List of products id that wasnt added to the system, null if the contract wasnt added
      */
     public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products);
 
@@ -67,6 +95,7 @@ public interface SupplierManagment {
      */
     public List<ProductDiscountsDTO> getAmountDiscountReport(int supplierId);
 
+    //TODO remove the day in the method 5.
     /**
      * Create a new order in the system
      * @param supplierId The supplier ID who need to supply the order
@@ -99,10 +128,14 @@ public interface SupplierManagment {
      */
     public List<SupplierProductDTO> getAllSupplierProducts(int supplierId);
 
+    //TODO implement function that return all the details of product by supid,catalog 4.
+
+    //TODO edit getPurchaseHistoy to return what we wrote in the description 6.
     /**
-     * Return all the orders ID from a given suppler
+     * Return all the catalog ID from a given suppler
      * @param supplierId Supplier ID
-     * @return List with all the orders for the specific supplier
+     * @return List with all the products catalog numbers that the system has order which
+     * contains them
      */
     public List<Integer> getPurchaseHistory(int supplierId);
 

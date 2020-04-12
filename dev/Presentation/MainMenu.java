@@ -23,6 +23,7 @@ public class MainMenu {
     private Map<String, Menu_Option> createMenuMap() {
         Map<String, Menu_Option> map = new HashMap<>();
 
+        //TODO add option that use getAllSupplierProducts and getProductDetails to print all the supplier products 4.
         map.put("createSupplierCard", new HandleSupplierCard(supplierManagment));
         map.put("getPaymentOptions", new PaymentOptions(supplierManagment));
         map.put("getAllSuppliers", new GetAllSuppliers(supplierManagment));
