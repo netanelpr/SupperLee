@@ -34,7 +34,7 @@ public class CreateNewOrder implements  Menu_Option {
             supId = Integer.parseInt(argv[0]);
 
             List<ProductInOrderDTO> products = new LinkedList<>();
-            System.out.print("Enter the numbers of product you want the order :");
+            System.out.print("Enter the numbers of product you want the order : ");
             int numberOfProducts = Integer.parseInt(reader.readLine());
 
             System.out.println("Enter product ID and amount\n\t format <productID> <amount>");

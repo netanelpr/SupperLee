@@ -11,6 +11,6 @@ public class SupplierProductDTO {
     }
 
     public String toString(){
-        return String.format("Product id : %d, Catalog number : %d", productID, productCatalogNumber);
+        return String.format("Product id : %d, Catalog number : %s", productID, productCatalogNumber);
     }
 }

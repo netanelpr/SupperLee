@@ -3,6 +3,7 @@ package Supplier;
 import Structs.Days;
 import Structs.OrderStatus;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -19,18 +20,14 @@ public class Order {
     private Order(List<ProductInOrder> products){
         orderId = GLOBAL_ORDER_ID;
         GLOBAL_ORDER_ID = GLOBAL_ORDER_ID + 1;
-        for (ProductInOrder product:
-             products) {
-            if(this.products.containsKey(product.productCatalogNumber))
-            {
-                int sum=this.products.get(product.productCatalogNumber).intValue()+product.amount;
-                this.products.replace(product.productCatalogNumber,sum);
-            }
-            else {
-                this.products.put(product.productCatalogNumber, product.amount);
-            }
+
+        this.products = new HashMap<>();
+        for (ProductInOrder product : products) {
+            this.products.put(product.productCatalogNumber, product.barcode);
         }
-        this.status=OrderStatus.Open;
+
+        status = OrderStatus.Open;
+        deliveryDay = null;
 
 
     }

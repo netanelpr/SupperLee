@@ -37,7 +37,7 @@ public class GetAllSuppliersProducts implements  Menu_Option {
                 System.out.println(product.toString());
             }
         } else {
-            System.out.println("Invalid supplier doest exist in the system");
+            System.out.println("Invalid supplier id or no contract");
         }
     }
 }

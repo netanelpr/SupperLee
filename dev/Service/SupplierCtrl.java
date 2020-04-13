@@ -200,7 +200,7 @@ public class SupplierCtrl implements SupplierManagment {
 
     public static ProductInOrder ProductInOrderDTOToPIO(ProductInOrderDTO productInOrderDTO){
         return new ProductInOrder(
-                productInOrderDTO.productId,
+                productInOrderDTO.barcode,
                 productInOrderDTO.amount);
     }
 

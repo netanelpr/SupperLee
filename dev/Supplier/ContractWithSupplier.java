@@ -15,6 +15,7 @@ public class ContractWithSupplier {
     private List<Days> dailyInfo;
     private String contractDetails;
     private List<ContractProduct> products;
+
     public ContractWithSupplier(String contractDetails, List<Days> days){
         this.dailyInfo=days;
         this.contractDetails=contractDetails;
@@ -70,5 +71,20 @@ public class ContractWithSupplier {
             barCodeToProductDiscounts.add(cp.getDiscounts());
         }
         return barCodeToProductDiscounts;
+    }
+
+    /**
+     * Check if there is a product id in this contract
+     * @param productId productId
+     * @return true if the there is productId
+     */
+    public boolean hasProduct(int productId) {
+        for(ContractProduct product : products){
+            if(product.getBarCode() == productId){
+                return true;
+            }
+        }
+        return false;
+
     }
 }

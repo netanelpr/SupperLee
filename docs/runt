@@ -12,3 +12,18 @@ addProductToSupplier 0
 10 123a 1500 tv lg {100:0.1}
 discountReport 0
 discountReport 1
+
+getAllSupplierProductsId 0
+getAllSupplierProductsId 1
+
+getAllSupplierProductsDetalis 0
+getAllSupplierProductsDetalis 1
+
+createNewOrder 0
+	2
+	1 10
+	2 100
+createNewOrder 0
+	1
+	10 100
+

@@ -38,11 +38,10 @@ public class GetAllSuppliersProductsDetalis implements  Menu_Option {
         if(supplierProductDTOS != null) {
             for(SupplierProductDTO dto : supplierProductDTOS){
                 String productInfo = supplierManagment.getAllInformationAboutSuppliersProduct(supplierId, dto.productID).toString();
-                System.out.println(productInfo);
-
+                System.out.println(productInfo+ "\n");
             }
         } else {
-            System.out.println("Invalid supplier doest exist in the system");
+            System.out.println("Invalid supplier id or no contract");
         }
     }
 }

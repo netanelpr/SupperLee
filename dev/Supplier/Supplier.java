@@ -80,6 +80,10 @@ public class Supplier {
     }
 
     public List<SupplierProductInfo> getAllProducts(){
+        if(contract == null){
+            return null;
+        }
+
         List<SupplierProductInfo> supplierProductInfos= new LinkedList<SupplierProductInfo>();
         for (ContractProduct product:
                 this.contract.getProducts()) {
@@ -159,7 +163,18 @@ public class Supplier {
     }
 
     public ContractProduct getAllInformationAboutSuppliersProduct( int barcode) {
-        ContractProduct cp=this.contract.getProducts().stream().filter(x->x.getBarCode()==barcode).findFirst().orElse(null);
-        return cp;
+        return this.contract.getProducts().stream().filter(x->x.getBarCode()==barcode).findFirst().orElse(null);
+    }
+
+    /**
+     * Check if the supplier supply this productId
+     * @param productId productId
+     * @return true if the supplier supply this productId
+     */
+    public boolean hasProduct(int productId) {
+        if(contract == null){
+            return false;
+        }
+        return contract.hasProduct(productId);
     }
 }

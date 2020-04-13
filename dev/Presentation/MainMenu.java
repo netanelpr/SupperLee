@@ -37,12 +37,12 @@ public class MainMenu implements Menu_Option{
         map.put("addProductToSupplier", new AddProductToSupplier(supplierManagment));
         map.put("discountReport", new GetAmountDiscountReport(supplierManagment));
 
+        map.put("getAllSupplierProductsId", new GetAllSuppliersProducts(supplierManagment));
+        map.put("getAllSupplierProductsDetalis", new GetAllSuppliersProductsDetalis(supplierManagment));
+
         map.put("createNewOrder", new CreateNewOrder(supplierManagment));
         map.put("updateOrderArrivalDay", new UpdateOrderArrivalDay(supplierManagment));
         map.put("updateOrderStatus", new UpdateOrderStatus(supplierManagment));
-
-        map.put("getAllSupplierProductsId", new GetAllSuppliersProducts(supplierManagment));
-        map.put("getAllSupplierProductsDetalis", new GetAllSuppliersProductsDetalis(supplierManagment));
 
         map.put("getPruchaseHistoryFromSupplier", new PurchaseHistoryFromSupplier(supplierManagment));
 

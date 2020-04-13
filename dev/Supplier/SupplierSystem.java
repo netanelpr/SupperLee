@@ -248,6 +248,12 @@ public class SupplierSystem {
             return -1;
         }
 
+        for(ProductInOrder product : products){
+            if(!supplier.hasProduct(product.barcode)){
+                return -1;
+            }
+        }
+
         Order order = Order.CreateOrder(products);
         if(order == null){
             return -1;
