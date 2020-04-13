@@ -2,6 +2,8 @@ package Supplier;
 
 import Structs.Days;
 import Structs.OrderStatus;
+
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class SupplierSystem {
@@ -35,11 +37,16 @@ public class SupplierSystem {
     public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo,
                                   String contactName, String phoneNumber,String email) {
 
-        if(Arrays.binarySearch(paymentOptions,paymentInfo.toUpperCase()) < 0){
-            return -1;
+        paymentInfo = paymentInfo.toUpperCase();
+        String[] paymentOArr = paymentInfo.split(",");
+        List<String> paymentOptions = Arrays.asList(this.paymentOptions);
+        for(String paymentO : paymentOArr) {
+            if (!paymentOptions.contains(paymentO.toUpperCase())) {
+                return -1;
+            }
         }
 
-        Supplier sup = new Supplier(name, incNum, accountNumber, paymentInfo,contactName,phoneNumber,email);
+        Supplier sup = new Supplier(name, incNum, accountNumber, paymentInfo, contactName, phoneNumber, email);
 
 
         if(sup.getSupId() < 0){
@@ -82,8 +89,9 @@ public class SupplierSystem {
         }
 
         // payment doesnt in the allowed list
-        for(String option : paymentInfo){
-            if(Arrays.binarySearch(paymentOptions, option.toUpperCase()) < 0){
+        List<String> paymentOptions = Arrays.asList(this.paymentOptions);
+        for(String paymentO : paymentInfo) {
+            if (!paymentOptions.contains(paymentO.toUpperCase())) {
                 return false;
             }
         }

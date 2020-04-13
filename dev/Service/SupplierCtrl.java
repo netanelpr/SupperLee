@@ -18,7 +18,7 @@ public class SupplierCtrl implements SupplierManagment {
     @Override
     public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo,
                                   String contactName, String phoneNumber,String email) {
-        return supplierSystem.createSupplierCard(name, incNum, accountNumber, paymentInfo,contactName,phoneNumber,email);
+        return supplierSystem.createSupplierCard(name, incNum, accountNumber, paymentInfo, contactName, phoneNumber, email);
     }
 
     @Override

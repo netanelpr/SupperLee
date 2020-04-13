@@ -32,7 +32,7 @@ public class GetAmountDiscountReport implements  Menu_Option {
 
         List<ProductDiscountsDTO> discountDTOList = supplierManagment.getAmountDiscountReport(supId);
         if(discountDTOList == null){
-            System.out.println("No such supplier ID");
+            System.out.println("No such supplier ID or there isnt a contract with the supplier");
             return;
         }
 

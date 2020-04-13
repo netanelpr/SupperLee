@@ -5,6 +5,7 @@ The program supports the next functaionalits for the user:
 
 1. Create a new supplier in the system:
    createSupplierCard <name> <inc number> <bank account number> <payment info>
+			<contactName> <contactPhoneNumber> <contactEmail>
  
 
 2. Return all the payment info in the system or the payment option for
@@ -14,7 +15,7 @@ The program supports the next functaionalits for the user:
 3. Return all the of the supplier ID and their corrisponding name in the system:
    getAllSuppliers
 
-4. Add a contact info the the supplier specifed:
+4. Add a contact info to the supplier specifed:
    addContactInfoToSupplier <supplier ID> <person name> <phone number> <email>
    
 

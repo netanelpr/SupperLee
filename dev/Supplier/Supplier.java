@@ -28,6 +28,8 @@ public class Supplier {
 
         this.contacts = new LinkedList<>();
         this.addContactInfo(contactName,phoneNumber,email);
+
+        contract = null;
     }
 
     public boolean addContactInfo(String name, String phone, String email){
@@ -71,7 +73,10 @@ public class Supplier {
     }
 
     public List<ProductDiscounts> getAmountDiscountReport(){
-        return contract.getAmountDiscountReport();
+        if(contract != null) {
+            return contract.getAmountDiscountReport();
+        }
+        return  null;
     }
 
     public List<SupplierProductInfo> getAllProducts(){
@@ -105,10 +110,12 @@ public class Supplier {
      * @return true
      */
     public boolean addPaymentOptions(String[] paymentInfo) {
-        String[] options = this.paymentInfo.split(",");
+        String[] options = this.paymentInfo.toUpperCase().split(",");
+        List<String> paymentOptions = Arrays.asList(options);
+
         for(String option : paymentInfo){
-            if(Arrays.binarySearch(options, option.toUpperCase()) < 0){
-                this.paymentInfo = String.format("%s,%s",this.paymentInfo, option);
+            if(!paymentOptions.contains(option.toUpperCase())){
+                this.paymentInfo = String.format("%s,%s",this.paymentInfo, option.toUpperCase());
             }
         }
 

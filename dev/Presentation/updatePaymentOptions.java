@@ -19,7 +19,7 @@ public class updatePaymentOptions implements  Menu_Option {
         /*
          * <update> <supplier id> <payment options>+
          */
-        if(argv.length < 3){
+        if(argv.length != 3){
             System.out.println("Invalid number of args");
             return;
         }
@@ -37,7 +37,7 @@ public class updatePaymentOptions implements  Menu_Option {
         }
 
         String[] paymentOptions;
-        paymentOptions = Arrays.copyOfRange(argv,1, argv.length);
+        paymentOptions = Arrays.copyOfRange(argv,2, argv.length);
 
         boolean update = false;
         if(argv[0].equals("remove")){

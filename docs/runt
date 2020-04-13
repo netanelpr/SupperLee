@@ -1,7 +1,14 @@
-createSupplierCard sup1 1 1 cash
+init
 
 getPaymentOptions
-getPaymentOptions 3 
-getPaymentOptions 1
+getPaymentOptions 0
+updatePaymentOptions add 0 CHEck
+getPaymentOptions 0
 
 getAllSuppliers
+addContactInfoToSupplier 1 a a a
+
+addProductToSupplier 0
+10 123a 1500 tv lg {100:0.1}
+discountReport 0
+discountReport 1

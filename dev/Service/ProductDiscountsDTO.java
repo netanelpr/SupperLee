@@ -19,7 +19,7 @@ public class ProductDiscountsDTO {
             discountStr = discountStr + String.format("\t%d : %f\n", amount, discountPerAmount.get(amount));
         }
 
-        return String.format("Product ID: %d\nDiscounts : %s\nOriginal price : %f", productID, discountStr, originalPrice);
+        return String.format("Product ID: %d\nDiscounts :\n%sOriginal price : %f", productID, discountStr, originalPrice);
     }
 
 
