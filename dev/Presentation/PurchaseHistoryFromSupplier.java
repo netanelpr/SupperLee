@@ -17,6 +17,9 @@ public class PurchaseHistoryFromSupplier implements  Menu_Option {
 
     @Override
     public void apply(String[] argv) {
+        /*
+         * <supplier ID>
+         */
         if(argv.length != 1){
             System.out.println("Invalid number of args");
             return;
@@ -30,15 +33,15 @@ public class PurchaseHistoryFromSupplier implements  Menu_Option {
             return;
         }
 
-        List<Integer> ordersId = supplierManagment.getPurchaseHistory(supplierId);
-        if(ordersId != null) {
+        List<String> catalogNumbers = supplierManagment.getPurchaseHistory(supplierId);
+        if(catalogNumbers != null) {
             int index = 0;
-            System.out.println("The orders id:");
-            for (Integer order : ordersId) {
+            System.out.println("The catalog numbers ids:");
+            for (String catalogN : catalogNumbers) {
                 if(index != 10) {
-                    System.out.print(order + ", ");
+                    System.out.print(catalogN + ", ");
                 } else {
-                    System.out.println(order.intValue());
+                    System.out.println(catalogN);
                     index = 0;
                     continue;
                 }

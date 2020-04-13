@@ -2,8 +2,8 @@ package Service;
 
 public class SupplierProductDTO {
 
-    private String productCatalogNumber;
-    private int productID;
+    public String productCatalogNumber;
+    public int productID;
 
     public SupplierProductDTO(int productID, String productCatalogNumber) {
         this.productCatalogNumber = productCatalogNumber;

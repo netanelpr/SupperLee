@@ -6,8 +6,7 @@ import java.util.*;
 
 public class SupplierSystem {
 
-    //TODO check if to make the add product an atomic procedure
-    // add to both supplier contract and the products.
+
     private Map<Integer, Supplier> suppliers;
     private Map<Integer,List<Order>> orders;
 
@@ -121,7 +120,6 @@ public class SupplierSystem {
      * Return the details for each supplier in the system.
      * @return List<Service.SupplierDetails> for each supplier in the system.
      */
-    // TODO maybe return just the id
     public List<SupplierDetails> getAllSuppliers() {
         List<SupplierDetails> supDetails = new LinkedList<>();
 

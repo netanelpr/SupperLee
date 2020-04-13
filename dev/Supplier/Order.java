@@ -16,7 +16,6 @@ public class Order {
     private OrderStatus status;
     private Days deliveryDay;
 
-    //TODO Implement
     private Order(List<ProductInOrder> products){
         orderId = GLOBAL_ORDER_ID;
         GLOBAL_ORDER_ID = GLOBAL_ORDER_ID + 1;

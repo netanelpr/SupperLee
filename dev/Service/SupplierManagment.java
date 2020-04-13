@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface SupplierManagment {
 
-    //TODO edit this method by adding contact info for one person 7.
     /**
      * Create new supplier in the system
      * @param name The name of the supplier
@@ -31,7 +30,6 @@ public interface SupplierManagment {
      */
     public String getPaymentOptions(int supId);
 
-    //TODO implement 1.
     /**
      * Add all or noting of the payments info to the supplier
      * @param supId supplier ID
@@ -40,7 +38,6 @@ public interface SupplierManagment {
      */
     public boolean addPaymentOptions(int supId, String[] paymentInfo);
 
-    //TODO implement 1.
     /**
      * Remove all or noting of the payments info from supplier
      * @param supId supplier ID
@@ -65,7 +62,6 @@ public interface SupplierManagment {
      */
     public boolean addContactInfo(int supplierId, String contactPersonName, String phoneNumber, String email);
 
-    //TODO implemet 2.
     /**
      * Remove contact person by email if there are more then 1 in the system for the
      * specifed supplier
@@ -130,15 +126,15 @@ public interface SupplierManagment {
      */
     public List<SupplierProductDTO> getAllSupplierProducts(int supplierId);
 
-    //TODO implement function that return all the details of product by supid,catalog 4.
     /**
      * Return all the information that was added to the system about a product
      * @param supplierId supplier ID
      * @param barcode the product's barcode
-     * @return All the information, encapsulated in an AddProductInfoDTO object
+     * @return All the information, encapsulated in an AddProductInfoDTO object,
+     *          return null if there isnt such barcode in the supplier products.
      */
     public AddProductInfoDTO getAllInformationAboutSuppliersProduct(int supplierId,int barcode);
-    //TODO edit getPurchaseHistory to return what we wrote in the description 6.
+
     /**
      * Return all the catalog ID from a given suppler
      * @param supplierId Supplier ID

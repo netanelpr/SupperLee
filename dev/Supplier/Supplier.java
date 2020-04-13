@@ -17,7 +17,6 @@ public class Supplier {
     private List<ContactInfo> contacts;
     private ContractWithSupplier contract;
 
-    //TODO verify incNum and accountNunber are numbers
     public Supplier(String name, String incNum, String accountNumber, String paymentInfo,
                     String contactName, String phoneNumber,String email){
         this.name=name;
@@ -31,7 +30,6 @@ public class Supplier {
         this.addContactInfo(contactName,phoneNumber,email);
     }
 
-    //TODO is the return is needed
     public boolean addContactInfo(String name, String phone, String email){
         this.contacts.add(new ContactInfo(name, phone, email));
         return true;
@@ -84,17 +82,14 @@ public class Supplier {
         }
         return supplierProductInfos;
     }
-    // TODO: not in class diagram
     public int getSupId(){
         return supId;
     }
 
-    // TODO: not in class diagram
     public String getPaymentInfo(){
         return paymentInfo;
     }
 
-    // TODO: not in class diagram
     public String getSupplierName(){
         return name;
     }

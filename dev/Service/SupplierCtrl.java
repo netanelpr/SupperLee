@@ -36,10 +36,9 @@ public class SupplierCtrl implements SupplierManagment {
         return supplierSystem.addPaymentOptions(supId, paymentInfo);
     }
 
-    //TODO implement
     @Override
     public boolean removePaymentOptions(int supId, String[] paymentInfo) {
-        return false;
+        return supplierSystem.removePaymentOptions(supId, paymentInfo);
     }
 
     @Override
@@ -164,10 +163,10 @@ public class SupplierCtrl implements SupplierManagment {
             return null;
         }
 
-        ProductDiscounts product = new ProductDiscounts(addProductInfoDTO.productId,addProductInfoDTO.discounts.discountPerAmount,addProductInfoDTO.originalPrice);
+        ProductDiscounts product = new ProductDiscounts(addProductInfoDTO.barcode,addProductInfoDTO.discounts.discountPerAmount,addProductInfoDTO.originalPrice);
 
         return new AddProduct(
-                addProductInfoDTO.productId,
+                addProductInfoDTO.barcode,
                 addProductInfoDTO.productCatalogNumber,
                 addProductInfoDTO.originalPrice,
                 product,
