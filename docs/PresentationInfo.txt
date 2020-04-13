@@ -1,7 +1,10 @@
 The program supports the next functaionalits for the user:
 
-<arrgumen description>
+<arrgument description>
 <...>? is optional
+<...>+ have at least one
+
+Initialize data : init
 
 1. Create a new supplier in the system:
    createSupplierCard <name> <inc number> <bank account number> <payment info>
@@ -23,8 +26,9 @@ The program supports the next functaionalits for the user:
    addContactInfoToSupplier <supplier ID> <person name> <phone number> <email>
    
 
-6. This functionality adds a contract to the supplier, only if there isnt one:
-   addContractToSupplier <supplier id>
+6. This functionality adds a contract to the supplier, or replaceing it
+   if one already exists:
+   addOrReplaceContractToSupplier <supplier id>
    Then you will go in the process of entering the next info:
 	   Contract info : String.
 	   Supply days sperated by space e.g sunday monday.
@@ -54,7 +58,7 @@ The program supports the next functaionalits for the user:
     updateOrderStatus <order ID> <status>
 
 12. Return all of the supplier product basic info which are product ID and the catalog number:
-    getAllSupplierProductsId <supplier ID>
+    getAllSupplierBarcode <supplier ID>
 
 13. Return all of the supplier products information:
     getAllSupplierProductsDetalis <supplier ID>

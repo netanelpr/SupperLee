@@ -27,3 +27,9 @@ createNewOrder 0
 	1
 	10 100
 
+
+updateOrderArrivalDay 0 sunday
+updateOrderStatus 0 close
+
+getPruchaseHistoryFromSupplier 0
+

@@ -39,7 +39,7 @@ public class PurchaseHistoryFromSupplier implements  Menu_Option {
             System.out.println("The catalog numbers ids:");
             for (String catalogN : catalogNumbers) {
                 if(index != 10) {
-                    System.out.print(catalogN + ", ");
+                    System.out.print(catalogN + " ");
                 } else {
                     System.out.println(catalogN);
                     index = 0;
@@ -47,6 +47,7 @@ public class PurchaseHistoryFromSupplier implements  Menu_Option {
                 }
                 index = index + 1;
             }
+            System.out.println();
         } else {
             System.out.println("Invalid supplier ID");
         }

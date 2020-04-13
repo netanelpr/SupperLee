@@ -167,14 +167,24 @@ public class Supplier {
     }
 
     /**
-     * Check if the supplier supply this productId
-     * @param productId productId
-     * @return true if the supplier supply this productId
+     * Check if the supplier supply this barcode
+     * @param barcode barcode
+     * @return true if the supplier supply this barcode
      */
-    public boolean hasProduct(int productId) {
+    public boolean hasProduct(int barcode) {
         if(contract == null){
             return false;
         }
-        return contract.hasProduct(productId);
+        return contract.hasProduct(barcode);
+    }
+
+    /**
+     * fill the catalogNumber filed according to the product id
+     * @param products products
+     */
+    public void fillWithCatalogNumber(List<ProductInOrder> products) {
+        if(contract != null){
+            contract.fillWithCatalogNumber(products);
+        }
     }
 }

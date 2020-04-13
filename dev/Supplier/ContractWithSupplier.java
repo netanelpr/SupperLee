@@ -21,7 +21,7 @@ public class ContractWithSupplier {
         this.contractDetails=contractDetails;
         this.products=new LinkedList<ContractProduct>();
     }
-    //int produceId, String manufacture, String name,  int productId, int productCatalogNumber, double originalPrice
+    //int produceId, String manufacture, String name,  int barcode, int productCatalogNumber, double originalPrice
     public boolean addProduct(AddProduct product){
         if(this.products.stream()
                 .filter(x->x.getProductCatalogNumber().equals(product.productCatalogNumber))
@@ -75,16 +75,31 @@ public class ContractWithSupplier {
 
     /**
      * Check if there is a product id in this contract
-     * @param productId productId
-     * @return true if the there is productId
+     * @param barcode barcode
+     * @return true if the there is barcode
      */
-    public boolean hasProduct(int productId) {
+    public boolean hasProduct(int barcode) {
         for(ContractProduct product : products){
-            if(product.getBarCode() == productId){
+            if(product.getBarCode() == barcode){
                 return true;
             }
         }
         return false;
 
+    }
+
+    /**
+     * fill the catalogNumber filed according to the product id
+     * @param products products
+     */
+    public void fillWithCatalogNumber(List<ProductInOrder> products) {
+        for(ContractProduct contractProduct : this.products){
+            for(ProductInOrder product : products){
+                if(product.barcode == contractProduct.getBarCode()){
+                    product.productCatalogNumber = contractProduct.getProductCatalogNumber();
+                    break;
+                }
+            }
+        }
     }
 }

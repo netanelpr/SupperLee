@@ -3,12 +3,12 @@ package Service;
 import java.util.Map;
 
 public class ProductDiscountsDTO {
-    public int productID;
+    public int barcode;
     public Map<Integer,Double> discountPerAmount;
     public double originalPrice;
 
-    public ProductDiscountsDTO(int productID, Map<Integer, Double> discountPerAmont, Double originalPrice) {
-        this.productID = productID;
+    public ProductDiscountsDTO(int barcode, Map<Integer, Double> discountPerAmont, Double originalPrice) {
+        this.barcode = barcode;
         this.discountPerAmount = discountPerAmont;
         this.originalPrice = originalPrice;
     }
@@ -19,7 +19,7 @@ public class ProductDiscountsDTO {
             discountStr = discountStr + String.format("\t%d : %f\n", amount, discountPerAmount.get(amount));
         }
 
-        return String.format("Product ID: %d\nDiscounts :\n%sOriginal price : %f", productID, discountStr, originalPrice);
+        return String.format("Product ID: %d\nDiscounts :\n%sOriginal price : %f", barcode, discountStr, originalPrice);
     }
 
 

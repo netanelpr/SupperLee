@@ -27,4 +27,15 @@ public class AddProductInfoDTO {
         return String.format("barcode: %d\ncatalog number : %s\noriginal price : %f\n"+
                         discounts.toString()+"\nmanufacture : %s\nname : %s", barcode, productCatalogNumber, originalPrice, manufacture, name);
     }
+
+    public String shallow_toString() {
+
+        String discountStr = "";
+        for(Integer amount : discounts.discountPerAmount.keySet()){
+            discountStr = discountStr + String.format("\t%d : %f\n", amount, discounts.discountPerAmount.get(amount));
+        }
+
+        return String.format("barcode: %d\ncatalog number : %s\noriginal price : %f\n" +
+                discountStr + "\nmanufacture : %s\nname : %s", barcode, productCatalogNumber, originalPrice, manufacture, name);
+    }
 }

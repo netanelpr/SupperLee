@@ -3,14 +3,14 @@ package Service;
 public class SupplierProductDTO {
 
     public String productCatalogNumber;
-    public int productID;
+    public int barcode;
 
-    public SupplierProductDTO(int productID, String productCatalogNumber) {
+    public SupplierProductDTO(int barcode, String productCatalogNumber) {
         this.productCatalogNumber = productCatalogNumber;
-        this.productID = productID;
+        this.barcode = barcode;
     }
 
     public String toString(){
-        return String.format("Product id : %d, Catalog number : %s", productID, productCatalogNumber);
+        return String.format("Barcode : %d, Catalog number : %s", barcode, productCatalogNumber);
     }
 }

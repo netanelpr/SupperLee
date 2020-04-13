@@ -3,7 +3,6 @@ package Supplier;
 import Structs.Days;
 import Structs.OrderStatus;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class SupplierSystem {
@@ -254,6 +253,8 @@ public class SupplierSystem {
             }
         }
 
+        supplier.fillWithCatalogNumber(products);
+
         Order order = Order.CreateOrder(products);
         if(order == null){
             return -1;
@@ -331,7 +332,7 @@ public class SupplierSystem {
         }
 
         for(Order order : ordersOfSupplier){
-            List<String> productsCatalogNumberInOrder=order.retrunProductsCatalogNumbers();
+            List<String> productsCatalogNumberInOrder = order.retrunProductsCatalogNumbers();
             for (String s : productsCatalogNumberInOrder) {
                 productsNoDuplicate.putIfAbsent(s, 0);
             }
