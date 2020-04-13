@@ -37,7 +37,7 @@ public class GetAllSuppliersProductsDetalis implements  Menu_Option {
 
         if(supplierProductDTOS != null) {
             for(SupplierProductDTO dto : supplierProductDTOS){
-                String productInfo = supplierManagment.getAllInformationAboutSuppliersProduct(supplierId, dto.productID).toString();
+                String productInfo = supplierManagment.getAllInformationAboutSuppliersProduct(supplierId, dto.barcode).shallow_toString();
                 System.out.println(productInfo+ "\n");
             }
         } else {
