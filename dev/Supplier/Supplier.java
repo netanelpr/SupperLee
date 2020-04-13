@@ -18,7 +18,8 @@ public class Supplier {
     private ContractWithSupplier contract;
 
     //TODO verify incNum and accountNunber are numbers
-    public Supplier(String name, String incNum, String accountNumber, String paymentInfo){
+    public Supplier(String name, String incNum, String accountNumber, String paymentInfo,
+                    String contactName, String phoneNumber,String email){
         this.name=name;
         this.incNum=incNum;
         this.accountNumber=accountNumber;
@@ -27,6 +28,7 @@ public class Supplier {
         SupplierIDsCounter++;
 
         this.contacts = new LinkedList<>();
+        this.addContactInfo(contactName,phoneNumber,email);
     }
 
     //TODO is the return is needed
@@ -42,9 +44,16 @@ public class Supplier {
      * @return List of products id with wasnt added to the supplier
      */
     public boolean addContractInfo(String contractDetails, List<Days> days){
-        this.contract=new ContractWithSupplier(contractDetails,days);
+        if(this.contract!=null)
+        {
+            this.contract=new ContractWithSupplier(contractDetails,days);
+            return true;
+        }
+        else {
+            this.contract = new ContractWithSupplier(contractDetails, days);
 
-        return true;
+            return true;
+        }
     }
 
     /**
@@ -131,5 +140,24 @@ public class Supplier {
 
         this.paymentInfo = String.join(",", optionsAfterRemove);
         return true;
+    }
+
+    public boolean RemoveContactFromSupplier(String email)
+    {
+        ContactInfo contact=this.contacts.stream().filter(x->x.email==email).findFirst().orElse(null);
+        if (contact!=null && this.contacts.size()>1)
+        {
+            this.contacts.remove(contact);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public ContractProduct getAllInformationAboutSuppliersProduct( int barcode) {
+        ContractProduct cp=this.contract.getProducts().stream().filter(x->x.getBarCode()==barcode).findFirst().orElse(null);
+        return cp;
     }
 }

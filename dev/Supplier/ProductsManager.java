@@ -25,4 +25,8 @@ public class ProductsManager {
     public boolean exists(int barCode){
         return productMap.containsKey(barCode);
     }
+
+    public Product getAllInfoAboutProduct(int barcode) {
+        return this.productMap.get(barcode);
+    }
 }

@@ -16,8 +16,9 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo) {
-        return supplierSystem.createSupplierCard(name, incNum, accountNumber, paymentInfo);
+    public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo,
+                                  String contactName, String phoneNumber,String email) {
+        return supplierSystem.createSupplierCard(name, incNum, accountNumber, paymentInfo,contactName,phoneNumber,email);
     }
 
     @Override
@@ -58,10 +59,9 @@ public class SupplierCtrl implements SupplierManagment {
         return supplierSystem.addContactInfo(supplierId, contactPersonName, phoneNumber, email);
     }
 
-    //TODO implement
     @Override
     public boolean removeContactPerson(int supplierId, String email) {
-        return false;
+        return this.supplierSystem.RemoveContactFromSupplier(supplierId,email);
     }
 
     @Override
@@ -134,14 +134,17 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public List<Integer> getPurchaseHistory(int supplierId) {
-        return supplierSystem.getPurchaseHistory(supplierId);
+    public AddProductInfoDTO getAllInformationAboutSuppliersProduct(int supplierId, int barcode) {
+        AddProduct supplierProductInfo= this.supplierSystem.getAllInformationAboutSuppliersProduct(supplierId, barcode);
+        return AddPITOToAddProductReverse(supplierProductInfo);
     }
 
     @Override
-    public List<Days> getProductSupplyTimingInterval(int supplierID) {
-        return null;
+    public List<String> getPurchaseHistory(int supplierId) {
+        return supplierSystem.getPurchaseHistory(supplierId);
     }
+
+
 
     private static SupplierDetailsDTO supplierDetailsToDTO(SupplierDetails supplierDetails){
 
@@ -170,6 +173,23 @@ public class SupplierCtrl implements SupplierManagment {
                 product,
                 addProductInfoDTO.name,
                 addProductInfoDTO.manufacture);
+    }
+
+    private static AddProductInfoDTO AddPITOToAddProductReverse(AddProduct addProduct){
+
+        if(addProduct == null){
+            return null;
+        }
+
+        ProductDiscountsDTO productDiscounts = new ProductDiscountsDTO(addProduct.barCode,addProduct.productDiscounts.discountPerAmount,addProduct.originalPrice);
+
+        return new AddProductInfoDTO(
+                addProduct.barCode,
+                addProduct.productCatalogNumber,
+                addProduct.originalPrice,
+                productDiscounts,
+                addProduct.name,
+                addProduct.manufacture);
     }
 
     private static ProductDiscountsDTO ProductDiscountToDTO(ProductDiscounts productDiscounts){

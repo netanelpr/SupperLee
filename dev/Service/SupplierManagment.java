@@ -14,9 +14,13 @@ public interface SupplierManagment {
      * @param incNum incupartion number
      * @param accountNumber Bank account
      * @param paymentInfo Payment info
+     * @param contactName Contact info
+     * @param phoneNumber Contact info
+     * @param email Contact info
      * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
      */
-    public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo);
+    public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo,
+                                  String contactName, String phoneNumber,String email);
 
     public String getPaymentOptions();
 
@@ -127,17 +131,22 @@ public interface SupplierManagment {
     public List<SupplierProductDTO> getAllSupplierProducts(int supplierId);
 
     //TODO implement function that return all the details of product by supid,catalog 4.
-
-    //TODO edit getPurchaseHistoy to return what we wrote in the description 6.
+    /**
+     * Return all the information that was added to the system about a product
+     * @param supplierId supplier ID
+     * @param barcode the product's barcode
+     * @return All the information, encapsulated in an AddProductInfoDTO object
+     */
+    public AddProductInfoDTO getAllInformationAboutSuppliersProduct(int supplierId,int barcode);
+    //TODO edit getPurchaseHistory to return what we wrote in the description 6.
     /**
      * Return all the catalog ID from a given suppler
      * @param supplierId Supplier ID
      * @return List with all the products catalog numbers that the system has order which
      * contains them
      */
-    public List<Integer> getPurchaseHistory(int supplierId);
+    public List<String> getPurchaseHistory(int supplierId);
 
-    //TODO check what it is
-    public List<Days> getProductSupplyTimingInterval(int supplierID);
+
 
 }

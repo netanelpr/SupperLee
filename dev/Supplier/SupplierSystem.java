@@ -22,7 +22,7 @@ public class SupplierSystem {
         orderIdToOrder = new HashMap<>();
 
         productsManager = new ProductsManager();
-        paymentOptions = new String[]{"CASH", "BANKTRANFOR","PAYMENTS"};
+        paymentOptions = new String[]{"CASH", "BANKTRANSFER","PAYMENTS","+30DAYSPAYMENT","CHECK"};
     }
 
     /**
@@ -33,13 +33,15 @@ public class SupplierSystem {
      * @param paymentInfo payment options by string separated by ,
      * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
      */
-    public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo) {
+    public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo,
+                                  String contactName, String phoneNumber,String email) {
 
         if(Arrays.binarySearch(paymentOptions,paymentInfo.toUpperCase()) < 0){
             return -1;
         }
 
-        Supplier sup = new Supplier(name, incNum, accountNumber, paymentInfo);
+        Supplier sup = new Supplier(name, incNum, accountNumber, paymentInfo,contactName,phoneNumber,email);
+
 
         if(sup.getSupId() < 0){
             return -1;
@@ -150,6 +152,11 @@ public class SupplierSystem {
         return supplier.addContactInfo(contactPersonName, phoneNumber, email);
     }
 
+    public boolean RemoveContactFromSupplier(int supID,String email)
+    {
+        return this.suppliers.get(supID).RemoveContactFromSupplier(email);
+    }
+
     /**
      * Add contract with the supplier, only one contract can exist.
      * @param supplierId Supplier id
@@ -167,18 +174,22 @@ public class SupplierSystem {
         if(supplier == null){
             return null;
         }
-        supplier.addContractInfo(contractInfo,days);
-        for(AddProduct product : products){
-            if(!supplier.addProduct(product))
-            {
-                productIdError.add(product.barCode);
+        boolean ans= supplier.addContractInfo(contractInfo,days);
+        if(ans) {
+            for (AddProduct product : products) {
+                if (!supplier.addProduct(product)) {
+                    productIdError.add(product.barCode);
+                } else {
+                    productsManager.addIfAbsent(product);
+                }
             }
-            else
-            {
-                productsManager.addIfAbsent(product);
-            }
+
+            return productIdError;
         }
-        return productIdError;
+        else {
+            return null;
+        }
+
     }
 
     /**
@@ -297,23 +308,44 @@ public class SupplierSystem {
      * @param supplierId Supplier ID
      * @return List with all the orders for the specific supplier
      */
-    public List<Integer> getPurchaseHistory(int supplierId) {
+    public List<String> getPurchaseHistory(int supplierId) {
         List<Order> ordersOfSupplier = orders.getOrDefault(supplierId, null);
-        List<Integer> ordersId = new LinkedList<>();
+        Map<String,Integer> productsNoDuplicate=new HashMap<>();
+
+
 
         if(ordersOfSupplier == null){
             return null;
         }
 
         for(Order order : ordersOfSupplier){
-            ordersId.add(order.getOrderId());
+            List<String> productsCatalogNumberInOrder=order.retrunProductsCatalogNumbers();
+            for (String s : productsCatalogNumberInOrder) {
+                productsNoDuplicate.putIfAbsent(s, 0);
+            }
         }
+        return new LinkedList<>(productsNoDuplicate.keySet());
 
-        return ordersId;
+
     }
 
 
-    public List<Days> getProductSupplyTimingInterval(int supplierID) {
-        return null;
+
+    public AddProduct getAllInformationAboutSuppliersProduct(int supplierId, int barcode) {
+        Supplier supplier = suppliers.getOrDefault(supplierId, null);
+
+        if(supplier == null){
+            return null;
+        }
+        ContractProduct cp=supplier.getAllInformationAboutSuppliersProduct(barcode);
+        Product product=this.productsManager.getAllInfoAboutProduct(barcode);
+        if(cp!=null && product!=null) {
+            return new AddProduct(cp.getBarCode(), cp.getProductCatalogNumber(), cp.getDiscounts().originalPrice, cp.getDiscounts(), product.manufacture, product.name);
+        }
+        else
+        {
+            return null;
+        }
+
     }
 }
