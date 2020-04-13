@@ -98,14 +98,14 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products, Days deliveryDay) {
+    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products) {
         List<ProductInOrder> productInOrders = new LinkedList<>();
 
         for(ProductInOrderDTO productInOrderDTO : products){
             productInOrders.add(ProductInOrderDTOToPIO(productInOrderDTO));
         }
 
-        return supplierSystem.createNewOrder(supplierId, productInOrders, deliveryDay);
+        return supplierSystem.createNewOrder(supplierId, productInOrders);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class SupplierSystem {
     private Map<Integer, Order> orderIdToOrder;
 
     private ProductsManager productsManager;
-    private String[] paymentOptions;
+    private final String[] paymentOptions;
 
     public SupplierSystem() {
         suppliers = new HashMap<>();
@@ -30,7 +30,7 @@ public class SupplierSystem {
      * @param name The name of the supplier
      * @param incNum incupartion number
      * @param accountNumber Bank account
-     * @param paymentInfo
+     * @param paymentInfo payment options by string separated by ,
      * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
      */
     public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo) {
@@ -172,22 +172,20 @@ public class SupplierSystem {
     }
 
 
-    //TODO check the day param, mabye the suppler dont do deliveries in this day.
     /**
      * Create a new order in the system
      * @param supplierId The supplier ID who need to supply the order
      * @param products The product to order
-     * @param deliveryDay the day to deliver it
      * @return -1 if cant create the order, otherwise return the order id
      */
-    public int createNewOrder(int supplierId, List<ProductInOrder> products, Days deliveryDay) {
+    public int createNewOrder(int supplierId, List<ProductInOrder> products) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
 
         if(supplier == null){
             return -1;
         }
 
-        Order order = Order.CreateOrder(products, deliveryDay);
+        Order order = Order.CreateOrder(products);
         if(order == null){
             return -1;
         }

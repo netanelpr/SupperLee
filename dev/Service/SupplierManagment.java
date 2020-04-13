@@ -95,15 +95,13 @@ public interface SupplierManagment {
      */
     public List<ProductDiscountsDTO> getAmountDiscountReport(int supplierId);
 
-    //TODO remove the day in the method 5.
     /**
      * Create a new order in the system
      * @param supplierId The supplier ID who need to supply the order
      * @param products The product to order
-     * @param day the day to deliver it
      * @return -1 if cant create the order, otherwise return the order id
      */
-    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products, Days day);
+    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products);
 
     /**
      * Update the day of order arrival

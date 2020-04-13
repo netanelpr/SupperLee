@@ -26,7 +26,7 @@ public class Order {
      * Supplier.Order cant be created without at least one product.
      * @return new order
      */
-    public static Order CreateOrder(List<ProductInOrder> productsInOrder, Days deliveryDay){
+    public static Order CreateOrder(List<ProductInOrder> productsInOrder){
         if(productsInOrder.isEmpty()){
             return null;
         }
