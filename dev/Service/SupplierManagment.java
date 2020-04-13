@@ -75,7 +75,7 @@ public interface SupplierManagment {
      * @param supplierId Supplier id
      * @param contractInfo Contract details
      * @param days List of days he can supply items.
-     * @param products List of product he supply
+     * @param products List of product he supply, need to contain at least one
      * @return List of products id that wasnt added to the system, null if the contract wasnt added
      */
     public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products);

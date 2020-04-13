@@ -14,6 +14,9 @@ public class HandleSupplierCard implements  Menu_Option {
 
     @Override
     public void apply(String[] argv) {
+        /*
+         * <name> <inc number> <bank account number> <payment info>
+         */
         if(argv.length != 4){
             System.out.println("Invalid input");
             return;

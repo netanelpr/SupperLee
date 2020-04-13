@@ -47,14 +47,16 @@ public class AddProductToSupplier implements  Menu_Option {
 
             Map<Integer, Double> discounts = new HashMap<>();
             String[] discountArr = input[5].substring(1, input[5].length()-1).split(",");
-            for(String discount: discountArr){
-                String[] discountS = discount.split(":");
-                if(discountS.length != 2){
-                    System.out.println("Invalid format of discount");
-                    continue;
-                }
+            if(!((discountArr.length == 1) && (discountArr[0].length() == 0))) {
+                for (String discount : discountArr) {
+                    String[] discountS = discount.split(":");
+                    if (discountS.length != 2) {
+                        System.out.println("Invalid format of discount");
+                        continue;
+                    }
 
-                discounts.put(Integer.parseInt(discountS[0]), Double.parseDouble(discountS[1]));
+                    discounts.put(Integer.parseInt(discountS[0]), Double.parseDouble(discountS[1]));
+                }
             }
 
             ProductDiscountsDTO product = new ProductDiscountsDTO(Integer.parseInt(input[0]), discounts,  Double.parseDouble(input[2]));

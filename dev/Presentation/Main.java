@@ -15,11 +15,6 @@ public class Main {
         //     7.edit createNewSupplier method by adding contact info for one person
 
         MainMenu mainMenu = new MainMenu();
-
-        try {
-            mainMenu.startMenu();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mainMenu.startMenu();
     }
 }

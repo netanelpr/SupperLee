@@ -22,7 +22,7 @@ public class SupplierSystem {
         orderIdToOrder = new HashMap<>();
 
         productsManager = new ProductsManager();
-        paymentOptions = new String[]{"CASH", "CREDIT"};
+        paymentOptions = new String[]{"CASH", "BANKTRANFOR","PAYMENTS"};
     }
 
     /**

@@ -41,12 +41,18 @@ public class MainMenu {
 
     }
 
-    public void startMenu() throws IOException {
+    public void startMenu() {
         String[] argv;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         while(true){
-            String input = reader.readLine();
+            String input;
+            try {
+                input = reader.readLine();
+            } catch (IOException e){
+                System.out.println("Error reading input");
+                continue;
+            }
             argv = input.split(" ");
 
             Menu_Option option = optionMap.getOrDefault(argv[0], null);
