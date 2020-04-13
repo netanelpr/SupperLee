@@ -26,6 +26,7 @@ public class MainMenu {
         //TODO add option that use getAllSupplierProducts and getProductDetails to print all the supplier products 4.
         map.put("createSupplierCard", new HandleSupplierCard(supplierManagment));
         map.put("getPaymentOptions", new PaymentOptions(supplierManagment));
+        map.put("updatePaymentOptions", new updatePaymentOptions(supplierManagment));
         map.put("getAllSuppliers", new GetAllSuppliers(supplierManagment));
         map.put("addContactInfoToSupplier", new AddContactInfoToSupplier(supplierManagment));
         map.put("addContractToSupplier", new AddContractToSupplier(supplierManagment));

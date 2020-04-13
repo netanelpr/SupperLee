@@ -2,10 +2,7 @@ package Supplier;
 
 import Structs.Days;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Supplier {
     private static int SupplierIDsCounter=0;
@@ -96,5 +93,43 @@ public class Supplier {
     public boolean addDiscountToProduct(int barcode,int amount, double discount)
     {
         return contract.addDiscountToProduct(barcode,amount,discount);
+    }
+
+    /**
+     * Add all paymentInfo if there are not already exist
+     * @param paymentInfo Array of payments info
+     * @return true
+     */
+    public boolean addPaymentOptions(String[] paymentInfo) {
+        String[] options = this.paymentInfo.split(",");
+        for(String option : paymentInfo){
+            if(Arrays.binarySearch(options, option.toUpperCase()) < 0){
+                this.paymentInfo = String.format("%s,%s",this.paymentInfo, option);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove all of payment info if there will be left at least one
+     * payment info
+     * @param paymentInfo Array of payment info
+     * @return true if all of the payment are removed, false otherwise
+     */
+    public boolean RemovePaymentOptions(String[] paymentInfo) {
+        String[] options = this.paymentInfo.split(",");
+        List<String> optionsAfterRemove = Arrays.asList(options);
+
+        for(String option : paymentInfo){
+            optionsAfterRemove.remove(option.toUpperCase());
+        }
+
+        if(optionsAfterRemove.isEmpty()){
+            return false;
+        }
+
+        this.paymentInfo = String.join(",", optionsAfterRemove);
+        return true;
     }
 }

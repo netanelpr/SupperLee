@@ -51,16 +51,7 @@ public class CreateNewOrder implements  Menu_Option {
                         Integer.parseInt(productAndAmount[1])));
             }
 
-            System.out.print("Enter the delivery day :");
-            String[] dayStr = {reader.readLine()};
-            List<Days> days = StructUtils.getDaysList(dayStr);
-            if(days == null){
-                System.out.println("Invalid day");
-                return;
-            }
-            Days day = days.get(0);
-
-            int orderId = supplierManagment.createNewOrder(supId, products, day);
+            int orderId = supplierManagment.createNewOrder(supId, products);
             if(orderId < 0){
                 System.out.println("Order was not created");
             } else {

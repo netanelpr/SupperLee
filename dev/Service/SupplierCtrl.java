@@ -30,10 +30,9 @@ public class SupplierCtrl implements SupplierManagment {
         return supplierSystem.getPaymentOptions(supId);
     }
 
-    //TODO implement
     @Override
     public boolean addPaymentOptions(int supId, String[] paymentInfo) {
-        return false;
+        return supplierSystem.addPaymentOptions(supId, paymentInfo);
     }
 
     //TODO implement

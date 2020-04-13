@@ -40,8 +40,7 @@ The program supports the next functaionalits for the user:
    createNewOrder <supplier ID>
    Then you will go in the proccess of entering the next info:
    	Number of product to in the order
-	Then for each product you will enter <product ID> <amount>
-	Delivery day: the day which the order should be reached the store.  
+	Then for each product you will enter <product ID> <amount>  
 
 9. Update the arrival day of an order:
    updateOrderArrivalDay <order ID> <day>

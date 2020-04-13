@@ -68,6 +68,52 @@ public class SupplierSystem {
         return sup.getPaymentInfo();
     }
 
+    /**
+     * Add payment options to supplier
+     * @param supId the supplier ID
+     * @param paymentInfo Array of payment options
+     * @return true if the payment options was added or already exist, false otherwise
+     */
+    public boolean addPaymentOptions(int supId, String[] paymentInfo) {
+        Supplier sup = suppliers.getOrDefault(supId, null);
+        if(sup == null){
+            return  false;
+        }
+
+        // payment doesnt in the allowed list
+        for(String option : paymentInfo){
+            if(Arrays.binarySearch(paymentOptions, option.toUpperCase()) < 0){
+                return false;
+            }
+        }
+
+        return sup.addPaymentOptions(paymentInfo);
+    }
+
+    /**
+     * Remove the payment options from the supplier
+     * After the removal there is need to be at least one payment option for the
+     * supplier otherwise the method wont remove any option
+     * @param supId supplier ID
+     * @param paymentInfo Array of payment options to remove
+     * @return true if the all the payment are removed, false otherwise
+     */
+    public boolean removePaymentOptions(int supId, String[] paymentInfo) {
+        Supplier sup = suppliers.getOrDefault(supId, null);
+        if(sup == null){
+            return  false;
+        }
+
+        // payment doesnt in the allowed list
+        for(String option : paymentInfo){
+            if(Arrays.binarySearch(paymentOptions, option.toUpperCase()) < 0){
+                return false;
+            }
+        }
+
+        return sup.RemovePaymentOptions(paymentInfo);
+    }
+
 
     /**
      * Return the details for each supplier in the system.
