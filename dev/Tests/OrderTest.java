@@ -50,12 +50,21 @@ class OrderTest {
         }
     }
 
-    @Test
-    void updateDeliveryDay() {
 
-    }
 
     @Test
     void retrunProductsCatalogNumbers() {
+
+        List<String> catalogNumbersLst=supplierSystem.getPurchaseHistory(supplierID);
+        boolean checkCatalogNumbers=false;
+        for (int i = 0; i < catalogNumbersLst.size(); i++) {
+            if(catalogNumbersLst.get(i).equals("55"))
+            {
+                checkCatalogNumbers=true;
+            }
+
+        }
+
+        Assert.assertTrue(checkCatalogNumbers);
     }
 }
