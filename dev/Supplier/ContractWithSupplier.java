@@ -95,8 +95,8 @@ public class ContractWithSupplier {
     public void fillWithCatalogNumber(List<ProductInOrder> products) {
         for(ContractProduct contractProduct : this.products){
             for(ProductInOrder product : products){
-                if(product.barcode == contractProduct.getBarCode()){
-                    product.productCatalogNumber = contractProduct.getProductCatalogNumber();
+                if(product.getBarcode() == contractProduct.getBarCode()){
+                    product.setProductCatalogNumber(contractProduct.getProductCatalogNumber());
                     break;
                 }
             }

@@ -150,7 +150,7 @@ public class Supplier {
 
     public boolean RemoveContactFromSupplier(String email)
     {
-        ContactInfo contact=this.contacts.stream().filter(x->x.email==email).findFirst().orElse(null);
+        ContactInfo contact=this.contacts.stream().filter(x->x.getEmail()==email).findFirst().orElse(null);
         if (contact!=null && this.contacts.size()>1)
         {
             this.contacts.remove(contact);

@@ -248,7 +248,7 @@ public class SupplierSystem {
         }
 
         for(ProductInOrder product : products){
-            if(!supplier.hasProduct(product.barcode)){
+            if(!supplier.hasProduct(product.getBarcode())){
                 return -1;
             }
         }
@@ -353,7 +353,7 @@ public class SupplierSystem {
         ContractProduct cp=supplier.getAllInformationAboutSuppliersProduct(barcode);
         Product product=this.productsManager.getAllInfoAboutProduct(barcode);
         if(cp!=null && product!=null) {
-            return new AddProduct(cp.getBarCode(), cp.getProductCatalogNumber(), cp.getDiscounts().originalPrice, cp.getDiscounts(), product.manufacture, product.name);
+            return new AddProduct(cp.getBarCode(), cp.getProductCatalogNumber(), cp.getDiscounts().originalPrice, cp.getDiscounts(), product.getManufacture(), product.getName());
         }
         else
         {
