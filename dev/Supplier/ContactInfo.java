@@ -4,9 +4,9 @@ package Supplier;
  * Data class
  */
 public class ContactInfo {
-    public String phoneNumber;
-    public String email;
-    public String name;
+    private String phoneNumber;
+    private String email;
+    private String name;
 
     public ContactInfo(String name, String phoneNumber, String email){
         this.email=email;

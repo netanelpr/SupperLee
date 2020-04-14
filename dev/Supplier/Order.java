@@ -13,7 +13,7 @@ public class Order {
     static private int GLOBAL_ORDER_ID = 0;
 
     private int orderId;
-    private Map<String, Integer> products; //CatalogNumberToProduct, TODO: edit in diagram
+    private Map<String, ProductInOrder> products;
     private OrderStatus status;
     private Days deliveryDay;
 
@@ -23,7 +23,10 @@ public class Order {
 
         this.products = new HashMap<>();
         for (ProductInOrder product : products) {
-            this.products.put(product.productCatalogNumber, product.barcode);
+            this.products.put(product.getProductCatalogNumber(),
+                                new ProductInOrder(product.getBarcode(),
+                                                    product.getAmount(),
+                                                    product.getProductCatalogNumber()));
         }
 
         status = OrderStatus.Open;

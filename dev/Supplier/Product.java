@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class Product {
     //Real product stored in system
-    public int barCode;
-    public String manufacture;
-    public String name;
+    private int barCode;
+    private String manufacture;
+    private String name;
 
     public Product(int barCode, String manufacture, String name) {
         this.barCode = barCode;
