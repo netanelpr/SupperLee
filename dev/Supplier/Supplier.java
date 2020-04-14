@@ -44,7 +44,7 @@ public class Supplier {
      * @return List of products id with wasnt added to the supplier
      */
     public boolean addContractInfo(String contractDetails, List<Days> days){
-        if(this.contract!=null)
+        if(this.contract==null)
         {
             this.contract=new ContractWithSupplier(contractDetails,days);
             return true;
