@@ -361,4 +361,16 @@ public class SupplierSystem {
         }
 
     }
+
+    public OrderStatus getOrderStatus(int orderID)
+    {
+        Order order=this.orderIdToOrder.get(orderID);
+        if(order!=null) {
+            return order.getStatus();
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

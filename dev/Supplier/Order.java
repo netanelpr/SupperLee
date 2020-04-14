@@ -23,10 +23,12 @@ public class Order {
 
         this.products = new HashMap<>();
         for (ProductInOrder product : products) {
+
             this.products.put(product.getProductCatalogNumber(),
                                 new ProductInOrder(product.getBarcode(),
                                                     product.getAmount(),
                                                     product.getProductCatalogNumber()));
+
         }
 
         status = OrderStatus.Open;
@@ -63,5 +65,9 @@ public class Order {
 
     public List<String> retrunProductsCatalogNumbers() {
         return new LinkedList<>(this.products.keySet());
+    }
+
+    public OrderStatus getStatus() {
+        return status;
     }
 }
