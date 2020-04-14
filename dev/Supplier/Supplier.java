@@ -49,11 +49,7 @@ public class Supplier {
             this.contract=new ContractWithSupplier(contractDetails,days);
             return true;
         }
-        else {
-            this.contract = new ContractWithSupplier(contractDetails, days);
-
-            return true;
-        }
+        return false;
     }
 
     /**
@@ -186,5 +182,9 @@ public class Supplier {
         if(contract != null){
             contract.fillWithCatalogNumber(products);
         }
+    }
+
+    public List<ContactInfo> getContacts(){
+        return new ArrayList<ContactInfo>(contacts);
     }
 }

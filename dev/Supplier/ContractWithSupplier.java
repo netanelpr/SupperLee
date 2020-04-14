@@ -1,14 +1,9 @@
 package Supplier;
 
-import Service.AddProductInfoDTO;
-import Service.SupplierProductDTO;
 import Structs.Days;
-
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 public class ContractWithSupplier {
 

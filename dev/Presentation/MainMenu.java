@@ -35,7 +35,7 @@ public class MainMenu {
         map.put("getAllSuppliers", new GetAllSuppliers(supplierManagment));
 
         map.put("addContactInfoToSupplier", new AddContactInfoToSupplier(supplierManagment));
-        map.put("addOrReplaceContractToSupplier", new AddContractToSupplier(supplierManagment));
+        map.put("addContractToSupplier", new AddContractToSupplier(supplierManagment));
         map.put("addProductToSupplier", new AddProductToSupplier(supplierManagment));
         map.put("discountReport", new GetAmountDiscountReport(supplierManagment));
 

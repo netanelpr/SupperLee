@@ -28,7 +28,7 @@ Initialize data : init
 
 6. This functionality adds a contract to the supplier, or replaceing it
    if one already exists:
-   addOrReplaceContractToSupplier <supplier id>
+   addContractToSupplier <supplier id>
    Then you will go in the process of entering the next info:
 	   Contract info : String.
 	   Supply days sperated by space e.g sunday monday.

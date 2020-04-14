@@ -1,6 +1,0 @@
-Check the visibility of the data classes in the main module
-
-Do the TODOS in the code.
-
-Consider adding an Result<T> in order to create a better code and 
-	notify the upper layers with error details if one accord

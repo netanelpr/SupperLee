@@ -15,10 +15,11 @@ class ContractWithSupplierTest {
     private ContractWithSupplier supplierContract;
     public ContractWithSupplierTest()
     {
-        supplierContract=new ContractWithSupplier("hello",new LinkedList<>());
+
     }
     @BeforeEach
     void setUp() {
+        supplierContract=new ContractWithSupplier("hello",new LinkedList<>());
     }
 
     @AfterEach

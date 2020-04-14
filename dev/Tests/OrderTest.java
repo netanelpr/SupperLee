@@ -22,7 +22,7 @@ class OrderTest {
     public OrderTest()
     {
         supplierSystem=new SupplierSystem();
-        supplierID=supplierSystem.createSupplierCard("Netanel","5A5","123-5","CASH","Netanel","054","@com");
+        supplierID=supplierSystem.createSupplierCard("Actor","5A5","123-5","CASH","Actor","054","@com");
         productList= new LinkedList<AddProduct>();
         productList.add(new AddProduct(
                 5,"55",5.3,
