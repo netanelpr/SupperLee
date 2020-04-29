@@ -1,0 +1,79 @@
+CREATE TABLE IF NOT EXISTS Supplier(
+	id INTEGER PRIMARY KEY AUTOINCREMENT
+);
+
+CREATE TABLE IF NOT EXISTS Contact_info(
+	name TEXT NOT NULL,
+	phone_number TEXT NOT NULL,
+	email TEXT NOT NULL,
+	supplier_id INTEGER NOT NULL,
+	PRIMARY KEY (name, phone_number, email)
+	FOREIGN KEY (supplier_id)
+		REFERENCES Supplier (id)
+);
+
+--Supplier contract
+CREATE TABLE IF NOT EXISTS Contract(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	contract_info TEXT NOT NULL,
+	supplier_id INTEGER NOT NULL,
+	UNIQUE(supplier_id),
+	FOREIGN KEY (supplier_id)
+		REFERENCES Supplier(id)
+);
+
+CREATE TABLE IF NOT EXISTS Product_in_contract(
+	catalog_number TEXT NOT NULL,
+	contract_id INTEGER NOT NULL,
+	barcode INTEGER NOT NULL,
+	original_price DOUBLE NOT NULL,
+	PRIMARY KEY (catalog_number, contract_id),
+	FOREIGN KEY (barcode)
+		REFERENCES Product(barcode)
+	FOREIGN KEY (contract_id)
+		REFERENCES Contract(id)
+);
+
+CREATE TABLE IF NOT EXISTS Discount_of_product_in_contract(
+	amount INTEGER NOT NULL,
+	discount DOUBLE NOT NULL,
+	catalog_number TEXT NOT NULL,
+	contract_id INTEGER NOT NULL,
+	PRIMARY KEY (amount, discount, catalog_number, contract_id),
+	FOREIGN KEY (catalog_number, contract_id)
+		REFERENCES Product_in_contract(catalog_number, contract_id),
+	CONSTRAINT discount_constraint 
+		CHECK(discount > 0 AND discount < 1)
+);
+
+--Product
+CREATE TABLE IF NOT EXISTS Product(
+	barcode INTEGER NOT NULL,
+	name TEXT NOT NULL,
+	manufacture TEXT NOT NULL,
+	PRIMARY KEY (barcode)
+	--CHECK (barcode > -1)
+);
+
+--Order
+CREATE TABLE IF NOT EXISTS Supplier_order(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	status TEXT NOT NULL,
+	delivery_day TEXT NOT NULL,
+	supplier_id INTEGER NOT NULL,
+	FOREIGN KEY (supplier_id)
+		REFERENCES Supplier(id)
+);
+
+CREATE TABLE IF NOT EXISTS Product_in_order(
+	order_id INTEGER NOT NULL,
+	barcode INTEGER NOT NULL,
+	amount INTEGER NOT NULL,
+	PRIMARY KEY (order_id, barcode)
+	FOREIGN KEY (order_id)
+		REFERENCES Supplier_order(id)
+	FOREIGN KEY (barcode)
+		REFERENCES Product(barcode)
+	CONSTRAINT amount_in_order
+		CHECK (amount > 0)
+);
