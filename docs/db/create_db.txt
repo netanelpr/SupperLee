@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS Contract(
 );
 
 CREATE TABLE IF NOT EXISTS Product_in_contract(
-	catalog_number TEXT NOT NULL,
 	contract_id INTEGER NOT NULL,
+	catalog_number TEXT NOT NULL,
 	barcode INTEGER NOT NULL,
 	original_price DOUBLE NOT NULL,
 	PRIMARY KEY (catalog_number, contract_id),
@@ -74,18 +74,13 @@ CREATE TABLE IF NOT EXISTS Supplier_order(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	status TEXT NOT NULL,
 	delivery_day TEXT NOT NULL,
-	creation_day TEXT NOT NULL,
+	creation_day TEXT NOT NULL
 	
-	supplier_id INTEGER NOT NULL,
 	--supplier_name TEXT NOT NULL
 	--supplier_address TEXT NOT NULL
 	
 	--contact_name TEXT NOT NULL
 	--phone_number TEXT NOT NULL
-	
-	
-	FOREIGN KEY (supplier_id)
-		REFERENCES Supplier(id)
 );
 
 CREATE TABLE IF NOT EXISTS Periodical_supplier_order(
@@ -99,7 +94,7 @@ CREATE TABLE IF NOT EXISTS Periodical_supplier_order(
 
 --TODO consider to remove it
 CREATE TABLE IF NOT EXISTS Regular_supplier_order(
-	id INTEGER,
+	id INTEGER NOT NULL,
 	
 	PRIMARY KEY (id)
 	FOREIGN KEY(id)
@@ -108,8 +103,9 @@ CREATE TABLE IF NOT EXISTS Regular_supplier_order(
 
 CREATE TABLE IF NOT EXISTS Product_in_order(
 	order_id INTEGER NOT NULL,
+	supplier_id INTEGER NOT NULL,
+	contract_id INTEGER NOT NULL,
 	catalog_number TEXT NOT NULL,
-	barcode INTEGER NOT NULL,
 	amount INTEGER NOT NULL,
 	
 	--name TEXT NOT NULL
@@ -119,11 +115,13 @@ CREATE TABLE IF NOT EXISTS Product_in_order(
 	
 	--total_price DOUBLE NOT NULL
 	
-	PRIMARY KEY (order_id, barcode, catalog_number)
+	PRIMARY KEY (order_id, supplier_id)
 	FOREIGN KEY (order_id)
 		REFERENCES Supplier_order(id)
-	FOREIGN KEY (barcode)
-		REFERENCES Product(barcode)
+	FOREIGN KEY (supplier_id)
+		REFERENCES Supplier(id)
+	FOREIGN KEY (contract_id, catalog_number)
+		REFERENCES Product_in_contract(contract_id, catalog_number)
 	CONSTRAINT amount_in_order
 		CHECK (amount > 0)
 );
