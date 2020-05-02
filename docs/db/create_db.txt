@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS supplay_days(
 	supplay_day INTEGER NOT NULL,
 	supplier_id INTEGER,
 	
-	PRIMARY KEY (supplay_day, supplier_id),
+	PRIMARY KEY (supplier_id, supplay_day),
 	FOREIGN KEY (supplier_id)
 		REFERENCES Supplier(id)
 	CONSTRAINT day_range CHECK (supplay_day > 0 AND supplay_day < 8)
@@ -72,24 +72,34 @@ CREATE TABLE IF NOT EXISTS Product(
 --Order
 CREATE TABLE IF NOT EXISTS Supplier_order(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	contract_id INTEGER NOT NULL,
 	status TEXT NOT NULL,
 	delivery_day TEXT NOT NULL,
-	creation_day TEXT NOT NULL
+	creation_day TEXT NOT NULL,
 	
-	--supplier_name TEXT NOT NULL
-	--supplier_address TEXT NOT NULL
-	
-	--contact_name TEXT NOT NULL
-	--phone_number TEXT NOT NULL
+	FOREIGN KEY (contract_id)
+		REFERENCES Product_in_contract(contract_id)
 );
 
 CREATE TABLE IF NOT EXISTS Periodical_supplier_order(
-	id INTEGER,
-	delivery_day TEXT NOT NULL,
+	id INTEGER NOT NULL,
+	delivery_dist INTEGER NOT NULL,
+	next_delivery_date TEXT NOT NULL,
 	
 	PRIMARY KEY (id)
 	FOREIGN KEY(id)
 		REFERENCES Supplier_order(id)
+	CHECK (delivery_dist > 0)
+);
+
+CREATE TABLE IF NOT EXISTS Periodical_supplier_order_days(
+	order_id INTEGER NOT NULL,
+	delivery_weekly_day INTEGER NOT NULL,
+	
+	PRIMARY KEY (id, delivery_weekly_day)
+	FOREIGN KEY(id)
+		REFERENCES Supplier_order(id)
+	CHECK (delivery_day > 0 AND delivery_day < 8)
 );
 
 --TODO consider to remove it
@@ -103,25 +113,13 @@ CREATE TABLE IF NOT EXISTS Regular_supplier_order(
 
 CREATE TABLE IF NOT EXISTS Product_in_order(
 	order_id INTEGER NOT NULL,
-	supplier_id INTEGER NOT NULL,
-	contract_id INTEGER NOT NULL,
 	catalog_number TEXT NOT NULL,
 	amount INTEGER NOT NULL,
-	
-	--name TEXT NOT NULL
-	
-	--original_price DOUBLE NOT NULL
-	--discount DOUBLE NOT NULL
-	
-	--total_price DOUBLE NOT NULL
-	
-	PRIMARY KEY (order_id, supplier_id)
+	PRIMARY KEY (order_id, catalog_number)
 	FOREIGN KEY (order_id)
 		REFERENCES Supplier_order(id)
-	FOREIGN KEY (supplier_id)
-		REFERENCES Supplier(id)
-	FOREIGN KEY (contract_id, catalog_number)
-		REFERENCES Product_in_contract(contract_id, catalog_number)
+	FOREIGN KEY (catalog_number)
+		REFERENCES Product_in_contract(catalog_number)
 	CONSTRAINT amount_in_order
 		CHECK (amount > 0)
 );
