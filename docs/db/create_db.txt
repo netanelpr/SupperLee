@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS Supplier(
+CREATE TABLE IF NOT EXISTS Suppliers.Supplier(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT NOT NULL,
 	address TEXT NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS supplay_days(
 	
 	PRIMARY KEY (supplier_id, supplay_day),
 	FOREIGN KEY (supplier_id)
-		REFERENCES Supplier(id)
+		REFERENCES Suppliers.Supplier(id)
 	CONSTRAINT day_range CHECK (supplay_day > 0 AND supplay_day < 8)
 );
 
@@ -23,17 +23,17 @@ CREATE TABLE IF NOT EXISTS Contact_info(
 	supplier_id INTEGER NOT NULL,
 	PRIMARY KEY (name, phone_number, email)
 	FOREIGN KEY (supplier_id)
-		REFERENCES Supplier (id)
+		REFERENCES Suppliers.Supplier (id)
 );
 
---Supplier contract
+--Suppliers.Supplier contract
 CREATE TABLE IF NOT EXISTS Contract(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	contract_info TEXT NOT NULL,
 	supplier_id INTEGER NOT NULL,
 	UNIQUE(supplier_id),
 	FOREIGN KEY (supplier_id)
-		REFERENCES Supplier(id)
+		REFERENCES Suppliers.Supplier(id)
 );
 
 CREATE TABLE IF NOT EXISTS Product_in_contract(

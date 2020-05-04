@@ -1,7 +1,6 @@
 package Tests;
 
-import Structs.Days;
-import Supplier.*;
+import Suppliers.Supplier.*;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
@@ -12,8 +11,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SupplierTest {
     private Supplier supplier;
