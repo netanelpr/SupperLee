@@ -7,7 +7,7 @@ import Suppliers.Structs.StructUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class UpdateOrderStatus implements  Menu_Option {
+public class UpdateOrderStatus extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -18,32 +18,25 @@ public class UpdateOrderStatus implements  Menu_Option {
 
 
     @Override
-    public void apply(String[] argv) {
-        if(argv.length != 2){
-            System.out.println("Invalid number of args");
+    public void apply() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int orderId = readInt("Order ID", reader);
+        String statusStr = readString("Enter order status", reader);
+
+        if(statusStr == null){
             return;
         }
 
-        int orderId = -1;
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        OrderStatus status = StructUtils.getOrderStatus(statusStr);
+        if(status == null){
+            System.out.println("Invalid order status");
+            return;
+        }
 
-            orderId = Integer.parseInt(argv[0]);
-
-            OrderStatus status = StructUtils.getOrderStatus(argv[1]);
-            if(status == null){
-                System.out.println("Invalid order status");
-                return;
-            }
-
-            if(supplierManagment.updateOrderStatus(orderId, status)){
-                System.out.println("Order was updated");
-            } else {
-                System.out.println("Order was not updated");
-            }
-
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid order id");
+        if(supplierManagment.updateOrderStatus(orderId, status)){
+            System.out.println("Order was updated");
+        } else {
+            System.out.println("Order was not updated");
         }
     }
 }

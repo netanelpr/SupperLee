@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class AddContractToSupplier implements  Menu_Option {
+public class AddContractToSupplier extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -24,21 +24,11 @@ public class AddContractToSupplier implements  Menu_Option {
 
 
     @Override
-    public void apply(String[] argv) {
-        /*
-         * <supplier ID>
-         */
-        if(argv.length != 1){
-            System.out.println("Invalid number of args");
-            return;
-        }
-
+    public void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int supId = readInt("Supplier ID", reader);
 
-        int supId = -1;
         try {
-            supId = Integer.parseInt(argv[0]);
-
             System.out.print("Enter contract info : ");
             String contractInfo = reader.readLine();
 

@@ -12,41 +12,63 @@ public class MainMenu {
 
     private SupplierManagment supplierManagment;
     private Map<String, Menu_Option> optionMap;
+    private List<String> optionToIndex;
 
     public MainMenu(){
         supplierManagment = new SupplierCtrl();
-        optionMap = createMenuMap();
+        optionMap = new HashMap<>();
+        optionToIndex = new LinkedList<>();
+
+        createMenuMap();
     }
 
-    private Map<String, Menu_Option> createMenuMap() {
-        Map<String, Menu_Option> map = new HashMap<>();
+    private void addMenuOption(String menuName, Menu_Option menu){
+        optionMap.put(menuName, menu);
+        optionToIndex.add(menuName);
+    }
 
-        map.put("createSupplierCard", new HandleSupplierCard(supplierManagment));
+    private void createMenuMap() {
 
-        Menu_Option createSup = map.getOrDefault("createSupplierCard", null);
-        map.put("init", new InitWithData(supplierManagment, createSup));
+        addMenuOption("Init", new InitWithData(supplierManagment));
+        addMenuOption("Create supplier card", new HandleSupplierCard(supplierManagment));
 
-        map.put("getPaymentOptions", new PaymentOptions(supplierManagment));
-        map.put("updatePaymentOptions", new updatePaymentOptions(supplierManagment));
+        addMenuOption("Get payment options", new PaymentOptions(supplierManagment));
+        addMenuOption("Update payment options", new updatePaymentOptions(supplierManagment));
 
-        map.put("getAllSuppliers", new GetAllSuppliers(supplierManagment));
+        addMenuOption("Get all suppliers", new GetAllSuppliers(supplierManagment));
 
-        map.put("addContactInfoToSupplier", new AddContactInfoToSupplier(supplierManagment));
-        map.put("addContractToSupplier", new AddContractToSupplier(supplierManagment));
-        map.put("addProductToSupplier", new AddProductToSupplier(supplierManagment));
-        map.put("discountReport", new GetAmountDiscountReport(supplierManagment));
+        addMenuOption("Add contact info to supplier", new AddContactInfoToSupplier(supplierManagment));
+        addMenuOption("Add contract to supplier", new AddContractToSupplier(supplierManagment));
+        addMenuOption("Add product to supplier", new AddProductToSupplier(supplierManagment));
+        addMenuOption("Discount report", new GetAmountDiscountReport(supplierManagment));
 
-        map.put("getAllSupplierBarcode", new GetAllSuppliersProducts(supplierManagment));
-        map.put("getAllSupplierProductsDetalis", new GetAllSuppliersProductsDetalis(supplierManagment));
+        addMenuOption("Get all supplier barcode", new GetAllSuppliersProducts(supplierManagment));
+        addMenuOption("Get all supplier products detalis", new GetAllSuppliersProductsDetalis(supplierManagment));
 
-        map.put("createNewOrder", new CreateNewOrder(supplierManagment));
-        map.put("updateOrderArrivalDay", new UpdateOrderArrivalDay(supplierManagment));
-        map.put("updateOrderStatus", new UpdateOrderStatus(supplierManagment));
+        addMenuOption("Create new order", new CreateNewOrder(supplierManagment));
+        addMenuOption("Update order arrival day", new UpdateOrderArrivalDay(supplierManagment));
+        addMenuOption("Update order status", new UpdateOrderStatus(supplierManagment));
 
-        map.put("getPruchaseHistoryFromSupplier", new PurchaseHistoryFromSupplier(supplierManagment));
+        addMenuOption("Get purchase history from supplier", new PurchaseHistoryFromSupplier(supplierManagment));
 
-        return map;
+        addMenuOption("Return to menu", null);
 
+    }
+
+    public void print_menu(){
+        int index = 0;
+
+        System.out.println("+++++++++++++++++++++++++++++++++++++\n");
+        System.out.println("Choose from the options");
+        for(String menuString : optionToIndex){
+            System.out.println(String.format("%d) %s",index, menuString));
+            index = index + 1;
+        }
+    }
+
+    public Menu_Option getMenuWithIndex(int index){
+        String menuName = optionToIndex.get(index);
+        return optionMap.getOrDefault(menuName, null);
     }
 
     public void startMenu() {
@@ -55,20 +77,34 @@ public class MainMenu {
 
         while(true){
             String input;
+            int index = -1;
+
+            print_menu();
+            System.out.print("Option: ");
             try {
                 input = reader.readLine();
+                index = Integer.parseInt(input);
             } catch (IOException e){
                 System.out.println("Error reading input");
                 continue;
+            } catch (NumberFormatException e){
+                System.out.println("Not an menu option");
+                continue;
             }
-            argv = input.split(" ");
+            System.out.print("\n");
 
-            Menu_Option option = optionMap.getOrDefault(argv[0], null);
+            if(index == optionToIndex.size()-1){
+                return;
+            }
+
+            Menu_Option option = getMenuWithIndex(index);
             if(option == null){
                 System.out.println("Invalid function");
                 continue;
             }
-            option.apply(Arrays.copyOfRange(argv, 1, argv.length));
+
+            option.apply();
+
         }
     }
 }

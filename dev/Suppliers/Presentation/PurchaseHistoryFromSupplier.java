@@ -2,9 +2,11 @@ package Suppliers.Presentation;
 
 import Suppliers.Service.SupplierManagment;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 
-public class PurchaseHistoryFromSupplier implements  Menu_Option {
+public class PurchaseHistoryFromSupplier extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -15,24 +17,11 @@ public class PurchaseHistoryFromSupplier implements  Menu_Option {
 
 
     @Override
-    public void apply(String[] argv) {
-        /*
-         * <supplier ID>
-         */
-        if(argv.length != 1){
-            System.out.println("Invalid number of args");
-            return;
-        }
+    public void apply() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int supId = readInt("Supplier ID", reader);
 
-        int supplierId = -1;
-        try {
-            supplierId = Integer.parseInt(argv[0]);
-        } catch (NullPointerException e){
-            System.out.println("Invalid supplier ID");
-            return;
-        }
-
-        List<String> catalogNumbers = supplierManagment.getPurchaseHistory(supplierId);
+        List<String> catalogNumbers = supplierManagment.getPurchaseHistory(supId);
         if(catalogNumbers != null) {
             int index = 0;
             System.out.println("The catalog numbers ids:");

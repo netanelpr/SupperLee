@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddProductToSupplier implements  Menu_Option {
+public class AddProductToSupplier extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -20,18 +20,16 @@ public class AddProductToSupplier implements  Menu_Option {
 
 
     @Override
-    public void apply(String[] argv) {
-        if(argv.length != 1){
-            System.out.println("Invalid number of args");
+    public void apply() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int supId = -1;
+
+        supId = readInt("Supplier ID", reader);
+        if(supId == -1){
             return;
         }
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        int supId = -1;
         try {
-            supId = Integer.parseInt(argv[0]);
-
+            System.out.println("Enter the following");
             System.out.println("Product format : <product Id> <catalog number> <original price>\n\t" +
                     "<name> <manufacture> <discount per amount {amount:discount,amount:discount...}>");
             String[] input = reader.readLine().split(" ");

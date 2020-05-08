@@ -3,9 +3,11 @@ package Suppliers.Presentation;
 import Suppliers.Service.SupplierManagment;
 import Suppliers.Service.SupplierProductDTO;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 
-public class GetAllSuppliersProductsDetalis implements  Menu_Option {
+public class GetAllSuppliersProductsDetalis extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -16,28 +18,16 @@ public class GetAllSuppliersProductsDetalis implements  Menu_Option {
 
 
     @Override
-    public void apply(String[] argv) {
-        /*
-         * <supplier ID>
-         */
-        if(argv.length != 1){
-            System.out.println("Invalid number of args");
-            return;
-        }
+    public void apply() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int supId = readInt("Supplier ID", reader);
 
-        int supplierId = -1;
-        try {
-            supplierId = Integer.parseInt(argv[0]);
-        } catch (NullPointerException e){
-            System.out.println("Invalid supplier ID");
-            return;
-        }
 
-        List<SupplierProductDTO> supplierProductDTOS = supplierManagment.getAllSupplierProducts(supplierId);
+        List<SupplierProductDTO> supplierProductDTOS = supplierManagment.getAllSupplierProducts(supId);
 
         if(supplierProductDTOS != null) {
             for(SupplierProductDTO dto : supplierProductDTOS){
-                String productInfo = supplierManagment.getAllInformationAboutSuppliersProduct(supplierId, dto.barcode).shallow_toString();
+                String productInfo = supplierManagment.getAllInformationAboutSuppliersProduct(supId, dto.barcode).shallow_toString();
                 System.out.println(productInfo+ "\n");
             }
         } else {

@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CreateNewOrder implements  Menu_Option {
+public class CreateNewOrder extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -19,21 +19,14 @@ public class CreateNewOrder implements  Menu_Option {
 
 
     @Override
-    public void apply(String[] argv) {
-        if(argv.length != 1){
-            System.out.println("Invalid number of args");
-            return;
-        }
+    public void apply() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int supId = readInt("Supplier ID", reader);
 
-        int supId = -1;
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-            supId = Integer.parseInt(argv[0]);
-
             List<ProductInOrderDTO> products = new LinkedList<>();
-            System.out.print("Enter the numbers of product you want the order : ");
-            int numberOfProducts = Integer.parseInt(reader.readLine());
+
+            int numberOfProducts = readInt("Enter the numbers of product you want the order", reader);
 
             System.out.println("Enter product ID and amount\n\t format <productID> <amount>");
             for(int i=0; i < numberOfProducts; i=i+1){
@@ -56,8 +49,6 @@ public class CreateNewOrder implements  Menu_Option {
                 System.out.println("Order id : "+ orderId);
             }
 
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid args");
         } catch (Exception e){
             System.out.println("Error reading input");
         }
