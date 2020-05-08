@@ -1,18 +1,17 @@
 package Suppliers.DataAccess;
 
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.util.HashMap;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 public abstract class AbstractMapper<T> {
     protected Connection conn;
-    protected HashMap<Integer, T> loadedMap;
+
+    protected WeakValueHashMap<Integer, T> loadedMap;
 
     public AbstractMapper(Connection conn){
         this.conn = conn;
+        loadedMap = new WeakValueHashMap<>();
     }
 
     /**
@@ -45,6 +44,11 @@ public abstract class AbstractMapper<T> {
 
     protected abstract String deleteStatement();
 
+    /**
+     * Delete a product from DB by its id
+     * @param id The id of the product
+     * @return true if the row was deleted
+     */
     public boolean deleteById(int id){
         try {
             PreparedStatement pstmt = conn.prepareStatement(deleteStatement());
@@ -66,7 +70,18 @@ public abstract class AbstractMapper<T> {
         }
     }
 
+    /**
+     * Build T from the given ResultSet
+     * @param res resultset that was return from the query
+     * @return The new T
+     */
     protected abstract T buildTFromResultSet(ResultSet res);
 
+    /**
+     * Insert a product to DB
+     * Set its id if the product was inserted
+     * @param product The product to insert
+     * @return The id of the product
+     */
     protected abstract int insert(T product);
 }

@@ -10,7 +10,6 @@ public class ProductMapper extends AbstractMapper<Product> {
 
     public ProductMapper(Connection conn) {
         super(conn);
-        loadedMap = new HashMap<>();
     }
 
     @Override

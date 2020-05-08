@@ -12,7 +12,7 @@ public class SupplierCtrl implements SupplierManagment {
     private SupplierSystem supplierSystem;
 
     public SupplierCtrl(){
-        supplierSystem = new SupplierSystem();
+        supplierSystem = SupplierSystem.getInstance();
     }
 
     @Override

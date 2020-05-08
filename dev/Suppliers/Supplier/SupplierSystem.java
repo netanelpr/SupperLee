@@ -7,6 +7,7 @@ import java.util.*;
 
 public class SupplierSystem {
 
+    private static SupplierSystem instance = null;
 
     private Map<Integer, Supplier> suppliers;
     private Map<Integer,List<Order>> orders;
@@ -16,13 +17,20 @@ public class SupplierSystem {
     private ProductsManager productsManager;
     private final String[] paymentOptions;
 
-    public SupplierSystem() {
+    private SupplierSystem() {
         suppliers = new HashMap<>();
         orders = new HashMap<>();
         orderIdToOrder = new HashMap<>();
 
-        productsManager = new ProductsManager();
+        productsManager = ProductsManager.getInstance();
         paymentOptions = new String[]{"CASH", "BANKTRANSFER","PAYMENTS","+30DAYSPAYMENT","CHECK"};
+    }
+
+    public static SupplierSystem getInstance(){
+        if(instance == null){
+            instance = new SupplierSystem();
+        }
+        return instance;
     }
 
     /**

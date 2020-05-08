@@ -5,12 +5,20 @@ import java.util.Map;
 
 public class ProductsManager {
 
+    private static ProductsManager instance = null;
+
     private Map<Integer, Product> productMap; //BarcodeToProductObject
 
-    public  ProductsManager(){
+    private ProductsManager(){
         productMap = new HashMap<>();
     }
 
+    public static ProductsManager getInstance(){
+        if(instance == null){
+            instance = new ProductsManager();
+        }
+        return instance;
+    }
 
     public boolean addIfAbsent(AddProduct addProduct){
         if(!productMap.containsKey(addProduct.barCode))
