@@ -25,8 +25,8 @@ public class ProductMapper extends AbstractMapper<Product> {
     protected Product buildTFromResultSet(ResultSet res) {
         try {
             return new Product(res.getInt(1),
-                                res.getString(2),
-                                res.getString(3));
+                    res.getString(2),
+                    res.getString(3));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -45,16 +45,16 @@ public class ProductMapper extends AbstractMapper<Product> {
      */
     @Override
     public int insert(Product product) {
-        if(loadedMap.getOrDefault(product.getBarCode(), null) != null){
+        if (loadedMap.getOrDefault(product.getBarCode(), null) != null) {
             return product.getBarCode();
         }
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(insertStatement());
 
-            pstmt.setInt(1,product.getBarCode());
-            pstmt.setString(2,product.getName());
-            pstmt.setString(3,product.getManufacture());
+            pstmt.setInt(1, product.getBarCode());
+            pstmt.setString(2, product.getName());
+            pstmt.setString(3, product.getManufacture());
 
             pstmt.executeUpdate();
 
@@ -72,4 +72,30 @@ public class ProductMapper extends AbstractMapper<Product> {
                 "WHERE barcode = ?";
     }
 
+    protected String updateStatement() {
+        return "UPDATE Product " +
+                "SET name = ? ,manufacture = ? WHERE barcode = ?";
+    }
+
+
+    public boolean update(Product product) {
+        int barcode = product.getBarCode();
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(updateStatement());
+
+            pstmt.setString(1, product.getName());
+            pstmt.setString(2, product.getManufacture());
+            pstmt.setInt(3, barcode);
+
+            pstmt.executeUpdate();
+
+            loadedMap.remove(barcode);
+            loadedMap.put(barcode, product);
+            return true;
+
+        } catch (java.sql.SQLException e) {
+            return false;
+        }
+    }
 }

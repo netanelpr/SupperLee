@@ -2,7 +2,7 @@ package Suppliers.Supplier;
 
 public class Product {
     //Real product stored in system
-    private int barCode;
+    private final int barCode;
     private String manufacture;
     private String name;
 
@@ -22,5 +22,13 @@ public class Product {
 
     public String getName() {
         return name;
+    }
+
+    public void setManufacture(String manufacture) {
+        this.manufacture = manufacture;
+    }
+
+    public void setName(String name) {
+        this.name =  name;
     }
 }

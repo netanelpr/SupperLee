@@ -18,11 +18,21 @@ public class Main {
             System.out.println("barcode: "+product.getBarCode()+", name "+ product.getName()+", manufacture "+ product.getManufacture());
 
             //need to be the same as product.getBarcode() in this case
-            int barcode = productMapper.insert(new Product(100,"aa","water"));
+            product = new Product(100,"aa","water");
+            int barcode = productMapper.insert(product);
             if(barcode > -1){
 
                 product = productMapper.findById(barcode);
                 System.out.println("barcode: "+product.getBarCode()+", name "+ product.getName()+", manufacture "+ product.getManufacture());
+
+                System.out.println("Update the manufacture of product with barcode 100");
+                product.setManufacture("TheWaterIsClean");
+                if(productMapper.update(product)){
+                    product = productMapper.findById(barcode);
+                    System.out.println("barcode: "+product.getBarCode()+", name "+ product.getName()+", manufacture "+ product.getManufacture());
+                } else {
+                    System.out.println("Didnt update the product");
+                }
 
             } else {
                 System.out.println("Didnt insert the product");
