@@ -37,9 +37,9 @@ public class CreateNewOrder extends Menu_Option {
                     continue;
                 }
 
-//                products.add(new ProductInOrderDTO(
-//                        Integer.parseInt(productAndAmount[0]),
-//                        Integer.parseInt(productAndAmount[1])));
+                products.add(new ProductInOrderDTO(
+                        Integer.parseInt(productAndAmount[0]),
+                        Integer.parseInt(productAndAmount[1])));
             }
 
             int orderId = supplierManagment.createNewOrder(supId, products);

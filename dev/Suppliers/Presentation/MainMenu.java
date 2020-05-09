@@ -93,17 +93,21 @@ public class MainMenu {
             }
             System.out.print("\n");
 
-            if(index == optionToIndex.size()-1){
-                return;
-            }
+            if(index > -1 & index < optionToIndex.size()) {
+                if (index == optionToIndex.size() - 1) {
+                    return;
+                }
 
-            Menu_Option option = getMenuWithIndex(index);
-            if(option == null){
-                System.out.println("Invalid function");
-                continue;
-            }
+                Menu_Option option = getMenuWithIndex(index);
+                if (option == null) {
+                    System.out.println("Invalid function");
+                    continue;
+                }
 
-            option.apply();
+                option.apply();
+            } else {
+                System.out.println("Invalid menu index11");
+            }
 
         }
     }
