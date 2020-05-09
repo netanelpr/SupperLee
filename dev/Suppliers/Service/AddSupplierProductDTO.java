@@ -1,6 +1,6 @@
 package Suppliers.Service;
 
-public class AddProductInfoDTO {
+public class AddSupplierProductDTO {
 
     public int barcode;
     public String productCatalogNumber;
@@ -9,7 +9,7 @@ public class AddProductInfoDTO {
     public String manufacture;
     public ProductDiscountsDTO discounts;
 
-    public AddProductInfoDTO(int barcode, String productCatalogNumber, double originalPrice, ProductDiscountsDTO discountPerAmount,
+    public AddSupplierProductDTO(int barcode, String productCatalogNumber, double originalPrice, ProductDiscountsDTO discountPerAmount,
                                  String manufacture, String name) {
         this.barcode = barcode;
         this.productCatalogNumber = productCatalogNumber;

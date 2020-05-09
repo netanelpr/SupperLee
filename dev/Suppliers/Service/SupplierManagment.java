@@ -78,7 +78,7 @@ public interface SupplierManagment {
      * @param products List of product he supply, need to contain at least one
      * @return List of products id that wasnt added to the system, null if the contract wasnt added
      */
-    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products);
+    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddSupplierProductDTO> products);
 
     /**
      * Add a product to the supplier contract
@@ -86,7 +86,7 @@ public interface SupplierManagment {
      * @param product Data of the product
      * @return -1 if the product wasnt added, otherwise the product id in the system
      */
-    public boolean addProductToContract(int supplierId, AddProductInfoDTO product);
+    public boolean addProductToContract(int supplierId, AddSupplierProductDTO product);
 
     /**
      * Return to each product the given supplier his discount per amount
@@ -133,7 +133,7 @@ public interface SupplierManagment {
      * @return All the information, encapsulated in an AddProductInfoDTO object,
      *          return null if there isnt such barcode in the supplier products.
      */
-    public AddProductInfoDTO getAllInformationAboutSuppliersProduct(int supplierId,int barcode);
+    public AddSupplierProductDTO getAllInformationAboutSuppliersProduct(int supplierId, int barcode);
 
     /**
      * Return all the catalog ID from a given suppler

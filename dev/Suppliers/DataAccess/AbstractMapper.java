@@ -20,6 +20,11 @@ public abstract class AbstractMapper<T> {
      */
     protected abstract String findStatement();
 
+    /**
+     * Search for the data by its id
+     * @param id The id of the data
+     * @return The data if its exist by its id, otherwise null
+     */
     public T findById(int id){
         T res = loadedMap.getOrDefault(id, null);
 

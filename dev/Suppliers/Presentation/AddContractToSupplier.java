@@ -1,6 +1,6 @@
 package Suppliers.Presentation;
 
-import Suppliers.Service.AddProductInfoDTO;
+import Suppliers.Service.AddSupplierProductDTO;
 import Suppliers.Service.ProductDiscountsDTO;
 import Suppliers.Service.SupplierManagment;
 import Suppliers.Structs.Days;
@@ -39,7 +39,7 @@ public class AddContractToSupplier extends Menu_Option {
 
             System.out.print("Enter number of product you want to enter : ");
             int numberOfProducts = Integer.parseInt(reader.readLine());
-            List<AddProductInfoDTO> products = new LinkedList<>();
+            List<AddSupplierProductDTO> products = new LinkedList<>();
             System.out.println("Product format : <product Id> <catalog number> <original price>\n\t" +
                     "<name> <manufacture> <discount per amount {amount:discount,amount:discount...}>");
             for(int i=0; i < numberOfProducts; i=i+1){
@@ -65,7 +65,7 @@ public class AddContractToSupplier extends Menu_Option {
                 }
 
                 ProductDiscountsDTO product = new ProductDiscountsDTO(Integer.parseInt(input[0]), discounts,  Double.parseDouble(input[2]));
-                products.add(new AddProductInfoDTO(
+                products.add(new AddSupplierProductDTO(
                         Integer.parseInt(input[0]),
                         input[1],
                         Double.parseDouble(input[2]),

@@ -1,5 +1,8 @@
 package Suppliers.Supplier;
 
+import Suppliers.DataAccess.ProductMapper;
+import Suppliers.DataAccess.SupplierDBConn;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,10 +10,13 @@ public class ProductsManager {
 
     private static ProductsManager instance = null;
 
-    private Map<Integer, Product> productMap; //BarcodeToProductObject
+    private ProductMapper productMapper;
+    //TODO remove it or use it to hold upto 100 products.
+    //private Map<Integer, Product> productMap; //BarcodeToProductObject
 
     private ProductsManager(){
-        productMap = new HashMap<>();
+        //productMap = new HashMap<>();
+        productMapper = new ProductMapper(SupplierDBConn.getInstance());
     }
 
     public static ProductsManager getInstance(){
@@ -21,20 +27,24 @@ public class ProductsManager {
     }
 
     public boolean addIfAbsent(AddProduct addProduct){
-        if(!productMap.containsKey(addProduct.barCode))
+
+        return productMapper.insert(new Product(addProduct.barCode, addProduct.manufacture, addProduct.name)) > -1;
+
+
+        /*if(!productMap.containsKey(addProduct.barCode))
         {
             productMap.put(addProduct.barCode,new Product(addProduct.barCode,addProduct.manufacture,addProduct.name));
             return true;
         }
         else
-            return false;
+            return false;*/
     }
 
-    public boolean exists(int barCode){
-        return productMap.containsKey(barCode);
+    public boolean exists(int barcode){
+        return productMapper.findById(barcode) != null;
     }
 
     public Product getAllInfoAboutProduct(int barcode) {
-        return this.productMap.get(barcode);
+        return productMapper.findById(barcode);
     }
 }

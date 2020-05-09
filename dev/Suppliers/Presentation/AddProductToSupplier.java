@@ -1,6 +1,6 @@
 package Suppliers.Presentation;
 
-import Suppliers.Service.AddProductInfoDTO;
+import Suppliers.Service.AddSupplierProductDTO;
 import Suppliers.Service.ProductDiscountsDTO;
 import Suppliers.Service.SupplierManagment;
 
@@ -55,7 +55,7 @@ public class AddProductToSupplier extends Menu_Option {
 
             ProductDiscountsDTO product = new ProductDiscountsDTO(Integer.parseInt(input[0]), discounts,  Double.parseDouble(input[2]));
             boolean added = supplierManagment.addProductToContract(supId,
-                                            new AddProductInfoDTO(
+                                            new AddSupplierProductDTO(
                                             Integer.parseInt(input[0]),
                                             input[1],
                                             Double.parseDouble(input[2]), product,

@@ -64,10 +64,10 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProductInfoDTO> products) {
+    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddSupplierProductDTO> products) {
         List<AddProduct> addProducts = new LinkedList<>();
 
-        for (AddProductInfoDTO addProduct : products) {
+        for (AddSupplierProductDTO addProduct : products) {
             addProducts.add(AddPITOToAddProduct(addProduct));
         }
 
@@ -75,7 +75,7 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public boolean addProductToContract(int supplierId, AddProductInfoDTO product) {
+    public boolean addProductToContract(int supplierId, AddSupplierProductDTO product) {
         return supplierSystem.addProductToContract(supplierId, AddPITOToAddProduct(product));
     }
 
@@ -133,7 +133,7 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public AddProductInfoDTO getAllInformationAboutSuppliersProduct(int supplierId, int barcode) {
+    public AddSupplierProductDTO getAllInformationAboutSuppliersProduct(int supplierId, int barcode) {
         AddProduct supplierProductInfo= this.supplierSystem.getAllInformationAboutSuppliersProduct(supplierId, barcode);
         return AddPITOToAddProductReverse(supplierProductInfo);
     }
@@ -157,24 +157,24 @@ public class SupplierCtrl implements SupplierManagment {
         );
     }
 
-    private static AddProduct AddPITOToAddProduct(AddProductInfoDTO addProductInfoDTO){
+    private static AddProduct AddPITOToAddProduct(AddSupplierProductDTO addSupplierProductDTO){
 
-        if(addProductInfoDTO == null){
+        if(addSupplierProductDTO == null){
             return null;
         }
 
-        ProductDiscounts product = new ProductDiscounts(addProductInfoDTO.barcode,addProductInfoDTO.discounts.discountPerAmount,addProductInfoDTO.originalPrice);
+        ProductDiscounts product = new ProductDiscounts(addSupplierProductDTO.barcode, addSupplierProductDTO.discounts.discountPerAmount, addSupplierProductDTO.originalPrice);
 
         return new AddProduct(
-                addProductInfoDTO.barcode,
-                addProductInfoDTO.productCatalogNumber,
-                addProductInfoDTO.originalPrice,
+                addSupplierProductDTO.barcode,
+                addSupplierProductDTO.productCatalogNumber,
+                addSupplierProductDTO.originalPrice,
                 product,
-                addProductInfoDTO.name,
-                addProductInfoDTO.manufacture);
+                addSupplierProductDTO.name,
+                addSupplierProductDTO.manufacture);
     }
 
-    private static AddProductInfoDTO AddPITOToAddProductReverse(AddProduct addProduct){
+    private static AddSupplierProductDTO AddPITOToAddProductReverse(AddProduct addProduct){
 
         if(addProduct == null){
             return null;
@@ -182,7 +182,7 @@ public class SupplierCtrl implements SupplierManagment {
 
         ProductDiscountsDTO productDiscounts = new ProductDiscountsDTO(addProduct.barCode,addProduct.productDiscounts.discountPerAmount,addProduct.originalPrice);
 
-        return new AddProductInfoDTO(
+        return new AddSupplierProductDTO(
                 addProduct.barCode,
                 addProduct.productCatalogNumber,
                 addProduct.originalPrice,
