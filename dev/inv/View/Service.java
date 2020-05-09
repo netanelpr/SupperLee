@@ -14,10 +14,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import Suppliers.Service.*;
 
 
 public class Service implements myObservable {
-
+    //private MainInterface myController;
     private View view;
     private HashMap<String, Inventory> superLeeInvs; //inventory id, inventory
     private Inventory currInv;
