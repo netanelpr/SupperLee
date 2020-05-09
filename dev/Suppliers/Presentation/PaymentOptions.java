@@ -2,7 +2,10 @@ package Suppliers.Presentation;
 
 import Suppliers.Service.SupplierManagment;
 
-public class PaymentOptions implements  Menu_Option {
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class PaymentOptions extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -13,22 +16,22 @@ public class PaymentOptions implements  Menu_Option {
 
 
     @Override
-    public void apply(String[] argv) {
-        if(argv.length > 1){
+    public void apply() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("1) get system payment options\n" +
+                            "2) get supplier payment options");
+        int op = readInt("Option",reader);
+
+        if(!(op == 1 | op == 2)){
             System.out.println("Invalid input");
             return;
         }
 
-        if(argv.length == 0){
+        if(op == 1){
             System.out.println("Payment options are: " +
                     supplierManagment.getPaymentOptions());
         } else {
-            int supId = -1;
-            try {
-                supId = Integer.parseInt(argv[0]);
-            } catch (NumberFormatException e){
-                System.out.println("getPaymentOptions <supplier ID>");
-            }
+            int supId = readInt("Supplier ID", reader);
 
             String paymentOptions = supplierManagment.getPaymentOptions(supId);
             if(paymentOptions == null){

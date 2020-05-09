@@ -2,7 +2,11 @@ package Suppliers.Presentation;
 
 import Suppliers.Service.SupplierManagment;
 
-public class AddContactInfoToSupplier implements  Menu_Option {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class AddContactInfoToSupplier extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -11,23 +15,59 @@ public class AddContactInfoToSupplier implements  Menu_Option {
         this.supplierManagment = supplierManagment;
     }
 
+    public String readString(String info, BufferedReader bufferedReader){
+        System.out.print(info + ": ");
+        try{
+          return bufferedReader.readLine();
+        } catch (IOException e) {
+            System.out.print("Error at reading");
+        }
+
+        return null;
+    }
+
+    public int readInt(String info, BufferedReader bufferedReader){
+        System.out.print(info + ": ");
+        try{
+            String input = bufferedReader.readLine();
+            return Integer.parseInt(input);
+        } catch (IOException e) {
+            System.out.println("Error at reading");
+        } catch (NumberFormatException e){
+            System.out.print("Need to be a number");
+        }
+
+        return -1;
+    }
 
     @Override
-    public void apply(String[] argv) {
-        if(argv.length != 4){
-            System.out.println("Invalid number of args");
+    public void apply() {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        int supID = -1;
+        String name, phoneNumber, email;
+
+        supID = readInt("Supplier ID", reader);
+        if(supID < -1){
+            return;
+        }
+        name = readString("Name", reader);
+        if(name == null){
             return;
         }
 
-        int supId = -1;
-        try {
-            supId = Integer.parseInt(argv[0]);
-        } catch (NumberFormatException e){
-            System.out.println("Invalid supplier ID");
+        phoneNumber = readString("Phone number", reader);
+        if(phoneNumber == null){
             return;
         }
 
-        if(supplierManagment.addContactInfo(supId, argv[1], argv[2], argv[3])){
+        email = readString("Email", reader);
+        if(email == null){
+            return;
+        }
+
+        if(supplierManagment.addContactInfo(supID, name, phoneNumber, email)){
             System.out.println("The contact has been added");
         } else {
             System.out.println("The contact wasnt added");

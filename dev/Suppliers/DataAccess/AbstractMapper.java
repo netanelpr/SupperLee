@@ -27,13 +27,14 @@ public abstract class AbstractMapper<T> {
             return res;
         }
 
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(findStatement());
+        try(PreparedStatement pstmt = conn.prepareStatement(findStatement())){
 
             pstmt.setInt(1,id);
             ResultSet rs  = pstmt.executeQuery();
 
-            return  buildTFromResultSet(rs);
+            res = buildTFromResultSet(rs);
+            loadedMap.put(id, res);
+            return res;
 
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
@@ -50,8 +51,7 @@ public abstract class AbstractMapper<T> {
      * @return true if the row was deleted
      */
     public boolean deleteById(int id){
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(deleteStatement());
+        try(PreparedStatement pstmt = conn.prepareStatement(deleteStatement())){
 
             pstmt.setInt(1,id);
             pstmt.executeUpdate();

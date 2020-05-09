@@ -2,9 +2,11 @@ package Suppliers.Presentation;
 
 import Suppliers.Service.SupplierManagment;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 
-public class updatePaymentOptions implements  Menu_Option {
+public class updatePaymentOptions extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -15,32 +17,29 @@ public class updatePaymentOptions implements  Menu_Option {
 
 
     @Override
-    public void apply(String[] argv) {
+    public void apply() {
         /*
          * <update> <supplier id> <payment options>+
          */
-        if(argv.length != 3){
-            System.out.println("Invalid number of args");
-            return;
-        }
-        if(!(argv[0].equals("remove") | argv[0].equals("add"))){
-            System.out.println("Invalid update option");
-            return;
-        }
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int supid = -1;
-        try{
-            supid = Integer.parseInt(argv[1]);
-        } catch (NumberFormatException e){
-            System.out.println("Invalid supplier ID");
+
+        System.out.println("1) Add\n" +
+                "2) Remove");
+        int op = readInt("Option",reader);
+
+        if(!(op == 1 | op == 2)){
+            System.out.println("Invalid input");
             return;
         }
+        supid = readInt("Supplier ID", reader);
 
-        String[] paymentOptions;
-        paymentOptions = Arrays.copyOfRange(argv,2, argv.length);
+        String paymentOptionsStr = readString("Payment options", reader);
+        String[] paymentOptions = paymentOptionsStr.split(" ");
 
         boolean update = false;
-        if(argv[0].equals("remove")){
+        if(op == 2){
             update = supplierManagment.removePaymentOptions(supid, paymentOptions);
         } else { // add
             update = supplierManagment.addPaymentOptions(supid, paymentOptions);

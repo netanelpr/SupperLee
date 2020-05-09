@@ -10,31 +10,39 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class InitWithData implements  Menu_Option {
+public class InitWithData extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
-    private Menu_Option createSupplier;
 
-    public InitWithData(SupplierManagment supplierManagment , Menu_Option createSupplier) {
+    public InitWithData(SupplierManagment supplierManagment) {
         this.supplierManagment = supplierManagment;
-        this.createSupplier = createSupplier;
     }
 
 
     @Override
-    public void apply(String[] argv) {
-        if(argv.length != 0){
-            System.out.println("Invalid number of args");
-            return;
-        }
+    public void apply() {
         createSuppliers();
-
     }
 
     private void createSuppliers(){
-        createSupplier.apply(new String[]{"supplier1", "123","12345", "Cash", "Supi", "051111111","supi@supplier1.com"});
-        createSupplier.apply(new String[]{"supplier2", "1010","11111", "PAYMENTS,Check", "Supi", "051234567","star@supplier1.com"});
+        int supId = -1;
+        supId = supplierManagment.createSupplierCard("supplier1", "123","12345", "Cash", "Supi",
+                "051111111","supi@supplier1.com");
+
+        if(supId > -1){
+            System.out.println("New supplier ID: " + supId);
+        } else {
+            System.out.println("supplier with id " + supId + " wasnt created");
+        }
+
+        supId = supplierManagment.createSupplierCard("supplier2", "1010","11111", "PAYMENTS,Check", "Supi",
+                "051234567","star@supplier1.com");
+        if(supId > -1){
+            System.out.println("New supplier ID: " + supId);
+        } else {
+            System.out.println("supplier with id " + supId + " wasnt created");
+        }
 
         addProductToSupplier(0);
     }

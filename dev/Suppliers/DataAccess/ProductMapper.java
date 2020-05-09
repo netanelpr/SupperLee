@@ -3,8 +3,6 @@ package Suppliers.DataAccess;
 import Suppliers.Supplier.Product;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Hashtable;
 
 public class ProductMapper extends AbstractMapper<Product> {
 
@@ -23,9 +21,11 @@ public class ProductMapper extends AbstractMapper<Product> {
     @Override
     protected Product buildTFromResultSet(ResultSet res) {
         try {
-            return new Product(res.getInt(1),
-                    res.getString(2),
-                    res.getString(3));
+            if(res.next()) {
+                return new Product(res.getInt(1),
+                        res.getString(2),
+                        res.getString(3));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,8 +48,7 @@ public class ProductMapper extends AbstractMapper<Product> {
             return product.getBarCode();
         }
 
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(insertStatement());
+        try(PreparedStatement pstmt = conn.prepareStatement(insertStatement())){
 
             pstmt.setInt(1, product.getBarCode());
             pstmt.setString(2, product.getName());
@@ -80,8 +79,7 @@ public class ProductMapper extends AbstractMapper<Product> {
     public boolean update(Product product) {
         int barcode = product.getBarCode();
 
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(updateStatement());
+        try(PreparedStatement pstmt = conn.prepareStatement(updateStatement())){
 
             pstmt.setString(1, product.getName());
             pstmt.setString(2, product.getManufacture());

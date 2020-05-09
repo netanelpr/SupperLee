@@ -5,7 +5,7 @@ import Suppliers.Service.SupplierManagment;
 
 import java.util.List;
 
-public class GetAllSuppliers implements  Menu_Option {
+public class GetAllSuppliers extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
@@ -16,12 +16,7 @@ public class GetAllSuppliers implements  Menu_Option {
 
 
     @Override
-    public void apply(String[] argv) {
-        if(argv.length != 0){
-            System.out.println("Invalid number of args");
-            return;
-        }
-
+    public void apply() {
         List<SupplierDetailsDTO> supplierDetails = supplierManagment.getAllSuppliers();
 
         if(supplierDetails != null) {
