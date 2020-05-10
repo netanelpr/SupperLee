@@ -93,5 +93,8 @@ public class defectiveController implements myObservable {
     public void notifyObserver(String msg) {
         observers.forEach(o -> o.onEvent(msg));
     }
+
+    public void loadDefectiveFromDB(String shopNum) {
+    }
     //endregion
 }

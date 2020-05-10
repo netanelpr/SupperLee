@@ -145,5 +145,8 @@ public class recordController implements myObservable {
     public void notifyObserver(String msg) {
         observers.forEach(o -> o.onEvent(msg));
     }
+
+    public void loadRecordsFromDB(String shopNum) {
+    }
     //endregion
 }

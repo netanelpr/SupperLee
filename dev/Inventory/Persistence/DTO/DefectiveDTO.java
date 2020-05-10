@@ -3,7 +3,7 @@ package Inventory.Persistence.DTO;
 
 import java.time.LocalDate;
 
-public class defectiveDTO {
+public class DefectiveDTO {
 
     private int defId;
     private int itemId;
@@ -12,7 +12,7 @@ public class defectiveDTO {
     private boolean expired;
     private boolean defective;
 
-    public defectiveDTO(int defId, int itemId, int quantity, LocalDate updateDate, boolean expired, boolean defective) {
+    public DefectiveDTO(int defId, int itemId, int quantity, LocalDate updateDate, boolean expired, boolean defective) {
         this.defId = defId;
         this.itemId = itemId;
         this.quantity = quantity;

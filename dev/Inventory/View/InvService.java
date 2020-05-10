@@ -6,10 +6,13 @@ import Inventory.Logic.Inventory;
 //imporinv.t DummyItem;
 import Inventory.Logic.OrderItem;
 import Inventory.Logic.ShortageOrder;
+import Inventory.Persistence.DTO.InventoryDTO;
 import Inventory.Persistence.DummyItem;
 import Inventory.Persistence.DummySuppliers;
+import Inventory.Persistence.Mappers.InventoriesMapper;
 import Result.Result;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,9 +29,10 @@ public class InvService implements myObservable {
     boolean terminateInv = false;
     boolean terminateSys = false;
     private Scanner myScanner;
-    public final List<Observer> observers;
-    public DummySuppliers tmpSuppliers;
-    public Inventory2SuppliersCtrl myInv2Sup;
+    private final List<Observer> observers;
+    private DummySuppliers tmpSuppliers;
+    private Inventory2SuppliersCtrl myInv2Sup;
+    private InventoriesMapper inventoriesMapper;
 
     //region singelton Constructor
     private static InvService instance = null;
@@ -39,6 +43,7 @@ public class InvService implements myObservable {
         this.myScanner = new Scanner(System.in);
         this.register(view);
         tmpSuppliers = new DummySuppliers();
+        inventoriesMapper = InventoriesMapper.getInstance();
     }
 
     public static InvService getInstance(){
@@ -275,6 +280,17 @@ public class InvService implements myObservable {
     @Override
     public void notifyObserver(String msg) {
         observers.forEach(o -> o.onEvent(msg));
+    }
+
+    public void loadDB() {
+        HashMap<String, InventoryDTO> invs = inventoriesMapper.load();
+        for (String shopNum : invs.keySet()) {
+            superLeeInvs.put(shopNum, new Inventory(view, invs.get(shopNum)));
+        }
+        for (String inv : superLeeInvs.keySet()) {
+            superLeeInvs.get(inv).loadInvDB();
+        }
+
     }
     //endregion
 }

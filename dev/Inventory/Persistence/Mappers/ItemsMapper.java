@@ -1,32 +1,28 @@
 package Inventory.Persistence.Mappers;
-
-import Inventory.Persistence.DTO.itemDTO;
-import Suppliers.Supplier.Product;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import Inventory.Persistence.DTO.ItemDTO;
 import java.util.HashMap;
+
 
 public class ItemsMapper extends AbstractMappers {
 
-    public HashMap<Integer, itemDTO> items; //<id, itemDTO>
+    //public HashMap<String, ItemDTO> items; //<id, ItemDTO>
 
-    public ItemsMapper(Connection myDB) {
+    //region singelton Constructor
+    private static ItemsMapper instance = null;
+    private ItemsMapper() {
         super();
-        items = new HashMap<>();
     }
+    public static ItemsMapper getInstance(){
+        if(instance == null)
+            instance = new ItemsMapper();
+        return instance;
+    }
+    //endregion
 
     @Override
-    public HashMap<Integer, itemDTO> load() throws SQLException {
-        Connection conn = this.getMyDB();
-        String query = "SELECT * FROM Items";
-        PreparedStatement statement = conn.prepareStatement(query);
-        ResultSet resultSet  = statement.executeQuery();
-        return builtDTOfromRes(resultSet);
+    public HashMap<String, ItemDTO> load() {
+        return null;
     }
-
 
     @Override
     public void insert() {
@@ -43,16 +39,5 @@ public class ItemsMapper extends AbstractMappers {
 
     }
 
-    private HashMap<Integer, itemDTO> builtDTOfromRes(ResultSet res) throws SQLException {
-        HashMap<Integer, itemDTO> items = new HashMap<>();
-        itemDTO currItem;
-        while(res.next()){
-            currItem = new itemDTO(res.findColumn("shopNum"),
-                                    res.findColumn("id"),
-                                    res.findColumn("quantityShop"),
-                                    res.findColumn("quantityStorage"));
-            items.put(currItem.getId(), currItem);
-        }
-        return items;
-    }
+
 }

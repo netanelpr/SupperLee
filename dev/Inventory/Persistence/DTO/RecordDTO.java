@@ -3,7 +3,7 @@ package Inventory.Persistence.DTO;
 
 import java.time.LocalDate;
 
-public class recordDTO {
+public class RecordDTO {
 
     private int recId;
     private int itemId;
@@ -12,7 +12,7 @@ public class recordDTO {
     private double price;
     private LocalDate priceChangeDate;
 
-    public recordDTO(int recId, int itemId, double cost, LocalDate costChangeDate, double price, LocalDate priceChangeDate) {
+    public RecordDTO(int recId, int itemId, double cost, LocalDate costChangeDate, double price, LocalDate priceChangeDate) {
         this.recId = recId;
         this.itemId = itemId;
         this.cost = cost;
