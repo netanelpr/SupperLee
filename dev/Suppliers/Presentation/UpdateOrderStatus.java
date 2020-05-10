@@ -1,5 +1,6 @@
 package Suppliers.Presentation;
 
+import Suppliers.Service.OrderAndProductManagement;
 import Suppliers.Service.SupplierManagment;
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Structs.StructUtils;
@@ -10,12 +11,11 @@ import java.io.InputStreamReader;
 public class UpdateOrderStatus extends Menu_Option {
 
 
-    private SupplierManagment supplierManagment;
+    private OrderAndProductManagement orderAndProductManagement;
 
-    public UpdateOrderStatus(SupplierManagment supplierManagment) {
-        this.supplierManagment = supplierManagment;
+    public UpdateOrderStatus(OrderAndProductManagement orderAndProductManagement) {
+        this.orderAndProductManagement = orderAndProductManagement;
     }
-
 
     @Override
     public void apply() {
@@ -33,7 +33,7 @@ public class UpdateOrderStatus extends Menu_Option {
             return;
         }
 
-        if(supplierManagment.updateOrderStatus(orderId, status)){
+        if(orderAndProductManagement.updateOrderStatus(orderId, status)){
             System.out.println("Order was updated");
         } else {
             System.out.println("Order was not updated");

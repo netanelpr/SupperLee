@@ -21,4 +21,14 @@ public class SupplierDBConn {
         }
         return null;
     }
+
+    public static void closeConn(){
+        if(conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+    }
 }

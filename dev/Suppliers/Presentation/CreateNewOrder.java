@@ -1,5 +1,6 @@
 package Suppliers.Presentation;
 
+import Suppliers.Service.OrderAndProductManagement;
 import Suppliers.Service.ProductInOrderDTO;
 import Suppliers.Service.SupplierManagment;
 
@@ -11,12 +12,11 @@ import java.util.List;
 public class CreateNewOrder extends Menu_Option {
 
 
-    private SupplierManagment supplierManagment;
+    private OrderAndProductManagement orderAndProductManagement;
 
-    public CreateNewOrder(SupplierManagment supplierManagment) {
-        this.supplierManagment = supplierManagment;
+    public CreateNewOrder(OrderAndProductManagement orderAndProductManagement) {
+        this.orderAndProductManagement = orderAndProductManagement;
     }
-
 
     @Override
     public void apply() {
@@ -42,7 +42,7 @@ public class CreateNewOrder extends Menu_Option {
                         Integer.parseInt(productAndAmount[1])));
             }
 
-            int orderId = supplierManagment.createNewOrder(supId, products);
+            int orderId = orderAndProductManagement.createNewOrder(supId, products);
             if(orderId < 0){
                 System.out.println("Order was not created");
             } else {

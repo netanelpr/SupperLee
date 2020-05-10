@@ -1,5 +1,6 @@
 package Suppliers.Presentation;
 
+import Suppliers.Service.OrderAndProductManagement;
 import Suppliers.Service.SupplierManagment;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.StructUtils;
@@ -11,10 +12,10 @@ import java.util.List;
 public class UpdateOrderArrivalDay extends Menu_Option {
 
 
-    private SupplierManagment supplierManagment;
+    private OrderAndProductManagement orderAndProductManagement;
 
-    public UpdateOrderArrivalDay(SupplierManagment supplierManagment) {
-        this.supplierManagment = supplierManagment;
+    public UpdateOrderArrivalDay(OrderAndProductManagement orderAndProductManagement) {
+        this.orderAndProductManagement = orderAndProductManagement;
     }
 
 
@@ -32,7 +33,7 @@ public class UpdateOrderArrivalDay extends Menu_Option {
         }
         Days day = days.get(0);
 
-        if(supplierManagment.updateOrderArrivalTime(orderId, day)){
+        if(orderAndProductManagement.updateOrderArrivalTime(orderId, day)){
             System.out.println("Order was updated");
         } else {
             System.out.println("Order was not updated");

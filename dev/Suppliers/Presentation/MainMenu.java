@@ -1,5 +1,7 @@
 package Suppliers.Presentation;
 
+import Suppliers.Service.OrderAndProductCtrl;
+import Suppliers.Service.OrderAndProductManagement;
 import Suppliers.Service.SupplierCtrl;
 import Suppliers.Service.SupplierManagment;
 
@@ -11,11 +13,15 @@ import java.util.*;
 public class MainMenu {
 
     private SupplierManagment supplierManagment;
+    private OrderAndProductManagement orderAndProductManagement;
+
     private Map<String, Menu_Option> optionMap;
     private List<String> optionToIndex;
 
     public MainMenu(){
         supplierManagment = new SupplierCtrl();
+        orderAndProductManagement = new OrderAndProductCtrl();
+
         optionMap = new HashMap<>();
         optionToIndex = new LinkedList<>();
 
@@ -45,9 +51,9 @@ public class MainMenu {
         addMenuOption("Get all supplier barcode", new GetAllSuppliersProducts(supplierManagment));
         addMenuOption("Get all supplier products detalis", new GetAllSuppliersProductsDetalis(supplierManagment));
 
-        addMenuOption("Create new order", new CreateNewOrder(supplierManagment));
-        addMenuOption("Update order arrival day", new UpdateOrderArrivalDay(supplierManagment));
-        addMenuOption("Update order status", new UpdateOrderStatus(supplierManagment));
+        addMenuOption("Create new order", new CreateNewOrder(orderAndProductManagement));
+        addMenuOption("Update order arrival day", new UpdateOrderArrivalDay(orderAndProductManagement));
+        addMenuOption("Update order status", new UpdateOrderStatus(orderAndProductManagement));
 
         addMenuOption("Get purchase history from supplier", new PurchaseHistoryFromSupplier(supplierManagment));
 
