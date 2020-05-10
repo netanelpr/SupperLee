@@ -87,6 +87,8 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     public Result receiveSupplierOrder(int orderID)
     {
+        //TODO: change arg to Order
+        myInvenoryService.getOrderFromSuppliers();
         return null;
     }
 

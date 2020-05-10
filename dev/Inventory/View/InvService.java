@@ -8,6 +8,7 @@ import Inventory.Logic.OrderItem;
 import Inventory.Logic.ShortageOrder;
 import Inventory.Persistence.DummyItem;
 import Inventory.Persistence.DummySuppliers;
+import Result.Result;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -83,6 +84,8 @@ public class InvService implements myObservable {
 
                 //region items
                 if (ansStr.equals("uis")) {
+                    //TODO: DELETE
+                    getOrderFromSuppliers();
                     notifyObserver("-- Update Inventory Suppliers --");
                     HashMap<DummyItem, Integer> supply = tmpSuppliers.getArrivedOrders(); //read from jason, only for stage one
                     tmpSuppliers.finishOrder();
@@ -204,10 +207,20 @@ public class InvService implements myObservable {
             currItem = myScanner.nextLine();
         }
         notifyObserver("-- finish updating inventory --");
-        if(shortageOrder.getLength() > 0)
-            myInv2Sup.placeNewShortageOrder(shortageOrder);
-
+        if(shortageOrder.getLength() > 0) {
+            Result<Integer> res = myInv2Sup.placeNewShortageOrder(shortageOrder);
+            if(res.isFailure())
+                notifyObserver(res.getMessage());
+        }
     }
+
+    public void getOrderFromSuppliers(){
+        //TODO: change arg to Order that you send to us
+        //TODO: start function with the specific shop
+        //notifyObserver("-- Update Inventory Suppliers --");
+        //currInv.updateInventorySuppliers(supply, this);
+    }
+
     private void setNewPrice() {
         notifyObserver("which id to set deal?");
         String id = myScanner.nextLine();
