@@ -4,6 +4,7 @@ import Suppliers.DataAccess.ProductMapper;
 import Suppliers.DataAccess.SupplierDBConn;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProductsManager {
@@ -38,6 +39,10 @@ public class ProductsManager {
         }
         else
             return false;*/
+    }
+
+    public List<Integer> getAllBarcodes(){
+        return productMapper.getAllIds();
     }
 
     public boolean exists(int barcode){

@@ -65,6 +65,11 @@ CREATE TABLE IF NOT EXISTS Product(
 	barcode INTEGER NOT NULL,
 	name TEXT NOT NULL,
 	manufacture TEXT NOT NULL,
+	categoty VARCHAR(32),
+	subCategoty VARCHAR(32),
+	size VARCHAR(12),
+	freqSupply INTEGER,
+	minPrice DOUBLE,
 	PRIMARY KEY (barcode)
 	--CHECK (barcode > -1)
 );

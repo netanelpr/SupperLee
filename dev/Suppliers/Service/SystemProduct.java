@@ -7,16 +7,21 @@ public class SystemProduct {
     public int barcode;
     public String name;
     public String manufacture;
-    public String catagory;
-    public String subCatagory;
+    public String category;
+    public String subCategory;
+    public String size;
     public int freqSupply;
     public double minPrice;
 
-    public SystemProduct(int barcode, String manufacture, String name, String catagory,
-                         String subCatagory, int freqSupply, double minPrice) {
+    public SystemProduct(int barcode, String manufacture, String name, String category,
+                         String subCategory, String size, int freqSupply, double minPrice) {
         this.barcode = barcode;
-        //this.originalPrice = originalPrice;
         this.manufacture = manufacture;
         this.name = name;
+        this.category = category;
+        this.subCategory = subCategory;
+        this.size = size;
+        this.freqSupply = freqSupply;
+        this.minPrice = minPrice;
     }
 }

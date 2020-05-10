@@ -34,12 +34,13 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     //TODO
     @Override
     public List<Integer> getAllProductBarcodes() {
-        return null;
+        return productsManager.getAllBarcodes();
     }
 
     public SystemProduct productToSystemProduct(Product product){
         return new SystemProduct(product.getBarCode(), product.getManufacture(), product.getName(),
-                null,null,1,1);
+                product.getCategory(),product.getSubCategory(),product.getSize(),
+                product.getFreqSupply(), product.getMinPrice());
     }
 
     @Override

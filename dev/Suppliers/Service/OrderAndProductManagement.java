@@ -17,6 +17,10 @@ public interface OrderAndProductManagement {
      */
     SystemProduct getProduct(int barcode);
 
+    /**
+     * A list of all the product barocdes in the system
+     * @return list of all the product barocdes in the system, empty list if there isnt any product or null
+     */
     List<Integer> getAllProductBarcodes();
 
     /**

@@ -3,6 +3,8 @@ package Suppliers.DataAccess;
 import Suppliers.Supplier.Product;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductMapper extends AbstractMapper<Product> {
 
@@ -23,8 +25,8 @@ public class ProductMapper extends AbstractMapper<Product> {
         try {
             if(res.next()) {
                 return new Product(res.getInt(1),
-                        res.getString(2),
-                        res.getString(3));
+                        res.getString(2), res.getString(3),res.getString(4), res.getString(5),
+                        res.getString(6), res.getInt(7), res.getInt(8));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,5 +96,26 @@ public class ProductMapper extends AbstractMapper<Product> {
         } catch (java.sql.SQLException e) {
             return false;
         }
+    }
+
+    public String getAllIdsStatement(){
+        return "SELECT barcode FROM Product";
+    }
+
+    public List<Integer> getAllIds() {
+        List<Integer> ids = new ArrayList<>();
+
+        try(PreparedStatement pstmt = conn.prepareStatement(getAllIdsStatement())){
+            ResultSet res = pstmt.executeQuery();
+
+            while(res.next()){
+                ids.add(res.getInt(1));
+            }
+
+        } catch (java.sql.SQLException e) {
+            return null;
+        }
+
+        return ids;
     }
 }
