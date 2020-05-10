@@ -1,5 +1,6 @@
 package Suppliers.Service;
 
+import Result.Result;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Supplier.Product;
@@ -30,19 +31,37 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         return productToSystemProduct(product);
     }
 
+    //TODO
+    @Override
+    public List<Integer> getAllProductBarcodes() {
+        return null;
+    }
+
     public SystemProduct productToSystemProduct(Product product){
-        return new SystemProduct(product.getBarCode(), product.getManufacture(), product.getName());
+        return new SystemProduct(product.getBarCode(), product.getManufacture(), product.getName(),
+                null,null,1,1);
     }
 
     @Override
-    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products) {
+    public Result<Integer> createNewSupplierOrder(int supplierId, List<ProductInOrderDTO> products) {
         List<ProductInOrder> productInOrders = new LinkedList<>();
 
         for(ProductInOrderDTO productInOrderDTO : products){
             productInOrders.add(ProductInOrderDTOToPIO(productInOrderDTO));
         }
 
-        return supplierSystem.createNewOrder(supplierId, productInOrders);
+        //TODO edit
+        return Result.makeOk("",supplierSystem.createNewOrder(supplierId, productInOrders));
+    }
+
+    @Override
+    public Result<Integer> createRegularNewOrder(List<ProductInOrderDTO> products, Days day) {
+        return null;
+    }
+
+    @Override
+    public Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod) {
+        return null;
     }
 
     @Override

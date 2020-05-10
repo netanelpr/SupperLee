@@ -1,6 +1,7 @@
 package Suppliers.Service;
 
 
+import Result.Result;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 
@@ -16,13 +17,19 @@ public interface OrderAndProductManagement {
      */
     SystemProduct getProduct(int barcode);
 
+    List<Integer> getAllProductBarcodes();
+
     /**
      * Create a new order in the system
      * @param supplierId The supplier ID who need to supply the order
      * @param products The product to order
      * @return -1 if cant create the order, otherwise return the order id
      */
-    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products);
+    Result<Integer> createNewSupplierOrder(int supplierId, List<ProductInOrderDTO> products);
+
+    Result<Integer> createRegularNewOrder(List<ProductInOrderDTO> products, Days day);
+
+    Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod);
 
     /**
      * Update the day of order arrival

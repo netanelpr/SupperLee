@@ -42,7 +42,8 @@ public class CreateNewOrder extends Menu_Option {
                         Integer.parseInt(productAndAmount[1])));
             }
 
-            int orderId = orderAndProductManagement.createNewOrder(supId, products);
+            //TODO edit to result
+            int orderId = orderAndProductManagement.createNewSupplierOrder(supId, products).getValue();
             if(orderId < 0){
                 System.out.println("Order was not created");
             } else {
