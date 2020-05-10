@@ -27,9 +27,10 @@ public class Inventory implements myObservable {
     public Inventory(View view){
         counter++;
         this.shopNum = String.valueOf(counter);
+        //TODO check if needs shop num in item!
         this.myItemController = new itemsController(view);
-        this.myRecoredController = new recordController(view);
-        this.myDefectivesController = new defectiveController(view);
+        this.myRecoredController = new recordController(view, shopNum);
+        this.myDefectivesController = new defectiveController(view, shopNum);
         observers = new ArrayList<>();
         this.register(view);
         shopName = "";
@@ -39,9 +40,10 @@ public class Inventory implements myObservable {
         counter++;
         this.shopNum = invDTO.getShopNum();
         this.shopName = invDTO.getShopName();
+        //TODO check if needs shop num in item!
         this.myItemController = new itemsController(view);
-        this.myRecoredController = new recordController(view);
-        this.myDefectivesController = new defectiveController(view);
+        this.myRecoredController = new recordController(view, shopNum);
+        this.myDefectivesController = new defectiveController(view, shopNum);
         observers = new ArrayList<>();
         this.register(view);
     }

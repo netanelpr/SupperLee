@@ -25,7 +25,6 @@ public class InventoriesMapper extends AbstractMappers {
     }
     //endregion
 
-    @Override
     public HashMap<String, InventoryDTO> load() {
         String query = "SELECT * " +
                         "FROM Inventory";

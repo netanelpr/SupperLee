@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class DefectivesMapper extends AbstractMappers {
-    @Override
+
     public HashMap load() throws SQLException {
         return null;
     }

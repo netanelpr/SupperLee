@@ -19,7 +19,6 @@ public class ItemsMapper extends AbstractMappers {
     }
     //endregion
 
-    @Override
     public HashMap<String, ItemDTO> load() {
         return null;
     }

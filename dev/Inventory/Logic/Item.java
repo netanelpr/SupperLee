@@ -14,6 +14,9 @@ public class Item implements myObservable {
     //supplier item info
     private String id;
     private String name;
+
+    private String shopNum;
+
     private String manufacturer;
     private String category;
     private String sub_category;

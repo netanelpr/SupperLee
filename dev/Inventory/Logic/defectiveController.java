@@ -12,13 +12,15 @@ public class defectiveController implements myObservable {
     //fields
     private HashMap<String, List<Defective>> defectives; //item id, number of defectives items
     public final List<Observer> observers;
+    private String shopNum;
+
 
     //constructor
-    public defectiveController(Observer o) {
-        //this.myScanner = new Scanner(System.in);
+    public defectiveController(Observer o, String shopNum) {
         this.defectives = new HashMap<>();
         observers = new ArrayList<>();
         this.register(o);
+        this.shopNum = shopNum;
     }
     public HashMap<String, List<Defective>> getDefectives() {
         return defectives;
@@ -47,7 +49,7 @@ public class defectiveController implements myObservable {
             if (defectives.containsKey(id)) {
                 List<Defective> defList = defectives.get(id);
                 Defective lastDef = defList.get(defList.size()-1);
-                Defective newDefectReport = new Defective(observers, id, lastDef.getName(), quantity, java.time.LocalDate.now(), expired, defective);
+                Defective newDefectReport = new Defective(observers, id, lastDef.getName(), quantity, java.time.LocalDate.now(), expired, defective, shopNum);
                 defectives.get(id).add(newDefectReport);
                 newDefectReport.defectiveItemStatus();
             }
@@ -62,7 +64,7 @@ public class defectiveController implements myObservable {
         for (DummyItem dummyItem : supply.keySet()) {
             String id = dummyItem.getId();
             if(!defectives.containsKey(id)) {
-                Defective newDefectReport = new Defective(observers, id, dummyItem.getName(), 0, java.time.LocalDate.now());
+                Defective newDefectReport = new Defective(observers, id, dummyItem.getName(), 0, java.time.LocalDate.now(), shopNum);
                 defectives.put(id, new ArrayList<>());
                 defectives.get(id).add(newDefectReport);
             }
@@ -95,6 +97,7 @@ public class defectiveController implements myObservable {
     }
 
     public void loadDefectiveFromDB(String shopNum) {
+
     }
     //endregion
 }

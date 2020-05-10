@@ -7,6 +7,9 @@ public class DefectiveDTO {
 
     private int defId;
     private int itemId;
+
+    private String shopNum;
+
     private int quantity;
     private LocalDate updateDate;
     private boolean expired;

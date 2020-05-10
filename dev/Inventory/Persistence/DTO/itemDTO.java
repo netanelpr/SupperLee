@@ -1,52 +1,128 @@
 package Inventory.Persistence.DTO;
 
-public class itemDTO {
+public class ItemDTO {
 
-    private int shopNum;
-    private int id;
-    private int quantityShop;
-    private int quantityStorage;
+    //item fields
+    private String shopNum;
+    private String id;
+    private String quantityShop;
+    private String quantityStorage;
 
+    //products fields
+    private String name;
+    private String manufacturer;
+    private String category;
+    private String sub_category;
+    private String size;
+    private int freqBuySupply;
+    private double minPrice;
 
-    public itemDTO(int shopNum, int id, int quantityShop, int quantityStorage) {
+    public ItemDTO(String shopNum, String id, String quantityShop, String quantityStorage, String name, String manufacturer, String category, String sub_category, String size, int freqBuySupply, double minPrice) {
         this.shopNum = shopNum;
         this.id = id;
         this.quantityShop = quantityShop;
         this.quantityStorage = quantityStorage;
+        this.name = name;
+        this.manufacturer = manufacturer;
+        this.category = category;
+        this.sub_category = sub_category;
+        this.size = size;
+        this.freqBuySupply = freqBuySupply;
+        this.minPrice = minPrice;
     }
 
+
     //region getters&setters
-    public int getShopNum() {
+
+    public String getShopNum() {
         return shopNum;
     }
 
-    public void setShopNum(int shopNum) {
+    public void setShopNum(String shopNum) {
         this.shopNum = shopNum;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getQuantityShop() {
+    public String getQuantityShop() {
         return quantityShop;
     }
 
-    public void setQuantityShop(int quantityShop) {
+    public void setQuantityShop(String quantityShop) {
         this.quantityShop = quantityShop;
     }
 
-    public int getQuantityStorage() {
+    public String getQuantityStorage() {
         return quantityStorage;
     }
 
-    public void setQuantityStorage(int quantityStorage) {
+    public void setQuantityStorage(String quantityStorage) {
         this.quantityStorage = quantityStorage;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSub_category() {
+        return sub_category;
+    }
+
+    public void setSub_category(String sub_category) {
+        this.sub_category = sub_category;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public int getFreqBuySupply() {
+        return freqBuySupply;
+    }
+
+    public void setFreqBuySupply(int freqBuySupply) {
+        this.freqBuySupply = freqBuySupply;
+    }
+
+    public double getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(double minPrice) {
+        this.minPrice = minPrice;
+    }
+
+
     //endregion
 
 }

@@ -5,16 +5,19 @@ import java.time.LocalDate;
 
 public class RecordDTO {
 
-    private int recId;
-    private int itemId;
+    private String recId;
+    private String itemId;
+    private String shopNum;
     private double cost;
     private LocalDate costChangeDate;
     private double price;
     private LocalDate priceChangeDate;
 
-    public RecordDTO(int recId, int itemId, double cost, LocalDate costChangeDate, double price, LocalDate priceChangeDate) {
+
+    public RecordDTO(String recId, String itemId, String shopNum, double cost, LocalDate costChangeDate, double price, LocalDate priceChangeDate) {
         this.recId = recId;
         this.itemId = itemId;
+        this.shopNum = shopNum;
         this.cost = cost;
         this.costChangeDate = costChangeDate;
         this.price = price;
@@ -22,20 +25,29 @@ public class RecordDTO {
     }
 
     // region getters&setters
-    public int getRecId() {
+
+    public String getRecId() {
         return recId;
     }
 
-    public void setRecId(int recId) {
+    public void setRecId(String recId) {
         this.recId = recId;
     }
 
-    public int getItemId() {
+    public String getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(String itemId) {
         this.itemId = itemId;
+    }
+
+    public String getShopNum() {
+        return shopNum;
+    }
+
+    public void setShopNum(String shopNum) {
+        this.shopNum = shopNum;
     }
 
     public double getCost() {
@@ -69,6 +81,7 @@ public class RecordDTO {
     public void setPriceChangeDate(LocalDate priceChangeDate) {
         this.priceChangeDate = priceChangeDate;
     }
+
     //endregion
 
 }

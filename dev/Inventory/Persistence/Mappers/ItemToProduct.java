@@ -14,12 +14,10 @@ public class ItemToProduct {
     private ItemsMapper itemsMapper;
     private ProductMapper productMapper;
 
-    public ItemToProduct(Connection conn) {
-        this.conn = conn;
-        this.itemsMapper = ItemsMapper.getInstance();
-        this.productMapper = new ProductMapper(this.conn);
-    }
 
+public ItemToProduct (Connection conn){
+    this.conn = conn;
+}
     //region getters & setters
 
     public Connection getConn() {

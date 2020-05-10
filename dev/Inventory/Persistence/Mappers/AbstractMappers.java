@@ -24,7 +24,7 @@ public abstract class AbstractMappers<T> {
     }
     //endregion
 
-    public abstract HashMap<Integer, T> load() throws SQLException;
+   // public abstract HashMap<Integer, T> load() throws SQLException;
     public abstract void insert();
     public abstract void update();
     public abstract void delete();
