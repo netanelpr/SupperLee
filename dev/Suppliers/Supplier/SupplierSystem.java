@@ -133,7 +133,7 @@ public class SupplierSystem {
 
     /**
      * Return the details for each supplier in the system.
-     * @return List<Suppliers.Service.SupplierDetails> for each supplier in the system.
+     * @return List<Suppliers.InvService.SupplierDetails> for each supplier in the system.
      */
     public List<SupplierDetails> getAllSuppliers() {
         List<SupplierDetails> supDetails = new LinkedList<>();

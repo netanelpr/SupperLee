@@ -1,8 +1,8 @@
-package inv.Logic;
+package Inventory.Logic;
 
-import inv.Interfaces.Observer;
-import inv.Interfaces.myObservable;
-import inv.Persistence.DummyItem;
+import Inventory.Interfaces.Observer;
+import Inventory.Interfaces.myObservable;
+import Inventory.Persistence.DummyItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,31 +24,10 @@ public class itemsController implements myObservable {
     }
 
     //region update items
-    public void updateInventoryWorkers(String id, int quanMissStock, int quanMissShop) {
-//        String id;
-//        int quanMissStock;
-//        int quanMissShop;
-//
-//        notifyObserver("enter updated quantities: ('id' 'quanMissStock' 'quanMissShop') || '0' to stop");
-//
-//        String currItem = myScanner.nextLine();
-//        String[] splited;
-//
-//        while(!currItem.equals("0"))
-//        {
-//            splited = currItem.split(" ");
-//            if(splited.length == 3) {
-//                id = splited[0];
-//                quanMissStock = Integer.parseInt(splited[1]);
-//                quanMissShop = Integer.parseInt(splited[2]);
-        items.get(id).updateMyQuantities(quanMissStock, quanMissShop, '-');
-//            }
-//            else
-//                notifyObserver("wrong input! type again:");
-//            currItem = myScanner.nextLine();
-//        }
-//        notifyObserver("-- finish updating inventory --");
+    public OrderItem updateInventoryWorkers(String id, int quanMissStock, int quanMissShop) {
+        return items.get(id).updateMyQuantities(quanMissStock, quanMissShop, '-');
     }
+
     public void updateInventorySuppliers(HashMap<DummyItem, Integer> supply) {
 
         for (DummyItem dummyItem : supply.keySet()) {

@@ -1,10 +1,10 @@
-package inv.Logic;
+package Inventory.Logic;
 
-import inv.Interfaces.Observer;
-import inv.Interfaces.myObservable;
-import inv.Persistence.DummyItem;
-import inv.View.View;
-import inv.View.Service;
+import Inventory.Interfaces.Observer;
+import Inventory.Interfaces.myObservable;
+import Inventory.Persistence.DummyItem;
+import Inventory.View.InvService;
+import Inventory.View.View;
 
 
 import java.util.ArrayList;
@@ -61,16 +61,16 @@ public class Inventory implements myObservable {
 
 
     //region updates items Inventory
-    public void updateInventoryWorkers(String id, int quanMissStock, int quanMissShop) {
-        myItemController.updateInventoryWorkers(id, quanMissStock, quanMissShop);
+    public OrderItem updateInventoryWorkers(String id, int quanMissStock, int quanMissShop) {
+        return myItemController.updateInventoryWorkers(id, quanMissStock, quanMissShop);
     }
-    public void updateInventorySuppliers(HashMap<DummyItem, Integer> supply, Service service) {
-        myRecoredController.updateRecordsSuppliers(supply, this, service);
+    public void updateInventorySuppliers(HashMap<DummyItem, Integer> supply, InvService invService) {
+        myRecoredController.updateRecordsSuppliers(supply, this, invService);
         myItemController.updateInventorySuppliers(supply);
         myDefectivesController.updateDefectivesSuppliers(supply);
     }
-    public double askUserPrice(double newCost, double oldCost, String[] lastRecordInfo, Service service) {
-        return service.askUserPrice(newCost, oldCost, lastRecordInfo);
+    public double askUserPrice(double newCost, double oldCost, String[] lastRecordInfo, InvService invService) {
+        return invService.askUserPrice(newCost, oldCost, lastRecordInfo);
     }
     //endregion
 

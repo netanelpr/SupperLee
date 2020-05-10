@@ -1,8 +1,7 @@
-package inv.Logic;
-import inv.Interfaces.Observer;
-import inv.Interfaces.myObservable;
-import inv.Persistence.DummyItem;
-import inv.View.View;
+package Inventory.Logic;
+import Inventory.Interfaces.Observer;
+import Inventory.Interfaces.myObservable;
+import Inventory.Persistence.DummyItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class Item implements myObservable {
     //endregion
 
     //region item functions
-    public void updateMyQuantities(int qstrg, int qshop, char c) {
+    public OrderItem updateMyQuantities(int qstrg, int qshop, char c) {
         if(c == '-'){
             this.quanStrg -= qstrg;
             this.quantShop -= qshop;
@@ -77,34 +76,42 @@ public class Item implements myObservable {
         if(quanStrg < 0) quanStrg = 0;
         if(quantShop < 0) quantShop = 0;
         totalQuantity = quanStrg+quantShop;
-        this.checkMinimumQuant();
+        if(this.checkMinimumQuant())
+            return issueOrderForShortageItem();
+        return null;
     }
-    private void checkMinimumQuant() {
+
+    private OrderItem issueOrderForShortageItem() {
+        int quantityToOrder = (Integer.parseInt(freqBuySupply)*10 + 10) - totalQuantity;
+        return new OrderItem(Integer.parseInt(id), quantityToOrder);
+    }
+
+    private Boolean checkMinimumQuant() {
 
         if((totalQuantity) < Integer.parseInt(freqBuySupply)*10)
         {
             minimum = true;
             notifyObserver("|--------------------------------------------------\n" +
-                                "|Alert! this product ENDED. order more!");
+                    "|Alert! this product ENDED. order more!");
         }
         else if((totalQuantity) < Integer.parseInt(freqBuySupply)*10 + 10)
         {
             minimum = true;
             notifyObserver("|--------------------------------------------------\n" +
-                                "|Alert! this product is about to end, need to order more");
+                    "|Alert! this product is about to end, need to order more");
         }
         else if(quanStrg == 0)
         {
             minimum = true;
             notifyObserver("|--------------------------------------------------\n" +
-                                "|Alert!! this product ENDED in the storage. order more!");
+                    "|Alert!! this product ENDED in the storage. order more!");
         }
         else
         {
             minimum = false;
         }
-
         itemStatusUpdated();
+        return minimum;
     }
     public void itemStatus() {
         notifyObserver("|--------------------------------------------------\n" +

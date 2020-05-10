@@ -1,11 +1,9 @@
-package inv.Logic;
+package Inventory.Logic;
 
-import inv.Interfaces.Observer;
-import inv.Interfaces.myObservable;
+import Inventory.Interfaces.Observer;
+import Inventory.Interfaces.myObservable;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Record implements myObservable {

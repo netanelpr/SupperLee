@@ -1,4 +1,4 @@
-package inv.Persistence;
+package Inventory.Persistence;
 
 public class DummyItem {
 

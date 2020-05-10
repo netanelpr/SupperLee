@@ -1,38 +1,55 @@
 package ConncetModules;
+import Inventory.Interfaces.Observer;
+import Inventory.Interfaces.myObservable;
+import Inventory.Logic.ShortageOrder;
+import Inventory.View.InvService;
+import Inventory.View.View;
 import Result.Result;
 import Suppliers.Structs.Days;
-import Suppliers.Supplier.AddProduct;
 import Suppliers.Supplier.ProductInOrder;
-import Suppliers.Supplier.Supplier;
-import Suppliers.Supplier.SupplierDetails;
-import inv.Persistence.DummyItem;
-import inv.View.Service;
+import Inventory.Persistence.DummyItem;
 import Suppliers.Service.*;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
-public class Inventory2SuppliersCtrl {
-    private static Inventory2SuppliersCtrl inventory2SuppliersCtrlInstance =null;
+public class Inventory2SuppliersCtrl implements myObservable {
+    private static Inventory2SuppliersCtrl inventory2SuppliersCtrlInstance = null;
     private SupplierManagment mySupplierManger;
-    private Service myInvenoryService;
+    private InvService myInvenoryService;
+    private Scanner myScanner;
+    private View view;
+    public final List<Observer> observers;
 
     private Inventory2SuppliersCtrl()
     {
         mySupplierManger= new SupplierCtrl();
-        myInvenoryService= Service.getInstance();
+        myInvenoryService= InvService.getInstance();
+        this.myScanner = new Scanner(System.in);
+        observers = new ArrayList<>();
+        this.view = new View();
+        this.register(view);
     }
 
-    public static Inventory2SuppliersCtrl getInstance()
-    {
-        if(inventory2SuppliersCtrlInstance ==null)
-        {
+    public static Inventory2SuppliersCtrl getInstance() {
+        if(inventory2SuppliersCtrlInstance == null)
+            inventory2SuppliersCtrlInstance = new Inventory2SuppliersCtrl();
+        return inventory2SuppliersCtrlInstance;
+    }
 
-            
-            inventory2SuppliersCtrlInstance =new Inventory2SuppliersCtrl();
+    public void run(){
+        int module = -1;
+        while(module != 0) {
+            notifyObserver("-- SUPER-LEE main Menu -- press: \n 1) Suppliers \n 2) Inventory \n 0) Exit");
+            module = myScanner.nextInt();
+            if (module == 1) {//TODO: add your main function
+            }
+            else if (module == 2) {
+                myInvenoryService.mainLoop();
+            }
         }
-            return inventory2SuppliersCtrlInstance;
     }
 
     public List<DummyItem> getAllCatalog()
@@ -48,8 +65,13 @@ public class Inventory2SuppliersCtrl {
         //return itemsList;
         return null;
     }
-    public Result<Integer> placeNewShortageOrder(Map<Integer, Integer> shoppingList, Days day)
+    public Result<Integer> placeNewShortageOrder(ShortageOrder shortageOrder)
+    //TODO: talk about the signature, days?, shortageOrder includes Map, ShopNum, order length)
+    //public Result<Integer> placeNewShortageOrder(Map<Integer, Integer> shoppingList, Days day)
     {
+        notifyObserver("automatic shortage order arrived successfully!");
+        notifyObserver(shortageOrder.toString());
+
         //List<ProductInOrder> productsToOrder;
         //return mySupplierManger.placeShortageOrder(productsToOrder,day);
         return null;
@@ -67,4 +89,14 @@ public class Inventory2SuppliersCtrl {
     }
 
 
+    //region observer
+    @Override
+    public void register(Observer o) {
+        observers.add(o);
+    }
+    @Override
+    public void notifyObserver(String msg) {
+        observers.forEach(o -> o.onEvent(msg));
+    }
+    //endregion
 }

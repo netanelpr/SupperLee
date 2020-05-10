@@ -1,9 +1,9 @@
-package inv.Logic;
+package Inventory.Logic;
 
-import inv.Interfaces.Observer;
-import inv.Interfaces.myObservable;
-import inv.Persistence.DummyItem;
-import inv.View.Service;
+import Inventory.Interfaces.Observer;
+import Inventory.Interfaces.myObservable;
+import Inventory.Persistence.DummyItem;
+import Inventory.View.InvService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -31,7 +31,7 @@ public class recordController implements myObservable {
     //endregion
 
     //region record update
-    public void updateRecordsSuppliers(HashMap<DummyItem, Integer> supply, Inventory inv, Service service) {
+    public void updateRecordsSuppliers(HashMap<DummyItem, Integer> supply, Inventory inv, InvService invService) {
         Record newRecord;
         double newPrice;
         for (DummyItem dummyItem : supply.keySet()) {
@@ -47,7 +47,7 @@ public class recordController implements myObservable {
                     lastRecordInfo[1] = lastRecord.getName();
                     lastRecordInfo[2] = String.valueOf(lastRecord.getPrice());
                     lastRecordInfo[3] = String.valueOf(lastRecord.getPriceChangeDate());
-                    newPrice = inv.askUserPrice(newCost, oldCost, lastRecordInfo, service);
+                    newPrice = inv.askUserPrice(newCost, oldCost, lastRecordInfo, invService);
                     if(newPrice != lastRecord.getPrice())
                         newRecord = new Record(observers, lastRecordInfo[0], lastRecordInfo[1], newCost, LocalDate.now(),
                                                 newPrice, LocalDate.now());

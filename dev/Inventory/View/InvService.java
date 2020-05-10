@@ -1,12 +1,13 @@
-package inv.View;
-import inv.Interfaces.Observer;
-import inv.Interfaces.myObservable;
-import inv.Logic.Defective;
-import inv.Logic.Inventory;
+package Inventory.View;
+import ConncetModules.Inventory2SuppliersCtrl;
+import Inventory.Interfaces.Observer;
+import Inventory.Interfaces.myObservable;
+import Inventory.Logic.Inventory;
 //imporinv.t DummyItem;
-import inv.Logic.Record;
-import inv.Persistence.DummyItem;
-import inv.Persistence.DummySuppliers;
+import Inventory.Logic.OrderItem;
+import Inventory.Logic.ShortageOrder;
+import Inventory.Persistence.DummyItem;
+import Inventory.Persistence.DummySuppliers;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,10 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import Suppliers.Service.*;
 
 
-public class Service implements myObservable {
+public class InvService implements myObservable {
     //private MainInterface myController;
     private View view;
     private HashMap<String, Inventory> superLeeInvs; //inventory id, inventory
@@ -27,27 +27,28 @@ public class Service implements myObservable {
     private Scanner myScanner;
     public final List<Observer> observers;
     public DummySuppliers tmpSuppliers;
+    public Inventory2SuppliersCtrl myInv2Sup;
 
     //region singelton Constructor
-    private static Service instance = null;
-    private Service(){
+    private static InvService instance = null;
+    private InvService(){
         this.view = new View();
         this.superLeeInvs = new HashMap<>();
         observers = new ArrayList<>();
         this.myScanner = new Scanner(System.in);
         this.register(view);
-
         tmpSuppliers = new DummySuppliers();
     }
-    public static Service getInstance(){
+
+    public static InvService getInstance(){
         if(instance == null)
-            instance = new Service();
+            instance = new InvService();
         return instance;
     }
     //endregion
 
     public String mainLoop() {
-
+        myInv2Sup = Inventory2SuppliersCtrl.getInstance();
         String ansStr;
 
         while(!terminateSys) {
@@ -61,8 +62,10 @@ public class Service implements myObservable {
             else if (ansStr.equals("register")) {
                 notifyObserver("which shop id?");
                 ansStr = myScanner.nextLine();
-                if (!superLeeInvs.containsKey(ansStr))
+                if (!superLeeInvs.containsKey(ansStr)) {
                     notifyObserver("does not exist...");
+                    terminateInv = true;
+                }
                 else {
                     this.currInv = superLeeInvs.get(ansStr);
                     notifyObserver("Welcome! keep 2 meters....");
@@ -145,7 +148,7 @@ public class Service implements myObservable {
                 //endregion
             }
         }
-        return "quit inv";
+        return "quit Inventory";
     }
 
     private void updDef() {
@@ -176,6 +179,9 @@ public class Service implements myObservable {
         String id;
         int quanMissStock;
         int quanMissShop;
+        OrderItem currOrderItem;
+        ShortageOrder shortageOrder = new ShortageOrder(Integer.parseInt(currInv.getShopNum()));
+
 
         notifyObserver("enter updated quantities: ('id' 'quanMissStock' 'quanMissShop') || '0' to stop");
 
@@ -189,13 +195,18 @@ public class Service implements myObservable {
                 id = splited[0];
                 quanMissStock = Integer.parseInt(splited[1]);
                 quanMissShop = Integer.parseInt(splited[2]);
-                currInv.updateInventoryWorkers(id, quanMissStock, quanMissShop);
+                currOrderItem = currInv.updateInventoryWorkers(id, quanMissStock, quanMissShop);
+                if (currOrderItem != null)
+                    shortageOrder.addItemToOrder(currOrderItem);
             }
             else
                 notifyObserver("wrong input! type again:");
             currItem = myScanner.nextLine();
         }
         notifyObserver("-- finish updating inventory --");
+        if(shortageOrder.getLength() > 0)
+            myInv2Sup.placeNewShortageOrder(shortageOrder);
+
     }
     private void setNewPrice() {
         notifyObserver("which id to set deal?");

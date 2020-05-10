@@ -1,5 +1,4 @@
-package inv.Persistence;
-import inv.Persistence.DummyItem;
+package Inventory.Persistence;
 
 import java.util.HashMap;
 

@@ -1,12 +1,11 @@
-package inv.Logic;
-import inv.Interfaces.Observer;
-import inv.Interfaces.myObservable;
-import inv.Persistence.DummyItem;
+package Inventory.Logic;
+import Inventory.Interfaces.Observer;
+import Inventory.Interfaces.myObservable;
+import Inventory.Persistence.DummyItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
 public class defectiveController implements myObservable {
 

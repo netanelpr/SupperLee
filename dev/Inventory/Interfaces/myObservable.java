@@ -1,4 +1,4 @@
-package inv.Interfaces;
+package Inventory.Interfaces;
 
 public interface myObservable {
 

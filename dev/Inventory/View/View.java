@@ -1,6 +1,6 @@
-package inv.View;
+package Inventory.View;
 
-import inv.Interfaces.Observer;
+import Inventory.Interfaces.Observer;
 
 public class View implements Observer
 {
