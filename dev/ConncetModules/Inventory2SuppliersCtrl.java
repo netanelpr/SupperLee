@@ -28,6 +28,8 @@ public class Inventory2SuppliersCtrl {
     {
         if(inventory2SuppliersCtrlInstance ==null)
         {
+
+            
             inventory2SuppliersCtrlInstance =new Inventory2SuppliersCtrl();
         }
             return inventory2SuppliersCtrlInstance;
