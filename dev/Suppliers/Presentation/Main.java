@@ -1,6 +1,8 @@
 package Suppliers.Presentation;
 
 import Suppliers.DataAccess.ProductMapper;
+import Suppliers.Service.OrderAndProductCtrl;
+import Suppliers.Service.SystemProduct;
 import Suppliers.Supplier.Product;
 
 import java.sql.Connection;
@@ -13,7 +15,7 @@ public class Main {
         try(Connection conn = DriverManager.getConnection("jdbc:sqlite:DB/supplier.db")) {
             Product product = null;
 
-            ProductMapper productMapper = new ProductMapper(conn);
+            /*ProductMapper productMapper = new ProductMapper(conn);
             product = productMapper.findById(1);
             System.out.println("barcode: "+product.getBarCode()+", name "+ product.getName()+", manufacture "+ product.getManufacture());
 
@@ -42,7 +44,11 @@ public class Main {
                 System.out.println("The item with the barcode " + barcode + " was deleted");
             } else {
                 System.out.println("The item with the barcode " + barcode + " wasnt deleted");
-            }
+            }*/
+
+            OrderAndProductCtrl orderAndProductCtrl = new OrderAndProductCtrl();
+            System.out.println(orderAndProductCtrl.getAllProductBarcodes());
+            System.out.println(orderAndProductCtrl.getProduct(1).size);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,8 +56,8 @@ public class Main {
     }
 
     public static void main(String[] args){
-        MainMenu mainMenu = new MainMenu();
-        mainMenu.startMenu();
-        //dbExample();
+        /*MainMenu mainMenu = new MainMenu();
+        mainMenu.startMenu();*/
+        dbExample();
     }
 }

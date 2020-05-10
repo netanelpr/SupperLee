@@ -5,14 +5,23 @@ public class SystemProduct {
     //TODO add the fields they need
 
     public int barcode;
-    //public double originalPrice;
     public String name;
     public String manufacture;
+    public String category;
+    public String subCategory;
+    public String size;
+    public int freqSupply;
+    public double minPrice;
 
-    public SystemProduct(int barcode, String manufacture, String name) {
+    public SystemProduct(int barcode, String manufacture, String name, String category,
+                         String subCategory, String size, int freqSupply, double minPrice) {
         this.barcode = barcode;
-        //this.originalPrice = originalPrice;
         this.manufacture = manufacture;
         this.name = name;
+        this.category = category;
+        this.subCategory = subCategory;
+        this.size = size;
+        this.freqSupply = freqSupply;
+        this.minPrice = minPrice;
     }
 }

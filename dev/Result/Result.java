@@ -1,23 +1,30 @@
 package Result;
 
 public class Result<T> {
-    ResultTags myTag;
-    T value;
-    String my_message;
+    private ResultTags myTag;
+    private T value;
+    private String my_message;
+
     private Result(ResultTags tag,String message)
     {
         myTag=tag;
         this.my_message=message;
     }
 
-    public static Result makeOk(String message)
+    private Result(ResultTags tag,String message, T value)
     {
-        return new Result(ResultTags.OK,message);
+        this(tag, message);
+        this.value = value;
     }
 
-    public static Result makeFailure(String message)
+    public static <T> Result<T> makeOk(String message, T value)
     {
-        return new Result(ResultTags.Failure,message);
+        return new Result<T>(ResultTags.OK,message, value);
+    }
+
+    public static <T> Result<T> makeFailure(String message)
+    {
+        return new Result<T>(ResultTags.Failure,message);
     }
 
     public boolean isOk() {
@@ -30,6 +37,10 @@ public class Result<T> {
 
     public String getMessage() {
         return my_message;
+    }
+
+    public T getValue(){
+        return value;
     }
 }
 

@@ -96,27 +96,6 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products) {
-        List<ProductInOrder> productInOrders = new LinkedList<>();
-
-        for(ProductInOrderDTO productInOrderDTO : products){
-            productInOrders.add(ProductInOrderDTOToPIO(productInOrderDTO));
-        }
-
-        return supplierSystem.createNewOrder(supplierId, productInOrders);
-    }
-
-    @Override
-    public boolean updateOrderArrivalTime(int orderId, Days day) {
-        return supplierSystem.updateOrderArrivalTime(orderId, day);
-    }
-
-    @Override
-    public boolean updateOrderStatus(int orderId, OrderStatus status) {
-        return supplierSystem.updateOrderStatus(orderId, status);
-    }
-
-    @Override
     public List<SupplierProductDTO> getAllSupplierProducts(int supplierId) {
         List<SupplierProductDTO> productDTOS = new LinkedList<>();
         List<SupplierProductInfo> supplierProducts = supplierSystem.getAllSupplierProducts(supplierId);
@@ -196,12 +175,6 @@ public class SupplierCtrl implements SupplierManagment {
                 productDiscounts.barCode,
                 productDiscounts.discountPerAmount,
                 productDiscounts.originalPrice);
-    }
-
-    public static ProductInOrder ProductInOrderDTOToPIO(ProductInOrderDTO productInOrderDTO){
-        return new ProductInOrder(
-                productInOrderDTO.barcode,
-                productInOrderDTO.amount);
     }
 
     public static SupplierProductDTO ContractProductToSupplerProductDTO(SupplierProductInfo product){

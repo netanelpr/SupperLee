@@ -96,30 +96,6 @@ public interface SupplierManagment {
     public List<ProductDiscountsDTO> getAmountDiscountReport(int supplierId);
 
     /**
-     * Create a new order in the system
-     * @param supplierId The supplier ID who need to supply the order
-     * @param products The product to order
-     * @return -1 if cant create the order, otherwise return the order id
-     */
-    public int createNewOrder(int supplierId, List<ProductInOrderDTO> products);
-
-    /**
-     * Update the day of order arrival
-     * @param orderId The order id
-     * @param day The arrival day
-     * @return true if it was updated.
-     */
-    public boolean updateOrderArrivalTime(int orderId, Days day);
-
-    /**
-     * Update the status of the given order id
-     * @param orderId Order id
-     * @param status Status
-     * @return True if the update was successful
-     */
-    public boolean updateOrderStatus(int orderId, OrderStatus status);
-
-    /**
      * Return all the supplier products
      * @param supplierId supplier ID
      * @return List with all the supplier product info

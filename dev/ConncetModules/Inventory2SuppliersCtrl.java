@@ -17,7 +17,9 @@ import java.util.Scanner;
 
 public class Inventory2SuppliersCtrl implements myObservable {
     private static Inventory2SuppliersCtrl inventory2SuppliersCtrlInstance = null;
+
     private SupplierManagment mySupplierManger;
+
     private InvService myInvenoryService;
     private Scanner myScanner;
     private View view;
