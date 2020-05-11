@@ -64,7 +64,8 @@ public class SupplierSystem {
             }
         }
 
-        Supplier sup = new Supplier(name, incNum, accountNumber, paymentInfo, contactName, phoneNumber, email);
+        Supplier sup = new Supplier(name,address,incNum,accountNumber,paymentInfo,contactName,phoneNumber,email);
+        supplierMapper.insert(sup);
 
 
         if(sup.getSupId() < 0){

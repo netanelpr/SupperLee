@@ -63,7 +63,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     }
 
     @Override
-    protected int insert(Supplier supplier) {
+    public int insert(Supplier supplier) {
         if (loadedMap.getOrDefault(supplier.getSupId(), null) != null) {
             return supplier.getSupId();
         }

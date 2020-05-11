@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Supplier {
     private static int SupplierIDsCounter=0;
-    private int supId;
+    private int supId=-1;
     private String incNum;
     private String accountNumber;
     private String paymentInfo;
@@ -31,6 +31,34 @@ public class Supplier {
         this.addContactInfo(contactName,phoneNumber,email);
 
         contract = null;
+    }
+
+    public Supplier(String name, String address, String incNum, String accountNumber, String paymentInfo,
+                    String contactName, String phoneNumber,String email){
+        this.name=name;
+        this.incNum=incNum;
+        this.accountNumber=accountNumber;
+        this.paymentInfo=paymentInfo;
+
+
+
+        this.contacts = new LinkedList<>();
+        this.addContactInfo(contactName,phoneNumber,email);
+
+        contract = null;
+    }
+
+    public boolean setID(int supplierID)
+    {
+        if(supId==-1)
+        {
+            supId=supplierID;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public boolean addContactInfo(String name, String phone, String email){

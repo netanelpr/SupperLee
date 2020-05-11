@@ -108,6 +108,10 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     }
 
+    public Result receiveAllOpenOrders(int shopNum)
+    {
+
+    }
 
     //region observer
     @Override
