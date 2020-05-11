@@ -1,4 +1,4 @@
-package Suppliers.Supplier;
+package Suppliers.Supplier.Order;
 
 public class ProductInOrder {
 

@@ -102,7 +102,7 @@ public class ProductMapper extends AbstractMapper<Product> {
         return "SELECT barcode FROM Product";
     }
 
-    public List<Integer> getAllIds() {
+    public List<Integer> getAllBarcodes() {
         List<Integer> ids = new ArrayList<>();
 
         try(PreparedStatement pstmt = conn.prepareStatement(getAllIdsStatement())){

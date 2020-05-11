@@ -40,14 +40,14 @@ public class ProductsManager {
     }
 
     public List<Integer> getAllBarcodes(){
-        return productMapper.getAllIds();
+        return productMapper.getAllBarcodes();
     }
 
     public boolean exists(int barcode){
         return productMapper.findById(barcode) != null;
     }
 
-    public Product getAllInfoAboutProduct(int barcode) {
+    public Product getProduct(int barcode) {
         return productMapper.findById(barcode);
     }
 }

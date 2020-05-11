@@ -1,7 +1,5 @@
 package Suppliers.Supplier.Order;
 
-import Suppliers.Supplier.ProductInOrder;
-
 import java.util.List;
 
 public class RegularOrder extends Order {

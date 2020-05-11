@@ -1,7 +1,6 @@
 package Suppliers.Service;
 
 import Suppliers.Structs.Days;
-import Suppliers.Structs.OrderStatus;
 
 import java.util.List;
 
@@ -79,7 +78,7 @@ public interface SupplierManagment {
      * @param products List of product he supply, need to contain at least one
      * @return List of products id that wasnt added to the system, null if the contract wasnt added
      */
-    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddSupplierProductDTO> products);
+    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<SupplierProductDTO> products);
 
     /**
      * Add a product to the supplier contract
@@ -87,7 +86,7 @@ public interface SupplierManagment {
      * @param product Data of the product
      * @return -1 if the product wasnt added, otherwise the product id in the system
      */
-    public boolean addProductToContract(int supplierId, AddSupplierProductDTO product);
+    public boolean addProductToContract(int supplierId, SupplierProductDTO product);
 
     /**
      * Return to each product the given supplier his discount per amount
@@ -101,7 +100,7 @@ public interface SupplierManagment {
      * @param supplierId supplier ID
      * @return List with all the supplier product info
      */
-    public List<SupplierProductDTO> getAllSupplierProducts(int supplierId);
+    public List<SimpleSupplierProductDTO> getAllSupplierProducts(int supplierId);
 
     /**
      * Return all the information that was added to the system about a product
@@ -110,7 +109,7 @@ public interface SupplierManagment {
      * @return All the information, encapsulated in an AddProductInfoDTO object,
      *          return null if there isnt such barcode in the supplier products.
      */
-    public AddSupplierProductDTO getAllInformationAboutSuppliersProduct(int supplierId, int barcode);
+    public SupplierProductDTO getAllInformationAboutSuppliersProduct(int supplierId, int barcode);
 
     /**
      * Return all the catalog ID from a given suppler

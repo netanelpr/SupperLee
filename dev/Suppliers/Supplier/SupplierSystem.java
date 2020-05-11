@@ -1,13 +1,11 @@
 package Suppliers.Supplier;
 
 import Result.Result;
-import Suppliers.DataAccess.ProductMapper;
-import Suppliers.DataAccess.SupDBConn;
-import Suppliers.DataAccess.SupplierMapper;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Supplier.Order.Order;
 import Suppliers.Supplier.Order.OrderManager;
+import Suppliers.Supplier.Order.ProductInOrder;
 import Suppliers.Supplier.Order.RegularOrder;
 
 import java.util.*;
@@ -428,7 +426,7 @@ public class SupplierSystem {
             return null;
         }
         ContractProduct cp=supplier.getAllInformationAboutSuppliersProduct(barcode);
-        Product product=this.productsManager.getAllInfoAboutProduct(barcode);
+        Product product=this.productsManager.getProduct(barcode);
         if(cp!=null && product!=null) {
             return new AddProduct(cp.getBarCode(), cp.getProductCatalogNumber(), cp.getDiscounts().originalPrice, cp.getDiscounts(), product.getManufacture(), product.getName());
         }

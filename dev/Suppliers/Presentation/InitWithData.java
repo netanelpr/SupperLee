@@ -1,6 +1,6 @@
 package Suppliers.Presentation;
 
-import Suppliers.Service.AddSupplierProductDTO;
+import Suppliers.Service.SupplierProductDTO;
 import Suppliers.Service.ProductDiscountsDTO;
 import Suppliers.Service.SupplierManagment;
 import Suppliers.Structs.Days;
@@ -55,10 +55,10 @@ public class InitWithData extends Menu_Option {
         discount1.put(10,0.01);
         discount1.put(100,0.05);
 
-        List<AddSupplierProductDTO> products = new LinkedList<>();
-        products.add(new AddSupplierProductDTO(1,"1",10.90, new ProductDiscountsDTO(1, discount1, 10.90)
+        List<SupplierProductDTO> products = new LinkedList<>();
+        products.add(new SupplierProductDTO(1,"1",10.90, new ProductDiscountsDTO(1, discount1, 10.90)
                 , "manufacture1", "product1"));
-        products.add(new AddSupplierProductDTO(2,"100",90, new ProductDiscountsDTO(1, new HashMap<>() , 10.90)
+        products.add(new SupplierProductDTO(2,"100",90, new ProductDiscountsDTO(1, new HashMap<>() , 10.90)
                 , "manufacture1", "product2"));
 
         List<Integer> notAdded = supplierManagment.addContractToSupplier(supId, "contract1",days1, products);

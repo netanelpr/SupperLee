@@ -1,7 +1,6 @@
 package Suppliers.Service;
 
 import Suppliers.Structs.Days;
-import Suppliers.Structs.OrderStatus;
 import Suppliers.Supplier.*;
 
 import java.util.LinkedList;
@@ -64,10 +63,10 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddSupplierProductDTO> products) {
+    public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<SupplierProductDTO> products) {
         List<AddProduct> addProducts = new LinkedList<>();
 
-        for (AddSupplierProductDTO addProduct : products) {
+        for (SupplierProductDTO addProduct : products) {
             addProducts.add(AddPITOToAddProduct(addProduct));
         }
 
@@ -75,7 +74,7 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public boolean addProductToContract(int supplierId, AddSupplierProductDTO product) {
+    public boolean addProductToContract(int supplierId, SupplierProductDTO product) {
         return supplierSystem.addProductToContract(supplierId, AddPITOToAddProduct(product));
     }
 
@@ -96,8 +95,8 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public List<SupplierProductDTO> getAllSupplierProducts(int supplierId) {
-        List<SupplierProductDTO> productDTOS = new LinkedList<>();
+    public List<SimpleSupplierProductDTO> getAllSupplierProducts(int supplierId) {
+        List<SimpleSupplierProductDTO> productDTOS = new LinkedList<>();
         List<SupplierProductInfo> supplierProducts = supplierSystem.getAllSupplierProducts(supplierId);
 
         if(supplierProducts == null){
@@ -112,7 +111,7 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public AddSupplierProductDTO getAllInformationAboutSuppliersProduct(int supplierId, int barcode) {
+    public SupplierProductDTO getAllInformationAboutSuppliersProduct(int supplierId, int barcode) {
         AddProduct supplierProductInfo= this.supplierSystem.getAllInformationAboutSuppliersProduct(supplierId, barcode);
         return AddPITOToAddProductReverse(supplierProductInfo);
     }
@@ -136,24 +135,24 @@ public class SupplierCtrl implements SupplierManagment {
         );
     }
 
-    private static AddProduct AddPITOToAddProduct(AddSupplierProductDTO addSupplierProductDTO){
+    private static AddProduct AddPITOToAddProduct(SupplierProductDTO supplierProductDTO){
 
-        if(addSupplierProductDTO == null){
+        if(supplierProductDTO == null){
             return null;
         }
 
-        ProductDiscounts product = new ProductDiscounts(addSupplierProductDTO.barcode, addSupplierProductDTO.discounts.discountPerAmount, addSupplierProductDTO.originalPrice);
+        ProductDiscounts product = new ProductDiscounts(supplierProductDTO.barcode, supplierProductDTO.discounts.discountPerAmount, supplierProductDTO.originalPrice);
 
         return new AddProduct(
-                addSupplierProductDTO.barcode,
-                addSupplierProductDTO.productCatalogNumber,
-                addSupplierProductDTO.originalPrice,
+                supplierProductDTO.barcode,
+                supplierProductDTO.productCatalogNumber,
+                supplierProductDTO.originalPrice,
                 product,
-                addSupplierProductDTO.name,
-                addSupplierProductDTO.manufacture);
+                supplierProductDTO.name,
+                supplierProductDTO.manufacture);
     }
 
-    private static AddSupplierProductDTO AddPITOToAddProductReverse(AddProduct addProduct){
+    private static SupplierProductDTO AddPITOToAddProductReverse(AddProduct addProduct){
 
         if(addProduct == null){
             return null;
@@ -161,7 +160,7 @@ public class SupplierCtrl implements SupplierManagment {
 
         ProductDiscountsDTO productDiscounts = new ProductDiscountsDTO(addProduct.barCode,addProduct.productDiscounts.discountPerAmount,addProduct.originalPrice);
 
-        return new AddSupplierProductDTO(
+        return new SupplierProductDTO(
                 addProduct.barCode,
                 addProduct.productCatalogNumber,
                 addProduct.originalPrice,
@@ -177,8 +176,8 @@ public class SupplierCtrl implements SupplierManagment {
                 productDiscounts.originalPrice);
     }
 
-    public static SupplierProductDTO ContractProductToSupplerProductDTO(SupplierProductInfo product){
-        return new SupplierProductDTO(
+    public static SimpleSupplierProductDTO ContractProductToSupplerProductDTO(SupplierProductInfo product){
+        return new SimpleSupplierProductDTO(
                 product.barCode,
                 product.productCatalogNumber);
     }

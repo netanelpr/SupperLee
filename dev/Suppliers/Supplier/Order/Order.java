@@ -1,11 +1,10 @@
 package Suppliers.Supplier.Order;
 
 import Suppliers.Structs.OrderStatus;
-import Suppliers.Supplier.ProductInOrder;
 
 import java.util.*;
 
-public class Order {
+public abstract class Order {
 
     protected int orderId;
     protected int contractId;
@@ -31,13 +30,13 @@ public class Order {
      * Suppliers.Supplier.Order.Order cant be created without at least one product.
      * @return new order
      */
-    public static Order CreateOrder(int orderId, List<ProductInOrder> productsInOrder, int shopNumber){
+    /*public static Order CreateOrder(int orderId, List<ProductInOrder> productsInOrder, int shopNumber){
         if(productsInOrder.isEmpty()){
             return null;
         }
 
         return new Order(orderId, productsInOrder, shopNumber);
-    }
+    }*/
 
     public int getOrderId(){
         return  orderId;

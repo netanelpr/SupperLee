@@ -4,7 +4,7 @@ import Result.Result;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Supplier.Product;
-import Suppliers.Supplier.ProductInOrder;
+import Suppliers.Supplier.Order.ProductInOrder;
 import Suppliers.Supplier.ProductsManager;
 import Suppliers.Supplier.SupplierSystem;
 
@@ -23,7 +23,7 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
 
     @Override
     public SystemProduct getProduct(int barcode) {
-        Product product = productsManager.getAllInfoAboutProduct(barcode);
+        Product product = productsManager.getProduct(barcode);
 
         if(product == null){
             return null;
@@ -56,7 +56,7 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     }
 
     @Override
-    public Result<Integer> createRegularNewOrder(List<ProductInOrderDTO> products, int shopNumber) {
+    public Result<Integer> createRegularOrder(List<ProductInOrderDTO> products, int shopNumber) {
         List<ProductInOrder> productInOrders = new LinkedList<>();
 
         for(ProductInOrderDTO productInOrderDTO : products){

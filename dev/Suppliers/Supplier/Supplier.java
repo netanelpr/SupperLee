@@ -1,6 +1,7 @@
 package Suppliers.Supplier;
 
 import Suppliers.Structs.Days;
+import Suppliers.Supplier.Order.ProductInOrder;
 
 import java.util.*;
 

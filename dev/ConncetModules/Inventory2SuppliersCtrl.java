@@ -6,13 +6,9 @@ import Inventory.View.InvService;
 import Inventory.View.View;
 import Result.Result;
 import Suppliers.Structs.Days;
-import Suppliers.Structs.OrderStatus;
-import Suppliers.Supplier.Product;
-import Suppliers.Supplier.ProductInOrder;
 import Inventory.Persistence.DummyItem;
 import Suppliers.Service.*;
 
-import java.security.Provider;
 import java.util.*;
 
 public class Inventory2SuppliersCtrl implements myObservable {
@@ -91,7 +87,7 @@ public class Inventory2SuppliersCtrl implements myObservable {
             productInOrderDTOS.add(newProduct);
         }
 
-        return myOrderAndProductManagement.createRegularNewOrder(productInOrderDTOS,shortageOrder.getShopNum());
+        return myOrderAndProductManagement.createRegularOrder(productInOrderDTOS,shortageOrder.getShopNum());
 
     }
 

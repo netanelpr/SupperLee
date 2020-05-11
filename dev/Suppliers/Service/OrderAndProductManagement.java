@@ -32,7 +32,7 @@ public interface OrderAndProductManagement {
      */
     Result<Integer> createNewSupplierOrder(int supplierId, List<ProductInOrderDTO> products, int shopNumber);
 
-    Result<Integer> createRegularNewOrder(List<ProductInOrderDTO> products, int shopNumber);
+    Result<Integer> createRegularOrder(List<ProductInOrderDTO> products, int shopNumber);
 
     Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod);
 

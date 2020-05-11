@@ -1,7 +1,7 @@
 package Suppliers.Presentation;
 
 import Suppliers.Service.SupplierManagment;
-import Suppliers.Service.SupplierProductDTO;
+import Suppliers.Service.SimpleSupplierProductDTO;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,10 +23,10 @@ public class GetAllSuppliersProductsDetalis extends Menu_Option {
         int supId = readInt("Supplier ID", reader);
 
 
-        List<SupplierProductDTO> supplierProductDTOS = supplierManagment.getAllSupplierProducts(supId);
+        List<SimpleSupplierProductDTO> simpleSupplierProductDTOS = supplierManagment.getAllSupplierProducts(supId);
 
-        if(supplierProductDTOS != null) {
-            for(SupplierProductDTO dto : supplierProductDTOS){
+        if(simpleSupplierProductDTOS != null) {
+            for(SimpleSupplierProductDTO dto : simpleSupplierProductDTOS){
                 String productInfo = supplierManagment.getAllInformationAboutSuppliersProduct(supId, dto.barcode).shallow_toString();
                 System.out.println(productInfo+ "\n");
             }

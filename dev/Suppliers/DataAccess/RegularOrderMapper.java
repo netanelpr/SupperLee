@@ -2,7 +2,7 @@ package Suppliers.DataAccess;
 
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Structs.StructUtils;
-import Suppliers.Supplier.ProductInOrder;
+import Suppliers.Supplier.Order.ProductInOrder;
 import Suppliers.Supplier.Order.RegularOrder;
 
 import java.sql.*;
@@ -10,8 +10,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class RegularOrderMapper extends AbstractMapper<RegularOrder> {

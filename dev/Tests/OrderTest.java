@@ -3,6 +3,7 @@ package Tests;
 
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Supplier.*;
+import Suppliers.Supplier.Order.ProductInOrder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

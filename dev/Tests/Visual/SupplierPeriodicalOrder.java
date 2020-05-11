@@ -4,8 +4,7 @@ import Suppliers.Structs.Days;
 import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.Order.OrderManager;
 import Suppliers.Supplier.Order.PeriodicalOrder;
-import Suppliers.Supplier.Order.RegularOrder;
-import Suppliers.Supplier.ProductInOrder;
+import Suppliers.Supplier.Order.ProductInOrder;
 
 import java.util.Calendar;
 import java.util.Date;

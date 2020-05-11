@@ -1,7 +1,7 @@
 package Suppliers.Presentation;
 
 import Suppliers.Service.SupplierManagment;
-import Suppliers.Service.SupplierProductDTO;
+import Suppliers.Service.SimpleSupplierProductDTO;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,9 +22,9 @@ public class GetAllSuppliersProducts extends Menu_Option {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int supId = readInt("Supplier ID", reader);
 
-        List<SupplierProductDTO> supplierProductDTOS = supplierManagment.getAllSupplierProducts(supId);
-        if(supplierProductDTOS != null) {
-            for (SupplierProductDTO product : supplierProductDTOS) {
+        List<SimpleSupplierProductDTO> simpleSupplierProductDTOS = supplierManagment.getAllSupplierProducts(supId);
+        if(simpleSupplierProductDTOS != null) {
+            for (SimpleSupplierProductDTO product : simpleSupplierProductDTOS) {
                 System.out.println(product.toString());
             }
         } else {

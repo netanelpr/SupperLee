@@ -2,7 +2,7 @@ package Tests.Visual;
 
 import Suppliers.Supplier.Order.OrderManager;
 import Suppliers.Supplier.Order.RegularOrder;
-import Suppliers.Supplier.ProductInOrder;
+import Suppliers.Supplier.Order.ProductInOrder;
 
 import java.util.Calendar;
 import java.util.Date;
