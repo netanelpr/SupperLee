@@ -18,7 +18,8 @@ public class SupplierRegularOrder {
                                     order.getOrderId(), order.getShopNumber(),order.getDeliveryDay(), order.getStatus().toString(), order.getContractId());
         String productsStr = "";
         for(ProductInOrder product : order.retrunProducts()){
-            String productStr = String.format("barcode:%d\tcatalog number:%s\tamount: %d", product.getBarcode(), product.getProductCatalogNumber(), product.getAmount());
+            String productStr = String.format("barcode:%d\tcatalog number:%s\tamount: %d\tPrice per unit: %f", product.getBarcode(),
+                    product.getProductCatalogNumber(), product.getAmount(), product.getPricePerUnit());
             productsStr = String.format("%s\n%s", productsStr, productStr);
         }
 
@@ -30,8 +31,8 @@ public class SupplierRegularOrder {
         OrderManager orderManager = OrderManager.getInstance();
 
         List<ProductInOrder> products = new LinkedList<>();
-        products.add(new ProductInOrder(1,10,"c1"));
-        products.add(new ProductInOrder(2,150,"c2"));
+        products.add(new ProductInOrder(1,10,"c1",10));
+        products.add(new ProductInOrder(2,150,"c2",12));
         RegularOrder order = RegularOrder.CreateRegularOrder(-1, products, 1);
 
         Calendar c = Calendar.getInstance();

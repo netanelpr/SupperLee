@@ -232,4 +232,21 @@ public class Supplier {
     public void setId(int aId) {
         this.supId=aId;
     }
+
+    /**
+     * Calculate the order price with the list of products
+     * @param products the products
+     * @return order price
+     */
+    public int calculateOrderPrice(List<ProductInOrder> products) {
+        //TODO implement
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Calculate and set the price per unit for every product
+     * @param products the products to set
+     */
+    public void setPricePerUnit(List<ProductInOrder> products) {
+    }
 }

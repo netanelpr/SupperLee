@@ -52,13 +52,18 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
             productInOrders.add(ProductInOrderDTOToPIO(productInOrderDTO));
         }
 
-        //TODO edit
-        return Result.makeOk("",supplierSystem.createNewOrder(supplierId, productInOrders, shopNumber));
+        return supplierSystem.createNewOrder(supplierId, productInOrders, shopNumber);
     }
 
     @Override
     public Result<Integer> createRegularNewOrder(List<ProductInOrderDTO> products, int shopNumber) {
-        return null;
+        List<ProductInOrder> productInOrders = new LinkedList<>();
+
+        for(ProductInOrderDTO productInOrderDTO : products){
+            productInOrders.add(ProductInOrderDTOToPIO(productInOrderDTO));
+        }
+
+        return supplierSystem.createRegularOrder(productInOrders, shopNumber);
     }
 
     @Override

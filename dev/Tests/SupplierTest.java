@@ -20,7 +20,7 @@ class SupplierTest {
 
     @BeforeEach
     void setUp() {
-        supplier=new Supplier("Moshe","123","123","CASH","Avi","054","@com");
+        supplier=new Supplier("Moshe","123","city1","123","CASH","Avi","054","@com");
     }
 
     @Test

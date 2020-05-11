@@ -4,11 +4,7 @@ CREATE TABLE IF NOT EXISTS Supplier(
 	address TEXT NOT NULL,
 	account_number TEXT NOT NULL,
 	paymentInfo TEXT NOT NULL,
-<<<<<<< HEAD
 	inc_number TEXT NOT NULL.
-=======
-	inc_number INTEGER NOT NULL
->>>>>>> daf5b8648252784d14231e8517f86c81d846b80f
 );
 
 --TODO supplay_day text or integer
@@ -133,6 +129,7 @@ CREATE TABLE IF NOT EXISTS Product_in_order(
 	contract_id INTEGER NOT NULL,
 	catalog_number TEXT NOT NULL,
 	amount INTEGER NOT NULL,
+	price_per_unit DOUBLE NOT NULL
 	PRIMARY KEY (order_id, catalog_number)
 	FOREIGN KEY (order_id)
 		REFERENCES Supplier_order(id)
@@ -141,3 +138,12 @@ CREATE TABLE IF NOT EXISTS Product_in_order(
 	CONSTRAINT amount_in_order
 		CHECK (amount > 0)
 );
+
+--Views
+
+CREATE VIEW Suppliers_products
+AS
+SELECT S.id AS supplier_id,PIC.catalog_number as catalog_number, PIC.barcode AS barcode
+FROM Supplier AS S JOIN Contract AS C
+	JOIN Product_in_contract AS PIC
+	ON S.id = C.supplier_id AND C.id = PIC.contract_id

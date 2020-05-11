@@ -61,7 +61,7 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     public List<DummyItem> getAllCatalog()
     {
-        List<Integer> barcodes=myOrderAndProductManagement.getAllProductBarcodes();
+        /*List<Integer> barcodes=myOrderAndProductManagement.getAllProductBarcodes();
 
         List<DummyItem> dummyItems = new LinkedList<>();
         for (Integer barcode:
@@ -73,7 +73,8 @@ public class Inventory2SuppliersCtrl implements myObservable {
                     theProduct.manufacture,theProduct.category,theProduct.subCategory,theProduct.size, theProduct.freqSupply);
 
         }
-        return dummyItems;
+        return dummyItems;*/
+        return null;
     }
     public Result<Integer> placeNewShortageOrder(ShortageOrder shortageOrder)
     {
@@ -102,15 +103,16 @@ public class Inventory2SuppliersCtrl implements myObservable {
     //TODO: understand how to make this work- which order id? of supplier? of inventory?
     public Result receiveSupplierOrder(int orderID)
     {
-        this.myOrderAndProductManagement.changeOrderStatus(orderID, OrderStatus.Close);
+        /*this.myOrderAndProductManagement.changeOrderStatus(orderID, OrderStatus.Close);
         OrderDTO theOrder= this.myOrderAndProductManagement.getOrder(orderID);
-        return myInvenoryService.getOrderFromSuppliers(theOrder);
+        return myInvenoryService.getOrderFromSuppliers(theOrder);*/
+        return null;
 
     }
 
     public Result receiveAllOpenOrders(int shopNum)
     {
-
+        return null;
     }
 
     //region observer

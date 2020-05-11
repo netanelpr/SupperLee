@@ -18,6 +18,6 @@ public class Main {
         /*MainMenu mainMenu = new MainMenu();
         mainMenu.startMenu();*/
 
-        SupplierPeriodicalOrder.addPeriodicalOrder();
+        SupplierPeriodicalOrder.getOrderById();
     }
 }

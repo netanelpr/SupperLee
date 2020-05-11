@@ -1,5 +1,6 @@
 package Suppliers.Supplier;
 
+import Result.Result;
 import Suppliers.DataAccess.ProductMapper;
 import Suppliers.DataAccess.SupDBConn;
 import Suppliers.DataAccess.SupplierMapper;
@@ -21,7 +22,7 @@ public class SupplierSystem {
     private Map<Integer, Order> orderIdToOrder;
 
     private ProductsManager productsManager;
-    private SupplierMapper supplierMapper;
+    private SupplierManager supplierManager;
     private OrderManager orderManager;
 
     private final String[] paymentOptions;
@@ -30,7 +31,8 @@ public class SupplierSystem {
         suppliers = new HashMap<>();
         orders = new HashMap<>();
         orderIdToOrder = new HashMap<>();
-        supplierMapper=new SupplierMapper(SupDBConn.getInstance());
+
+        supplierManager = SupplierManager.getInstance();
         productsManager = ProductsManager.getInstance();
         orderManager = OrderManager.getInstance();
 
@@ -65,7 +67,7 @@ public class SupplierSystem {
         }
 
         Supplier sup = new Supplier(name,address,incNum,accountNumber,paymentInfo,contactName,phoneNumber,email);
-        supplierMapper.insert(sup);
+        supplierManager.insert(sup);
 
 
         if(sup.getSupId() < 0){
@@ -260,37 +262,88 @@ public class SupplierSystem {
      * @param products The product to order
      * @return -1 if cant create the order, otherwise return the order id
      */
-    public int createNewOrder(int supplierId, List<ProductInOrder> products, int shopNumber) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
+    public Result<Integer> createNewOrder(int supplierId, List<ProductInOrder> products, int shopNumber) {
+        Supplier supplier = supplierManager.getOrNull(supplierId);
+        List<Integer> barcodes = new ArrayList<>();
 
         if(supplier == null){
-            return -1;
+            return Result.makeFailure("Supplier doesnt exist");
         }
 
-        //TODO maybe do it in one funtion which get a list are return true or false
+
         for(ProductInOrder product : products){
-            if(!supplier.hasProduct(product.getBarcode())){
-                return -1;
-            }
+            barcodes.add(product.getBarcode());
+        }
+        if(!supplierManager.haveAllBarcodes(supplierId,barcodes)){
+            return Result.makeFailure("The supplier do not supply some of this products");
         }
 
+        //TODO check this
         supplier.fillWithCatalogNumber(products);
 
         RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1, products, shopNumber);
         if(regularOrder == null){
-            return -1;
+            return Result.makeFailure("Need to have at least one product");
         }
 
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){
-            return -1;
+            return Result.makeFailure("Order wasnt created");
         }
 
+        //TODO remove this
         // Add the order to the data
-        orders.get(supplierId).add(regularOrder);
-        orderIdToOrder.put(regularOrder.getOrderId(), regularOrder);
+        /*orders.get(supplierId).add(regularOrder);
+        orderIdToOrder.put(regularOrder.getOrderId(), regularOrder);*/
 
-        return regularOrder.getOrderId();
+        return Result.makeOk("Order was created", regularOrder.getOrderId());
+    }
+
+    /**
+     * Create a regular order if a supplier have all the products with the cheapest one
+     * @param products products
+     * @param shopNumber shop number
+     * @return orderId if it was created otherwise -1
+     */
+    public Result<Integer> createRegularOrder(List<ProductInOrder> products, int shopNumber) {
+        List<Integer> barcodes = new ArrayList<>();
+        List<Integer> suppliersId;
+        Supplier sup;
+
+        for(ProductInOrder product : products){
+            barcodes.add(product.getBarcode());
+        }
+        suppliersId = supplierManager.getAllSupplierWithBarcodes(barcodes);
+        if(suppliersId.isEmpty()){
+            return Result.makeFailure("There isnt one supplier with all of this products");
+        }
+
+        int cheapestSupplierId = -1, totalPrice = -1;
+        for(int id : suppliersId){
+            sup = supplierManager.getById(id);
+            int orderPrice = sup.calculateOrderPrice(products);
+            if(orderPrice < totalPrice){
+                totalPrice = orderPrice;
+                cheapestSupplierId = id;
+            }
+        }
+
+        sup = supplierManager.getById(cheapestSupplierId);
+        sup.setPricePerUnit(products);
+
+        RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1,products, shopNumber);
+        orderManager.createRegularOrder(regularOrder);
+        if(regularOrder.getOrderId() < 0){
+            return Result.makeFailure("Order wasnt created");
+        }
+
+        //TODO remove this
+        // Add the order to the data
+        /*orders.get(supplierId).add(regularOrder);
+        orderIdToOrder.put(regularOrder.getOrderId(), regularOrder);*/
+
+        return Result.makeOk("Order was created", regularOrder.getOrderId());
+
     }
 
     /**
@@ -367,8 +420,6 @@ public class SupplierSystem {
 
 
     }
-
-
 
     public AddProduct getAllInformationAboutSuppliersProduct(int supplierId, int barcode) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);

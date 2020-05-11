@@ -14,7 +14,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     public SupplierMapper(Connection conn) {
         super(conn);
     }
-
     @Override
     protected String findStatement() {
         return "SELECT * " +

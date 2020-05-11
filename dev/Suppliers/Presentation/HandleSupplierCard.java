@@ -23,17 +23,18 @@ public class HandleSupplierCard extends Menu_Option {
          */
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String name, incNum, bankAccount, payment, contactName, phoneNumber, email;
+        String name, incNum, bankAccount, address, payment, contactName, phoneNumber, email;
 
         name = readString("Name", reader);
         incNum = readString("Inc number", reader);
+        address = readString("address", reader);
         bankAccount = readString("Bank account Number", reader);
         payment = readString("Payment options", reader);
         contactName = readString("Contact name", reader);
         phoneNumber = readString("Phone number", reader);
         email = readString("Email", reader);
 
-        int supId = supplierManagment.createSupplierCard(name, incNum, bankAccount, payment,
+        int supId = supplierManagment.createSupplierCard(name, incNum, address, bankAccount, payment,
                                                         contactName, phoneNumber, email);
         if(supId < 0){
             System.out.println("Suppliers.Supplier card wasnt created");

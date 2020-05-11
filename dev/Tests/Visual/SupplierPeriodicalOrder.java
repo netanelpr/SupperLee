@@ -22,7 +22,8 @@ public class SupplierPeriodicalOrder {
                                     order.getStatus().toString(), order.getContractId(),order.getWeekPeriod(), order.getDays().toString());
         String productsStr = "";
         for(ProductInOrder product : order.retrunProducts()){
-            String productStr = String.format("barcode:%d\tcatalog number:%s\tamount: %d", product.getBarcode(), product.getProductCatalogNumber(), product.getAmount());
+            String productStr = String.format("barcode:%d\tcatalog number:%s\tamount: %d\tPrice per unit: %f", product.getBarcode(),
+                    product.getProductCatalogNumber(), product.getAmount(), product.getPricePerUnit());
             productsStr = String.format("%s\n%s", productsStr, productStr);
         }
 
@@ -38,8 +39,8 @@ public class SupplierPeriodicalOrder {
         days.add(StructUtils.getDayWithInt(5));
 
         List<ProductInOrder> products = new LinkedList<>();
-        products.add(new ProductInOrder(1,10,"c1"));
-        products.add(new ProductInOrder(2,150,"c2"));
+        products.add(new ProductInOrder(1,10,"c1",10));
+        products.add(new ProductInOrder(2,150,"c2",12));
         PeriodicalOrder order = PeriodicalOrder.CreatePeriodicalOrder(-1, products, days, 1, 1);
 
         Calendar c = Calendar.getInstance();

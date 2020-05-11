@@ -11,6 +11,7 @@ public interface SupplierManagment {
      * Create new supplier in the system
      * @param name The name of the supplier
      * @param incNum incupartion number
+     * @param address the address of the supplier
      * @param accountNumber Bank account
      * @param paymentInfo Payment info
      * @param contactName Contact info
@@ -18,7 +19,7 @@ public interface SupplierManagment {
      * @param email Contact info
      * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
      */
-    public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo,
+    public int createSupplierCard(String name, String incNum, String address, String accountNumber, String paymentInfo,
                                   String contactName, String phoneNumber,String email);
 
     public String getPaymentOptions();

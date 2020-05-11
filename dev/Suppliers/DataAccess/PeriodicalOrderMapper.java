@@ -23,7 +23,7 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
 
     @Override
     protected String findStatement() {
-        return "SELECT S.*, PSO.weekp, PIC.barcode, P.contract_id, P.catalog_number, P.amount\n" +
+        return "SELECT S.*, PSO.weekp, PIC.barcode, P.contract_id, P.catalog_number, P.amount, P.price_per_unit\n" +
                 "FROM Supplier_order AS S JOIN Periodical_supplier_order AS PSO\n" +
                 "JOIN Product_in_order AS P JOIN Product_in_contract as PIC\n" +
                 "\tON S.id = P.order_id AND P.catalog_number =  PIC.catalog_number\n" +
@@ -99,11 +99,11 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
                 status = StructUtils.getOrderStatus(res.getInt(3));
                 deliveryDay = res.getString(4);
                 weekP = res.getInt(5);
-                products.add(new ProductInOrder(res.getInt(6), res.getInt(9), res.getString(8)));
+                products.add(new ProductInOrder(res.getInt(6), res.getInt(9), res.getString(8), res.getDouble(10)));
             }
 
             while (res.next()) {
-                products.add(new ProductInOrder(res.getInt(6), res.getInt(9), res.getString(8)));
+                products.add(new ProductInOrder(res.getInt(6), res.getInt(9), res.getString(8), res.getDouble(10)));
             }
 
             periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(orderId, products, days, weekP, shopNumber);
@@ -125,8 +125,8 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
     }
 
     private String insertIntoProductInOrderStatement(){
-        return "INSERT INTO Product_in_order (order_id, contract_id, catalog_number, amount) " +
-                "VALUES (?, ?, ?, ?)";
+        return "INSERT INTO Product_in_order (order_id, contract_id, catalog_number, amount, price_per_unit) " +
+                "VALUES (?, ?, ?, ?, ?)";
     }
 
     private String insertIdToPeriodicalOrderStatement(){
@@ -182,6 +182,7 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
                     productInsertPstmt.setInt(2, contractId);
                     productInsertPstmt.setString(3, productInOrder.getProductCatalogNumber());
                     productInsertPstmt.setInt(4, productInOrder.getAmount());
+                    productInsertPstmt.setDouble(5, productInOrder.getPricePerUnit());
                     productInsertPstmt.addBatch();
                 }
                 productInsertPstmt.executeBatch();

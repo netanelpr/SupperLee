@@ -22,7 +22,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
     @Override
     protected String findStatement() {
-        return "SELECT S.*, PIC.barcode, P.contract_id, P.catalog_number, P.amount\n" +
+        return "SELECT S.*, PIC.barcode, P.contract_id, P.catalog_number, P.amount, P.price_per_unit\n" +
                 "FROM Supplier_order AS S JOIN Product_in_order AS P\n" +
                 "JOIN Product_in_contract as PIC\n" +
                 "ON S.id = P.order_id AND P.catalog_number =  PIC.catalog_number\n" +
@@ -48,11 +48,11 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
                 shopNumber = res.getInt(2);
                 status = StructUtils.getOrderStatus(res.getInt(3));
                 deliveryDay = res.getString(4);
-                products.add(new ProductInOrder(res.getInt(5), res.getInt(8), res.getString(7)));
+                products.add(new ProductInOrder(res.getInt(5), res.getInt(8), res.getString(7), res.getDouble(9)));
             }
 
             while (res.next()) {
-                products.add(new ProductInOrder(res.getInt(5), res.getInt(8), res.getString(7)));
+                products.add(new ProductInOrder(res.getInt(5), res.getInt(8), res.getString(7), res.getDouble(9)));
             }
 
             regularOrder = RegularOrder.CreateRegularOrder(orderId, products, shopNumber);
@@ -74,8 +74,8 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
     }
 
     private String insertIntoProductInOrderStatement(){
-        return "INSERT INTO Product_in_order (order_id, contract_id, catalog_number, amount) " +
-                "VALUES (?, ?, ?, ?)";
+        return "INSERT INTO Product_in_order (order_id, contract_id, catalog_number, amount, price_per_unit) " +
+                "VALUES (?, ?, ?, ?, ?)";
     }
 
     private String insertIdToRegularOrderStatement(){
@@ -125,6 +125,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
                     productInsertPstmt.setInt(2, contractId);
                     productInsertPstmt.setString(3, productInOrder.getProductCatalogNumber());
                     productInsertPstmt.setInt(4, productInOrder.getAmount());
+                    productInsertPstmt.setDouble(5, productInOrder.getPricePerUnit());
                     productInsertPstmt.addBatch();
                 }
                 productInsertPstmt.executeBatch();

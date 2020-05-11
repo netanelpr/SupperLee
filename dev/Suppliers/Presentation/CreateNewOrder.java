@@ -1,5 +1,6 @@
 package Suppliers.Presentation;
 
+import Result.Result;
 import Suppliers.Service.OrderAndProductManagement;
 import Suppliers.Service.ProductInOrderDTO;
 import Suppliers.Service.SupplierManagment;
@@ -48,12 +49,11 @@ public class CreateNewOrder extends Menu_Option {
                         Integer.parseInt(productAndAmount[1])));
             }
 
-            //TODO edit to result
-            int orderId = orderAndProductManagement.createNewSupplierOrder(supId, products, shopNumber).getValue();
-            if(orderId < 0){
-                System.out.println("Order was not created");
+            Result<Integer> res = orderAndProductManagement.createNewSupplierOrder(supId, products, shopNumber);
+            if(res.isOk()){
+                System.out.println("Order id : "+ res.getValue());
             } else {
-                System.out.println("Order id : "+ orderId);
+                System.out.println(res.getMessage());
             }
 
         } catch (Exception e){
