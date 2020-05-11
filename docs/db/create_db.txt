@@ -1,8 +1,10 @@
-CREATE TABLE IF NOT EXISTS Suppliers.Supplier(
+CREATE TABLE IF NOT EXISTS Supplier(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	name TEXT NOT NULL,
+	sup_name TEXT NOT NULL,
 	address TEXT NOT NULL,
-	inc_number INTEGER NOT NULL
+	account_number TEXT NOT NULL,
+	paymentInfo TEXT NOT NULL,
+	inc_number TEXT NOT NULL.
 );
 
 --TODO supplay_day text or integer
@@ -78,12 +80,13 @@ CREATE TABLE IF NOT EXISTS Product(
 CREATE TABLE IF NOT EXISTS Supplier_order(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	contract_id INTEGER NOT NULL,
-	status TEXT NOT NULL,
+	shop_number INTEGER NOT NULL,
+	status INTEGER NOT NULL,
 	delivery_day TEXT NOT NULL,
-	creation_day TEXT NOT NULL,
+	
 	
 	FOREIGN KEY (contract_id)
-		REFERENCES Product_in_contract(contract_id)
+		REFERENCES Contract(id)
 );
 
 CREATE TABLE IF NOT EXISTS Periodical_supplier_order(

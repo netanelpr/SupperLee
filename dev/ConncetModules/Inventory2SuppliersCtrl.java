@@ -6,19 +6,19 @@ import Inventory.View.InvService;
 import Inventory.View.View;
 import Result.Result;
 import Suppliers.Structs.Days;
+import Suppliers.Supplier.Product;
 import Suppliers.Supplier.ProductInOrder;
 import Inventory.Persistence.DummyItem;
 import Suppliers.Service.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.security.Provider;
+import java.util.*;
 
 public class Inventory2SuppliersCtrl implements myObservable {
     private static Inventory2SuppliersCtrl inventory2SuppliersCtrlInstance = null;
 
-    private SupplierManagment mySupplierManger;
+    private SupplierManagment mySupplierManagment;
+    private OrderAndProductManagement myOrderAndProductManagement;
 
     private InvService myInvenoryService;
     private Scanner myScanner;
@@ -27,7 +27,8 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     private Inventory2SuppliersCtrl()
     {
-        mySupplierManger= new SupplierCtrl();
+        mySupplierManagment= new SupplierCtrl();
+        myOrderAndProductManagement= new OrderAndProductCtrl();
         myInvenoryService= InvService.getInstance();
         this.myScanner = new Scanner(System.in);
         observers = new ArrayList<>();
@@ -56,7 +57,17 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     public List<DummyItem> getAllCatalog()
     {
+        List<Integer> barcodes=myOrderAndProductManagement.getAllProductBarcodes();
 
+        List<DummyItem> dummyItems = new LinkedList<>();
+        for (Integer barcode:
+             barcodes) {
+            SystemProduct theProduct=myOrderAndProductManagement.getProduct(barcode);
+            //(String id, String name, String manufacturer, String category,
+            //                     String sub_category, String size, String freqSupply, String cost)
+            DummyItem newDummyItem= new DummyItem(String.valueOf(theProduct.barcode),theProduct.name,theProduct.manufacture,theProduct.catagory,theProduct.subCatagory,theProduct.size, theProduct.freqSupply);
+
+        }
         //List<AddProduct> productDTOS= mySupplierManger.getCatalog();
         //List<DummyItem> itemsList= new LinkedList<>();
         //for (AddProduct product:
@@ -69,6 +80,7 @@ public class Inventory2SuppliersCtrl implements myObservable {
     }
     public Result<Integer> placeNewShortageOrder(ShortageOrder shortageOrder)
     //TODO: talk about the signature, days?, shortageOrder includes Map, ShopNum, order length)
+            //TODO: talk about adding a day to an order from inventory managment creating order
     //public Result<Integer> placeNewShortageOrder(Map<Integer, Integer> shoppingList, Days day)
     {
         notifyObserver("automatic shortage order arrived successfully!");
@@ -76,18 +88,27 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
         //List<ProductInOrder> productsToOrder;
         //return mySupplierManger.placeShortageOrder(productsToOrder,day);
-        return null;
+        List<ProductInOrderDTO> productInOrderDTOS= new LinkedList<>();
+        HashMap<Integer,Integer> order=shortageOrder.getOrder();
+        for (Integer barcode:
+             order.keySet()) {
+            ProductInOrderDTO newProduct= new ProductInOrderDTO(barcode,order.get(barcode));
+            productInOrderDTOS.add(newProduct);
+        }
+
+        return myOrderAndProductManagement.createRegularNewOrder(productInOrderDTOS,Days.Sunday);
 
     }
 
-    public Result placePeriodicalOrder(List<ProductInOrder> shoppingList, List<Days> days, int weekPeriod)
+    public Result placePeriodicalOrder(List<ProductInOrderDTO> shoppingList, List<Days> days, int weekPeriod)
     {
-        return null;
+        return this.myOrderAndProductManagement.createPeriodicalOrder(shoppingList,days,weekPeriod);
     }
 
+    //TODO: understand how to make this work- which order id? of supplier? of inventory?
     public Result receiveSupplierOrder(int orderID)
     {
-        return null;
+        myInvenoryService.
     }
 
 

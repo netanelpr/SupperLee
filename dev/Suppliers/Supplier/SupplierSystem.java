@@ -1,5 +1,8 @@
 package Suppliers.Supplier;
 
+import Suppliers.DataAccess.ProductMapper;
+import Suppliers.DataAccess.SupplierDBConn;
+import Suppliers.DataAccess.SupplierMapper;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 
@@ -15,13 +18,14 @@ public class SupplierSystem {
     private Map<Integer, Order> orderIdToOrder;
 
     private ProductsManager productsManager;
+    private SupplierMapper supplierMapper;
     private final String[] paymentOptions;
 
     private SupplierSystem() {
         suppliers = new HashMap<>();
         orders = new HashMap<>();
         orderIdToOrder = new HashMap<>();
-
+        supplierMapper=new SupplierMapper(SupplierDBConn.getInstance());
         productsManager = ProductsManager.getInstance();
         paymentOptions = new String[]{"CASH", "BANKTRANSFER","PAYMENTS","+30DAYSPAYMENT","CHECK"};
     }
