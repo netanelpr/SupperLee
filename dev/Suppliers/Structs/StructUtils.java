@@ -1,9 +1,8 @@
 package Suppliers.Structs;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class StructUtils {
 
@@ -40,6 +39,10 @@ public class StructUtils {
         }
 
         return list;
+    }
+
+    public static String dateFormat(){
+        return "dd/MM/yyyy";
     }
 
     public static Days getDayWithInt(int day){
@@ -92,6 +95,35 @@ public class StructUtils {
         }
 
         return -1;
+    }
+
+    /**
+     * Return the nearest date
+     * @param days the days to compare with
+     * @return the nearest date or null
+     */
+    public static Date getTheNearestDate(List<Days> days){
+         Calendar c = Calendar.getInstance();
+         int day = c.get(Calendar.DAY_OF_WEEK);
+         int nearestDayInDays = 8;
+
+         for(Days d: days){
+             int subtract = getDayInt(d) - day;
+             if(subtract < 0){
+                 subtract = subtract + 7;
+             }
+
+             if(nearestDayInDays > subtract){
+                 nearestDayInDays = subtract;
+             }
+         }
+
+         if(nearestDayInDays != 8){
+            c.add(Calendar.DATE, nearestDayInDays);
+             return c.getTime();
+         }
+
+         return null;
     }
 
     private static Map<String, OrderStatus> createStatusMap(){

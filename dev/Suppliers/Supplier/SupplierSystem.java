@@ -283,6 +283,7 @@ public class SupplierSystem {
         if(regularOrder == null){
             return Result.makeFailure("Need to have at least one product");
         }
+        regularOrder.setDeliveryDay(supplierManager.getNextDeliveryDate(supplierId));
 
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){

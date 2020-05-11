@@ -1,13 +1,13 @@
 package Suppliers.DataAccess;
 
-import Result.Result;
-import Suppliers.Supplier.Product;
+import Suppliers.Structs.Days;
 import Suppliers.Supplier.Supplier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class SupplierMapper extends AbstractMapper<Supplier> {
 
@@ -96,5 +96,10 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
         } catch (java.sql.SQLException e) {
             return -1;
         }
+    }
+
+    public List<Days> getDeliveryDates(int supplierId) {
+        //TODO dont return null here
+        throw new UnsupportedOperationException();
     }
 }

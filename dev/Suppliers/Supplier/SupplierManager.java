@@ -2,7 +2,10 @@ package Suppliers.Supplier;
 
 import Suppliers.DataAccess.SupDBConn;
 import Suppliers.DataAccess.SupplierMapper;
+import Suppliers.Structs.Days;
+import Suppliers.Structs.StructUtils;
 
+import java.util.Date;
 import java.util.List;
 
 public class SupplierManager {
@@ -62,6 +65,20 @@ public class SupplierManager {
 		 *         WHERE SP.supplier_id = S.id) IN (?)
 		 * Use conn.createArrayOf(...)
          */
+        return null;
+    }
+
+    /**
+     * Calculate the next delivery date of supplier
+     * @param supplierId the supplier id
+     * @return the next delivery date
+     */
+    public Date getNextDeliveryDate(int supplierId) {
+        List<Days> days = supplierMapper.getDeliveryDates(supplierId);
+        if(!days.isEmpty()){
+            return StructUtils.getTheNearestDate(days);
+        }
+
         return null;
     }
 }

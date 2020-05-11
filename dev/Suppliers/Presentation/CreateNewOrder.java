@@ -30,7 +30,7 @@ public class CreateNewOrder extends Menu_Option {
 
             shopNumber = readInt("Enter the shop number", reader);
             if(shopNumber < 0){
-                System.out.println("Shop number need to be bigger than -1");
+                return;
             }
 
             int numberOfProducts = readInt("Enter the numbers of product you want the order", reader);
