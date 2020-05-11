@@ -42,6 +42,9 @@ public class Inventory2SuppliersCtrl implements myObservable {
     }
 
     public void run(){
+        myInvenoryService.loadDB();
+
+
         int module = -1;
         while(module != 0) {
             notifyObserver("-- SUPER-LEE main Menu -- press: \n 1) Suppliers \n 2) Inventory \n 0) Exit");
@@ -87,6 +90,8 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     public Result receiveSupplierOrder(int orderID)
     {
+        //TODO: change arg to Order
+        myInvenoryService.getOrderFromSuppliers();
         return null;
     }
 

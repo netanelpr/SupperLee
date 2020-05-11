@@ -2,7 +2,10 @@ package Inventory.Logic;
 
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
+import Inventory.Persistence.DTO.ItemDTO;
 import Inventory.Persistence.DummyItem;
+import Inventory.Persistence.Mappers.ItemToProduct;
+import DataAccess.SupInvDBConn;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,14 +14,17 @@ import java.util.List;
 public class itemsController implements myObservable {
 
     private HashMap<String, Item> items; //item id, item
-    public final List<Observer> observers;
+    private final List<Observer> observers;
+    private ItemToProduct itemToProduct;
 
     public itemsController(Observer o) {
         //this.myScanner = new Scanner(System.in);
         this.items = new HashMap<>();
         observers = new ArrayList<>();
         this.register(o);
+        this.itemToProduct = new ItemToProduct(SupInvDBConn.getInstance());
     }
+
     public HashMap<String, Item> getItems() {
         return items;
     }
@@ -79,6 +85,13 @@ public class itemsController implements myObservable {
     @Override
     public void notifyObserver(String msg) {
         observers.forEach(o -> o.onEvent(msg));
+    }
+
+    public void loadItemsFromDB(String shopNum) {
+        HashMap<String, ItemDTO> itemsDTO = itemToProduct.loadInvFromItemsAndProducts(shopNum);
+        for (String id : itemsDTO.keySet()) {
+            items.put(id, new Item(observers.get(0), itemsDTO.get(id)));
+        }
     }
     //endregion
 

@@ -1,6 +1,5 @@
 package Tests.Visual;
 
-import Suppliers.Service.OrderAndProductCtrl;
 import Suppliers.Supplier.Order.OrderManager;
 import Suppliers.Supplier.Order.RegularOrder;
 import Suppliers.Supplier.ProductInOrder;

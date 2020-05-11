@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class SupplierProduct {
     public static void dbExample(){
-        try(Connection conn = DriverManager.getConnection("jdbc:sqlite:DB/supplier.db")) {
+        try(Connection conn = DriverManager.getConnection("jdbc:sqlite:DB/supplier_only.db")) {
             Product product = null;
 
             /*ProductMapper productMapper = new ProductMapper(conn);

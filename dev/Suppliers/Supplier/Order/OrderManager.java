@@ -1,7 +1,7 @@
 package Suppliers.Supplier.Order;
 
 import Suppliers.DataAccess.RegularOrderMapper;
-import Suppliers.DataAccess.SupplierDBConn;
+import Suppliers.DataAccess.SupDBConn;
 
 public class OrderManager {
 
@@ -10,7 +10,7 @@ public class OrderManager {
     private RegularOrderMapper regularOrderMapper;
 
     private OrderManager(){
-        regularOrderMapper = new RegularOrderMapper(SupplierDBConn.getInstance());
+        regularOrderMapper = new RegularOrderMapper(SupDBConn.getInstance());
     }
 
     public static OrderManager getInstance(){

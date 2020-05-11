@@ -11,6 +11,9 @@ public class Defective implements myObservable {
     //region fields
     private String id;
     private String name;
+
+    private String shopNum;
+
     private int quantity;
     private LocalDate updateDate;
     public final List<Observer> observers;
@@ -19,7 +22,7 @@ public class Defective implements myObservable {
     //endregion
 
     //region constructors
-    public Defective(List<Observer> observers, String id, String name, int quantity, LocalDate updateDate, Boolean expired, Boolean defective) {
+    public Defective(List<Observer> observers, String id, String name, int quantity, LocalDate updateDate, Boolean expired, Boolean defective, String shopNum) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -27,13 +30,15 @@ public class Defective implements myObservable {
         this.observers = observers;
         this.expired = expired;
         this.defective = defective;
+        this.shopNum = shopNum;
     }
-    public Defective(List<Observer> observers, String id, String name, int quantity, LocalDate updateDate) {
+    public Defective(List<Observer> observers, String id, String name, int quantity, LocalDate updateDate, String shopNum) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.updateDate = updateDate;
         this.observers = observers;
+        this.shopNum = shopNum;
     }
     //endregion
 

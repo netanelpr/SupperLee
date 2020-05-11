@@ -1,18 +1,18 @@
-package Suppliers.DataAccess;
+package DataAccess;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class SupplierDBConn {
+public class SupInvDBConn {
     private static Connection conn;
 
-    private SupplierDBConn(){ }
+    private SupInvDBConn(){ }
 
     public static Connection getInstance(){
         try {
             if(conn == null) {
-                conn = DriverManager.getConnection("jdbc:sqlite:DB/supplier.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:DB/sup_inv.db");
             }
             return conn;
         } catch (SQLException throwables) {

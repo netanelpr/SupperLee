@@ -6,9 +6,13 @@ import Inventory.Logic.Inventory;
 //imporinv.t DummyItem;
 import Inventory.Logic.OrderItem;
 import Inventory.Logic.ShortageOrder;
+import Inventory.Persistence.DTO.InventoryDTO;
 import Inventory.Persistence.DummyItem;
 import Inventory.Persistence.DummySuppliers;
+import Inventory.Persistence.Mappers.InventoriesMapper;
+import Result.Result;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,9 +29,10 @@ public class InvService implements myObservable {
     boolean terminateInv = false;
     boolean terminateSys = false;
     private Scanner myScanner;
-    public final List<Observer> observers;
-    public DummySuppliers tmpSuppliers;
-    public Inventory2SuppliersCtrl myInv2Sup;
+    private final List<Observer> observers;
+    private DummySuppliers tmpSuppliers;
+    private Inventory2SuppliersCtrl myInv2Sup;
+    private InventoriesMapper inventoriesMapper;
 
     //region singelton Constructor
     private static InvService instance = null;
@@ -38,6 +43,7 @@ public class InvService implements myObservable {
         this.myScanner = new Scanner(System.in);
         this.register(view);
         tmpSuppliers = new DummySuppliers();
+        inventoriesMapper = InventoriesMapper.getInstance();
     }
 
     public static InvService getInstance(){
@@ -83,6 +89,8 @@ public class InvService implements myObservable {
 
                 //region items
                 if (ansStr.equals("uis")) {
+                    //TODO: DELETE
+                    getOrderFromSuppliers();
                     notifyObserver("-- Update Inventory Suppliers --");
                     HashMap<DummyItem, Integer> supply = tmpSuppliers.getArrivedOrders(); //read from jason, only for stage one
                     tmpSuppliers.finishOrder();
@@ -204,10 +212,20 @@ public class InvService implements myObservable {
             currItem = myScanner.nextLine();
         }
         notifyObserver("-- finish updating inventory --");
-        if(shortageOrder.getLength() > 0)
-            myInv2Sup.placeNewShortageOrder(shortageOrder);
-
+        if(shortageOrder.getLength() > 0) {
+            Result<Integer> res = myInv2Sup.placeNewShortageOrder(shortageOrder);
+            if(res.isFailure())
+                notifyObserver(res.getMessage());
+        }
     }
+
+    public void getOrderFromSuppliers(){
+        //TODO: change arg to Order that you send to us
+        //TODO: start function with the specific shop
+        //notifyObserver("-- Update Inventory Suppliers --");
+        //currInv.updateInventorySuppliers(supply, this);
+    }
+
     private void setNewPrice() {
         notifyObserver("which id to set deal?");
         String id = myScanner.nextLine();
@@ -262,6 +280,17 @@ public class InvService implements myObservable {
     @Override
     public void notifyObserver(String msg) {
         observers.forEach(o -> o.onEvent(msg));
+    }
+
+    public void loadDB() {
+        HashMap<String, InventoryDTO> invs = inventoriesMapper.load();
+        for (String shopNum : invs.keySet()) {
+            superLeeInvs.put(shopNum, new Inventory(view, invs.get(shopNum)));
+        }
+        for (String inv : superLeeInvs.keySet()) {
+            superLeeInvs.get(inv).loadInvDB();
+        }
+
     }
     //endregion
 }
