@@ -1,5 +1,8 @@
 package Suppliers.Supplier;
 
+import Suppliers.DataAccess.ProductMapper;
+import Suppliers.DataAccess.SupDBConn;
+import Suppliers.DataAccess.SupplierMapper;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Supplier.Order.Order;
@@ -18,6 +21,7 @@ public class SupplierSystem {
     private Map<Integer, Order> orderIdToOrder;
 
     private ProductsManager productsManager;
+    private SupplierMapper supplierMapper;
     private OrderManager orderManager;
 
     private final String[] paymentOptions;
@@ -26,7 +30,7 @@ public class SupplierSystem {
         suppliers = new HashMap<>();
         orders = new HashMap<>();
         orderIdToOrder = new HashMap<>();
-
+        supplierMapper=new SupplierMapper(SupDBConn.getInstance());
         productsManager = ProductsManager.getInstance();
         orderManager = OrderManager.getInstance();
 
@@ -48,7 +52,7 @@ public class SupplierSystem {
      * @param paymentInfo payment options by string separated by ,
      * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
      */
-    public int createSupplierCard(String name, String incNum, String accountNumber, String paymentInfo,
+    public int createSupplierCard(String name, String incNum, String address, String accountNumber, String paymentInfo,
                                   String contactName, String phoneNumber,String email) {
 
         paymentInfo = paymentInfo.toUpperCase();

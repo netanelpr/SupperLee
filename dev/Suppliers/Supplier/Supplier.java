@@ -10,6 +10,7 @@ public class Supplier {
     private String incNum;
     private String accountNumber;
     private String paymentInfo;
+    private String address;
 
     //Suppliers.Supplier.Suppliers.Supplier Details
     private String name;
@@ -17,14 +18,14 @@ public class Supplier {
     private List<ContactInfo> contacts;
     private ContractWithSupplier contract;
 
-    public Supplier(String name, String incNum, String accountNumber, String paymentInfo,
+    public Supplier(int supID,String name, String address, String incNum, String accountNumber, String paymentInfo,
                     String contactName, String phoneNumber,String email){
         this.name=name;
         this.incNum=incNum;
         this.accountNumber=accountNumber;
         this.paymentInfo=paymentInfo;
-        this.supId=SupplierIDsCounter;
-        SupplierIDsCounter++;
+        this.supId=supID;
+
 
         this.contacts = new LinkedList<>();
         this.addContactInfo(contactName,phoneNumber,email);
@@ -99,7 +100,19 @@ public class Supplier {
         return name;
     }
 
-    public boolean addDiscountToProduct(int barcode,int amount, double discount)
+    public String getIncNum() {
+        return incNum;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public boolean addDiscountToProduct(int barcode, int amount, double discount)
     {
         return contract.addDiscountToProduct(barcode,amount,discount);
     }
@@ -186,5 +199,9 @@ public class Supplier {
 
     public List<ContactInfo> getContacts(){
         return new ArrayList<ContactInfo>(contacts);
+    }
+
+    public void setId(int aId) {
+        this.supId=aId;
     }
 }

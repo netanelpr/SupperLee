@@ -32,4 +32,12 @@ public class ShortageOrder {
         }
         return ans;
     }
+
+    public Integer getShopNum() {
+        return shopNum;
+    }
+
+    public HashMap<Integer, Integer> getOrder() {
+        return order;
+    }
 }
