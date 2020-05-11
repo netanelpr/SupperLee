@@ -8,6 +8,7 @@ import Suppliers.Supplier.ProductInOrder;
 import Suppliers.Supplier.ProductsManager;
 import Suppliers.Supplier.SupplierSystem;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     }
 
     @Override
-    public Result<Integer> createNewSupplierOrder(int supplierId, List<ProductInOrderDTO> products) {
+    public Result<Integer> createNewSupplierOrder(int supplierId, List<ProductInOrderDTO> products, int shopNumber) {
         List<ProductInOrder> productInOrders = new LinkedList<>();
 
         for(ProductInOrderDTO productInOrderDTO : products){
@@ -52,11 +53,11 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         }
 
         //TODO edit
-        return Result.makeOk("",supplierSystem.createNewOrder(supplierId, productInOrders));
+        return Result.makeOk("",supplierSystem.createNewOrder(supplierId, productInOrders, shopNumber));
     }
 
     @Override
-    public Result<Integer> createRegularNewOrder(List<ProductInOrderDTO> products, Days day) {
+    public Result<Integer> createRegularNewOrder(List<ProductInOrderDTO> products, int shopNumber) {
         return null;
     }
 
@@ -66,8 +67,8 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     }
 
     @Override
-    public boolean updateOrderArrivalTime(int orderId, Days day) {
-        return supplierSystem.updateOrderArrivalTime(orderId, day);
+    public boolean updateOrderArrivalTime(int orderId, Date date) {
+        return supplierSystem.updateOrderArrivalTime(orderId, date);
     }
 
     @Override

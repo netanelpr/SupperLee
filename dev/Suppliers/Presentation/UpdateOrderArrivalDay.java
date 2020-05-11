@@ -7,6 +7,11 @@ import Suppliers.Structs.StructUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 public class UpdateOrderArrivalDay extends Menu_Option {
@@ -23,17 +28,19 @@ public class UpdateOrderArrivalDay extends Menu_Option {
     public void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int orderId = readInt("Order ID", reader);
-        String daysinput = readString("Enter days",reader);
+        Date deliveryDate;
 
-        String[] dayStr = {daysinput};
-        List<Days> days = StructUtils.getDaysList(dayStr);
-        if(days == null){
-            System.out.println("Invalid day");
+        String dayinput = readString("Delivery day (dd/MM/yyyy)",reader);
+
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            deliveryDate  = df.parse(dayinput);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format");
             return;
         }
-        Days day = days.get(0);
 
-        if(orderAndProductManagement.updateOrderArrivalTime(orderId, day)){
+        if(orderAndProductManagement.updateOrderArrivalTime(orderId, deliveryDate)){
             System.out.println("Order was updated");
         } else {
             System.out.println("Order was not updated");

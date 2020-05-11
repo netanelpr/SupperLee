@@ -2,6 +2,9 @@ package Suppliers.Supplier;
 
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
+import Suppliers.Supplier.Order.Order;
+import Suppliers.Supplier.Order.OrderManager;
+import Suppliers.Supplier.Order.RegularOrder;
 
 import java.util.*;
 
@@ -15,6 +18,8 @@ public class SupplierSystem {
     private Map<Integer, Order> orderIdToOrder;
 
     private ProductsManager productsManager;
+    private OrderManager orderManager;
+
     private final String[] paymentOptions;
 
     private SupplierSystem() {
@@ -23,6 +28,8 @@ public class SupplierSystem {
         orderIdToOrder = new HashMap<>();
 
         productsManager = ProductsManager.getInstance();
+        orderManager = OrderManager.getInstance();
+
         paymentOptions = new String[]{"CASH", "BANKTRANSFER","PAYMENTS","+30DAYSPAYMENT","CHECK"};
     }
 
@@ -248,13 +255,14 @@ public class SupplierSystem {
      * @param products The product to order
      * @return -1 if cant create the order, otherwise return the order id
      */
-    public int createNewOrder(int supplierId, List<ProductInOrder> products) {
+    public int createNewOrder(int supplierId, List<ProductInOrder> products, int shopNumber) {
         Supplier supplier = suppliers.getOrDefault(supplierId, null);
 
         if(supplier == null){
             return -1;
         }
 
+        //TODO maybe do it in one funtion which get a list are return true or false
         for(ProductInOrder product : products){
             if(!supplier.hasProduct(product.getBarcode())){
                 return -1;
@@ -263,32 +271,37 @@ public class SupplierSystem {
 
         supplier.fillWithCatalogNumber(products);
 
-        Order order = Order.CreateOrder(products);
-        if(order == null){
+        RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1, products, shopNumber);
+        if(regularOrder == null){
+            return -1;
+        }
+
+        orderManager.createRegularOrder(regularOrder);
+        if(regularOrder.getOrderId() < 0){
             return -1;
         }
 
         // Add the order to the data
-        orders.get(supplierId).add(order);
-        orderIdToOrder.put(order.getOrderId(), order);
+        orders.get(supplierId).add(regularOrder);
+        orderIdToOrder.put(regularOrder.getOrderId(), regularOrder);
 
-        return order.getOrderId();
+        return regularOrder.getOrderId();
     }
 
     /**
      * Update the day of order arrival
      * @param orderId The order id
-     * @param day The arrival day
+     * @param date The arrival day
      * @return true if it was updated.
      */
-    public boolean updateOrderArrivalTime(int orderId, Days day) {
+    public boolean updateOrderArrivalTime(int orderId, Date date) {
         Order order = orderIdToOrder.getOrDefault(orderId, null);
 
         if(order == null){
             return false;
         }
 
-        return order.updateDeliveryDay(day);
+        return order.updateDeliveryDay(date);
     }
 
 

@@ -59,11 +59,35 @@ public class StructUtils {
     public static OrderStatus getOrderStatus(String orderStatus){
         Map<String, OrderStatus> map = createStatusMap();
 
-         OrderStatus orderS =  map.getOrDefault(orderStatus.toUpperCase(), null);
-         if(orderS == null){
-             return null;
-         }
+         return map.getOrDefault(orderStatus.toUpperCase(), null);
+    }
 
-        return orderS;
+    /**
+     * Return orderStatus by number
+     * @param orderStatus order Status
+     * @return null if there is not order status as the one given
+     */
+    public static OrderStatus getOrderStatus(int orderStatus){
+        if(orderStatus == 0) {
+            return OrderStatus.Close;
+        }
+
+        if(orderStatus == 1) {
+            return OrderStatus.Open;
+        }
+
+        return null;
+    }
+
+    public static int getOrderStatusInt(OrderStatus orderStatus){
+        if(orderStatus == OrderStatus.Close) {
+            return 0;
+        }
+
+        if(orderStatus == OrderStatus.Open) {
+            return 1;
+        }
+
+        return -1;
     }
 }
