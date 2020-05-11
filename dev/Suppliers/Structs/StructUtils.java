@@ -42,6 +42,58 @@ public class StructUtils {
         return list;
     }
 
+    public static Days getDayWithInt(int day){
+        if(day == 1){
+            return Days.Sunday;
+        }
+        if(day == 2){
+            return Days.Monday;
+        }
+        if(day == 3){
+            return Days.Tuesday;
+        }
+        if(day == 4){
+            return Days.Wednesday;
+        }
+        if(day == 5){
+            return Days.Thursday;
+        }
+        if(day == 6){
+            return Days.Friday;
+        }
+        if(day == 7){
+            return Days.Saturday;
+        }
+
+        return null;
+    }
+
+    public static int getDayInt(Days day){
+        if(day == Days.Sunday){
+            return 1;
+        }
+        if(day == Days.Monday){
+            return 2;
+        }
+        if(day == Days.Tuesday){
+            return 3;
+        }
+        if(day == Days.Wednesday){
+            return 4;
+        }
+        if(day == Days.Thursday){
+            return 5;
+        }
+        if(day == Days.Friday){
+            return 6;
+        }
+        if(day == Days.Saturday){
+            return 7;
+        }
+
+        return -1;
+    }
+
     private static Map<String, OrderStatus> createStatusMap(){
         Map<String, OrderStatus> map = new HashMap<>();
 

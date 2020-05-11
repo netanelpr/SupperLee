@@ -20,6 +20,7 @@ public class Order {
             this.products.put(product.getProductCatalogNumber(), product);
         }
 
+        this.orderId = orderId;
         status = OrderStatus.Open;
         deliveryDay = null;
         this.shopNumber = shopNumber;
@@ -86,5 +87,9 @@ public class Order {
 
     public void setContractId(int contractId){
         this.contractId =  contractId;
+    }
+
+    public void setOrderId(int orderId){
+        this.orderId = orderId;
     }
 }
