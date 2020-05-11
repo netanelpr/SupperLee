@@ -6,6 +6,7 @@ import Inventory.View.InvService;
 import Inventory.View.View;
 import Result.Result;
 import Suppliers.Structs.Days;
+import Suppliers.Structs.OrderStatus;
 import Suppliers.Supplier.Product;
 import Suppliers.Supplier.ProductInOrder;
 import Inventory.Persistence.DummyItem;
@@ -43,6 +44,9 @@ public class Inventory2SuppliersCtrl implements myObservable {
     }
 
     public void run(){
+        myInvenoryService.loadDB();
+
+
         int module = -1;
         while(module != 0) {
             notifyObserver("-- SUPER-LEE main Menu -- press: \n 1) Suppliers \n 2) Inventory \n 0) Exit");
@@ -63,25 +67,15 @@ public class Inventory2SuppliersCtrl implements myObservable {
         for (Integer barcode:
              barcodes) {
             SystemProduct theProduct=myOrderAndProductManagement.getProduct(barcode);
-            //(String id, String name, String manufacturer, String category,
-            //                     String sub_category, String size, String freqSupply, String cost)
-            DummyItem newDummyItem= new DummyItem(String.valueOf(theProduct.barcode),theProduct.name,theProduct.manufacture,theProduct.catagory,theProduct.subCatagory,theProduct.size, theProduct.freqSupply);
+            //((String id, String name, String manufacturer, String category,
+            //                     String sub_category, String size, String freqSupply, String cost
+            DummyItem newDummyItem= new DummyItem(String.valueOf(theProduct.barcode),theProduct.name,
+                    theProduct.manufacture,theProduct.category,theProduct.subCategory,theProduct.size, theProduct.freqSupply);
 
         }
-        //List<AddProduct> productDTOS= mySupplierManger.getCatalog();
-        //List<DummyItem> itemsList= new LinkedList<>();
-        //for (AddProduct product:
-        //     productDTOS) {
-        //    DummyItem newDummyItem=new DummyItem(product.barCode,product.name,product.manufacture,product.category,product.sub_category,product.freqSupply,product.originalPrice);
-        //    itemsList.add(newDummyItem);
-        //}
-        //return itemsList;
-        return null;
+        return dummyItems;
     }
     public Result<Integer> placeNewShortageOrder(ShortageOrder shortageOrder)
-    //TODO: talk about the signature, days?, shortageOrder includes Map, ShopNum, order length)
-            //TODO: talk about adding a day to an order from inventory managment creating order
-    //public Result<Integer> placeNewShortageOrder(Map<Integer, Integer> shoppingList, Days day)
     {
         notifyObserver("automatic shortage order arrived successfully!");
         notifyObserver(shortageOrder.toString());
@@ -96,7 +90,7 @@ public class Inventory2SuppliersCtrl implements myObservable {
             productInOrderDTOS.add(newProduct);
         }
 
-        return myOrderAndProductManagement.createRegularNewOrder(productInOrderDTOS,Days.Sunday);
+        return myOrderAndProductManagement.createRegularNewOrder(productInOrderDTOS,shortageOrder.getShopNum());
 
     }
 
@@ -108,7 +102,10 @@ public class Inventory2SuppliersCtrl implements myObservable {
     //TODO: understand how to make this work- which order id? of supplier? of inventory?
     public Result receiveSupplierOrder(int orderID)
     {
-        myInvenoryService.
+        this.myOrderAndProductManagement.changeOrderStatus(orderID, OrderStatus.Close);
+        OrderDTO theOrder= this.myOrderAndProductManagement.getOrder(orderID);
+        return myInvenoryService.getOrderFromSuppliers(theOrder);
+
     }
 
 

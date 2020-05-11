@@ -1,6 +1,7 @@
 package Inventory.Logic;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
+import Inventory.Persistence.DTO.ItemDTO;
 import Inventory.Persistence.DummyItem;
 
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ public class Item implements myObservable {
     //supplier item info
     private String id;
     private String name;
+
+    private String shopNum;
+
     private String manufacturer;
     private String category;
     private String sub_category;
@@ -26,6 +30,18 @@ public class Item implements myObservable {
     private boolean minimum = false;//for alerts
     public final List<Observer> observers;
     //endregion
+
+    public Item(Observer o, ItemDTO itemDTO) {
+        this.observers = new ArrayList<>();
+        this.register(o);
+        this.id = itemDTO.getId();
+        this.name = itemDTO.getName();
+        this.manufacturer = itemDTO.getManufacturer();
+        this.category = itemDTO.getCategory();
+        this.sub_category = itemDTO.getSub_category();
+        this.size = itemDTO.getSize();
+        this.freqBuySupply = String.valueOf(itemDTO.getFreqBuySupply());
+    }
 
     public Item(Observer o, DummyItem dm) {
         this.observers = new ArrayList<>();

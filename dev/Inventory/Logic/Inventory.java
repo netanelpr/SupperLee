@@ -2,6 +2,7 @@ package Inventory.Logic;
 
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
+import Inventory.Persistence.DTO.InventoryDTO;
 import Inventory.Persistence.DummyItem;
 import Inventory.View.InvService;
 import Inventory.View.View;
@@ -15,21 +16,34 @@ public class Inventory implements myObservable {
 
     private static int counter = 0;
     private String shopNum;
+    private String shopName;
     public final List<Observer> observers;
-
 
     private itemsController myItemController;
     private recordController myRecoredController;
     private defectiveController myDefectivesController;
 
 
-
     public Inventory(View view){
         counter++;
         this.shopNum = String.valueOf(counter);
+        //TODO check if needs shop num in item!
         this.myItemController = new itemsController(view);
-        this.myRecoredController = new recordController(view);
-        this.myDefectivesController = new defectiveController(view);
+        this.myRecoredController = new recordController(view, shopNum);
+        this.myDefectivesController = new defectiveController(view, shopNum);
+        observers = new ArrayList<>();
+        this.register(view);
+        shopName = "";
+    }
+
+    public Inventory(View view, InventoryDTO invDTO){
+        counter++;
+        this.shopNum = invDTO.getShopNum();
+        this.shopName = invDTO.getShopName();
+        //TODO check if needs shop num in item!
+        this.myItemController = new itemsController(view);
+        this.myRecoredController = new recordController(view, shopNum);
+        this.myDefectivesController = new defectiveController(view, shopNum);
         observers = new ArrayList<>();
         this.register(view);
     }
@@ -56,6 +70,12 @@ public class Inventory implements myObservable {
     }
     public defectiveController getMyDefectivesController() {
         return myDefectivesController;
+    }
+    public String getShopName() {
+        return shopName;
+    }
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
     //endregion
 
@@ -122,6 +142,12 @@ public class Inventory implements myObservable {
     }
     public void notifyObserver(String msg) {
         observers.forEach(o -> o.onEvent(msg));
+    }
+
+    public void loadInvDB() {
+        myItemController.loadItemsFromDB(shopNum);
+        myDefectivesController.loadDefectiveFromDB(shopNum);
+        myRecoredController.loadRecordsFromDB(shopNum);
     }
     //endregion
 

@@ -1,11 +1,9 @@
 package Suppliers.Supplier;
 
 import Suppliers.DataAccess.ProductMapper;
-import Suppliers.DataAccess.SupplierDBConn;
+import Suppliers.DataAccess.SupDBConn;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ProductsManager {
 
@@ -17,7 +15,7 @@ public class ProductsManager {
 
     private ProductsManager(){
         //productMap = new HashMap<>();
-        productMapper = new ProductMapper(SupplierDBConn.getInstance());
+        productMapper = new ProductMapper(SupDBConn.getInstance());
     }
 
     public static ProductsManager getInstance(){

@@ -22,9 +22,15 @@ public class CreateNewOrder extends Menu_Option {
     public void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int supId = readInt("Supplier ID", reader);
+        int shopNumber;
 
         try {
             List<ProductInOrderDTO> products = new LinkedList<>();
+
+            shopNumber = readInt("Enter the shop number", reader);
+            if(shopNumber < 0){
+                System.out.println("Shop number need to be bigger than -1");
+            }
 
             int numberOfProducts = readInt("Enter the numbers of product you want the order", reader);
 
@@ -43,7 +49,7 @@ public class CreateNewOrder extends Menu_Option {
             }
 
             //TODO edit to result
-            int orderId = orderAndProductManagement.createNewSupplierOrder(supId, products).getValue();
+            int orderId = orderAndProductManagement.createNewSupplierOrder(supId, products, shopNumber).getValue();
             if(orderId < 0){
                 System.out.println("Order was not created");
             } else {

@@ -29,7 +29,7 @@ class OrderTest {
         supplierSystem.addContractToSupplier(supplierID,"shalom",new LinkedList<>(),productList);
         productInOrder=new LinkedList<ProductInOrder>();
         productInOrder.add(new ProductInOrder(productList.get(0).barCode,10));
-        orderID=supplierSystem.createNewOrder(supplierID,productInOrder);
+        orderID=supplierSystem.createNewOrder(supplierID,productInOrder,1);
 
     }
 
