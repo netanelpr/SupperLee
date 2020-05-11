@@ -1,5 +1,6 @@
 package Suppliers.Supplier.Order;
 
+import Suppliers.DataAccess.PeriodicalOrderMapper;
 import Suppliers.DataAccess.RegularOrderMapper;
 import Suppliers.DataAccess.SupDBConn;
 
@@ -8,9 +9,11 @@ public class OrderManager {
     private static OrderManager instance = null;
 
     private RegularOrderMapper regularOrderMapper;
+    private PeriodicalOrderMapper periodicalOrderMapper;
 
     private OrderManager(){
         regularOrderMapper = new RegularOrderMapper(SupDBConn.getInstance());
+        periodicalOrderMapper = new PeriodicalOrderMapper(SupDBConn.getInstance());
     }
 
     public static OrderManager getInstance(){
@@ -24,7 +27,16 @@ public class OrderManager {
         return regularOrderMapper.findById(orderId);
     }
 
+    public PeriodicalOrder getPeriodicalOrder(int orderId){
+        return periodicalOrderMapper.findById(orderId);
+    }
+
+
     public void createRegularOrder(RegularOrder regularOrder){
         regularOrder.setOrderId(regularOrderMapper.insert(regularOrder));
+    }
+
+    public void createPeriodicalOrder(PeriodicalOrder periodicalOrder){
+        periodicalOrder.setOrderId(periodicalOrderMapper.insert(periodicalOrder));
     }
 }

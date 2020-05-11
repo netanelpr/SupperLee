@@ -17,8 +17,5 @@ public class RegularOrder extends Order {
 
         return new RegularOrder(orderId, productsInOrder, shopNumber);
     }
-    public void setOrderId(int orderId){
-        this.orderId = orderId;
-    }
 
 }

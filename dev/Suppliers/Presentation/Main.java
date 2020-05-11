@@ -3,7 +3,9 @@ package Suppliers.Presentation;
 import Suppliers.DataAccess.ProductMapper;
 import Suppliers.Service.OrderAndProductCtrl;
 import Suppliers.Service.SystemProduct;
+import Suppliers.Supplier.Order.PeriodicalOrder;
 import Suppliers.Supplier.Product;
+import Tests.Visual.SupplierPeriodicalOrder;
 import Tests.Visual.SupplierRegularOrder;
 
 import java.sql.Connection;
@@ -16,6 +18,6 @@ public class Main {
         /*MainMenu mainMenu = new MainMenu();
         mainMenu.startMenu();*/
 
-        SupplierRegularOrder.addRegularOrder();
+        SupplierPeriodicalOrder.addPeriodicalOrder();
     }
 }

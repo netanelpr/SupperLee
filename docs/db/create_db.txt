@@ -101,13 +101,12 @@ CREATE TABLE IF NOT EXISTS Supplier_order(
 
 CREATE TABLE IF NOT EXISTS Periodical_supplier_order(
 	id INTEGER NOT NULL,
-	delivery_dist INTEGER NOT NULL,
-	next_delivery_date TEXT NOT NULL,
+	weekp INTEGER NOT NULL,
 	
 	PRIMARY KEY (id)
 	FOREIGN KEY(id)
 		REFERENCES Supplier_order(id)
-	CHECK (delivery_dist > 0)
+	CHECK weekp > 0)
 );
 
 CREATE TABLE IF NOT EXISTS Periodical_supplier_order_days(
@@ -115,7 +114,7 @@ CREATE TABLE IF NOT EXISTS Periodical_supplier_order_days(
 	delivery_weekly_day INTEGER NOT NULL,
 	
 	PRIMARY KEY (order_id, delivery_weekly_day)
-	FOREIGN KEY(order_id)
+	FOREIGN KEY (order_id)
 		REFERENCES Supplier_order(id)
 	CHECK (delivery_weekly_day > 0 AND delivery_weekly_day < 8)
 );

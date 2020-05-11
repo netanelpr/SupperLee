@@ -16,7 +16,7 @@ public class PeriodicalOrder extends Order {
         this.weekPeriod = weekPeriod;
     }
 
-    public static Order CreateRegularOrder(int orderId, List<ProductInOrder> productsInOrder, List<Days> days, int weekPeriod, int shopNumber){
+    public static PeriodicalOrder CreatePeriodicalOrder(int orderId, List<ProductInOrder> productsInOrder, List<Days> days, int weekPeriod, int shopNumber){
         if(productsInOrder.isEmpty() | days.isEmpty()){
             return null;
         }
@@ -28,5 +28,21 @@ public class PeriodicalOrder extends Order {
 
 
         return new PeriodicalOrder(orderId, productsInOrder, days, weekPeriod, shopNumber);
+    }
+
+    public int getWeekPeriod() {
+        return weekPeriod;
+    }
+
+    public void setWeekPeriod(int weekPeriod) {
+        this.weekPeriod = weekPeriod;
+    }
+
+    public List<Days> getDays() {
+        return days;
+    }
+
+    public void setDays(List<Days> days) {
+        this.days = days;
     }
 }
