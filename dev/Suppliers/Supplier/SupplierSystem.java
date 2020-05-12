@@ -254,6 +254,8 @@ public class SupplierSystem {
     }
 
 
+    //TODO for suppliers how dont have supply days the delivery date is null
+    // in the integration edit it, to send this order of suppliers to vec
     /**
      * Create a new order in the system
      * @param supplierId The supplier ID who need to supply the order
@@ -272,18 +274,19 @@ public class SupplierSystem {
         for(ProductInOrder product : products){
             barcodes.add(product.getBarcode());
         }
+
+        //TODO this may not be needed as the product contract have all this info
         if(!supplierManager.haveAllBarcodes(supplierId,barcodes)){
             return Result.makeFailure("The supplier do not supply some of this products");
         }
 
-        //TODO check this
         supplier.fillWithCatalogNumber(products);
 
         RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1, products, shopNumber);
         if(regularOrder == null){
             return Result.makeFailure("Need to have at least one product");
         }
-        regularOrder.setDeliveryDay(supplierManager.getNextDeliveryDate(supplierId));
+        regularOrder.setDeliveryDay(supplier.getNextDeliveryDate());
 
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){
@@ -331,6 +334,8 @@ public class SupplierSystem {
         sup.setPricePerUnit(products);
 
         RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1,products, shopNumber);
+        regularOrder.setDeliveryDay(sup.getNextDeliveryDate());
+
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){
             return Result.makeFailure("Order wasnt created");
@@ -352,13 +357,12 @@ public class SupplierSystem {
      * @return true if it was updated.
      */
     public boolean updateOrderArrivalTime(int orderId, Date date) {
-        Order order = orderIdToOrder.getOrDefault(orderId, null);
-
-        if(order == null){
+        //TODO may remove this
+        if(date.compareTo(Calendar.getInstance().getTime()) > 0){
             return false;
         }
 
-        return order.updateDeliveryDay(date);
+        return orderManager.updateOrderDelivery(orderId, date);
     }
 
 

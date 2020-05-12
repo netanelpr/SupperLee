@@ -1,6 +1,7 @@
 package Suppliers.Supplier;
 
 import Suppliers.Structs.Days;
+import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.Order.ProductInOrder;
 
 import java.util.*;
@@ -238,5 +239,18 @@ public class Supplier {
      * @param products the products to set
      */
     public void setPricePerUnit(List<ProductInOrder> products) {
+    }
+
+    /**
+     * Return the next delivery date
+     * @return next delivery date
+     */
+    public Date getNextDeliveryDate(){
+        List<Days> days = contract.getDailyInfo();
+        if(!days.isEmpty()){
+            return StructUtils.getTheNearestDate(days);
+        }
+
+        return null;
     }
 }

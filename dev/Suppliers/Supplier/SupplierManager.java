@@ -67,18 +67,4 @@ public class SupplierManager {
          */
         return null;
     }
-
-    /**
-     * Calculate the next delivery date of supplier
-     * @param supplierId the supplier id
-     * @return the next delivery date
-     */
-    public Date getNextDeliveryDate(int supplierId) {
-        List<Days> days = supplierMapper.getDeliveryDates(supplierId);
-        if(!days.isEmpty()){
-            return StructUtils.getTheNearestDate(days);
-        }
-
-        return null;
-    }
 }
