@@ -449,4 +449,9 @@ public class SupplierSystem {
             return null;
         }
     }
+
+    public List<Integer> getAllOpenOrdersIds(int shopID)
+    {
+        return null;
+    }
 }
