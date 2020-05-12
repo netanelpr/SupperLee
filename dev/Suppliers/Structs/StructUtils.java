@@ -2,6 +2,7 @@ package Suppliers.Structs;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class StructUtils {
@@ -43,6 +44,11 @@ public class StructUtils {
 
     public static String dateFormat(){
         return "dd/MM/yyyy";
+    }
+
+    public static String dateToForamt(Date date){
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat());
+        return formatter.format(date);
     }
 
     public static Days getDayWithInt(int day){
@@ -98,25 +104,36 @@ public class StructUtils {
     }
 
     /**
+     * Calculate the number of days to the nearest day from the list
+     * @param days the days to compare
+     * @return number of days to the nearest day from the list, return 8 if the list is empty or null
+     */
+    protected static int nearestDayInDays(List<Days> days){
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_WEEK);
+        int nearestDayInDays = 8;
+
+        for(Days d: days){
+            int subtract = getDayInt(d) - day;
+            if(subtract < 0){
+                subtract = subtract + 7;
+            }
+
+            if(nearestDayInDays > subtract){
+                nearestDayInDays = subtract;
+            }
+        }
+
+        return nearestDayInDays;
+    }
+    /**
      * Return the nearest date
      * @param days the days to compare with
      * @return the nearest date or null
      */
     public static Date getTheNearestDate(List<Days> days){
          Calendar c = Calendar.getInstance();
-         int day = c.get(Calendar.DAY_OF_WEEK);
-         int nearestDayInDays = 8;
-
-         for(Days d: days){
-             int subtract = getDayInt(d) - day;
-             if(subtract < 0){
-                 subtract = subtract + 7;
-             }
-
-             if(nearestDayInDays > subtract){
-                 nearestDayInDays = subtract;
-             }
-         }
+         int nearestDayInDays = nearestDayInDays(days);
 
          if(nearestDayInDays != 8){
             c.add(Calendar.DATE, nearestDayInDays);
@@ -124,6 +141,31 @@ public class StructUtils {
          }
 
          return null;
+    }
+
+    /**
+     * Calculate the nearest date with from the list and week period
+     * @param days the days to compare
+     * @param weekP The week period 1 is to search 7 head, 2 for 14 days head and so on
+     * @return the calculated date
+     */
+    public static Date getTheNearestDateWithWeekPeriod(List<Days> days, int weekP){
+        Calendar c = Calendar.getInstance();
+        int nearestDayInDays = nearestDayInDays(days);
+
+        if(nearestDayInDays != 8){
+
+            if(c.get(Calendar.DAY_OF_WEEK) + nearestDayInDays < 8){
+                weekP = 0;
+            } else{
+                weekP = weekP - 1;
+            }
+
+            c.add(Calendar.DATE, nearestDayInDays + (7 * weekP));
+            return c.getTime();
+        }
+
+        return null;
     }
 
     private static Map<String, OrderStatus> createStatusMap(){

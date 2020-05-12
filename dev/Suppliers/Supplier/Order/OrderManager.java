@@ -4,6 +4,8 @@ import Suppliers.DataAccess.PeriodicalOrderMapper;
 import Suppliers.DataAccess.RegularOrderMapper;
 import Suppliers.DataAccess.SupDBConn;
 
+import java.util.Date;
+
 public class OrderManager {
 
     private static OrderManager instance = null;
@@ -38,5 +40,9 @@ public class OrderManager {
 
     public void createPeriodicalOrder(PeriodicalOrder periodicalOrder){
         periodicalOrder.setOrderId(periodicalOrderMapper.insert(periodicalOrder));
+    }
+
+    public boolean updateOrderDelivery(int orderrId, Date date){
+        return regularOrderMapper.updateDeliveryDate(orderrId, date);
     }
 }

@@ -98,7 +98,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
         }
     }
 
-    public List<Days> getDeliveryDates(int supplierId) {
+    public List<Days> getSupplyDays(int supplierId) {
         //TODO dont return null here
         throw new UnsupportedOperationException();
     }

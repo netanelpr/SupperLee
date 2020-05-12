@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
@@ -56,7 +57,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
             regularOrder = RegularOrder.CreateRegularOrder(orderId, products, shopNumber);
             regularOrder.setStatus(status);
 
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat dateFormat = new SimpleDateFormat(StructUtils.dateFormat());
             regularOrder.setDeliveryDay(dateFormat.parse(deliveryDay));
 
         } catch (SQLException | ParseException e) {
@@ -158,6 +159,29 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
         return orderId;
     }
 
+
+    public String updateDeliveryDateStatement(){
+        return "UPDATE Supplier_order\n" +
+                "SET delivery_day = ?\n" +
+                "WHERE id = ?";
+    }
+
+    public boolean updateDeliveryDate(int orderId, Date date){
+        try(PreparedStatement ptsmt = conn.prepareStatement(updateDeliveryDateStatement())){
+
+            ptsmt.setString(1,StructUtils.dateToForamt(date));
+            ptsmt.setInt(2, orderId);
+
+            ptsmt.executeUpdate();
+            return true;
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return false;
+    }
 
     public boolean updateStatus(){
         return true;
