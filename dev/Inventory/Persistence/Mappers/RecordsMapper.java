@@ -81,6 +81,25 @@ public class RecordsMapper extends AbstractMappers {
     @Override
     public void insert() {
     }
+
+    public void insert(RecordDTO recDTO){
+
+
+        try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Records" +
+                " (recId, shopNum, itemId, cost, price, costChangeDate, priceChangeDate) " +
+                "Values (?, ?, ?, ?, ?, ?, ?)")){
+            pstmt.setString(1, recDTO.getRecId());
+            pstmt.setString(2, recDTO.getShopNum());
+            pstmt.setString(3, recDTO.getItemId());
+            pstmt.setDouble(4, recDTO.getCost());
+            pstmt.setDouble(5, recDTO.getPrice());
+            //TODO deal with the dates and types!
+            //pstmt.setDate(6, recDTO.getCostChangeDate());
+            //pstmt.setDate(7, recDTO.getPriceChangeDate());
+            pstmt.executeUpdate();
+
+        } catch (java.sql.SQLException e) { }
+    }
     @Override
     public void update() {
 

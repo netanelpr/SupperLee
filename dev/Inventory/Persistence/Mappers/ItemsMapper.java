@@ -38,7 +38,7 @@ public class ItemsMapper<T> extends AbstractMappers  {
     }
     public void insert(ItemDTO currDTO) {
 
-        try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO items" +
+        try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Items" +
                                                     " (shopNum, id, qShop, qStorage) " +
                                                     "Values (?, ?, ?, ?)")){
             pstmt.setString(1, currDTO.getShopNum());
@@ -48,9 +48,7 @@ public class ItemsMapper<T> extends AbstractMappers  {
 
             pstmt.executeUpdate();
 
-        } catch (java.sql.SQLException e) {
-
-        }
+        } catch (java.sql.SQLException e) { }
     }
 
     @Override
