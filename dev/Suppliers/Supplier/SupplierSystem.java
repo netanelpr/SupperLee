@@ -199,6 +199,8 @@ public class SupplierSystem {
         if(supplier == null){
             return null;
         }
+
+        //TODO add to addproduct.product if not null the freqSupply and min price that is the original price
         boolean ans= supplier.addContractInfo(contractInfo,days);
         if(ans) {
             for (AddProduct product : products) {
@@ -230,6 +232,8 @@ public class SupplierSystem {
             return false;
         }
         boolean ans=false;
+        //TODO add to addproduct.product if not null the freqSupply and min price that is the original price
+
         if(ans=supplier.addProduct(product))
         {
             productsManager.addIfAbsent(product);
@@ -433,7 +437,7 @@ public class SupplierSystem {
         ContractProduct cp=supplier.getAllInformationAboutSuppliersProduct(barcode);
         Product product=this.productsManager.getProduct(barcode);
         if(cp!=null && product!=null) {
-            return new AddProduct(cp.getBarCode(), cp.getProductCatalogNumber(), cp.getDiscounts().originalPrice, cp.getDiscounts(), product.getManufacture(), product.getName());
+            return new AddProduct(cp.getBarCode(), cp.getProductCatalogNumber(), cp.getDiscounts().originalPrice, cp.getDiscounts(), product);
         }
         else
         {

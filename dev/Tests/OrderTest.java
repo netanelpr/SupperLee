@@ -23,10 +23,10 @@ class OrderTest {
         supplierSystem=SupplierSystem.getInstance();
         supplierID=supplierSystem.createSupplierCard("Actor","5A5", "City1","123-5","CASH","Actor","054","@com");
         productList= new LinkedList<AddProduct>();
+        //TODO systemproduct
         productList.add(new AddProduct(
                 5,"55",5.3,
-                new ProductDiscounts(5,new HashMap<Integer, Double>(),5.3),"osem","bamba"
-        ));
+                new ProductDiscounts(5,new HashMap<Integer, Double>(),5.3)));
         supplierSystem.addContractToSupplier(supplierID,"shalom",new LinkedList<>(),productList);
         productInOrder=new LinkedList<ProductInOrder>();
         productInOrder.add(new ProductInOrder(productList.get(0).barCode,10));

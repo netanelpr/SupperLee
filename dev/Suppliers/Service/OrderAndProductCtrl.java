@@ -8,6 +8,7 @@ import Suppliers.Supplier.Order.ProductInOrder;
 import Suppliers.Supplier.ProductsManager;
 import Suppliers.Supplier.SupplierSystem;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +37,21 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     @Override
     public List<Integer> getAllProductBarcodes() {
         return productsManager.getAllBarcodes();
+    }
+
+    @Override
+    public List<Integer> productsInTheSystem(List<Integer> barcodes) {
+        List<Integer> barcds =  productsManager.getAllBarcodes();
+        List<Integer> barcodesInSystem = new ArrayList<>();
+
+        for(Integer barcode : barcodes){
+            if(barcds.indexOf(barcode) > 0){
+                barcodesInSystem.add(barcode.intValue());
+            }
+        }
+
+        return  barcodesInSystem;
+
     }
 
     public SystemProduct productToSystemProduct(Product product){
@@ -79,6 +95,12 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     @Override
     public boolean updateOrderStatus(int orderId, OrderStatus status) {
         return supplierSystem.updateOrderStatus(orderId, status);
+    }
+
+    @Override
+    public List<Integer> getAllOrderIdsOfShop(int shopNumber) {
+        //TODO implement
+        return null;
     }
 
     public static ProductInOrder ProductInOrderDTOToPIO(ProductInOrderDTO productInOrderDTO){

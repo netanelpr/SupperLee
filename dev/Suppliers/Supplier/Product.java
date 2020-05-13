@@ -1,5 +1,7 @@
 package Suppliers.Supplier;
 
+import Suppliers.Service.SystemProduct;
+
 public class Product {
     //Real product stored in system
     private final int barCode;
@@ -11,11 +13,13 @@ public class Product {
     private int freqSupply;
     private double minPrice;
 
-    //TODO remove this after the update in supplier
-    public Product(int barCode, String manufacture, String name) {
-        this.barCode = barCode;
-        this.manufacture = manufacture;
-        this.name = name;
+    public Product(SystemProduct systemProduct) {
+        this.barCode = systemProduct.barcode;
+        this.manufacture = systemProduct.manufacture;
+        this.name = systemProduct.name;
+        this.category = systemProduct.category;
+        this.subCategory = systemProduct.subCategory;
+        this.size = systemProduct.size;
     }
 
     public Product(int barcode, String manufacture, String name, String category,

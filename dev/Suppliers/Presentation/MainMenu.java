@@ -44,8 +44,8 @@ public class MainMenu {
         addMenuOption("Get all suppliers", new GetAllSuppliers(supplierManagment));
 
         addMenuOption("Add contact info to supplier", new AddContactInfoToSupplier(supplierManagment));
-        addMenuOption("Add contract to supplier", new AddContractToSupplier(supplierManagment));
-        addMenuOption("Add product to supplier", new AddProductToSupplier(supplierManagment));
+        addMenuOption("Add contract to supplier", new AddContractToSupplier(supplierManagment, orderAndProductManagement));
+        addMenuOption("Add product to supplier", new AddProductToSupplier(supplierManagment, orderAndProductManagement));
         addMenuOption("Discount report", new GetAmountDiscountReport(supplierManagment));
 
         addMenuOption("Get all supplier barcode", new GetAllSuppliersProducts(supplierManagment));

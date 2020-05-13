@@ -10,15 +10,9 @@ public abstract class Menu_Option {
      */
     abstract void apply();
 
-    public String readString(String info, BufferedReader bufferedReader){
+    public String readString(String info, BufferedReader bufferedReader) throws IOException {
         System.out.print(info + ": ");
-        try{
-            return bufferedReader.readLine();
-        } catch (IOException e) {
-            System.out.print("Error at reading");
-        }
-
-        return null;
+        return bufferedReader.readLine();
     }
 
     public int readInt(String info, BufferedReader bufferedReader){
@@ -29,9 +23,28 @@ public abstract class Menu_Option {
         } catch (IOException e) {
             System.out.println("Error at reading");
         } catch (NumberFormatException e){
-            System.out.print("Need to be a number");
+            System.out.println("Need to be a number");
         }
 
         return -1;
+    }
+
+    public int readIntPos(String info, String posInfo, BufferedReader bufferedReader){
+        int number = -1;
+        System.out.print(info + ": ");
+        try{
+            String input = bufferedReader.readLine();
+            number = Integer.parseInt(input);
+        } catch (IOException e) {
+            System.out.println("Error at reading");
+        } catch (NumberFormatException e){
+            System.out.println("Need to be a number");
+        }
+
+        if(number < 0){
+            System.out.println(posInfo);
+        }
+
+        return number;
     }
 }

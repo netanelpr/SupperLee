@@ -140,16 +140,20 @@ public class SupplierCtrl implements SupplierManagment {
         if(supplierProductDTO == null){
             return null;
         }
+        SystemProduct systemProduct = supplierProductDTO.systemProduct;
 
-        ProductDiscounts product = new ProductDiscounts(supplierProductDTO.barcode, supplierProductDTO.discounts.discountPerAmount, supplierProductDTO.originalPrice);
-
+        ProductDiscounts productDiscount = new ProductDiscounts(supplierProductDTO.barcode, supplierProductDTO.discounts.discountPerAmount, supplierProductDTO.originalPrice);
+        Product product = null;
+        if(systemProduct != null) {
+            product = new Product(systemProduct.barcode, systemProduct.manufacture, systemProduct.name, systemProduct.category,
+                    systemProduct.subCategory, systemProduct.size, systemProduct.freqSupply, systemProduct.minPrice);
+        }
         return new AddProduct(
                 supplierProductDTO.barcode,
                 supplierProductDTO.productCatalogNumber,
                 supplierProductDTO.originalPrice,
-                product,
-                supplierProductDTO.name,
-                supplierProductDTO.manufacture);
+                productDiscount,
+                product);
     }
 
     private static SupplierProductDTO AddPITOToAddProductReverse(AddProduct addProduct){
@@ -158,6 +162,10 @@ public class SupplierCtrl implements SupplierManagment {
             return null;
         }
 
+        Product product = addProduct.product;
+        SystemProduct systemProduct = new SystemProduct(product.getBarCode(), product.getManufacture(), product.getName(), product.getCategory(), product.getSubCategory(),
+                product.getSize(), product.getFreqSupply(), product.getMinPrice());
+
         ProductDiscountsDTO productDiscounts = new ProductDiscountsDTO(addProduct.barCode,addProduct.productDiscounts.discountPerAmount,addProduct.originalPrice);
 
         return new SupplierProductDTO(
@@ -165,8 +173,7 @@ public class SupplierCtrl implements SupplierManagment {
                 addProduct.productCatalogNumber,
                 addProduct.originalPrice,
                 productDiscounts,
-                addProduct.name,
-                addProduct.manufacture);
+                systemProduct);
     }
 
     private static ProductDiscountsDTO ProductDiscountToDTO(ProductDiscounts productDiscounts){
