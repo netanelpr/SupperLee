@@ -39,8 +39,8 @@ public class DefectivesMapper extends AbstractMappers {
 
     private HashMap<String, List<DefectiveDTO>> builtDTOfromRes(ResultSet res) throws SQLException {
 
-        String defId, itemId, shopNum;
-        int quantity, price;
+        String defId, itemId, shopNum, tmpDate;
+        int quantity;
         LocalDate updateDate;
         boolean expired, defective;
 
@@ -53,13 +53,11 @@ public class DefectivesMapper extends AbstractMappers {
             itemId = res.getString(res.findColumn("itemId"));
             shopNum = res.getString(res.findColumn("shopNum"));
             quantity = res.getInt(res.findColumn("quantity"));
-            price = res.getInt(res.findColumn("price"));
             expired = res.getBoolean(res.findColumn("expired"));
             defective = res.getBoolean(res.findColumn("defective"));
-            //TODO: to get date
-            //updateDate = convertToLocalDate(new Date(res.getDate(res.findColumn("updateDate")).getTime()));
-            updateDate = LocalDate.now();
-            currDef = new DefectiveDTO(defId, itemId, quantity, updateDate, expired, defective);
+            tmpDate = res.getString(res.findColumn("updateDate"));
+            updateDate = LocalDate.parse(tmpDate);
+            currDef = new DefectiveDTO(defId, itemId, shopNum, quantity, updateDate, expired, defective);
 
             if(DefsDTO.keySet().contains(itemId))
                 DefsDTO.get(itemId).add(currDef);

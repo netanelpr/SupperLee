@@ -10,7 +10,7 @@ import java.util.List;
 public class Record implements myObservable {
 
     //region fields
-    private String id;
+    private String recId;
     private String itemId;
     private String shopNum;
     private double cost;
@@ -19,8 +19,9 @@ public class Record implements myObservable {
     private LocalDate priceChangeDate;
     public final List<Observer> observers;
 
+
     public Record(List<Observer> observers, RecordDTO currDTORec) {
-        this.id = currDTORec.getRecId();
+        this.recId = currDTORec.getRecId();
         this.itemId = currDTORec.getItemId();
         this.shopNum = currDTORec.getShopNum();
         this.cost = currDTORec.getCost();
@@ -39,7 +40,7 @@ public class Record implements myObservable {
         return cost;
     }
     public String getId() {
-        return id;
+        return recId;
     }
     public String getItemId() {
         return itemId;
@@ -51,7 +52,7 @@ public class Record implements myObservable {
     //endregion
 
     public Record(List<Observer> observers, String id, String name, double cost, LocalDate costChangeDate, LocalDate priceChangeDate, String shopNum) {
-        this.id = id;
+        this.recId = id;
         this.itemId = name;
         this.cost = cost;
         this.costChangeDate = costChangeDate;
@@ -61,7 +62,7 @@ public class Record implements myObservable {
         this.shopNum = shopNum;
     }
     public Record(List<Observer> observers, String id, String itemId, double cost, LocalDate costChangeDate, double newPrice, LocalDate priceChangeDate, String shopNum) {
-        this.id = id;
+        this.recId = id;
         this.itemId = itemId;
         this.cost = cost;
         this.costChangeDate = costChangeDate;
@@ -73,7 +74,7 @@ public class Record implements myObservable {
 
     public void recordItemStatus() {
         notifyObserver("|--$-$-$-$-$-$-$-$-$-$-$-$-$--\n" +
-                "| Rec id; " + id + " item id; " + itemId + "\n" +
+                "| Rec id; " + recId + " item id; " + itemId + "\n" +
                 "| cost; " + cost +
                 " cost Change Date; " + costChangeDate + "\n" +
                 "| price; " + price +

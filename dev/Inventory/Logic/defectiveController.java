@@ -21,7 +21,7 @@ public class defectiveController implements myObservable {
     public final List<Observer> observers;
     private String shopNum;
     private DefectivesMapper MyDefectiveMapper;
-
+    private int idCounter = 0;
 
     //constructor
     public defectiveController(Observer o, String shopNum) {
@@ -59,7 +59,8 @@ public class defectiveController implements myObservable {
             if (defectives.containsKey(id)) {
                 List<Defective> defList = defectives.get(id);
                 Defective lastDef = defList.get(defList.size()-1);
-                Defective newDefectReport = new Defective(observers, id, quantity, java.time.LocalDate.now(), expired, defective, shopNum);
+                Defective newDefectReport = new Defective(observers, String.valueOf(idCounter), id, quantity, java.time.LocalDate.now(), expired, defective, shopNum);
+                idCounter++;
                 defectives.get(id).add(newDefectReport);
                 newDefectReport.defectiveItemStatus();
             }
@@ -74,7 +75,8 @@ public class defectiveController implements myObservable {
         for (DummyItem dummyItem : supply.keySet()) {
             String id = dummyItem.getId();
             if(!defectives.containsKey(id)) {
-                Defective newDefectReport = new Defective(observers, id, 0, java.time.LocalDate.now(), shopNum);
+                Defective newDefectReport = new Defective(observers, String.valueOf(idCounter), id, 0, java.time.LocalDate.now(), false, false, shopNum);
+                idCounter++;
                 defectives.put(id, new ArrayList<>());
                 defectives.get(id).add(newDefectReport);
             }

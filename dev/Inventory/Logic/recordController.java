@@ -22,6 +22,8 @@ public class recordController implements myObservable {
     public final List<Observer> observers;
     private String shopNum;
     private RecordsMapper myRecordMapper;
+    //TODO : to understand what happen with the rec id
+    private int idCounter = 0;
 
     //endregion
 

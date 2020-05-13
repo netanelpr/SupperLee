@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Supplier(
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	itemId INTEGER PRIMARY KEY AUTOINCREMENT,
 	sup_name TEXT NOT NULL,
 	address TEXT NOT NULL,
 	account_number TEXT NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS supplay_days(
 	
 	PRIMARY KEY (supplier_id, supplay_day)
 	FOREIGN KEY (supplier_id)
-		REFERENCES Supplier(id)
+		REFERENCES Supplier(itemId)
 	CONSTRAINT day_range CHECK (supplay_day > 0 AND supplay_day < 8)
 );
 
@@ -25,17 +25,17 @@ CREATE TABLE IF NOT EXISTS Contact_info(
 	supplier_id INTEGER NOT NULL,
 	PRIMARY KEY (name, phone_number, email)
 	FOREIGN KEY (supplier_id)
-		REFERENCES Supplier (id)
+		REFERENCES Supplier (itemId)
 );
 
 --Suppliers.Supplier contract
 CREATE TABLE IF NOT EXISTS Contract(
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	itemId INTEGER PRIMARY KEY AUTOINCREMENT,
 	contract_info TEXT NOT NULL,
 	supplier_id INTEGER NOT NULL,
 	UNIQUE(supplier_id),
 	FOREIGN KEY (supplier_id)
-		REFERENCES Supplier(id)
+		REFERENCES Supplier(itemId)
 );
 
 CREATE TABLE IF NOT EXISTS Product_in_contract(
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS Product_in_contract(
 	FOREIGN KEY (barcode)
 		REFERENCES Product(barcode)
 	FOREIGN KEY (contract_id)
-		REFERENCES Contract(id)
+		REFERENCES Contract(itemId)
 );
 
 CREATE TABLE IF NOT EXISTS Discount_of_product_in_contract(
@@ -78,22 +78,22 @@ CREATE TABLE IF NOT EXISTS Product(
 
 --Order
 CREATE TABLE IF NOT EXISTS Supplier_order(
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	itemId INTEGER PRIMARY KEY AUTOINCREMENT,
 	shop_number INTEGER NOT NULL,
 	status INTEGER NOT NULL,
 	delivery_day TEXT,
 	
 	FOREIGN KEY (contract_id)
-		REFERENCES Contract(id)
+		REFERENCES Contract(itemId)
 );
 
 CREATE TABLE IF NOT EXISTS Periodical_supplier_order(
-	id INTEGER NOT NULL,
+	itemId INTEGER NOT NULL,
 	weekp INTEGER NOT NULL,
 	
-	PRIMARY KEY (id)
-	FOREIGN KEY(id)
-		REFERENCES Supplier_order(id)
+	PRIMARY KEY (itemId)
+	FOREIGN KEY(itemId)
+		REFERENCES Supplier_order(itemId)
 	CHECK weekp > 0)
 );
 
@@ -103,17 +103,17 @@ CREATE TABLE IF NOT EXISTS Periodical_supplier_order_days(
 	
 	PRIMARY KEY (order_id, delivery_weekly_day)
 	FOREIGN KEY (order_id)
-		REFERENCES Supplier_order(id)
+		REFERENCES Supplier_order(itemId)
 	CHECK (delivery_weekly_day > 0 AND delivery_weekly_day < 8)
 );
 
 --TODO consider to remove it
 CREATE TABLE IF NOT EXISTS Regular_supplier_order(
-	id INTEGER NOT NULL,
+	itemId INTEGER NOT NULL,
 	
-	PRIMARY KEY (id)
-	FOREIGN KEY(id)
-		REFERENCES Supplier_order(id)
+	PRIMARY KEY (itemId)
+	FOREIGN KEY(itemId)
+		REFERENCES Supplier_order(itemId)
 );
 
 CREATE TABLE IF NOT EXISTS Product_in_order(
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS Product_in_order(
 	price_per_unit DOUBLE NOT NULL
 	PRIMARY KEY (order_id, catalog_number)
 	FOREIGN KEY (order_id)
-		REFERENCES Supplier_order(id)
+		REFERENCES Supplier_order(itemId)
 	FOREIGN KEY (catalog_number, contract_id)
 		REFERENCES Product_in_contract(catalog_number, contract_id)
 	CONSTRAINT amount_in_order
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS Product_in_order(
 
 CREATE VIEW Suppliers_products
 AS
-SELECT S.id AS supplier_id,PIC.catalog_number as catalog_number, PIC.barcode AS barcode
+SELECT S.itemId AS supplier_id,PIC.catalog_number as catalog_number, PIC.barcode AS barcode
 FROM Supplier AS S JOIN Contract AS C
 	JOIN Product_in_contract AS PIC
-	ON S.id = C.supplier_id AND C.id = PIC.contract_id
+	ON S.itemId = C.supplier_id AND C.itemId = PIC.contract_id

@@ -41,7 +41,7 @@ public class RecordsMapper extends AbstractMappers {
 
     private HashMap<String, List<RecordDTO>> builtDTOfromRes(ResultSet res) throws SQLException {
 
-        String itemId, recId, shopNum;
+        String itemId, recId, shopNum, tmpCost, tmpPrice;
         Double cost, price;
         LocalDate costChangeDate, priceChangeDate;
 
@@ -56,14 +56,11 @@ public class RecordsMapper extends AbstractMappers {
             shopNum = res.getString(res.findColumn("shopNum"));
             cost = res.getDouble(res.findColumn("cost"));
             price = res.getDouble(res.findColumn("price"));
-            //costChangeDate = convertToLocalDate(new Date(res.getDate(res.findColumn("costChangeDate")).getTime()));
-            //priceChangeDate = convertToLocalDate(new Date(res.getDate(res.findColumn("priceChangeDate")).getTime()));
-
-            //TODO: to get date
-            costChangeDate = LocalDate.now();
-            priceChangeDate = LocalDate.now();
+            tmpCost = res.getString(res.findColumn("costChangeDate"));
+            tmpPrice = res.getString(res.findColumn("costChangeDate"));
+            costChangeDate = LocalDate.parse(tmpCost);
+            priceChangeDate = LocalDate.parse((tmpPrice));
             currRec = new RecordDTO(recId, itemId, shopNum, cost, costChangeDate, price ,priceChangeDate);
-
 
             if(RecsDTO.keySet().contains(itemId))
                 RecsDTO.get(itemId).add(currRec);

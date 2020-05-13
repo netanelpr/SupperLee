@@ -6,6 +6,7 @@ import Inventory.Persistence.DTO.ItemDTO;
 import Inventory.Persistence.DummyItem;
 import Inventory.Persistence.Mappers.ItemToProductMapper;
 import DataAccess.SupInvDBConn;
+import Inventory.Persistence.Mappers.ItemsMapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class itemsController implements myObservable {
     private HashMap<String, Item> items; //item id, item
     private final List<Observer> observers;
     private ItemToProductMapper MyItemToProductMapper;
+    private ItemsMapper myItemMapper;
 
     public itemsController(Observer o) {
         //this.myScanner = new Scanner(System.in);
@@ -23,6 +25,7 @@ public class itemsController implements myObservable {
         observers = new ArrayList<>();
         this.register(o);
         this.MyItemToProductMapper = new ItemToProductMapper(SupInvDBConn.getInstance());
+        this.myItemMapper = new ItemsMapper((SupInvDBConn.getInstance()));
     }
 
     public HashMap<String, Item> getItems() {
@@ -34,18 +37,19 @@ public class itemsController implements myObservable {
         return items.get(id).updateMyQuantities(quanMissStock, quanMissShop, '-');
     }
 
-    public void updateInventorySuppliers(HashMap<DummyItem, Integer> supply) {
+    public void updateInventorySuppliers(HashMap<ItemDTO, Integer> supply) { //int -> quantity
 
-        for (DummyItem dummyItem : supply.keySet()) {
-            if(items.containsKey(dummyItem.getId())) {
-                Item currItem = items.get(dummyItem.getId());
-                currItem.updateMyQuantities(supply.get(dummyItem), 0, '+');
+        for (ItemDTO currDTO : supply.keySet()) {
+            if(items.containsKey(currDTO.getId())) {
+                Item currItem = items.get(currDTO.getId());
+                currItem.updateMyQuantities(supply.get(currDTO), 0, '+');
             }
             else
             {
-                Item newItem = new Item(observers.get(0), dummyItem);
-                newItem.updateMyQuantities(supply.get(dummyItem), 0, '+');
+                Item newItem = new Item(observers.get(0), currDTO);
+                newItem.updateMyQuantities(supply.get(currDTO), 0, '+');
                 items.put(newItem.getId(), newItem);
+                myItemMapper.insert(currDTO);
             }
         }
     }
