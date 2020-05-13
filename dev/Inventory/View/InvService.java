@@ -30,7 +30,7 @@ public class InvService implements myObservable {
     boolean terminateSys = false;
     private Scanner myScanner;
     private final List<Observer> observers;
-    private DummySuppliers tmpSuppliers;
+    private DummySuppliers tmpSuppliers; //TODO delete at the end!!
     private Inventory2SuppliersCtrl myInv2Sup;
     private InventoriesMapper inventoriesMapper;
 

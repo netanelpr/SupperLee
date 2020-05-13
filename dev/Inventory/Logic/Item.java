@@ -74,7 +74,7 @@ public class Item implements myObservable {
             this.quantShop += qshop;
             //this.totalQuantity += (qstrg + qshop);
         }
-
+        //TODO increase decrease quantity
         int missInShop = this.capacityShop - this.quantShop;
         if (missInShop > 0 & this.quanStrg > 0)
         {
@@ -92,6 +92,9 @@ public class Item implements myObservable {
         if(quanStrg < 0) quanStrg = 0;
         if(quantShop < 0) quantShop = 0;
         totalQuantity = quanStrg+quantShop;
+
+        //TODO: write the func updateItemDB();... because we changed item's quantities here
+
         if(this.checkMinimumQuant())
             return issueOrderForShortageItem();
         return null;
