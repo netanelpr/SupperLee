@@ -93,17 +93,18 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     public Result placePeriodicalOrder(List<ProductInOrderDTO> shoppingList, List<Days> days, int weekPeriod)
     {
-        return this.myOrderAndProductManagement.createPeriodicalOrder(shoppingList,days,weekPeriod);
+        //return this.myOrderAndProductManagement.createPeriodicalOrder(shoppingList,days,weekPeriod);
+        return null;
     }
 
     //TODO: understand how to make this work- which order id? of supplier? of inventory?
-    public Result receiveSupplierOrder(int orderID)
+    //TODO I delete the result because its didnt work
+    public void receiveSupplierOrder(int orderID)
     {
         /*this.myOrderAndProductManagement.changeOrderStatus(orderID, OrderStatus.Close);
         OrderDTO theOrder= this.myOrderAndProductManagement.getOrder(orderID);
         return myInvenoryService.getOrderFromSuppliers(theOrder);*/
-        return null;
-
+        myInvenoryService.getOrderFromSuppliers();
     }
 
     public Result receiveAllOpenOrders(int shopNum)
