@@ -27,7 +27,7 @@ public class ProductsManager {
 
     public boolean addIfAbsent(AddProduct addProduct){
 
-        return productMapper.insert(new Product(addProduct.barCode, addProduct.manufacture, addProduct.name)) > -1;
+        return productMapper.insert(addProduct.product) > -1;
 
 
         /*if(!productMap.containsKey(addProduct.barCode))

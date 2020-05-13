@@ -25,6 +25,14 @@ public interface OrderAndProductManagement {
     List<Integer> getAllProductBarcodes();
 
     /**
+     * Return a new list with the barcode from the given barcodes list
+     * that exist in the system
+     * @param barcodes list of barcodes to check
+     * @return list of barcode that in the system
+     */
+    List<Integer> productsInTheSystem(List<Integer> barcodes);
+
+    /**
      * Create a new order in the system
      * @param supplierId The supplier ID who need to supply the order
      * @param products The product to order
@@ -51,5 +59,12 @@ public interface OrderAndProductManagement {
      * @return True if the update was successful
      */
     public boolean updateOrderStatus(int orderId, OrderStatus status);
+
+    /**
+     * Return a list of all the open orders of a shop
+     * @param shopNumber the shop number
+     * @return list with all the orders id that are open.
+     */
+    public List<Integer> getAllOrderIdsOfShop(int shopNumber);
 }
 

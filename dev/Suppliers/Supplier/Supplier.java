@@ -50,18 +50,7 @@ public class Supplier {
         contract = null;
     }
 
-    public boolean setID(int supplierID)
-    {
-        if(supId==-1)
-        {
-            supId=supplierID;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    
 
     public boolean addContactInfo(String name, String phone, String email){
         this.contacts.add(new ContactInfo(name, phone, email));

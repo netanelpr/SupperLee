@@ -6,6 +6,7 @@ import Suppliers.Structs.OrderStatus;
 import Suppliers.Structs.StructUtils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class UpdateOrderStatus extends Menu_Option {
@@ -21,10 +22,12 @@ public class UpdateOrderStatus extends Menu_Option {
     public void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int orderId = readInt("Order ID", reader);
-        String statusStr = readString("Enter order status", reader);
 
-        if(statusStr == null){
-            return;
+        String statusStr = null;
+        try {
+            statusStr = readString("Enter order status", reader);
+        } catch (IOException e) {
+            System.out.println("Error at reading");
         }
 
         OrderStatus status = StructUtils.getOrderStatus(statusStr);

@@ -35,6 +35,7 @@ public class ProductMapper extends AbstractMapper<Product> {
         return null;
     }
 
+    //TODO edit
     protected String insertStatement() {
         return "INSERT INTO Product (barcode, name, manufacture)  " +
                 "Values (?, ?, ?)";
