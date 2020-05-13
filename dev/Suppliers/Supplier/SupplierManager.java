@@ -67,4 +67,25 @@ public class SupplierManager {
          */
         return null;
     }
+
+    /**
+     * Return all the supplier ids which have all the barcodes
+     * @param supplierIds the supplier ids to check with
+     * @param barcodes the barcodes to check
+     * @return Return list with all the supplier ids which have all the barcodes
+     */
+    public List<Integer> getAllSupplierWithBarcodes(List<Integer> supplierIds, List<Integer> barcodes){
+        //TODO implement return empty list is there isnt any one
+        return null;
+    }
+
+    /**
+     * Return all the supplier ids which supply in the given days
+     * @param days the days to check with
+     * @return Return list with all the supplier ids which supply in the given days
+     */
+    public List<Integer> getAllSupplierWithSupplyDays(List<Days> days) {
+        //TODO implement return empty list is there isnt any one
+        return  null;
+    }
 }

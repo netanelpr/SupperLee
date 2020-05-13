@@ -229,9 +229,8 @@ public class Supplier {
      * @param products the products
      * @return order price
      */
-    public int calculateOrderPrice(List<ProductInOrder> products) {
-        //TODO implement
-        throw new UnsupportedOperationException();
+    public double calculateOrderPrice(List<ProductInOrder> products) {
+        return contract.calculateOrderPrice(products);
     }
 
     /**

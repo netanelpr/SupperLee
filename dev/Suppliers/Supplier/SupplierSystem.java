@@ -3,10 +3,7 @@ package Suppliers.Supplier;
 import Result.Result;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
-import Suppliers.Supplier.Order.Order;
-import Suppliers.Supplier.Order.OrderManager;
-import Suppliers.Supplier.Order.ProductInOrder;
-import Suppliers.Supplier.Order.RegularOrder;
+import Suppliers.Supplier.Order.*;
 
 import java.util.*;
 
@@ -297,11 +294,6 @@ public class SupplierSystem {
             return Result.makeFailure("Order wasnt created");
         }
 
-        //TODO remove this
-        // Add the order to the data
-        /*orders.get(supplierId).add(regularOrder);
-        orderIdToOrder.put(regularOrder.getOrderId(), regularOrder);*/
-
         return Result.makeOk("Order was created", regularOrder.getOrderId());
     }
 
@@ -312,6 +304,7 @@ public class SupplierSystem {
      * @return orderId if it was created otherwise -1
      */
     public Result<Integer> createRegularOrder(List<ProductInOrder> products, int shopNumber) {
+        //TODO suupliers with no delivery day, do not open for them an order
         List<Integer> barcodes = new ArrayList<>();
         List<Integer> suppliersId;
         Supplier sup;
@@ -324,15 +317,7 @@ public class SupplierSystem {
             return Result.makeFailure("There isnt one supplier with all of this products");
         }
 
-        int cheapestSupplierId = -1, totalPrice = -1;
-        for(int id : suppliersId){
-            sup = supplierManager.getById(id);
-            int orderPrice = sup.calculateOrderPrice(products);
-            if(orderPrice < totalPrice){
-                totalPrice = orderPrice;
-                cheapestSupplierId = id;
-            }
-        }
+        int cheapestSupplierId = getCheapestSupplierId(suppliersId, products);
 
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
@@ -345,13 +330,42 @@ public class SupplierSystem {
             return Result.makeFailure("Order wasnt created");
         }
 
-        //TODO remove this
-        // Add the order to the data
-        /*orders.get(supplierId).add(regularOrder);
-        orderIdToOrder.put(regularOrder.getOrderId(), regularOrder);*/
-
         return Result.makeOk("Order was created", regularOrder.getOrderId());
 
+    }
+
+    public Result<Integer> createPeriodicalOrder(List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber) {
+        List<Integer> barcodes = new ArrayList<>();
+        List<Integer> suppliersId;
+        Supplier sup;
+
+        suppliersId = supplierManager.getAllSupplierWithSupplyDays(days);
+        if(suppliersId.isEmpty()){
+            return Result.makeFailure("There isnt one supplier with the given supply days");
+        }
+
+        for(ProductInOrder product : products){
+            barcodes.add(product.getBarcode());
+        }
+        suppliersId = supplierManager.getAllSupplierWithBarcodes(suppliersId, barcodes);
+        if(suppliersId.isEmpty()){
+            return Result.makeFailure("There isnt one supplier with all of this products");
+        }
+
+        int cheapestSupplierId = getCheapestSupplierId(suppliersId, products);
+
+        sup = supplierManager.getById(cheapestSupplierId);
+        sup.setPricePerUnit(products);
+
+        PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days, weekPeriod, shopNumber);
+        periodicalOrder.setDeliveryDay(sup.getNextDeliveryDate());
+
+        orderManager.createPeriodicalOrder(periodicalOrder);
+        if(periodicalOrder.getOrderId() < 0){
+            return Result.makeFailure("Order wasnt created");
+        }
+
+        return Result.makeOk("Order was created", periodicalOrder.getOrderId());
     }
 
     /**
@@ -458,8 +472,18 @@ public class SupplierSystem {
         }
     }
 
-    public List<Integer> getAllOpenOrdersIds(int shopID)
-    {
-        return null;
+    private int getCheapestSupplierId(List<Integer> suppliersId, List<ProductInOrder> products) {
+        Supplier sup;
+        int cheapestSupplierId = -1;
+        double totalPrice = -1;
+        for(int id : suppliersId){
+            sup = supplierManager.getById(id);
+            double orderPrice = sup.calculateOrderPrice(products);
+            if(orderPrice < totalPrice){
+                totalPrice = orderPrice;
+                cheapestSupplierId = id;
+            }
+        }
+        return cheapestSupplierId;
     }
 }

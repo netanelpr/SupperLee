@@ -3,6 +3,7 @@ package Suppliers.Service;
 import Result.Result;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
+import Suppliers.Supplier.Order.OrderManager;
 import Suppliers.Supplier.Product;
 import Suppliers.Supplier.Order.ProductInOrder;
 import Suppliers.Supplier.ProductsManager;
@@ -14,11 +15,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class OrderAndProductCtrl implements OrderAndProductManagement {
-    private ProductsManager productsManager;
-    private SupplierSystem supplierSystem;
+    private final ProductsManager productsManager;
+    private final OrderManager orderManager;
+    private final SupplierSystem supplierSystem;
 
     public OrderAndProductCtrl(){
         productsManager = ProductsManager.getInstance();
+        orderManager = OrderManager.getInstance();
         supplierSystem = SupplierSystem.getInstance();
     }
 
@@ -33,7 +36,6 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         return productToSystemProduct(product);
     }
 
-    //TODO
     @Override
     public List<Integer> getAllProductBarcodes() {
         return productsManager.getAllBarcodes();
@@ -83,8 +85,14 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     }
 
     @Override
-    public Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod) {
-        return null;
+    public Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod, int shopNumber) {
+        List<ProductInOrder> productInOrders = new LinkedList<>();
+
+        for(ProductInOrderDTO productInOrderDTO : products){
+            productInOrders.add(ProductInOrderDTOToPIO(productInOrderDTO));
+        }
+
+        return supplierSystem.createPeriodicalOrder(productInOrders, days, weekPeriod, shopNumber);
     }
 
     @Override
@@ -98,9 +106,8 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     }
 
     @Override
-    public List<Integer> getAllOrderIdsOfShop(int shopNumber) {
-        //TODO implement
-        return null;
+    public List<Integer> getAllOpenOrderIdsByShop(int shopNumber) {
+        return orderManager.getAllOpenOrderIdsByShop(shopNumber);
     }
 
     public static ProductInOrder ProductInOrderDTOToPIO(ProductInOrderDTO productInOrderDTO){

@@ -5,6 +5,7 @@ import Suppliers.DataAccess.RegularOrderMapper;
 import Suppliers.DataAccess.SupDBConn;
 
 import java.util.Date;
+import java.util.List;
 
 public class OrderManager {
 
@@ -44,5 +45,9 @@ public class OrderManager {
 
     public boolean updateOrderDelivery(int orderrId, Date date){
         return regularOrderMapper.updateDeliveryDate(orderrId, date);
+    }
+
+    public List<Integer> getAllOpenOrderIdsByShop(int shopNumber){
+        return regularOrderMapper.getAllOpenOrderIdsByShop(shopNumber);
     }
 }

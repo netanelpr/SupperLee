@@ -42,7 +42,7 @@ public interface OrderAndProductManagement {
 
     Result<Integer> createRegularOrder(List<ProductInOrderDTO> products, int shopNumber);
 
-    Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod);
+    Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod, int shopNumber);
 
     /**
      * Update the day of order arrival
@@ -65,6 +65,6 @@ public interface OrderAndProductManagement {
      * @param shopNumber the shop number
      * @return list with all the orders id that are open.
      */
-    public List<Integer> getAllOrderIdsOfShop(int shopNumber);
+    public List<Integer> getAllOpenOrderIdsByShop(int shopNumber);
 }
 
