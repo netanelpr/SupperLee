@@ -47,4 +47,23 @@ public class ContractProduct {
         }
         return true;
     }
+
+    public double getPricePerAmount(int amount) {
+        int biggestDiscountAmount = 0;
+        for(Integer pAmount : discounts.keySet()){
+            if(amount < pAmount){
+                continue;
+            }
+
+            if(biggestDiscountAmount < pAmount){
+                biggestDiscountAmount = pAmount;
+            }
+        }
+
+        if(biggestDiscountAmount == 0){
+            return originalPrice;
+        }
+
+        return originalPrice * discounts.get(biggestDiscountAmount).getDiscount();
+    }
 }

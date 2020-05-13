@@ -160,7 +160,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
     }
 
 
-    public String updateDeliveryDateStatement(){
+    private String updateDeliveryDateStatement(){
         return "UPDATE Supplier_order\n" +
                 "SET delivery_day = ?\n" +
                 "WHERE id = ?";
@@ -185,5 +185,31 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
     public boolean updateStatus(){
         return true;
+    }
+
+    private String allShopOpenOrdersStatement(){
+        return "SELECT id\n" +
+                "FROM Supplier_order\n" +
+                "WHERE shop_number = ? AND status = ?";
+    }
+
+    public List<Integer> getAllOpenOrderIdsByShop(int shopNumber) {
+        ResultSet rs;
+        List<Integer> orderIds = new ArrayList<>();
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(allShopOpenOrdersStatement())){
+
+            ptsmt.setInt(1, shopNumber);
+            ptsmt.setInt(2, StructUtils.getOrderStatusInt(OrderStatus.Open));
+
+            rs = ptsmt.executeQuery();
+            while(rs.next()){
+                orderIds.add(rs.getInt(0));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return orderIds;
     }
 }
