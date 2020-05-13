@@ -59,7 +59,7 @@ public class RecordsMapper extends AbstractMappers {
             //costChangeDate = convertToLocalDate(new Date(res.getDate(res.findColumn("costChangeDate")).getTime()));
             //priceChangeDate = convertToLocalDate(new Date(res.getDate(res.findColumn("priceChangeDate")).getTime()));
 
-
+            //TODO: to get date
             costChangeDate = LocalDate.now();
             priceChangeDate = LocalDate.now();
             currRec = new RecordDTO(recId, itemId, shopNum, cost, costChangeDate, price ,priceChangeDate);

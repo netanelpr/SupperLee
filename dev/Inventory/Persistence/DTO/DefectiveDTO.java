@@ -5,17 +5,15 @@ import java.time.LocalDate;
 
 public class DefectiveDTO {
 
-    private int defId;
-    private int itemId;
-
-    private String shopNum;
-
+    private String defId;
+    private String itemId;
     private int quantity;
     private LocalDate updateDate;
     private boolean expired;
     private boolean defective;
+    private String shopNum;
 
-    public DefectiveDTO(int defId, int itemId, int quantity, LocalDate updateDate, boolean expired, boolean defective) {
+    public DefectiveDTO(String defId, String itemId, int quantity, LocalDate updateDate, boolean expired, boolean defective) {
         this.defId = defId;
         this.itemId = itemId;
         this.quantity = quantity;
@@ -25,19 +23,20 @@ public class DefectiveDTO {
     }
 
     //region getters&setters
-    public int getDefId() {
+
+    public String getDefId() {
         return defId;
     }
 
-    public void setDefId(int defId) {
+    public void setDefId(String defId) {
         this.defId = defId;
     }
 
-    public int getItemId() {
+    public String getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
 
@@ -72,6 +71,15 @@ public class DefectiveDTO {
     public void setDefective(boolean defective) {
         this.defective = defective;
     }
+
+    public String getShopNum() {
+        return shopNum;
+    }
+
+    public void setShopNum(String shopNum) {
+        this.shopNum = shopNum;
+    }
+
     //endregion
 
 }

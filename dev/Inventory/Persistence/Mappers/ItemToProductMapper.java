@@ -9,13 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-public class ItemToProduct {
+public class ItemToProductMapper {
     private Connection conn;
     private ItemsMapper itemsMapper;
     private ProductMapper productMapper;
 
 
-public ItemToProduct (Connection conn){
+public ItemToProductMapper(Connection conn){
     this.conn = conn;
 }
     //region getters & setters

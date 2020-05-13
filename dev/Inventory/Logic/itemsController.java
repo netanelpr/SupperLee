@@ -4,7 +4,7 @@ import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.ItemDTO;
 import Inventory.Persistence.DummyItem;
-import Inventory.Persistence.Mappers.ItemToProduct;
+import Inventory.Persistence.Mappers.ItemToProductMapper;
 import DataAccess.SupInvDBConn;
 
 import java.util.ArrayList;
@@ -15,14 +15,14 @@ public class itemsController implements myObservable {
 
     private HashMap<String, Item> items; //item id, item
     private final List<Observer> observers;
-    private ItemToProduct itemToProduct;
+    private ItemToProductMapper MyItemToProductMapper;
 
     public itemsController(Observer o) {
         //this.myScanner = new Scanner(System.in);
         this.items = new HashMap<>();
         observers = new ArrayList<>();
         this.register(o);
-        this.itemToProduct = new ItemToProduct(SupInvDBConn.getInstance());
+        this.MyItemToProductMapper = new ItemToProductMapper(SupInvDBConn.getInstance());
     }
 
     public HashMap<String, Item> getItems() {
@@ -88,7 +88,7 @@ public class itemsController implements myObservable {
     }
 
     public void loadItemsFromDB(String shopNum) {
-        HashMap<String, ItemDTO> itemsDTO = itemToProduct.loadInvFromItemsAndProducts(shopNum);
+        HashMap<String, ItemDTO> itemsDTO = MyItemToProductMapper.loadInvFromItemsAndProducts(shopNum);
         for (String id : itemsDTO.keySet()) {
             items.put(id, new Item(observers.get(0), itemsDTO.get(id)));
         }
