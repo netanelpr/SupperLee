@@ -13,12 +13,6 @@ public class ProductInOrder {
         productCatalogNumber = null;
     }
 
-    /*public ProductInOrder(int barcode, int amount, String productCatalogNumber){
-        this.barcode = barcode;
-        this.amount = amount;
-        this.productCatalogNumber = productCatalogNumber;
-    }*/
-
     public ProductInOrder(int barcode, int amount, String productCatalogNumber, double pricePerUnit){
         this.barcode = barcode;
         this.amount = amount;

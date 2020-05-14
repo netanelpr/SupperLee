@@ -66,5 +66,12 @@ public interface OrderAndProductManagement {
      * @return list with all the orders id that are open.
      */
     public List<Integer> getAllOpenOrderIdsByShop(int shopNumber);
+
+    /**
+     * Return all the details of order as discribed in the docs
+     * @param orderId the order id
+     * @return all the details of order as discribed in the docs
+     */
+    public OrderShipDetails orderDetails(int orderId);
 }
 

@@ -1,8 +1,10 @@
 package Suppliers.Supplier;
 
 import Result.Result;
+import Suppliers.Presentation.OrderDetails;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
+import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.Order.*;
 
 import java.util.*;
@@ -357,8 +359,8 @@ public class SupplierSystem {
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
 
-        PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days, weekPeriod, shopNumber);
-        periodicalOrder.setDeliveryDay(sup.getNextDeliveryDate());
+        PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days,
+                weekPeriod, shopNumber, sup.getNextDeliveryDate());
 
         orderManager.createPeriodicalOrder(periodicalOrder);
         if(periodicalOrder.getOrderId() < 0){
@@ -367,39 +369,6 @@ public class SupplierSystem {
 
         return Result.makeOk("Order was created", periodicalOrder.getOrderId());
     }
-
-    /**
-     * Update the day of order arrival
-     * @param orderId The order id
-     * @param date The arrival day
-     * @return true if it was updated.
-     */
-    public boolean updateOrderArrivalTime(int orderId, Date date) {
-        //TODO may remove this
-        if(date.compareTo(Calendar.getInstance().getTime()) > 0){
-            return false;
-        }
-
-        return orderManager.updateOrderDelivery(orderId, date);
-    }
-
-
-    /**
-     * Update the status of the given order id
-     * @param orderId Order id
-     * @param status Status
-     * @return True if the update was successful
-     */
-    public boolean updateOrderStatus(int orderId, OrderStatus status) {
-        Order order = orderIdToOrder.getOrDefault(orderId, null);
-
-        if(order == null){
-            return false;
-        }
-
-        return order.setStatus(status);
-    }
-
 
     /**
      * Return all the supplier products
@@ -485,5 +454,19 @@ public class SupplierSystem {
             }
         }
         return cheapestSupplierId;
+    }
+
+    public AllOrderDetails getOrderDetails(int orderId) {
+        Order order = orderManager.getOrderBasicDetails(orderId);
+        if(order == null){
+            return null;
+        }
+
+        List<AllDetailsOfProductInOrder> details = orderManager.getAllProductDetails(orderId);
+
+        int supplierId = supplierManager.getIdByContract(order.getContractId());
+        Supplier supplier = supplierManager.loadSupplierAndContacts(supplierId);
+
+        return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details);
     }
 }

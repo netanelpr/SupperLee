@@ -1,5 +1,5 @@
-SELECT S.itemId
+SELECT S.id
 FROM Supplier AS S
 WHERE (SELECT barcode
 		FROM Suppliers_products as SP
-		WHERE SP.supplier_id = S.itemId) IN (1,2)
+		WHERE SP.supplier_id = S.id) IN (1,2)

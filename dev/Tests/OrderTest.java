@@ -3,6 +3,7 @@ package Tests;
 
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Supplier.*;
+import Suppliers.Supplier.Order.OrderManager;
 import Suppliers.Supplier.Order.ProductInOrder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import java.util.List;
 
 class OrderTest {
     private SupplierSystem supplierSystem;
+    private OrderManager orderManager;
     private int supplierID;
     private List<AddProduct> productList;
     private List<ProductInOrder> productInOrder;
@@ -21,6 +23,7 @@ class OrderTest {
     public OrderTest()
     {
         supplierSystem=SupplierSystem.getInstance();
+        orderManager = OrderManager.getInstance();
         supplierID=supplierSystem.createSupplierCard("Actor","5A5", "City1","123-5","CASH","Actor","054","@com");
         productList= new LinkedList<AddProduct>();
         //TODO systemproduct
@@ -39,12 +42,12 @@ class OrderTest {
         OrderStatus status=supplierSystem.getOrderStatus(orderID);
         if(status==OrderStatus.Open)
         {
-            supplierSystem.updateOrderStatus(orderID,OrderStatus.Close);
+            orderManager.updateOrderStatus(orderID,OrderStatus.Close);
             Assert.assertEquals(supplierSystem.getOrderStatus(orderID),OrderStatus.Close);
         }
         else
         {
-            supplierSystem.updateOrderStatus(orderID,OrderStatus.Open);
+            orderManager.updateOrderStatus(orderID,OrderStatus.Open);
             Assert.assertEquals(supplierSystem.getOrderStatus(orderID),OrderStatus.Open);
         }
     }

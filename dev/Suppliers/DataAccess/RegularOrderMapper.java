@@ -2,6 +2,8 @@ package Suppliers.DataAccess;
 
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Structs.StructUtils;
+import Suppliers.Supplier.Order.AllDetailsOfProductInOrder;
+import Suppliers.Supplier.Order.Order;
 import Suppliers.Supplier.Order.ProductInOrder;
 import Suppliers.Supplier.Order.RegularOrder;
 
@@ -118,7 +120,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
             }
 
             if (rowAffected != 0) {
-                for (ProductInOrder productInOrder : product.retrunProducts()) {
+                for (ProductInOrder productInOrder : product.getProducts()) {
                     productInsertPstmt.clearParameters();
                     productInsertPstmt.setInt(1, orderId);
                     productInsertPstmt.setInt(2, contractId);
@@ -183,10 +185,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
         return false;
     }
 
-    public boolean updateStatus(){
-        return true;
-    }
-
     private String allShopOpenOrdersStatement(){
         return "SELECT id\n" +
                 "FROM Supplier_order\n" +
@@ -211,5 +209,89 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
         }
 
         return orderIds;
+    }
+
+    private String updateDeliveryStatusStatement(){
+        return "UPDATE Supplier_order\n" +
+                "SET status = ?\n" +
+                "WHERE id = ?";
+    }
+
+    public boolean updateOrderStatus(int orderId, OrderStatus status){
+        try(PreparedStatement ptsmt = conn.prepareStatement(updateDeliveryStatusStatement())){
+
+            int statusInt = StructUtils.getOrderStatusInt(status);
+            ptsmt.setInt(1,statusInt);
+            ptsmt.setInt(2, orderId);
+
+            ptsmt.executeUpdate();
+            return true;
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private String loadBasicDetailsStatement(){
+        return "SELECT *\n" +
+                "FROM Supplier_order\n" +
+                "WHERE id = ?";
+    }
+
+    public Order loadBasicDetails(int orderId) {
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(loadBasicDetailsStatement())){
+
+            ptsmt.setInt(1, orderId);
+
+            ResultSet res = ptsmt.executeQuery();
+
+            if(res.next()){
+                List<ProductInOrder> products = new ArrayList<>();
+                products.add(null);
+                RegularOrder order = RegularOrder.CreateRegularOrder(orderId, products, res.getInt(2));
+                order.setStatus(StructUtils.getOrderStatus(res.getInt(3)));
+                DateFormat dateFormat = new SimpleDateFormat(StructUtils.dateFormat());
+                order.setDeliveryDay(dateFormat.parse(res.getString(4)));
+
+                return order;
+            }
+
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getAllProductDetailsStatement(){
+        return "SELECT PO.*, PIC.original_price, (1 - PO.price_per_unit / PIC.original_price) AS discount, P.name, P.barcode\n" +
+                "FROM Product_in_order as PO JOIN Product_in_contract as PIC\n" +
+                "\tJOIN Product as P\n" +
+                "\t\tON PO.contract_id = PIC.contract_id AND PO.catalog_number = PIC.catalog_number\n" +
+                "\t\tAND PIC.barcode = P.barcode WHERE PO.order_id = ?";
+    }
+
+    public List<AllDetailsOfProductInOrder> getAllProductDetails(int orderId) {
+        List<AllDetailsOfProductInOrder> details = new ArrayList<>();
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(getAllProductDetailsStatement())){
+
+            ptsmt.setInt(1, orderId);
+
+            ResultSet res = ptsmt.executeQuery();
+
+            while(res.next()){
+                details.add(new AllDetailsOfProductInOrder(res.getInt(9), res.getInt(4),
+                        res.getString(3), res.getDouble(5), res.getString(8),
+                        res.getDouble(6), res.getDouble(7)));
+            }
+
+        } catch (SQLException e) {
+        }
+
+        return details;
     }
 }
