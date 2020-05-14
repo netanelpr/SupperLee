@@ -71,7 +71,7 @@ public class InvService implements myObservable {
                 }
                 else {
                     this.currInv = superLeeInvs.get(ansStr);
-                    notifyObserver(String.format("Welcome to shop #%s! keep 2 meters....", ansStr));
+                    notifyObserver(String.format("Welcome to shop #%s!", ansStr));
                 }
             }
             else {
@@ -110,7 +110,7 @@ public class InvService implements myObservable {
                     notifyObserver("Type order id:");
                     ansStr = myScanner.nextLine();
                     //Result res =
-                    myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr));
+                    myInv2Sup.receiveSuppliersOrderTmp(Integer.parseInt(ansStr));
 //                    if(res.isFailure()){
 //                        notifyObserver("Cant receive this order from suppliers. error: " + res.getMessage());
 //                    }
