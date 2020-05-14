@@ -3,6 +3,7 @@ package Inventory.Logic;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.InventoryDTO;
+import Inventory.Persistence.DTO.ItemDTO;
 import Inventory.Persistence.DummyItem;
 import Inventory.View.InvService;
 import Inventory.View.View;
@@ -24,7 +25,7 @@ public class Inventory implements myObservable {
     private defectiveController myDefectivesController;
 
 
-    public Inventory(View view){
+    public Inventory(View view, String name){
         counter++;
         this.shopNum = String.valueOf(counter);
         //TODO check if needs shop num in item!
@@ -33,7 +34,7 @@ public class Inventory implements myObservable {
         this.myDefectivesController = new defectiveController(view, shopNum);
         observers = new ArrayList<>();
         this.register(view);
-        shopName = "";
+        shopName = name;
     }
 
     public Inventory(View view, InventoryDTO invDTO){
@@ -84,10 +85,11 @@ public class Inventory implements myObservable {
     public OrderItem updateInventoryWorkers(String id, int quanMissStock, int quanMissShop) {
         return myItemController.updateInventoryWorkers(id, quanMissStock, quanMissShop);
     }
-    public void updateInventorySuppliers(HashMap<DummyItem, Integer> supply, InvService invService) {
-        myRecoredController.updateRecordsSuppliers(supply, this, invService);
-        myItemController.updateInventorySuppliers(supply);
-        myDefectivesController.updateDefectivesSuppliers(supply);
+    public void updateInventorySuppliers(HashMap<ItemDTO, Integer> supply, InvService invService) { //<itemDTO, quantity>
+        //TODO: need to get order!!!!!!!
+        //myRecoredController.updateRecordsSuppliers(supply, this, invService);
+        //myItemController.updateInventorySuppliers(supply);
+        //myDefectivesController.updateDefectivesSuppliers(supply);
     }
     public double askUserPrice(double newCost, double oldCost, String[] lastRecordInfo, InvService invService) {
         return invService.askUserPrice(newCost, oldCost, lastRecordInfo);
