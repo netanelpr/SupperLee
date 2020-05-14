@@ -1,16 +1,13 @@
 package Presentation;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
-import Inventory.Logic.Item;
 import Inventory.Logic.ShortageOrder;
 import Inventory.Persistence.DTO.ItemDTO;
 import Inventory.View.InvService;
 import Inventory.View.View;
 import Result.Result;
 import Suppliers.Structs.Days;
-import Inventory.Persistence.DummyItem;
 import Suppliers.Service.*;
-import Suppliers.Supplier.Order.ProductInOrder;
 
 import java.util.*;
 

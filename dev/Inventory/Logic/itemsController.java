@@ -19,11 +19,13 @@ public class itemsController implements myObservable {
     private final List<Observer> observers;
     private ItemToProductMapper myItemToProductMapper;
     private ItemsMapper myItemMapper;
+    private String shopNum;
 
-    public itemsController(Observer o) {
+    public itemsController(Observer o, String shopNum) {
         //this.myScanner = new Scanner(System.in);
         this.items = new HashMap<>();
         observers = new ArrayList<>();
+        this.shopNum = shopNum;
         this.register(o);
         this.myItemToProductMapper = new ItemToProductMapper(SupInvDBConn.getInstance());
         this.myItemMapper = new ItemsMapper((SupInvDBConn.getInstance()));
