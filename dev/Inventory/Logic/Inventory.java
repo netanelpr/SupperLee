@@ -7,6 +7,7 @@ import Inventory.Persistence.DTO.ItemDTO;
 import Inventory.Persistence.DummyItem;
 import Inventory.View.InvService;
 import Inventory.View.View;
+import Suppliers.Service.OrderDTO;
 
 
 import java.util.ArrayList;
@@ -85,11 +86,10 @@ public class Inventory implements myObservable {
     public OrderItem updateInventoryWorkers(String id, int quanMissStock, int quanMissShop) {
         return myItemController.updateInventoryWorkers(id, quanMissStock, quanMissShop);
     }
-    public void updateInventorySuppliers(HashMap<ItemDTO, Integer> supply, InvService invService) { //<itemDTO, quantity>
-        //TODO: need to get order!!!!!!!
-        //myRecoredController.updateRecordsSuppliers(supply, this, invService);
-        //myItemController.updateInventorySuppliers(supply);
-        //myDefectivesController.updateDefectivesSuppliers(supply);
+    public void updateInventorySuppliers(OrderDTO order, InvService invService) { //<itemDTO, quantity>
+        myRecoredController.updateRecordsSuppliers(order, this, invService);
+        myItemController.updateInventorySuppliers(order);
+        myDefectivesController.updateDefectivesSuppliers(order);
     }
     public double askUserPrice(double newCost, double oldCost, String[] lastRecordInfo, InvService invService) {
         return invService.askUserPrice(newCost, oldCost, lastRecordInfo);

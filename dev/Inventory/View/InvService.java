@@ -1,5 +1,5 @@
 package Inventory.View;
-import ConncetModules.Inventory2SuppliersCtrl;
+import Presentation.Inventory2SuppliersCtrl;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Logic.Inventory;
@@ -8,13 +8,10 @@ import Inventory.Logic.OrderItem;
 import Inventory.Logic.ShortageOrder;
 import Inventory.Persistence.DTO.InventoryDTO;
 import Inventory.Persistence.DTO.ItemDTO;
-import Inventory.Persistence.DummyItem;
-import Inventory.Persistence.DummySuppliers;
 import Inventory.Persistence.Mappers.InventoriesMapper;
 import Result.Result;
+import Suppliers.Service.OrderDTO;
 
-import java.sql.SQLException;
-import java.text.Format;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,7 +29,6 @@ public class InvService implements myObservable {
     boolean terminateSys = false;
     private Scanner myScanner;
     private final List<Observer> observers;
-    private DummySuppliers tmpSuppliers; //TODO delete at the end!!
     private Inventory2SuppliersCtrl myInv2Sup;
     private InventoriesMapper inventoriesMapper;
 
@@ -44,7 +40,6 @@ public class InvService implements myObservable {
         observers = new ArrayList<>();
         this.myScanner = new Scanner(System.in);
         this.register(view);
-        tmpSuppliers = new DummySuppliers();
         inventoriesMapper = InventoriesMapper.getInstance();
     }
 
@@ -56,7 +51,7 @@ public class InvService implements myObservable {
     //endregion
 
     public void mainLoop() {
-        myInv2Sup = Inventory2SuppliersCtrl.getInstance();
+        this.myInv2Sup = Inventory2SuppliersCtrl.getInstance();
         String ansStr;
 
         while(!terminateSys) {
@@ -111,7 +106,7 @@ public class InvService implements myObservable {
 
                 //region items
                 //-- Receive arrived order to inventory --
-                if (ansStr.equals("1")) {
+                if (ansStr.equals("1")) { //TODO talk about the shops
                     notifyObserver("Type order id:");
                     ansStr = myScanner.nextLine();
                     //Result res =
@@ -229,16 +224,12 @@ public class InvService implements myObservable {
                 notifyObserver(res.getMessage());
         }
     }
-    public void getOrderFromSuppliers(){
-        //TODO: change arg to Order that you send to us
-        //TODO: start function with the specific shop
+    public void getOrderFromSuppliers(OrderDTO order){
         //notifyObserver("-- Update Inventory Suppliers --");
-        ItemDTO justForCheck = new ItemDTO("1", "1", "100", "100",
-                                            "milk", "tnuva", "diary", "drinks",
-                                                "M", 3, 7.9);
-        HashMap< ItemDTO, Integer > hashForCheck = new HashMap<>();
-        hashForCheck.put(justForCheck, 100);
-        currInv.updateInventorySuppliers(hashForCheck, this);
+        HashMap<ItemDTO, Integer> supply = new HashMap<>();
+
+
+        currInv.updateInventorySuppliers(order, this);
     }
     private void setNewPrice() {
         notifyObserver("which id to set deal?");

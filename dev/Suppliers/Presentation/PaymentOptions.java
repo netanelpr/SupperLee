@@ -4,6 +4,7 @@ import Suppliers.Service.SupplierManagment;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class PaymentOptions extends Menu_Option {
 
@@ -33,12 +34,15 @@ public class PaymentOptions extends Menu_Option {
         } else {
             int supId = readInt("Supplier ID", reader);
 
-            String paymentOptions = supplierManagment.getPaymentOptions(supId);
+            List<String> paymentOptions = supplierManagment.getPaymentOptions(supId);
             if(paymentOptions == null){
                 System.out.println("There isnt such a supplier with id "+ supId);
             } else {
-                System.out.println("Payment options are: " +
-                        paymentOptions);
+                System.out.println("Payment options are: \n");
+                for (String option:
+                     paymentOptions) {
+                    System.out.println(option+"\n");
+                }
             }
         }
     }

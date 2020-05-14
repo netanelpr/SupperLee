@@ -64,6 +64,25 @@ public ItemToProductMapper(Connection conn){
         }
         return null;
     }
+    public ItemDTO loadById(String barcode, String shopNum) {
+        String query = "SELECT * " +
+                "FROM Items " +
+                "JOIN Product " +
+                "ON Items.id = Product.barcode " +
+                "WHERE shopNum = ? " +
+                "AND Items.id = ? ";
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(query);
+            statement.setString(1, shopNum);
+            statement.setString(2, barcode);
+            ResultSet resultSet  = statement.executeQuery();
+            return builtOneDTOfromRes(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private HashMap<String, ItemDTO> builtDTOfromRes(ResultSet res) throws SQLException {
 
@@ -92,4 +111,32 @@ public ItemToProductMapper(Connection conn){
         }
         return itemsDTO;
     }
+    private ItemDTO builtOneDTOfromRes(ResultSet res) throws SQLException {
+
+        String shopNum, id, quantityShop, quantityStorage;
+        String name, manufacturer, category, sub_category, size; int freqBuySupply; double minPrice;
+
+        ItemDTO currItem = null;
+
+        while(res.next()){
+            shopNum = res.getString(res.findColumn("shopNum"));
+            id = res.getString(res.findColumn("id"));
+            quantityShop = res.getString(res.findColumn("qShop"));
+            quantityStorage = res.getString(res.findColumn("qStorage"));
+            name = res.getString(res.findColumn("name"));
+            manufacturer = res.getString(res.findColumn("manufacture"));
+            category = res.getString(res.findColumn("categoty"));
+            sub_category = res.getString(res.findColumn("subCategoty"));
+            size = res.getString(res.findColumn("size"));
+            freqBuySupply = res.getInt(res.findColumn("freqSupply"));
+            minPrice = res.getDouble(res.findColumn("minPrice"));
+
+            currItem = new ItemDTO(shopNum, id, quantityShop, quantityStorage,
+                    name, manufacturer, category, sub_category, size, freqBuySupply, minPrice);
+        }
+        return currItem;
+    }
+
+
+
 }

@@ -8,6 +8,8 @@ import Inventory.Persistence.DTO.RecordDTO;
 import Inventory.Persistence.DummyItem;
 import Inventory.Persistence.Mappers.DefectivesMapper;
 import Inventory.Persistence.Mappers.ItemToProductMapper;
+import Suppliers.Service.OrderDTO;
+import Suppliers.Service.ProductInOrderDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -71,12 +73,12 @@ public class defectiveController implements myObservable {
         else
             notifyObserver("wrong input! type again:");
     }
-    public void updateDefectivesSuppliers(HashMap<DummyItem, Integer> supply) {
-        for (DummyItem dummyItem : supply.keySet()) {
-            String id = dummyItem.getId();
+    public void updateDefectivesSuppliers(OrderDTO order) {
+        for (ProductInOrderDTO prod: order.productInOrderDTOList) {
+            String id = String.valueOf(prod.barcode);
             if(!defectives.containsKey(id)) {
-                Defective newDefectReport = new Defective(observers, String.valueOf(idCounter), id, 0, java.time.LocalDate.now(), false, false, shopNum);
-                idCounter++;
+                Defective newDefectReport = new Defective(observers, String.valueOf(idCounter++), id, 0,
+                                                            java.time.LocalDate.now(), false, false, shopNum);
                 defectives.put(id, new ArrayList<>());
                 defectives.get(id).add(newDefectReport);
             }

@@ -43,18 +43,6 @@ public class Item implements myObservable {
         this.freqBuySupply = String.valueOf(itemDTO.getFreqBuySupply());
     }
 
-    public Item(Observer o, DummyItem dm) {
-        this.observers = new ArrayList<>();
-        this.register(o);
-        this.id = dm.getId();
-        this.name = dm.getName();
-        this.manufacturer = dm.getManufacturer();
-        this.category = dm.getCategory();
-        this.sub_category = dm.getSub_category();
-        this.size = dm.getSize();
-        this.freqBuySupply = dm.getFreqSupply();
-    }
-
     //region getters
     public String getCategory() { return this.category; }
     public boolean getIfQuantityMinimum() { return this.minimum; }

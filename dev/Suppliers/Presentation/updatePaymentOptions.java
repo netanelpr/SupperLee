@@ -44,13 +44,13 @@ public class updatePaymentOptions extends Menu_Option {
             System.out.println("Error at reading");
             return;
         }
-        String[] paymentOptions = paymentOptionsStr.split(" ");
+        String paymentOptions = paymentOptionsStr;
 
         boolean update = false;
         if(op == 2){
             update = supplierManagment.removePaymentOptions(supid, paymentOptions);
         } else { // add
-            update = supplierManagment.addPaymentOptions(supid, paymentOptions);
+            update = supplierManagment.addPaymentOption(supid, paymentOptions);
         }
 
         if(update){

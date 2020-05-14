@@ -39,7 +39,7 @@ public class Record implements myObservable {
     public double getCost() {
         return cost;
     }
-    public String getId() {
+    public String getRecId() {
         return recId;
     }
     public String getItemId() {
@@ -51,9 +51,9 @@ public class Record implements myObservable {
     public String getShopNum() { return shopNum; }
     //endregion
 
-    public Record(List<Observer> observers, String id, String name, double cost, LocalDate costChangeDate, LocalDate priceChangeDate, String shopNum) {
+    public Record(List<Observer> observers, String id, String itemId, double cost, LocalDate costChangeDate, LocalDate priceChangeDate, String shopNum) {
         this.recId = id;
-        this.itemId = name;
+        this.itemId = itemId;
         this.cost = cost;
         this.costChangeDate = costChangeDate;
         this.price = cost*1.75; //default price
