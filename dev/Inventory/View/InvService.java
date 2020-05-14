@@ -226,9 +226,7 @@ public class InvService implements myObservable {
     }
     public void getOrderFromSuppliers(OrderDTO order){
         //notifyObserver("-- Update Inventory Suppliers --");
-        HashMap<ItemDTO, Integer> supply = new HashMap<>();
-
-
+        //HashMap<ItemDTO, Integer> supply = new HashMap<>();
         currInv.updateInventorySuppliers(order, this);
     }
     private void setNewPrice() {

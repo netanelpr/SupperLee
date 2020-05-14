@@ -23,6 +23,7 @@ public class Defective implements myObservable {
     //region constructors
     public Defective(List<Observer> observers, String defId, String itemId, int quantity, LocalDate updateDate, Boolean expired, Boolean defective, String shopNum) {
         this.itemId = itemId;
+        this.defId = defId;
         this.quantity = quantity;
         this.updateDate = updateDate;
         this.observers = observers;
