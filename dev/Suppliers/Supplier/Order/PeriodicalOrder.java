@@ -2,6 +2,7 @@ package Suppliers.Supplier.Order;
 
 import Suppliers.Structs.Days;
 
+import java.util.Date;
 import java.util.List;
 
 public class PeriodicalOrder extends Order {
@@ -9,13 +10,15 @@ public class PeriodicalOrder extends Order {
     private List<Days> days;
     private int weekPeriod;
 
-    protected PeriodicalOrder(int orderId, List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber){
+    protected PeriodicalOrder(int orderId, List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber, Date deliveryDay){
         super(orderId, products, shopNumber);
         this.days = days;
         this.weekPeriod = weekPeriod;
+        this.setDeliveryDay(deliveryDay);
     }
 
-    public static PeriodicalOrder CreatePeriodicalOrder(int orderId, List<ProductInOrder> productsInOrder, List<Days> days, int weekPeriod, int shopNumber){
+    public static PeriodicalOrder CreatePeriodicalOrder(int orderId, List<ProductInOrder> productsInOrder, List<Days> days,
+                                                        int weekPeriod, int shopNumber, Date deliveryDay){
         if(productsInOrder.isEmpty() | days.isEmpty()){
             return null;
         }
@@ -26,7 +29,7 @@ public class PeriodicalOrder extends Order {
 
 
 
-        return new PeriodicalOrder(orderId, productsInOrder, days, weekPeriod, shopNumber);
+        return new PeriodicalOrder(orderId, productsInOrder, days, weekPeriod, shopNumber, deliveryDay);
     }
 
     public int getWeekPeriod() {

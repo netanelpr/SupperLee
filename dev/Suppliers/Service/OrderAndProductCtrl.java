@@ -3,10 +3,8 @@ package Suppliers.Service;
 import Result.Result;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
+import Suppliers.Supplier.*;
 import Suppliers.Supplier.Order.*;
-import Suppliers.Supplier.Product;
-import Suppliers.Supplier.ProductsManager;
-import Suppliers.Supplier.SupplierSystem;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,9 +93,9 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     }
 
     /**
-     *
-     * @param orderId
-     * @return
+     * Return the products information of a order
+     * @param orderId the order id
+     * @return OrderDTO that contains the information abount the products, null if no such order id
      */
     public OrderDTO orderArrived(int orderId){
         List<ProductInOrderDTO> products = new ArrayList<>();
@@ -110,7 +108,7 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         }
 
         if(order == null){
-            //TODO no such orderId
+            return null;
         }
 
         for(ProductInOrder product : order.getProducts()){
@@ -118,6 +116,23 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         }
 
         return new OrderDTO(order.getShopNumber(), products);
+    }
+
+    public OrderShipDetails orderDetails(int orderId){
+        AllOrderDetails orderDetails = supplierSystem.getOrderDetails(orderId);
+        if(orderDetails == null){
+            return null;
+        }
+
+        Supplier supplier = orderDetails.supplier;
+        ContactInfo contactInfo = supplier.getContacts().get(0);
+        SupplierDetailsDTO supplierDetailsDTO = new SupplierDetailsDTO(supplier.getSupId(), supplier.getSupplierName(),
+                supplier.getIncNum(),supplier.getAccountNumber(), supplier.getAddress(),
+                contactInfo.getName(), contactInfo.getEmail(), contactInfo.getEmail());
+
+        return new OrderShipDetails(orderDetails.orderId, orderDetails.shopNumber, orderDetails.deliveryDate,
+                supplierDetailsDTO, orderDetails.details);
+
     }
 
     @Override

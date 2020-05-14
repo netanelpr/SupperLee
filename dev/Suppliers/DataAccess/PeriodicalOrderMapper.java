@@ -105,11 +105,9 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
                 products.add(new ProductInOrder(res.getInt(6), res.getInt(9), res.getString(8), res.getDouble(10)));
             }
 
-            periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(orderId, products, days, weekP, shopNumber);
-            periodicalOrder.setStatus(status);
-
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            periodicalOrder.setDeliveryDay(dateFormat.parse(deliveryDay));
+            periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(orderId, products, days, weekP, shopNumber, dateFormat.parse(deliveryDay));
+            periodicalOrder.setStatus(status);
 
         } catch (SQLException | ParseException e) {
             e.printStackTrace();

@@ -55,4 +55,12 @@ public class OrderManager {
     public List<Integer> getAllOpenOrderIdsByShop(int shopNumber){
         return regularOrderMapper.getAllOpenOrderIdsByShop(shopNumber);
     }
+
+    public Order getOrderBasicDetails(int orderId) {
+        return regularOrderMapper.loadBasicDetails(orderId);
+    }
+
+    public List<AllDetailsOfProductInOrder> getAllProductDetails(int orderId) {
+        return regularOrderMapper.getAllProductDetails(orderId);
+    }
 }

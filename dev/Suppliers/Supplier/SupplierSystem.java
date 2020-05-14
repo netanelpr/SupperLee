@@ -1,9 +1,9 @@
 package Suppliers.Supplier;
 
 import Result.Result;
-import Suppliers.Presentation.PaymentOptions;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
+import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.Order.*;
 
 import java.util.*;
@@ -374,8 +374,8 @@ public class SupplierSystem {
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
 
-        PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days, weekPeriod, shopNumber);
-        periodicalOrder.setDeliveryDay(sup.getNextDeliveryDate());
+        PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days,
+                weekPeriod, shopNumber, sup.getNextDeliveryDate());
 
         orderManager.createPeriodicalOrder(periodicalOrder);
         if(periodicalOrder.getOrderId() < 0){
@@ -472,10 +472,24 @@ public class SupplierSystem {
     }
 
     public List<String> getOfferedPaymentOptions() {
-        List<String> options= new LinkedList<>();
-        for (Suppliers.Structs.PaymentOptions option: Suppliers.Structs.PaymentOptions.values()) {
+        List<String> options = new LinkedList<>();
+        for (Suppliers.Structs.PaymentOptions option : Suppliers.Structs.PaymentOptions.values()) {
             options.add(option.name());
         }
         return options;
+    }
+
+    public AllOrderDetails getOrderDetails(int orderId) {
+        Order order = orderManager.getOrderBasicDetails(orderId);
+        if(order == null){
+            return null;
+        }
+
+        List<AllDetailsOfProductInOrder> details = orderManager.getAllProductDetails(orderId);
+
+        int supplierId = supplierManager.getIdByContract(order.getContractId());
+        Supplier supplier = supplierManager.loadSupplierAndContacts(supplierId);
+
+        return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details);
     }
 }

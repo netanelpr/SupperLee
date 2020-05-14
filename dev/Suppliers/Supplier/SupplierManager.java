@@ -116,9 +116,8 @@ public class SupplierManager {
      */
     public List<Integer> getAllSupplierWithSupplyDays(List<Days> days) {
         //TODO implement return empty list is there isnt any one
-        return  null;
+        return null;
     }
-
 
     public boolean addPaymentOption(int supId, String paymentInfo) {
         List<String> supplierPaymentInfo= supplierMapper.getAllSupplierPaymentInfo(supId);
@@ -134,21 +133,29 @@ public class SupplierManager {
     }
 
     public boolean removePaymentOption(int supId, String paymentInfo) {
-        List<String> supplierPaymentInfo=this.supplierMapper.getAllSupplierPaymentInfo(supId);
-        boolean ans=false;
-        for ( String info:
+        List<String> supplierPaymentInfo = this.supplierMapper.getAllSupplierPaymentInfo(supId);
+        boolean ans = false;
+        for (String info :
                 supplierPaymentInfo) {
-            if(info.equals(paymentInfo))
-            {
-                ans=true;
+            if (info.equals(paymentInfo)) {
+                ans = true;
                 break;
             }
         }
-        if(ans)
-        {
-            supplierMapper.removePaymentOption(supId,paymentInfo);
+        if (ans) {
+            supplierMapper.removePaymentOption(supId, paymentInfo);
         }
 
         return ans;
+    }
+
+    public int getIdByContract(int contractId) {
+        //TODO implement
+        return -1;
+    }
+
+    public Supplier loadSupplierAndContacts(int supplierId) {
+        //TODO implement
+        return null;
     }
 }
