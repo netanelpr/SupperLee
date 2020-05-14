@@ -35,9 +35,10 @@ public class ProductMapper extends AbstractMapper<Product> {
         return null;
     }
 
+    //TODO edit
     protected String insertStatement() {
-        return "INSERT INTO Product (barcode, name, manufacture)  " +
-                "Values (?, ?, ?)";
+        return "INSERT INTO Product (barcode, name, manufacture, category, subCategory, size, freqSupply, minPrice)  " +
+                "Values (?, ?, ?, ?, ?, ?, ?, ?)";
     }
 
     /*
@@ -55,6 +56,11 @@ public class ProductMapper extends AbstractMapper<Product> {
             pstmt.setInt(1, product.getBarCode());
             pstmt.setString(2, product.getName());
             pstmt.setString(3, product.getManufacture());
+            pstmt.setString(4, product.getCategory());
+            pstmt.setString(5, product.getSubCategory());
+            pstmt.setString(6, product.getSize());
+            pstmt.setInt(7, product.getFreqSupply());
+            pstmt.setDouble(8, product.getMinPrice());
 
             pstmt.executeUpdate();
 
@@ -74,7 +80,8 @@ public class ProductMapper extends AbstractMapper<Product> {
 
     protected String updateStatement() {
         return "UPDATE Product " +
-                "SET name = ? ,manufacture = ? WHERE barcode = ?";
+                "SET name = ? ,manufacture = ?, category = ?, subCategory = ?, " +
+                "size = ?, freqSupply = ?, minPrice = ? WHERE barcode = ?";
     }
 
 
@@ -85,7 +92,13 @@ public class ProductMapper extends AbstractMapper<Product> {
 
             pstmt.setString(1, product.getName());
             pstmt.setString(2, product.getManufacture());
-            pstmt.setInt(3, barcode);
+            pstmt.setString(3, product.getCategory());
+            pstmt.setString(4, product.getSubCategory());
+            pstmt.setString(5, product.getSize());
+            pstmt.setInt(6, product.getFreqSupply());
+            pstmt.setDouble(7, product.getMinPrice());
+
+            pstmt.setInt(8, barcode);
 
             pstmt.executeUpdate();
 

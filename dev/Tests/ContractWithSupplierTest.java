@@ -26,10 +26,11 @@ class ContractWithSupplierTest {
 
     @Test
     void addProduct() {
+        //TODO systemProduct
         AddProduct product1= new AddProduct(5,"55",5.3,
-                new ProductDiscounts(5,new HashMap<Integer, Double>(),5.3),"osem","bamba");
+                new ProductDiscounts(5,new HashMap<Integer, Double>(),5.3));
         AddProduct product2= new AddProduct(16,"55x",5.6,
-                new ProductDiscounts(16,new HashMap<Integer, Double>(),5.6),"elit","kifkef");
+                new ProductDiscounts(16,new HashMap<Integer, Double>(),5.6));
         boolean contains1=false;
         boolean contains2=false;
         for (int i = 0; i < supplierContract.getProducts().size(); i++) {
@@ -59,9 +60,9 @@ class ContractWithSupplierTest {
     @Test
     void addDiscountToProduct() {
         AddProduct product1= new AddProduct(128,"128",128.0,
-                new ProductDiscounts(128,new HashMap<Integer, Double>(),128.0),"Salmon","kineret");
+                new ProductDiscounts(128,new HashMap<Integer, Double>(),128.0));
         AddProduct product2= new AddProduct(122,"122",10.0,
-                new ProductDiscounts(122,new HashMap<Integer, Double>(),10.0),"Water","Eden");
+                new ProductDiscounts(122,new HashMap<Integer, Double>(),10.0));
         this.supplierContract.addProduct(product1);
         this.supplierContract.addProduct(product2);
         int index=0;

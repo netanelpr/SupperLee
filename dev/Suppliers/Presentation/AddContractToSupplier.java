@@ -1,12 +1,11 @@
 package Suppliers.Presentation;
 
-import Suppliers.Service.SupplierProductDTO;
-import Suppliers.Service.ProductDiscountsDTO;
-import Suppliers.Service.SupplierManagment;
+import Suppliers.Service.*;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.StructUtils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,9 +16,11 @@ public class AddContractToSupplier extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
+    private OrderAndProductManagement orderAndProductManagement;
 
-    public AddContractToSupplier(SupplierManagment supplierManagment) {
+    public AddContractToSupplier(SupplierManagment supplierManagment, OrderAndProductManagement orderAndProductManagement) {
         this.supplierManagment = supplierManagment;
+        this.orderAndProductManagement = orderAndProductManagement;
     }
 
 
@@ -27,6 +28,13 @@ public class AddContractToSupplier extends Menu_Option {
     public void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int supId = readInt("Supplier ID", reader);
+        int barcode = -1;
+        List<Integer> barcodes = orderAndProductManagement.getAllProductBarcodes();
+        String supplierProduct;
+        String name = null, manufacture = null, category = null, subCategoty = null, size = null;
+        SystemProduct systemProduct;
+
+        boolean newProduct;
 
         try {
             System.out.print("Enter contract info : ");
@@ -40,37 +48,71 @@ public class AddContractToSupplier extends Menu_Option {
             System.out.print("Enter number of product you want to enter : ");
             int numberOfProducts = Integer.parseInt(reader.readLine());
             List<SupplierProductDTO> products = new LinkedList<>();
-            System.out.println("Product format : <product Id> <catalog number> <original price>\n\t" +
-                    "<name> <manufacture> <discount per amount {amount:discount,amount:discount...}>");
-            for(int i=0; i < numberOfProducts; i=i+1){
-                String[] input = reader.readLine().split(" ");
 
-                if(input.length != 6){
-                    System.out.println("Invalid number of args");
+            System.out.println("Supplier product format : <catalog number> <original price> <discount per amount {amount:discount,amount:discount...}>");
+            while(products.size() != numberOfProducts){
+                try {
+                    barcode = readIntPos("Barcode", "Barcode need to be equal or bigger than 0 ", reader);
+                    if (barcode < 0) {
+                        continue;
+                    }
+
+                    supplierProduct = readString("Enter supplier product", reader);
+                    if (supplierProduct == null) {
+                        continue;
+                    }
+
+                    String[] input = supplierProduct.split(" ");
+                    if (input.length != 3) {
+                        System.out.println("Invalid number of args");
+                        continue;
+                    }
+
+                    double originaPrice = Double.parseDouble(input[1]);
+                    if (originaPrice < 0) {
+                        System.out.println("Price need to be bigger than 0");
+                        continue;
+                    }
+
+                    Map<Integer, Double> discounts = new HashMap<>();
+                    String[] discountArr = input[2].substring(1, input[2].length() - 1).split(",");
+                    if (!((discountArr.length == 1) && (discountArr[0].length() == 0))) {
+                        for (String discount : discountArr) {
+                            String[] discountS = discount.split(":");
+                            if (discountS.length != 2) {
+                                System.out.println("Invalid format of discount");
+                                continue;
+                            }
+
+                            discounts.put(Integer.parseInt(discountS[0]), Double.parseDouble(discountS[1]));
+                        }
+                    }
+
+                    if (!barcodes.contains(barcode)) {
+                        System.out.println("This is a new product in the system enter the following info");
+                        name = readString("Name", reader);
+                        manufacture = readString("Manufacture", reader);
+                        category = readString("Categoty", reader);
+                        subCategoty = readString("sub categoty", reader);
+                        size = readString("Product size", reader);
+                        newProduct = true;
+                    } else{
+                        newProduct = false;
+                    }
+
+                    ProductDiscountsDTO product = new ProductDiscountsDTO(barcode, discounts, originaPrice);
+                    if(newProduct){
+                        systemProduct = new SystemProduct(barcode, name, manufacture, category, subCategoty, size);
+                        products.add(new SupplierProductDTO(barcode, input[0], originaPrice, product, systemProduct));
+                    }
+
+                    products.add(new SupplierProductDTO(barcode, input[0], originaPrice, product));
+
+                } catch (IOException e) {
+                    System.out.println("Error at reading");
                     continue;
                 }
 
-                Map<Integer, Double> discounts = new HashMap<>();
-                String[] discountArr = input[5].substring(1, input[5].length()-1).split(",");
-                if(!((discountArr.length == 1) && (discountArr[0].length() == 0))) {
-                    for (String discount : discountArr) {
-                        String[] discountS = discount.split(":");
-                        if (discountS.length != 2) {
-                            System.out.println("Invalid format of discount");
-                            continue;
-                        }
-
-                        discounts.put(Integer.parseInt(discountS[0]), Double.parseDouble(discountS[1]));
-                    }
-                }
-
-                ProductDiscountsDTO product = new ProductDiscountsDTO(Integer.parseInt(input[0]), discounts,  Double.parseDouble(input[2]));
-                products.add(new SupplierProductDTO(
-                        Integer.parseInt(input[0]),
-                        input[1],
-                        Double.parseDouble(input[2]),
-                        product,
-                        input[4], input[3]));
 
             }
 
@@ -87,9 +129,8 @@ public class AddContractToSupplier extends Menu_Option {
 
         } catch (NumberFormatException e){
             System.out.println("Invalid args");
-        } catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Error reading input");
+        } catch (IOException e){
+            System.out.println("Error at reading");
         }
     }
 }

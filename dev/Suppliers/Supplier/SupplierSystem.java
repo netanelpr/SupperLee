@@ -3,10 +3,7 @@ package Suppliers.Supplier;
 import Result.Result;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
-import Suppliers.Supplier.Order.Order;
-import Suppliers.Supplier.Order.OrderManager;
-import Suppliers.Supplier.Order.ProductInOrder;
-import Suppliers.Supplier.Order.RegularOrder;
+import Suppliers.Supplier.Order.*;
 
 import java.util.*;
 
@@ -199,6 +196,8 @@ public class SupplierSystem {
         if(supplier == null){
             return null;
         }
+
+        //TODO add to addproduct.product if not null the freqSupply and min price that is the original price
         boolean ans= supplier.addContractInfo(contractInfo,days);
         if(ans) {
             for (AddProduct product : products) {
@@ -230,6 +229,8 @@ public class SupplierSystem {
             return false;
         }
         boolean ans=false;
+        //TODO add to addproduct.product if not null the freqSupply and min price that is the original price
+
         if(ans=supplier.addProduct(product))
         {
             productsManager.addIfAbsent(product);
@@ -293,11 +294,6 @@ public class SupplierSystem {
             return Result.makeFailure("Order wasnt created");
         }
 
-        //TODO remove this
-        // Add the order to the data
-        /*orders.get(supplierId).add(regularOrder);
-        orderIdToOrder.put(regularOrder.getOrderId(), regularOrder);*/
-
         return Result.makeOk("Order was created", regularOrder.getOrderId());
     }
 
@@ -308,6 +304,7 @@ public class SupplierSystem {
      * @return orderId if it was created otherwise -1
      */
     public Result<Integer> createRegularOrder(List<ProductInOrder> products, int shopNumber) {
+        //TODO suupliers with no delivery day, do not open for them an order
         List<Integer> barcodes = new ArrayList<>();
         List<Integer> suppliersId;
         Supplier sup;
@@ -320,15 +317,7 @@ public class SupplierSystem {
             return Result.makeFailure("There isnt one supplier with all of this products");
         }
 
-        int cheapestSupplierId = -1, totalPrice = -1;
-        for(int id : suppliersId){
-            sup = supplierManager.getById(id);
-            int orderPrice = sup.calculateOrderPrice(products);
-            if(orderPrice < totalPrice){
-                totalPrice = orderPrice;
-                cheapestSupplierId = id;
-            }
-        }
+        int cheapestSupplierId = getCheapestSupplierId(suppliersId, products);
 
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
@@ -341,47 +330,43 @@ public class SupplierSystem {
             return Result.makeFailure("Order wasnt created");
         }
 
-        //TODO remove this
-        // Add the order to the data
-        /*orders.get(supplierId).add(regularOrder);
-        orderIdToOrder.put(regularOrder.getOrderId(), regularOrder);*/
-
         return Result.makeOk("Order was created", regularOrder.getOrderId());
 
     }
 
-    /**
-     * Update the day of order arrival
-     * @param orderId The order id
-     * @param date The arrival day
-     * @return true if it was updated.
-     */
-    public boolean updateOrderArrivalTime(int orderId, Date date) {
-        //TODO may remove this
-        if(date.compareTo(Calendar.getInstance().getTime()) > 0){
-            return false;
+    public Result<Integer> createPeriodicalOrder(List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber) {
+        List<Integer> barcodes = new ArrayList<>();
+        List<Integer> suppliersId;
+        Supplier sup;
+
+        suppliersId = supplierManager.getAllSupplierWithSupplyDays(days);
+        if(suppliersId.isEmpty()){
+            return Result.makeFailure("There isnt one supplier with the given supply days");
         }
 
-        return orderManager.updateOrderDelivery(orderId, date);
-    }
-
-
-    /**
-     * Update the status of the given order id
-     * @param orderId Order id
-     * @param status Status
-     * @return True if the update was successful
-     */
-    public boolean updateOrderStatus(int orderId, OrderStatus status) {
-        Order order = orderIdToOrder.getOrDefault(orderId, null);
-
-        if(order == null){
-            return false;
+        for(ProductInOrder product : products){
+            barcodes.add(product.getBarcode());
+        }
+        suppliersId = supplierManager.getAllSupplierWithBarcodes(suppliersId, barcodes);
+        if(suppliersId.isEmpty()){
+            return Result.makeFailure("There isnt one supplier with all of this products");
         }
 
-        return order.setStatus(status);
-    }
+        int cheapestSupplierId = getCheapestSupplierId(suppliersId, products);
 
+        sup = supplierManager.getById(cheapestSupplierId);
+        sup.setPricePerUnit(products);
+
+        PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days, weekPeriod, shopNumber);
+        periodicalOrder.setDeliveryDay(sup.getNextDeliveryDate());
+
+        orderManager.createPeriodicalOrder(periodicalOrder);
+        if(periodicalOrder.getOrderId() < 0){
+            return Result.makeFailure("Order wasnt created");
+        }
+
+        return Result.makeOk("Order was created", periodicalOrder.getOrderId());
+    }
 
     /**
      * Return all the supplier products
@@ -433,7 +418,7 @@ public class SupplierSystem {
         ContractProduct cp=supplier.getAllInformationAboutSuppliersProduct(barcode);
         Product product=this.productsManager.getProduct(barcode);
         if(cp!=null && product!=null) {
-            return new AddProduct(cp.getBarCode(), cp.getProductCatalogNumber(), cp.getDiscounts().originalPrice, cp.getDiscounts(), product.getManufacture(), product.getName());
+            return new AddProduct(cp.getBarCode(), cp.getProductCatalogNumber(), cp.getDiscounts().originalPrice, cp.getDiscounts(), product);
         }
         else
         {
@@ -454,8 +439,18 @@ public class SupplierSystem {
         }
     }
 
-    public List<Integer> getAllOpenOrdersIds(int shopID)
-    {
-        return null;
+    private int getCheapestSupplierId(List<Integer> suppliersId, List<ProductInOrder> products) {
+        Supplier sup;
+        int cheapestSupplierId = -1;
+        double totalPrice = -1;
+        for(int id : suppliersId){
+            sup = supplierManager.getById(id);
+            double orderPrice = sup.calculateOrderPrice(products);
+            if(orderPrice < totalPrice){
+                totalPrice = orderPrice;
+                cheapestSupplierId = id;
+            }
+        }
+        return cheapestSupplierId;
     }
 }

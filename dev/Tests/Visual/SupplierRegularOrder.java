@@ -17,7 +17,7 @@ public class SupplierRegularOrder {
         String orderDetails = String.format("orderId :%d\nShop number: %d\nDelivery date: %s\nStatus: %s\ncontract id: %d",
                                     order.getOrderId(), order.getShopNumber(),order.getDeliveryDay(), order.getStatus().toString(), order.getContractId());
         String productsStr = "";
-        for(ProductInOrder product : order.retrunProducts()){
+        for(ProductInOrder product : order.getProducts()){
             String productStr = String.format("barcode:%d\tcatalog number:%s\tamount: %d\tPrice per unit: %f", product.getBarcode(),
                     product.getProductCatalogNumber(), product.getAmount(), product.getPricePerUnit());
             productsStr = String.format("%s\n%s", productsStr, productStr);

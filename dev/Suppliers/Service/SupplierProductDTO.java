@@ -5,25 +5,29 @@ public class SupplierProductDTO {
     public int barcode;
     public String productCatalogNumber;
     public double originalPrice;
-    public String name;
-    public String manufacture;
     public ProductDiscountsDTO discounts;
 
-    public SupplierProductDTO(int barcode, String productCatalogNumber, double originalPrice, ProductDiscountsDTO discountPerAmount,
-                              String manufacture, String name) {
+    public SystemProduct systemProduct;
+
+    public SupplierProductDTO(int barcode, String productCatalogNumber, double originalPrice, ProductDiscountsDTO discountPerAmount) {
         this.barcode = barcode;
         this.productCatalogNumber = productCatalogNumber;
         this.originalPrice = originalPrice;
-        this.manufacture = manufacture;
-        this.name = name;
 
         this.discounts = discountPerAmount;
+        systemProduct = null;
+
+    }
+
+    public SupplierProductDTO(int barcode, String productCatalogNumber, double originalPrice, ProductDiscountsDTO discountPerAmount, SystemProduct systemProduct) {
+        this(barcode, productCatalogNumber, originalPrice, discountPerAmount);
+        this.systemProduct = systemProduct;
 
     }
 
     public String toString(){
         return String.format("barcode: %d\ncatalog number : %s\noriginal price : %f\n"+
-                        discounts.toString()+"\nmanufacture : %s\nname : %s", barcode, productCatalogNumber, originalPrice, manufacture, name);
+                        discounts.toString()+"\n%s", barcode, productCatalogNumber, originalPrice, systemProduct.toString());
     }
 
     public String shallow_toString() {
@@ -34,6 +38,6 @@ public class SupplierProductDTO {
         }
 
         return String.format("barcode: %d\ncatalog number : %s\noriginal price : %f\n" +
-                discountStr + "\nmanufacture : %s\nname : %s", barcode, productCatalogNumber, originalPrice, manufacture, name);
+                discountStr + "\n%s", barcode, productCatalogNumber, originalPrice, systemProduct.toString());
     }
 }

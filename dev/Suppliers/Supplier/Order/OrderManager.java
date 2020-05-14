@@ -3,8 +3,10 @@ package Suppliers.Supplier.Order;
 import Suppliers.DataAccess.PeriodicalOrderMapper;
 import Suppliers.DataAccess.RegularOrderMapper;
 import Suppliers.DataAccess.SupDBConn;
+import Suppliers.Structs.OrderStatus;
 
 import java.util.Date;
+import java.util.List;
 
 public class OrderManager {
 
@@ -44,5 +46,13 @@ public class OrderManager {
 
     public boolean updateOrderDelivery(int orderrId, Date date){
         return regularOrderMapper.updateDeliveryDate(orderrId, date);
+    }
+
+    public boolean updateOrderStatus(int orderId, OrderStatus status){
+        return regularOrderMapper.updateOrderStatus(orderId, status);
+    }
+
+    public List<Integer> getAllOpenOrderIdsByShop(int shopNumber){
+        return regularOrderMapper.getAllOpenOrderIdsByShop(shopNumber);
     }
 }

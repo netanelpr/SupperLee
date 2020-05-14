@@ -6,6 +6,7 @@ import Suppliers.Structs.Days;
 import Suppliers.Structs.StructUtils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -30,13 +31,15 @@ public class UpdateOrderArrivalDay extends Menu_Option {
         int orderId = readInt("Order ID", reader);
         Date deliveryDate;
 
-        String dayinput = readString("Delivery day (dd/MM/yyyy)",reader);
-
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         try {
+            String dayinput = readString("Delivery day (dd/MM/yyyy)",reader);
             deliveryDate  = df.parse(dayinput);
         } catch (ParseException e) {
             System.out.println("Invalid date format");
+            return;
+        } catch (IOException e){
+            System.out.println("Error at reading");
             return;
         }
 

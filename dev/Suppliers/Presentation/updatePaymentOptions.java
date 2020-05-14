@@ -1,8 +1,10 @@
 package Suppliers.Presentation;
 
 import Suppliers.Service.SupplierManagment;
+import Suppliers.Service.SystemProduct;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
@@ -35,7 +37,13 @@ public class updatePaymentOptions extends Menu_Option {
         }
         supid = readInt("Supplier ID", reader);
 
-        String paymentOptionsStr = readString("Payment options", reader);
+        String paymentOptionsStr = null;
+        try {
+            paymentOptionsStr = readString("Payment options", reader);
+        } catch (IOException e) {
+            System.out.println("Error at reading");
+            return;
+        }
         String[] paymentOptions = paymentOptionsStr.split(" ");
 
         boolean update = false;

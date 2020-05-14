@@ -3,6 +3,7 @@ package Suppliers.Supplier;
 import Suppliers.Structs.Days;
 import Suppliers.Supplier.Order.ProductInOrder;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class ContractWithSupplier {
 
     private List<Days> dailyInfo;
     private String contractDetails;
+    //TODO save it as hashmap for faster search
     private List<ContractProduct> products;
 
     public ContractWithSupplier(String contractDetails, List<Days> days){
@@ -98,5 +100,20 @@ public class ContractWithSupplier {
                 }
             }
         }
+    }
+
+    public double calculateOrderPrice(List<ProductInOrder> products) {
+        double total = 0;
+
+        for(ProductInOrder product : products){
+            for(ContractProduct cp : this.products){
+                if(cp.getBarCode() == product.getBarcode()){
+                    total = total + cp.getPricePerAmount(product.getAmount());
+                    break;
+                }
+            }
+        }
+
+        return total;
     }
 }

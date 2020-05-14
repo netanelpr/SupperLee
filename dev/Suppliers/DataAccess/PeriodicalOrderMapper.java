@@ -175,7 +175,7 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
             }
 
             if (rowAffected != 0) {
-                for (ProductInOrder productInOrder : product.retrunProducts()) {
+                for (ProductInOrder productInOrder : product.getProducts()) {
                     productInsertPstmt.clearParameters();
                     productInsertPstmt.setInt(1, orderId);
                     productInsertPstmt.setInt(2, contractId);

@@ -56,7 +56,7 @@ public abstract class Order {
         return new LinkedList<>(this.products.keySet());
     }
 
-    public List<ProductInOrder> retrunProducts() {
+    public List<ProductInOrder> getProducts() {
         return new LinkedList<>(this.products.values());
     }
 
