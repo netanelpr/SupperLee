@@ -3,10 +3,11 @@ package Inventory.Logic;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.RecordDTO;
-import Inventory.Persistence.DummyItem;
 import Inventory.Persistence.Mappers.RecordsMapper;
 import Inventory.View.InvService;
 import DataAccess.SupInvDBConn;
+import Suppliers.Service.OrderDTO;
+import Suppliers.Service.ProductInOrderDTO;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class recordController implements myObservable {
     public final List<Observer> observers;
     private String shopNum;
     private RecordsMapper myRecordMapper;
+    private int idCounter = 0;
 
     //endregion
 
@@ -39,34 +41,35 @@ public class recordController implements myObservable {
     //endregion
 
     //region record update
-    public void updateRecordsSuppliers(HashMap<DummyItem, Integer> supply, Inventory inv, InvService invService) {
+    public void updateRecordsSuppliers(OrderDTO order, Inventory inv, InvService invService) {
         Record newRecord;
         double newPrice;
-        for (DummyItem dummyItem : supply.keySet()) {
-            String id = dummyItem.getId();
-            if(records.containsKey(dummyItem.getId())) {
+        for (ProductInOrderDTO prod : order.productInOrderDTOList) {
+            String id = String.valueOf(prod.barcode);
+            if(records.containsKey(id)){
                 List<Record> currList = records.get(id);
                 Record lastRecord = currList.get(currList.size()-1);
                 double oldCost = lastRecord.getCost();
-                double newCost = dummyItem.getCost();
+                double newCost = prod.price;
                 if(newCost != oldCost) {
                     String[] lastRecordInfo = new String[4];
-                    lastRecordInfo[0] = lastRecord.getId();
+                    lastRecordInfo[0] = lastRecord.getRecId();
                     lastRecordInfo[1] = lastRecord.getItemId();
                     lastRecordInfo[2] = String.valueOf(lastRecord.getPrice());
                     lastRecordInfo[3] = String.valueOf(lastRecord.getPriceChangeDate());
                     newPrice = inv.askUserPrice(newCost, oldCost, lastRecordInfo, invService);
                     if(newPrice != lastRecord.getPrice())
-                        newRecord = new Record(observers, lastRecordInfo[0], lastRecordInfo[1], newCost, LocalDate.now(),
+                        newRecord = new Record(observers, String.valueOf(idCounter++), lastRecordInfo[1], newCost, LocalDate.now(),
                                                 newPrice, LocalDate.now(), shopNum);
                     else
-                        newRecord = new Record(observers, lastRecordInfo[0], lastRecordInfo[1], newCost, LocalDate.now(),
+                        newRecord = new Record(observers, String.valueOf(idCounter++), lastRecordInfo[1], newCost, LocalDate.now(),
                                                 newPrice, changeToDate(lastRecordInfo[3]), shopNum);
                     records.get(id).add(newRecord);
                 }
             }
             else {
-                newRecord = new Record(observers, id, dummyItem.getName(), dummyItem.getCost(), LocalDate.now(), LocalDate.now(), shopNum);
+
+                newRecord = new Record(observers, String.valueOf(idCounter++), id, prod.price, LocalDate.now(), LocalDate.now(), shopNum);
                 records.put(id, new ArrayList<>());
                 records.get(id).add(newRecord);
             }

@@ -3,9 +3,11 @@ package Inventory.Logic;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.ItemDTO;
-import Inventory.Persistence.DummyItem;
-import Inventory.Persistence.Mappers.ItemToProduct;
+import Inventory.Persistence.Mappers.ItemToProductMapper;
 import DataAccess.SupInvDBConn;
+import Inventory.Persistence.Mappers.ItemsMapper;
+import Suppliers.Service.OrderDTO;
+import Suppliers.Service.ProductInOrderDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,14 +17,18 @@ public class itemsController implements myObservable {
 
     private HashMap<String, Item> items; //item id, item
     private final List<Observer> observers;
-    private ItemToProduct itemToProduct;
+    private ItemToProductMapper myItemToProductMapper;
+    private ItemsMapper myItemMapper;
+    private String shopNum;
 
-    public itemsController(Observer o) {
+    public itemsController(Observer o, String shopNum) {
         //this.myScanner = new Scanner(System.in);
         this.items = new HashMap<>();
         observers = new ArrayList<>();
+        this.shopNum = shopNum;
         this.register(o);
-        this.itemToProduct = new ItemToProduct(SupInvDBConn.getInstance());
+        this.myItemToProductMapper = new ItemToProductMapper(SupInvDBConn.getInstance());
+        this.myItemMapper = new ItemsMapper((SupInvDBConn.getInstance()));
     }
 
     public HashMap<String, Item> getItems() {
@@ -34,18 +40,20 @@ public class itemsController implements myObservable {
         return items.get(id).updateMyQuantities(quanMissStock, quanMissShop, '-');
     }
 
-    public void updateInventorySuppliers(HashMap<DummyItem, Integer> supply) {
+    public void updateInventorySuppliers(OrderDTO order) { //int -> quantity
 
-        for (DummyItem dummyItem : supply.keySet()) {
-            if(items.containsKey(dummyItem.getId())) {
-                Item currItem = items.get(dummyItem.getId());
-                currItem.updateMyQuantities(supply.get(dummyItem), 0, '+');
+        for (ProductInOrderDTO p: order.productInOrderDTOList) {
+            if(items.containsKey(String.valueOf(p.barcode))) {
+                Item currItem = items.get(String.valueOf(p.barcode));
+                currItem.updateMyQuantities(p.amount, 0, '+');
             }
             else
             {
-                Item newItem = new Item(observers.get(0), dummyItem);
-                newItem.updateMyQuantities(supply.get(dummyItem), 0, '+');
+                ItemDTO itemDTO = (myItemToProductMapper.loadById(String.valueOf(p.barcode), String.valueOf(order.shopID)));
+                Item newItem = new Item(observers.get(0), itemDTO);
+                newItem.updateMyQuantities(p.amount, 0, '+');
                 items.put(newItem.getId(), newItem);
+                myItemMapper.insert(itemDTO);
             }
         }
     }
@@ -88,11 +96,12 @@ public class itemsController implements myObservable {
     }
 
     public void loadItemsFromDB(String shopNum) {
-        HashMap<String, ItemDTO> itemsDTO = itemToProduct.loadInvFromItemsAndProducts(shopNum);
+        HashMap<String, ItemDTO> itemsDTO = myItemToProductMapper.loadInvFromItemsAndProducts(shopNum);
         for (String id : itemsDTO.keySet()) {
             items.put(id, new Item(observers.get(0), itemsDTO.get(id)));
         }
     }
     //endregion
+
 
 }

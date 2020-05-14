@@ -2,7 +2,6 @@ package Inventory.Logic;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.ItemDTO;
-import Inventory.Persistence.DummyItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,18 +42,6 @@ public class Item implements myObservable {
         this.freqBuySupply = String.valueOf(itemDTO.getFreqBuySupply());
     }
 
-    public Item(Observer o, DummyItem dm) {
-        this.observers = new ArrayList<>();
-        this.register(o);
-        this.id = dm.getId();
-        this.name = dm.getName();
-        this.manufacturer = dm.getManufacturer();
-        this.category = dm.getCategory();
-        this.sub_category = dm.getSub_category();
-        this.size = dm.getSize();
-        this.freqBuySupply = dm.getFreqSupply();
-    }
-
     //region getters
     public String getCategory() { return this.category; }
     public boolean getIfQuantityMinimum() { return this.minimum; }
@@ -74,7 +61,7 @@ public class Item implements myObservable {
             this.quantShop += qshop;
             //this.totalQuantity += (qstrg + qshop);
         }
-
+        //TODO increase decrease quantity
         int missInShop = this.capacityShop - this.quantShop;
         if (missInShop > 0 & this.quanStrg > 0)
         {
@@ -92,6 +79,9 @@ public class Item implements myObservable {
         if(quanStrg < 0) quanStrg = 0;
         if(quantShop < 0) quantShop = 0;
         totalQuantity = quanStrg+quantShop;
+
+        //TODO: write the func updateItemDB();... because we changed item's quantities here
+
         if(this.checkMinimumQuant())
             return issueOrderForShortageItem();
         return null;

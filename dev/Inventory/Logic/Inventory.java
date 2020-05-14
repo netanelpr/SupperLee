@@ -3,10 +3,9 @@ package Inventory.Logic;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.InventoryDTO;
-import Inventory.Persistence.DTO.ItemDTO;
-import Inventory.Persistence.DummyItem;
 import Inventory.View.InvService;
 import Inventory.View.View;
+import Suppliers.Service.OrderDTO;
 
 
 import java.util.ArrayList;
@@ -28,8 +27,7 @@ public class Inventory implements myObservable {
     public Inventory(View view, String name){
         counter++;
         this.shopNum = String.valueOf(counter);
-        //TODO check if needs shop num in item!
-        this.myItemController = new itemsController(view);
+        this.myItemController = new itemsController(view, shopNum);
         this.myRecoredController = new recordController(view, shopNum);
         this.myDefectivesController = new defectiveController(view, shopNum);
         observers = new ArrayList<>();
@@ -41,8 +39,7 @@ public class Inventory implements myObservable {
         counter++;
         this.shopNum = invDTO.getShopNum();
         this.shopName = invDTO.getShopName();
-        //TODO check if needs shop num in item!
-        this.myItemController = new itemsController(view);
+        this.myItemController = new itemsController(view, shopNum);
         this.myRecoredController = new recordController(view, shopNum);
         this.myDefectivesController = new defectiveController(view, shopNum);
         observers = new ArrayList<>();
@@ -85,11 +82,10 @@ public class Inventory implements myObservable {
     public OrderItem updateInventoryWorkers(String id, int quanMissStock, int quanMissShop) {
         return myItemController.updateInventoryWorkers(id, quanMissStock, quanMissShop);
     }
-    public void updateInventorySuppliers(HashMap<ItemDTO, Integer> supply, InvService invService) { //<itemDTO, quantity>
-        //TODO: need to get order!!!!!!!
-        //myRecoredController.updateRecordsSuppliers(supply, this, invService);
-        //myItemController.updateInventorySuppliers(supply);
-        //myDefectivesController.updateDefectivesSuppliers(supply);
+    public void updateInventorySuppliers(OrderDTO order, InvService invService) { //<itemDTO, quantity>
+        myRecoredController.updateRecordsSuppliers(order, this, invService);
+        myItemController.updateInventorySuppliers(order);
+        myDefectivesController.updateDefectivesSuppliers(order);
     }
     public double askUserPrice(double newCost, double oldCost, String[] lastRecordInfo, InvService invService) {
         return invService.askUserPrice(newCost, oldCost, lastRecordInfo);

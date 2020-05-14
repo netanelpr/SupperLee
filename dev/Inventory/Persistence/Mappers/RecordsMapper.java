@@ -41,7 +41,7 @@ public class RecordsMapper extends AbstractMappers {
 
     private HashMap<String, List<RecordDTO>> builtDTOfromRes(ResultSet res) throws SQLException {
 
-        String itemId, recId, shopNum;
+        String itemId, recId, shopNum, tmpCost, tmpPrice;
         Double cost, price;
         LocalDate costChangeDate, priceChangeDate;
 
@@ -56,14 +56,11 @@ public class RecordsMapper extends AbstractMappers {
             shopNum = res.getString(res.findColumn("shopNum"));
             cost = res.getDouble(res.findColumn("cost"));
             price = res.getDouble(res.findColumn("price"));
-            //costChangeDate = convertToLocalDate(new Date(res.getDate(res.findColumn("costChangeDate")).getTime()));
-            //priceChangeDate = convertToLocalDate(new Date(res.getDate(res.findColumn("priceChangeDate")).getTime()));
-
-
-            costChangeDate = LocalDate.now();
-            priceChangeDate = LocalDate.now();
+            tmpCost = res.getString(res.findColumn("costChangeDate"));
+            tmpPrice = res.getString(res.findColumn("costChangeDate"));
+            costChangeDate = LocalDate.parse(tmpCost);
+            priceChangeDate = LocalDate.parse((tmpPrice));
             currRec = new RecordDTO(recId, itemId, shopNum, cost, costChangeDate, price ,priceChangeDate);
-
 
             if(RecsDTO.keySet().contains(itemId))
                 RecsDTO.get(itemId).add(currRec);
@@ -83,6 +80,25 @@ public class RecordsMapper extends AbstractMappers {
 
     @Override
     public void insert() {
+    }
+
+    public void insert(RecordDTO recDTO){
+
+
+        try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Records" +
+                " (recId, shopNum, itemId, cost, price, costChangeDate, priceChangeDate) " +
+                "Values (?, ?, ?, ?, ?, ?, ?)")){
+            pstmt.setString(1, recDTO.getRecId());
+            pstmt.setString(2, recDTO.getShopNum());
+            pstmt.setString(3, recDTO.getItemId());
+            pstmt.setDouble(4, recDTO.getCost());
+            pstmt.setDouble(5, recDTO.getPrice());
+            //TODO deal with the dates and types!
+            //pstmt.setDate(6, recDTO.getCostChangeDate());
+            //pstmt.setDate(7, recDTO.getPriceChangeDate());
+            pstmt.executeUpdate();
+
+        } catch (java.sql.SQLException e) { }
     }
     @Override
     public void update() {

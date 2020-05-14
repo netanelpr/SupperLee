@@ -22,6 +22,7 @@ public class WelcomeMenu {
     public void start(){
         int option = 0;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        inventoryMenu.loadDB();
 
         while(true){
             System.out.println("1) Supplier menu\n2) Inventory menu\n3) Close");

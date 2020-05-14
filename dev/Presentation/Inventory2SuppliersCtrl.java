@@ -1,22 +1,21 @@
-package ConncetModules;
+package Presentation;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Logic.ShortageOrder;
+import Inventory.Persistence.DTO.ItemDTO;
 import Inventory.View.InvService;
 import Inventory.View.View;
 import Result.Result;
 import Suppliers.Structs.Days;
-import Inventory.Persistence.DummyItem;
 import Suppliers.Service.*;
 
 import java.util.*;
 
 public class Inventory2SuppliersCtrl implements myObservable {
-    private static Inventory2SuppliersCtrl inventory2SuppliersCtrlInstance = null;
 
+    private static Inventory2SuppliersCtrl inventory2SuppliersCtrlInstance = null;
     private SupplierManagment mySupplierManagment;
     private OrderAndProductManagement myOrderAndProductManagement;
-
     private InvService myInvenoryService;
     private Scanner myScanner;
     private View view;
@@ -39,23 +38,8 @@ public class Inventory2SuppliersCtrl implements myObservable {
         return inventory2SuppliersCtrlInstance;
     }
 
-    public void run(){
-        myInvenoryService.loadDB();
 
-
-        int module = -1;
-        while(module != 0) {
-            notifyObserver("-- SUPER-LEE main Menu -- press: \n 1) Suppliers \n 2) Inventory \n 0) Exit");
-            module = myScanner.nextInt();
-            if (module == 1) {//TODO: add your main function
-            }
-            else if (module == 2) {
-                myInvenoryService.mainLoop();
-            }
-        }
-    }
-
-    public List<DummyItem> getAllCatalog()
+    public List<ItemDTO> getAllCatalog()
     {
         /*List<Integer> barcodes=myOrderAndProductManagement.getAllProductBarcodes();
 
@@ -103,8 +87,29 @@ public class Inventory2SuppliersCtrl implements myObservable {
         /*this.myOrderAndProductManagement.changeOrderStatus(orderID, OrderStatus.Close);
         OrderDTO theOrder= this.myOrderAndProductManagement.getOrder(orderID);
         return myInvenoryService.getOrderFromSuppliers(theOrder);*/
-        myInvenoryService.getOrderFromSuppliers();
+        //myInvenoryService.getOrderFromSuppliers();
+   }
+
+    public Result receiveSuppliersOrderTmp(int orderID){
+
+        List <ProductInOrderDTO> productsLss = new ArrayList();
+        ProductInOrderDTO item1 = new ProductInOrderDTO(1, 100, 7.34);
+        ProductInOrderDTO item2 = new ProductInOrderDTO(2, 20, 7.6);
+        ProductInOrderDTO item3 = new ProductInOrderDTO(3, 70, 798);
+        ProductInOrderDTO item4 = new ProductInOrderDTO(4, 200, 9);
+
+        productsLss.add(item1);
+        productsLss.add(item2);
+        productsLss.add(item3);
+        productsLss.add(item4);
+
+        OrderDTO order = new OrderDTO(1, productsLss);
+
+        myInvenoryService.getOrderFromSuppliers(order);
+
+        return null;
     }
+
 
     public Result receiveAllOpenOrders(int shopNum)
     {

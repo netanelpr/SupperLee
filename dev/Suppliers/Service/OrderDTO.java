@@ -12,5 +12,4 @@ public class OrderDTO {
         this.productInOrderDTOList = productInOrderDTOS;
     }
 
-
 }

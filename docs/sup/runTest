@@ -57,7 +57,7 @@ Barcode : 2, Catalog number : 100
 Barcode : 10, Catalog number : 123
 
 getAllSupplierBarcode 1
-Invalid supplier id or no contract
+Invalid supplier itemId or no contract
 
 getAllSupplierProductsDetalis 0
 barcode: 1
@@ -85,7 +85,7 @@ manufacture : lg
 name : tv
 
 getAllSupplierProductsDetalis 1
-Invalid supplier id or no contract
+Invalid supplier itemId or no contract
 
 createNewOrder 0
 Enter the numbers of product you want the order : 2
@@ -93,14 +93,14 @@ Enter product ID and amount
 	 format <productID> <amount>
 1 10
 2 100
-Order id : 0
+Order itemId : 0
 
 createNewOrder 0
 Enter the numbers of product you want the order : 1
 Enter product ID and amount
 	 format <productID> <amount>
 10 100
-Order id : 1
+Order itemId : 1
 
 updateOrderArrivalDay 0 sunday
 Order was updated

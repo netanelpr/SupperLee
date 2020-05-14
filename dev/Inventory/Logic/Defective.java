@@ -2,6 +2,7 @@ package Inventory.Logic;
 
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
+import Inventory.Persistence.DTO.DefectiveDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,11 +10,9 @@ import java.util.List;
 public class Defective implements myObservable {
 
     //region fields
-    private String id;
-    private String name;
-
+    private String defId;
+    private String itemId;
     private String shopNum;
-
     private int quantity;
     private LocalDate updateDate;
     public final List<Observer> observers;
@@ -22,9 +21,8 @@ public class Defective implements myObservable {
     //endregion
 
     //region constructors
-    public Defective(List<Observer> observers, String id, String name, int quantity, LocalDate updateDate, Boolean expired, Boolean defective, String shopNum) {
-        this.id = id;
-        this.name = name;
+    public Defective(List<Observer> observers, String defId, String itemId, int quantity, LocalDate updateDate, Boolean expired, Boolean defective, String shopNum) {
+        this.itemId = itemId;
         this.quantity = quantity;
         this.updateDate = updateDate;
         this.observers = observers;
@@ -32,20 +30,24 @@ public class Defective implements myObservable {
         this.defective = defective;
         this.shopNum = shopNum;
     }
-    public Defective(List<Observer> observers, String id, String name, int quantity, LocalDate updateDate, String shopNum) {
-        this.id = id;
-        this.name = name;
-        this.quantity = quantity;
-        this.updateDate = updateDate;
+
+    public Defective(List<Observer> observers, DefectiveDTO DTO){
+        this.defId = DTO.getDefId();
+        this.itemId = DTO.getDefId();
+        this.quantity = DTO.getQuantity();
+        this.updateDate = DTO.getUpdateDate();
+        this.expired = DTO.isExpired();
+        this.expired = DTO.isDefective();
+        this.shopNum = DTO.getShopNum();
         this.observers = observers;
-        this.shopNum = shopNum;
     }
+
     //endregion
 
     //region defective functions
     public void defectiveItemStatus() {
         notifyObserver("|------------------------------\n" +
-                "| id; " + id + " name; " + name + "\n" +
+                "| itemId; " + itemId + "\n" +
                 " update Date; " + updateDate + " quantity = " + quantity + " ==>");
                 if(expired&&defective)
                     notifyObserver(" expired AND has a defect");
@@ -62,9 +64,7 @@ public class Defective implements myObservable {
     public int getQuantity() {
         return quantity;
     }
-    public String getName() {
-        return name;
-    }
+
     //endregion
 
     //region observer
