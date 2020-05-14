@@ -40,7 +40,7 @@ public class SupplierPeriodicalOrder {
         List<ProductInOrder> products = new LinkedList<>();
         products.add(new ProductInOrder(1,10,"c1",10));
         products.add(new ProductInOrder(2,150,"c2",12));
-        PeriodicalOrder order = PeriodicalOrder.CreatePeriodicalOrder(-1, products, days, 1, 1);
+        PeriodicalOrder order = PeriodicalOrder.CreatePeriodicalOrder(-1, products, days, 1, 1, new Date());
 
         Calendar c = Calendar.getInstance();
         c.set(2020, Calendar.MAY, 11);

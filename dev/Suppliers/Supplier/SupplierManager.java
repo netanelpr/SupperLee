@@ -88,4 +88,14 @@ public class SupplierManager {
         //TODO implement return empty list is there isnt any one
         return  null;
     }
+
+    public int getIdByContract(int contractId) {
+        //TODO implement
+        return -1;
+    }
+
+    public Supplier loadSupplierAndContacts(int supplierId) {
+        //TODO implement
+        return null;
+    }
 }

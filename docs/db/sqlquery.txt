@@ -3,3 +3,13 @@ FROM Supplier AS S
 WHERE (SELECT barcode
 		FROM Suppliers_products as SP
 		WHERE SP.supplier_id = S.id) IN (1,2)
+
+--SELECT S.*, C.*
+--FROM Supplier AS S JOIN Contact_info AS C
+--ON s.id = C.supplier_id
+
+SELECT PO.*, PIC.*, (1 - PO.price_per_unit / PIC.original_price) AS discount, P.name
+FROM Product_in_order as PO JOIN Product_in_contract as PIC
+	JOIN Product as P
+		ON PO.contract_id = PIC.contract_id AND PO.catalog_number = PIC.catalog_number
+		AND PIC.barcode = P.barcode
