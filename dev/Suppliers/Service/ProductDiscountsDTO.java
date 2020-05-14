@@ -1,5 +1,8 @@
 package Suppliers.Service;
 
+import Suppliers.Supplier.ProductDiscounts;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class ProductDiscountsDTO {
@@ -11,6 +14,25 @@ public class ProductDiscountsDTO {
         this.barcode = barcode;
         this.discountPerAmount = discountPerAmont;
         this.originalPrice = originalPrice;
+    }
+
+    public ProductDiscountsDTO(int barcode,Double originalPrice)
+    {
+        this.originalPrice=originalPrice;
+        this.barcode=barcode;
+        this.discountPerAmount=new HashMap<>();
+    }
+
+    public void addDiscount(int amount, double discount)
+    {
+        if(!this.discountPerAmount.containsKey(amount))
+        {
+            this.discountPerAmount.put(amount,discount);
+        }
+        else
+        {
+            this.discountPerAmount.replace(amount,discount);
+        }
     }
 
     public String toString(){

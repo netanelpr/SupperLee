@@ -3,6 +3,7 @@ package Suppliers.Supplier;
 import Suppliers.DataAccess.SupDBConn;
 import Suppliers.DataAccess.SupplierMapper;
 import Suppliers.Structs.Days;
+import Suppliers.Structs.PaymentOptions;
 import Suppliers.Structs.StructUtils;
 
 import java.util.Date;
@@ -54,7 +55,8 @@ public class SupplierManager {
         return supplierMapper.insertContactInfo(contactInfo);
     }
     public boolean removeContactFromSupplier(int supID, String email) {
-        if(supplierMapper.getAllSupplierContacts(supID).size()<2)
+        List<ContactInfo> contacts=supplierMapper.getAllSupplierContacts(supID);
+        if(contacts.size()<2)
         {
             return false;
         }
@@ -120,8 +122,8 @@ public class SupplierManager {
     }
 
     public boolean addPaymentOption(int supId, String paymentInfo) {
-        List<String> supplierPaymentInfo= supplierMapper.getAllSupplierPaymentInfo(supId);
-        for ( String info:
+        List<PaymentOptions> supplierPaymentInfo= supplierMapper.getAllSupplierPaymentInfo(supId);
+        for ( PaymentOptions info:
               supplierPaymentInfo) {
             if(info.equals(paymentInfo))
             {
@@ -133,9 +135,9 @@ public class SupplierManager {
     }
 
     public boolean removePaymentOption(int supId, String paymentInfo) {
-        List<String> supplierPaymentInfo = this.supplierMapper.getAllSupplierPaymentInfo(supId);
+        List<PaymentOptions> supplierPaymentInfo = this.supplierMapper.getAllSupplierPaymentInfo(supId);
         boolean ans = false;
-        for (String info :
+        for (PaymentOptions info :
                 supplierPaymentInfo) {
             if (info.equals(paymentInfo)) {
                 ans = true;
@@ -150,12 +152,58 @@ public class SupplierManager {
     }
 
     public int getIdByContract(int contractId) {
-        //TODO implement
-        return -1;
+        ContractWithSupplier contractWithSupplier=this.supplierMapper.getContractByContractID(contractId);
+        if(contractWithSupplier!=null)
+        {
+            return contractWithSupplier.getContractID();
+        }
+        else
+        {
+            return -1;
+        }
+
     }
 
     public Supplier loadSupplierAndContacts(int supplierId) {
         //TODO implement
         return null;
+    }
+
+    public int addContractToSupplier(int supplierId, ContractWithSupplier contractInfo) {
+
+        return this.supplierMapper.insertContractToSupplier(supplierId,contractInfo);
+    }
+
+    public boolean addProductToContract(int supplierID,AddProduct product) {
+        ContractWithSupplier contractWithSupplier=supplierMapper.getContractBySupplier(supplierID);
+        if(contractWithSupplier==null)
+        {
+            return false;
+        }
+
+        return supplierMapper.addProductToContract(contractWithSupplier.getContractID(),product);
+    }
+
+    public List<ContactInfo> getAllSupplierContacts(int supID) {
+        return this.supplierMapper.getAllSupplierContacts(supID);
+    }
+
+    public ContractWithSupplier getSupplierContract(int supID) {
+        ContractWithSupplier contractWithSupplier=this.supplierMapper.getContractBySupplier(supID);
+        //System.out.println("SupplierID from contract id: "+getIdByContract(contractWithSupplier.getContractID()));
+        return contractWithSupplier;
+    }
+
+    public List<Days> getSupplyingDaysBySupID(int supID) {
+        return this.supplierMapper.getSupplyDays(supID);
+    }
+
+    public List<PaymentOptions> getSupplierPaymentOptions(int supId) {
+
+        return this.supplierMapper.getAllSupplierPaymentInfo(supId);
+    }
+
+    public List<ContractProduct> getAllSupplierProductsBardoces(int supplierId) {
+        return this.supplierMapper.getAllSupplierProducts(supplierId);
     }
 }

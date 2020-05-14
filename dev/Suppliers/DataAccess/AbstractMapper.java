@@ -38,8 +38,8 @@ public abstract class AbstractMapper<T> {
         if(res != null){
             return res;
         }
-
-        try(PreparedStatement pstmt = conn.prepareStatement(findStatement())){
+        String statement=findStatement();
+        try(PreparedStatement pstmt = conn.prepareStatement(statement)){
 
             pstmt.setInt(1,id);
             ResultSet rs  = pstmt.executeQuery();

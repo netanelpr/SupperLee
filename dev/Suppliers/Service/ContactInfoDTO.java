@@ -1,15 +1,13 @@
-package Suppliers.Supplier;
+package Suppliers.Service;
 
-/**
- * Data class
- */
-public class ContactInfo {
+public class ContactInfoDTO {
+
     private String phoneNumber;
     private String email;
     private String name;
     private int SupID;
 
-    public ContactInfo(String name, String phoneNumber, String email, int supID){
+    public ContactInfoDTO(String name, String phoneNumber, String email, int supID){
         this.email=email;
         this.name=name;
         this.phoneNumber=phoneNumber;

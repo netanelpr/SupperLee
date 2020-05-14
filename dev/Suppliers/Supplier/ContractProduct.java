@@ -8,7 +8,19 @@ public class ContractProduct {
     private String productCatalogNumber;
     private Map<Integer,DiscountOfProduct> discounts;
     private double originalPrice;
+    private int contractID;
 
+    public double getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setContractID(int contractID) {
+        this.contractID = contractID;
+    }
+
+    public int getContractID() {
+        return contractID;
+    }
 
     public ContractProduct(int barCode, String productCatalogNumber, ProductDiscounts discounts) {
         this.barCode = barCode;
@@ -19,6 +31,22 @@ public class ContractProduct {
         }
         this.originalPrice=discounts.originalPrice;
     }
+    public ContractProduct(int barCode, String productCatalogNumber, double originalPrice) {
+        this.barCode = barCode;
+        this.productCatalogNumber = productCatalogNumber;
+        this.discounts=new HashMap<Integer, DiscountOfProduct>();
+        this.originalPrice=originalPrice;
+    }
+
+    public void setDiscounts(ProductDiscounts discounts)
+    {
+        for (Integer amount:
+             discounts.discountPerAmount.keySet()) {
+            this.discounts.put(amount,new DiscountOfProduct(amount,discounts.discountPerAmount.get(amount)));
+        }
+    }
+
+
 
     public int getBarCode() {
         return barCode;

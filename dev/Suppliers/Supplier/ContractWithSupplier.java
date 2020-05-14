@@ -1,6 +1,7 @@
 package Suppliers.Supplier;
 
 import Suppliers.Structs.Days;
+import Suppliers.Structs.PaymentOptions;
 import Suppliers.Supplier.Order.ProductInOrder;
 
 import java.util.HashMap;
@@ -14,6 +15,24 @@ public class ContractWithSupplier {
     private String contractDetails;
     //TODO save it as hashmap for faster search
     private List<ContractProduct> products;
+    private int contractID;
+    private int supID;
+
+    public int getSupID() {
+        return supID;
+    }
+
+    public void setSupID(int supID) {
+        this.supID = supID;
+    }
+
+    public void setContractID(int contractID) {
+        this.contractID = contractID;
+    }
+
+    public int getContractID() {
+        return contractID;
+    }
 
     public ContractWithSupplier(String contractDetails, List<Days> days){
         this.dailyInfo=days;
@@ -115,5 +134,10 @@ public class ContractWithSupplier {
         }
 
         return total;
+    }
+
+    public void addSupplyDayToContract(Days day)
+    {
+        this.dailyInfo.add(day);
     }
 }

@@ -53,10 +53,30 @@ public class Supplier {
         contract = null;
     }
 
+    public Supplier(String name, String address, String incNum, String accountNumber, String paymentInfo){
+        this.name=name;
+        this.incNum=incNum;
+        this.accountNumber=accountNumber;
+        this.paymentInfo=new LinkedList<>();
+        this.paymentInfo.add(paymentInfo);
+        this.address=address;
+
+
+
+        this.contacts = new LinkedList<>();
+
+        contract = null;
+    }
+
     
 
     public boolean addContactInfo(String name, String phone, String email){
         this.contacts.add(new ContactInfo(name, phone, email,this.supId));
+        return true;
+    }
+
+    public boolean addContactInfo(ContactInfo contactInfo){
+        this.contacts.add(contactInfo);
         return true;
     }
 
@@ -246,5 +266,18 @@ public class Supplier {
         }
 
         return null;
+    }
+
+    public void addContract(ContractWithSupplier contract) {
+        this.contract=contract;
+    }
+
+    public boolean hasContract() {
+        return this.contract!=null;
+    }
+
+    public ContractWithSupplier getContract()
+    {
+        return contract;
     }
 }

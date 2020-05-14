@@ -1,8 +1,10 @@
 package Suppliers.Supplier;
 
 import Result.Result;
+import Suppliers.Service.*;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
+import Suppliers.Structs.PaymentOptions;
 import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.Order.*;
 
@@ -53,29 +55,31 @@ public class SupplierSystem {
     public int createSupplierCard(String name, String incNum, String address, String accountNumber, String paymentInfo,
                                   String contactName, String phoneNumber,String email) {
 
-        paymentInfo = paymentInfo.toUpperCase();
-        String[] paymentOArr = paymentInfo.split(",");
-        List<String> paymentOptions = Arrays.asList(this.paymentOptions);
-        for(String paymentO : paymentOArr) {
-            if (!paymentOptions.contains(paymentO.toUpperCase())) {
-                return -1;
-            }
-        }
+//        paymentInfo = paymentInfo.toUpperCase();
+//        String[] paymentOArr = paymentInfo.split(",");
+//        List<String> paymentOptions = Arrays.asList(this.paymentOptions);
+//        for(String paymentO : paymentOArr) {
+//            if (!paymentOptions.contains(paymentO.toUpperCase())) {
+//                return -1;
+//            }
+//        }
 
-        Supplier sup = new Supplier(name,address,incNum,accountNumber,paymentInfo,contactName,phoneNumber,email);
+        Supplier sup = new Supplier(name,address,incNum,accountNumber,paymentInfo);
         int returnedId=supplierManager.insert(sup);
         if(returnedId!=-1) {
-            String returnedEmail=supplierManager.insertNewContactInfo(new ContactInfo(contactName, phoneNumber, email, sup.getSupId()));
-            if (returnedEmail==null)
-            {
-                boolean ans=supplierManager.deleteSupplier(sup);
-                return  -1;
+            String returnedEmail = supplierManager.insertNewContactInfo(new ContactInfo(contactName, phoneNumber, email, sup.getSupId()));
+            if (returnedEmail == null) {
+
+                boolean ans = supplierManager.deleteSupplier(sup);
+                return -1;
             }
+            if (!this.addPaymentOptions(sup.getSupId(), sup.getPaymentInfo().get(0))) {
+                boolean ans = supplierManager.deleteSupplier(sup);
+                return -1;
+            }
+
             return returnedId;
-
         }
-
-
         if(sup.getSupId() < 0){
             return -1;
         }
@@ -95,12 +99,13 @@ public class SupplierSystem {
      * @return null if the supplier doesnt exist in the system, otherwise its payment information
      */
     public List<String> getPaymentOptions(int supId) {
-        Supplier sup = suppliers.getOrDefault(supId, null);
+        List<String> options = new LinkedList<>();
+        for (PaymentOptions theOpt:
+                this.supplierManager.getSupplierPaymentOptions(supId)) {
+            options.add(theOpt.name());
 
-        if(sup == null){
-            return  null;
         }
-        return sup.getPaymentInfo();
+        return options;
     }
 
     /**
@@ -110,19 +115,11 @@ public class SupplierSystem {
      * @return true if the payment options was added or already exist, false otherwise
      */
     public boolean addPaymentOptions(int supId, String paymentInfo) {
-        Supplier sup = suppliers.getOrDefault(supId, null);
-        if(sup == null){
-            return  false;
-        }
 
-        // payment doesnt in the allowed list
-        List<String> paymentOptions = Arrays.asList(this.paymentOptions);
-        if (!paymentOptions.contains(paymentInfo.toUpperCase())) {
+        if (Arrays.stream(PaymentOptions.values()).filter(x->x.name().equals(paymentInfo)).findFirst().orElse(null)==null) {
                 return false;
-
         }
-        supplierManager.addPaymentOption(supId,paymentInfo);
-        return sup.addPaymentOptions(paymentInfo);
+        return supplierManager.addPaymentOption(supId,paymentInfo);
     }
 
     /**
@@ -134,15 +131,7 @@ public class SupplierSystem {
      * @return true if the all the payment are removed, false otherwise
      */
     public boolean removePaymentOptions(int supId, String paymentInfo) {
-        Supplier sup = suppliers.getOrDefault(supId, null);
-        if(sup == null){
-            return  false;
-        }
 
-        // payment doesnt in the allowed list
-            if(Arrays.binarySearch(paymentOptions, paymentInfo) < 0){
-                return false;
-            }
         return supplierManager.removePaymentOption(supId,paymentInfo);
 
     }
@@ -173,27 +162,20 @@ public class SupplierSystem {
      * @return True if the contact as been added.
      */
     public boolean addContactInfo(int supplierId, String contactPersonName, String phoneNumber, String email) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
-
-        if(supplier == null){
-            return false;
-        }
         String returnedEmail=supplierManager.insertNewContactInfo(new ContactInfo(contactPersonName,phoneNumber,email,supplierId));
-        if(returnedEmail!=null) {
-            return supplier.addContactInfo(contactPersonName, phoneNumber, email);
-        }
-        else {
+        if(returnedEmail==null)
+        {
             return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
     public boolean RemoveContactFromSupplier(int supID,String email)
     {
-        if(this.supplierManager.removeContactFromSupplier(supID,email)) {
-            return this.suppliers.get(supID).RemoveContactFromSupplier(email);
-        }
-        else
-            return false;
+        return this.supplierManager.removeContactFromSupplier(supID,email);
     }
 
     /**
@@ -206,51 +188,46 @@ public class SupplierSystem {
      *          supplier already have one.
      */
     public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProduct> products) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
-
-        List<Integer> productIdError = new LinkedList<>();
-
-        if(supplier == null){
-            return null;
-        }
-
+//        Supplier supplier = suppliers.getOrDefault(supplierId, null);
+//
+//        List<Integer> productIdError = new LinkedList<>();
+//
+//        if(supplier == null){
+//            return null;
+//        }
+        List<Integer> badProducts=new LinkedList<>();
         //TODO add to addproduct.product if not null the freqSupply and min price that is the original price
-        boolean ans= supplier.addContractInfo(contractInfo,days);
-        if(ans) {
-            for (AddProduct product : products) {
-                if (!supplier.addProduct(product)) {
-                    productIdError.add(product.barCode);
-                } else {
-                    productsManager.addIfAbsent(product);
-                }
-            }
-
-            return productIdError;
-        }
-        else {
+        int contractID=supplierManager.addContractToSupplier(supplierId,new ContractWithSupplier(contractInfo,days));
+        if(contractID<0)
+        {
             return null;
         }
+        boolean ans=true;
+        for (AddProduct product:products
+             ) {
+            ans=addProductToContract(supplierId,product);
+            if(!ans)
+            {
+                badProducts.add(product.barCode);
+            }
+        }
+        return badProducts;
 
     }
 
     /**
      * Add a product to the supplier contract
-     * @param supplierId Suppliers.Supplier ID
+     * @param supplierID Suppliers.Supplier ID
      * @param product Data of the product
      * @return true if the product have been added
      */
-    public boolean addProductToContract(int supplierId, AddProduct product) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
+    public boolean addProductToContract(int supplierID, AddProduct product) {
+        boolean ans;
 
-        if(supplier == null){
-            return false;
-        }
-        boolean ans=false;
-        //TODO add to addproduct.product if not null the freqSupply and min price that is the original price
-
-        if(ans=supplier.addProduct(product))
+        if(ans=supplierManager.addProductToContract(supplierID,product))
         {
-            productsManager.addIfAbsent(product);
+            //TODO: make the next line workable
+            //productsManager.addIfAbsent(product);
         }
         return ans;
 
@@ -390,13 +367,21 @@ public class SupplierSystem {
      * @param supplierId supplier ID
      * @return List with all the supplier product info
      */
-    public List<SupplierProductInfo> getAllSupplierProducts(int supplierId) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
+    public List<SupplierProductDTO> getAllSupplierProducts(int supplierId) {
+        List<SupplierProductDTO> supplierProductDTOs=new LinkedList<>();
+        //int barcode, String productCatalogNumber, double originalPrice, ProductDiscountsDTO discountPerAmount
+        for (ContractProduct product:
+                this.supplierManager.getAllSupplierProductsBardoces(supplierId)) {
+            ProductDiscountsDTO productDiscountsDTO= new ProductDiscountsDTO(product.getBarCode(),product.getOriginalPrice());
+            for (int amount:
+                 product.getDiscounts().discountPerAmount.keySet()) {
+                productDiscountsDTO.addDiscount(amount,product.getDiscounts().discountPerAmount.get(amount));
+            }
+            supplierProductDTOs.add(new SupplierProductDTO(product.getBarCode(),
+                    product.getProductCatalogNumber(),product.getOriginalPrice(), productDiscountsDTO));
 
-        if(supplier == null){
-            return null;
         }
-        return supplier.getAllProducts();
+        return supplierProductDTOs;
     }
 
 
@@ -492,4 +477,59 @@ public class SupplierSystem {
 
         return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details);
     }
+
+    public SupplierDetailsDTO getSupplierInformation(int supID) {
+        Supplier supplier=supplierManager.getById(supID);
+        //int supplierID, String supplierName, String incNum, String accountNumber,
+        //                              String address, String contactName, String phoneNumber, String email) {
+        if(supplier!=null) {
+            SupplierDetailsDTO supplierDetails = new SupplierDetailsDTO(supplier.getSupId(), supplier.getSupplierName(),
+                    supplier.getIncNum(), supplier.getAccountNumber(), supplier.getAddress(),
+                    supplier.getContacts().get(0).getName(), supplier.getContacts().get(0).getPhoneNumber(), supplier.getContacts().get(0).getEmail());
+            return supplierDetails;
+        }
+        return null;
+    }
+
+    public List<ContactInfoDTO> getSupplierContacts(int supID) {
+        List<ContactInfoDTO> contactInfoDTOS= new LinkedList<>();
+        for (ContactInfo contact:
+             supplierManager.getAllSupplierContacts(supID)) {
+                contactInfoDTOS.add(new ContactInfoDTO(contact.getName(),contact.getPhoneNumber(),contact.getEmail(),contact.getSupID()));
+        }
+        return contactInfoDTOS;
+    }
+
+    public ContractWithSupplierDTO getSupplierContractInfo(int supID) {
+        ContractWithSupplier contractWithSupplier=this.supplierManager.getSupplierContract(supID);
+        if(contractWithSupplier!=null)
+        {
+            List<String> days=this.getSupplyingDaysNamesBySupID(supID);
+            return new ContractWithSupplierDTO(days,contractWithSupplier.getContractDetails());
+        }
+        return null;
+    }
+
+    public List<String> getSupplyingDaysNamesBySupID(int supID) {
+        List<String> days = new LinkedList<>();
+        for (Days day:
+                this.supplierManager.getSupplyingDaysBySupID(supID)) {
+            days.add(day.name());
+
+        }
+        return days;
+    }
+
+    public List<Integer> getSupplyingDaysNumbersBySupID(int supID) {
+        List<Integer> days = new LinkedList<>();
+        for (Days day:
+                this.supplierManager.getSupplyingDaysBySupID(supID)) {
+            Integer dayInt=StructUtils.getDayInt(day);
+            days.add(dayInt);
+
+        }
+        return days;
+    }
+
+
 }
