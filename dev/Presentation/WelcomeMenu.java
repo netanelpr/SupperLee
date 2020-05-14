@@ -34,16 +34,14 @@ public class WelcomeMenu {
             }
 
             if(option == 1){
-                supplierMenu.startMenu();
-            }
-            if(option == 2){
+                supplierMenu.apply();
+            } else if(option == 2){
                 inventoryMenu.mainLoop();
-            }
-            if(option == 3){
+            } else if(option == 3){
                 break;
+            } else {
+                System.out.println("Invalid option");
             }
-
-            System.out.println("Invalid option");
         }
         SupInvDBConn.closeConn();
     }
