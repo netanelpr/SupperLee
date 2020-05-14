@@ -25,12 +25,13 @@ public class InvService implements myObservable {
     private View view;
     private HashMap<String, Inventory> superLeeInvs; //inventory id, inventory
     private Inventory currInv;
-    boolean terminateInv = false;
-    boolean terminateSys = false;
+    private boolean terminateInv = false;
+    private boolean terminateSys = false;
     private Scanner myScanner;
     private final List<Observer> observers;
     private Inventory2SuppliersCtrl myInv2Sup;
     private InventoriesMapper inventoriesMapper;
+    private String ansStr;
 
     //region singelton Constructor
     private static InvService instance = null;
@@ -52,7 +53,6 @@ public class InvService implements myObservable {
 
     public void mainLoop() {
         this.myInv2Sup = Inventory2SuppliersCtrl.getInstance();
-        String ansStr;
 
         while(!terminateSys) {
             terminateInv = false;
@@ -81,113 +81,83 @@ public class InvService implements myObservable {
             //endregion
             while (!terminateInv) {
                 notifyObserver("Choose option:\n-------\n" +
-                                    "Items: update and reports quantities\n" +
-                                    "\t1) Receive arrived order to inventory \n" +
-                                    "\t2) Update quantities in your inventory after stocktaking \n" +
-                                    "\t3) Get All Items Report \n" +
-                                    "\t4) Get Item Report by id \n" +
-                                    "\t5) Get Item Report By Category \n"+
-                                    "\t6) Get Shortage Item Report  \n" +
-                                    "\t7) Get Item Report By Category \n" +
-                                    "\t8) Get Item Report By Category \n" +
-                                    "\t9) Get Item Report By Category \n" +
-                                    "Records: update and reports\n" +
-                                    "\t10) Set New Price For Item \n" +
-                                    "\t11) Get Cost & Price All Items Report \n" +
-                                    "\t12) Get Cost & Price Item Report By Id \n" +
-                                    "Defectives and Expired Items: update and reports\n" +
-                                    "\t13) Update defective/expired Items in your inventory\n" +
-                                    "\t14) Get All Defective and Expired Report \n" +
-                                    "\t15) Get Defective and Expired Report By Id \n" +
-                                    "For Exiting...\n" +
-                                    "\t^) Type 'exit' for backing the last menu\n" +
-                                    "\t^) Type 'quit' to close super lee system\n");
+                        "1) Items: update and reports quantities\n" +
+                        "2) Records: update and reports\n" +
+                        "3) Defectives and Expired Items: update and reports\n" +
+                        "4) Back to suppliers-inventory menu\n" +
+                        "5) Quit - close super lee system\n");
                 ansStr = myScanner.nextLine();
-
-                //region items
-                //-- Receive arrived order to inventory --
-                if (ansStr.equals("1")) { //TODO talk about the shops
-                    notifyObserver("Type order id:");
-                    ansStr = myScanner.nextLine();
-                    //Result res =
-                    myInv2Sup.receiveSuppliersOrderTmp(Integer.parseInt(ansStr));
-//                    if(res.isFailure()){
-//                        notifyObserver("Cant receive this order from suppliers. error: " + res.getMessage());
-//                    }
-//                    else {
-//                        notifyObserver("order received successfully and arranged in inventory!");
-//                    }
-                } else if (ansStr.equals("2")) {
-                    updInvWorker();
-                } else if (ansStr.equals("3")) {
-                    notifyObserver("--- All items report ---");
-                    currInv.getItemReport();
-                } else if (ansStr.equals("4")) {
-                    notifyObserver("enter id:");
-                    ansStr = myScanner.nextLine();
-                    notifyObserver(String.format("-- Item Report By Id : #%s--", ansStr));
-                    currInv.getItemReportById(ansStr);
-                } else if (ansStr.equals("5")) {
-                    notifyObserver("enter category:");
-                    ansStr = myScanner.nextLine();
-                    notifyObserver(String.format("--- Items Report By Category %s ---", ansStr));
-                    currInv.getItemReportByCategory(ansStr);
-                } else if (ansStr.equals("6")) {
-                    notifyObserver("--- Shortage Item Report ---");
-                    currInv.getItemMissing();
-                }
-                //endregion
-                //region records
-                else if (ansStr.equals("10")) {
-                    setNewPrice();
-                } else if (ansStr.equals("11")) {
-                    notifyObserver("--- Cost & Price Item Report ---");
-                    currInv.getGeneralRecordsReport();
-                } else if (ansStr.equals("12")) {
-                    notifyObserver("enter id:");
-                    ansStr = myScanner.nextLine();
-                    notifyObserver(String.format("--- Cost & Price Item Report By Id : %s --", ansStr));
-                    currInv.getRecordsReportById(ansStr);
-                }
-                //endregion
-                //region defectives
-                else if (ansStr.equals("13")) {
-                    updDef();
-                } else if (ansStr.equals("15")) {
-                    notifyObserver("enter id:");
-                    String id = myScanner.nextLine();
-                    notifyObserver(String.format("-- Defective/Expired Report By Id : %s--"));
-                    currInv.getDefectivesReportById(id);
-                } else if (ansStr.equals("14")) {
-                    notifyObserver("--- General Defective Report ---");
-                    currInv.getDefectivesReport();
-                }
-                //endregion
-                //region quit_exit
-                    else if (ansStr.equals("exit")) {
-                    notifyObserver("-- exiting current inventory... --");
+                if(ansStr.equals("1"))
+                    itemsFunctions();
+                else if(ansStr.equals("2"))
+                    recordsFunctions();
+                else if(ansStr.equals("3"))
+                    defectivesFunctions();
+                else if(ansStr.equals("4"))
                     terminateInv = true;
-                } else if (ansStr.equals("quit")) {
+                else if(ansStr.equals("5")){
                     notifyObserver("-- Bye Bye thank you for buying yellow --");
                     terminateInv = true;
                     terminateSys = true;
-                } else {
-                    notifyObserver("-- wrong order --");
                 }
-                //endregion
+                else
+                    notifyObserver("-- wrong order --");
             }
         }
     }
 
 
-    //region FUNCTIONS
-    public Inventory newShop() {
-        notifyObserver("choose name for your shop:");
-        String name = myScanner.nextLine();
-        Inventory newInv = new Inventory(view, name);
-        superLeeInvs.put(newInv.getShopNum(), newInv);
-        notifyObserver("YAY! opened new Inv number " + newInv.getShopNum() + "\n\n--------");
-        return newInv;
+
+    //region items
+    private void itemsFunctions() {
+        while(!terminateSys) {
+            notifyObserver(
+                    "__Items__\nChoose option:\n" +
+                            "\t1) Receive arrived order to inventory \n" +
+                            "\t2) Update quantities in your inventory after stocktaking \n" +
+                            "\t3) Get All Items Report \n" +
+                            "\t4) Get Item Report by id \n" +
+                            "\t5) Get Item Report By Category \n" +
+                            "\t6) Get Shortage Item Report  \n" +
+                            "\t7) Back to inventory menu \n");
+            ansStr = myScanner.nextLine();
+            if (ansStr.equals("1")) { //TODO talk about the shops
+                notifyObserver("Type order id:");
+                ansStr = myScanner.nextLine();
+                Result res = myInv2Sup.receiveSuppliersOrderTmp(Integer.parseInt(ansStr));
+                if(res == null) {notifyObserver("//order received successfully and arranged in inventory! !Result not implement!");}//need to implement
+                else if(res.isFailure()){
+                    notifyObserver("Cant receive this order from suppliers. error: " + res.getMessage());
+                }
+                else {
+                    notifyObserver("order received successfully and arranged in inventory!");
+                }
+            } //-- Receive arrived order to inventory --
+            else if (ansStr.equals("2")) { updInvWorker(); }
+            else if (ansStr.equals("3")) {
+                notifyObserver("--- All items report ---");
+                currInv.getItemReport();
+            }
+            else if (ansStr.equals("4")) {
+                notifyObserver("enter id:");
+                ansStr = myScanner.nextLine();
+                notifyObserver(String.format("-- Item Report By Id : #%s--", ansStr));
+                currInv.getItemReportById(ansStr);
+            }
+            else if (ansStr.equals("5")) {
+                notifyObserver("enter category:");
+                ansStr = myScanner.nextLine();
+                notifyObserver(String.format("--- Items Report By Category %s ---", ansStr));
+                currInv.getItemReportByCategory(ansStr);
+            }
+            else if (ansStr.equals("6")) {
+                notifyObserver("--- Shortage Item Report ---");
+                currInv.getItemMissing();
+            }
+            else if (ansStr.equals("7")) {terminateSys=true;}
+            else {notifyObserver("wrong order");}
+        }
+        terminateSys = false;
     }
     private void updInvWorker() {
         String id;
@@ -196,8 +166,8 @@ public class InvService implements myObservable {
         OrderItem currOrderItem;
         ShortageOrder shortageOrder = new ShortageOrder(Integer.parseInt(currInv.getShopNum()));
         notifyObserver("Type the updated quantities for each item you want, in the following format:\n " +
-                            "<'id' 'Amount of missing quantity in stock' 'Amount of missing quantity in shop'>\n " +
-                            "<0> when you finish");
+                "<'id' 'Amount of missing quantity in stock' 'Amount of missing quantity in shop'>\n " +
+                "<0> when you finish");
         String currItem = myScanner.nextLine();
         String[] splited;
 
@@ -214,7 +184,7 @@ public class InvService implements myObservable {
             }
             else
                 notifyObserver("You probably type the wrong format or id that isn't exist, type again in the format:\n" +
-                                "<'id' 'Amount of missing quantity in stock' 'Amount of missing quantity in shop'>");
+                        "<'id' 'Amount of missing quantity in stock' 'Amount of missing quantity in shop'>");
             currItem = myScanner.nextLine();
         }
         notifyObserver("finish updating inventory, sending shortage order to suppliers if needed.");
@@ -231,6 +201,35 @@ public class InvService implements myObservable {
 
         currInv.updateInventorySuppliers(order, this);
     }
+    //endregion
+    //region records
+    private void recordsFunctions() {
+        while(!terminateSys) {
+            notifyObserver(
+                    "__Records__\nChoose option:\n" +
+                            "\t1) Set New Price For Item \n" +
+                            "\t2) Get Cost & Price All Items Report \n" +
+                            "\t3) Get Cost & Price Item Report By Id \n" +
+                            "\t4) Back to inventory menu \n");
+            ansStr = myScanner.nextLine();
+                if (ansStr.equals("1")) {
+                setNewPrice();
+            }
+                else if (ansStr.equals("2")) {
+                notifyObserver("--- Cost & Price Item Report ---");
+                currInv.getGeneralRecordsReport();
+            }
+                else if (ansStr.equals("3")) {
+                notifyObserver("enter id:");
+                ansStr = myScanner.nextLine();
+                notifyObserver(String.format("--- Cost & Price Item Report By Id : %s --", ansStr));
+                currInv.getRecordsReportById(ansStr);
+            }
+                else if (ansStr.equals("4")) {terminateSys=true;}
+                else {notifyObserver("wrong order");}
+        }
+        terminateSys = false;
+    }
     private void setNewPrice() {
         notifyObserver("which id to set deal?");
         String id = myScanner.nextLine();
@@ -241,6 +240,35 @@ public class InvService implements myObservable {
                 "type new price: ");
         String newPrice = myScanner.nextLine();
         currInv.setNewPrice(id, newPrice, nameLast, priceLast);
+    }
+    //endregion
+    //region defectives
+    private void defectivesFunctions() {
+        while(!terminateSys) {
+            notifyObserver(
+                    "__Defectives-Expired__\nChoose option:\n" +
+                            "\t1) Update defective/expired Items in your inventory \n" +
+                            "\t2) Get All Defective and Expired Report\n" +
+                            "\t3) Get Defective and Expired Report By Id\n" +
+                            "\t4) Back to inventory menu \n");
+            ansStr = myScanner.nextLine();
+            if (ansStr.equals("1")) {
+                updDef();
+            }
+            else if (ansStr.equals("2")) {
+                notifyObserver("enter id:");
+                String id = myScanner.nextLine();
+                notifyObserver(String.format("-- Defective/Expired Report By Id : %s--"));
+                currInv.getDefectivesReportById(id);
+            }
+            else if (ansStr.equals("3")) {
+                notifyObserver("--- General Defective Report ---");
+                currInv.getDefectivesReport();
+            }
+            else if (ansStr.equals("4")) {terminateSys=true;}
+            else {notifyObserver("wrong order");}
+        }
+        terminateSys = false;
     }
     private void updDef() {
         notifyObserver("Enter the defect or expired items quantities for each item you want, in the following format:\n " +
@@ -256,6 +284,17 @@ public class InvService implements myObservable {
             currItem = myScanner.nextLine();
         }
         notifyObserver("--- finish updating defectives and expired ---");
+    }
+    //endregion
+
+    //region FUNCTIONS
+    public Inventory newShop() {
+        notifyObserver("choose name for your shop:");
+        String name = myScanner.nextLine();
+        Inventory newInv = new Inventory(view, name);
+        superLeeInvs.put(newInv.getShopNum(), newInv);
+        notifyObserver(String.format("YAY! opened new Inv # %s : %s \n--------", newInv.getShopNum(), name));
+        return newInv;
     }
     public double askUserPrice(double newCost, double oldCost, String[] lastRecordInfo) {
         String id = lastRecordInfo[0]; String name = lastRecordInfo[1];
