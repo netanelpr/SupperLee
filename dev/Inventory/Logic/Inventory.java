@@ -3,8 +3,6 @@ package Inventory.Logic;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.InventoryDTO;
-import Inventory.Persistence.DTO.ItemDTO;
-import Inventory.Persistence.DummyItem;
 import Inventory.View.InvService;
 import Inventory.View.View;
 import Suppliers.Service.OrderDTO;
@@ -29,8 +27,7 @@ public class Inventory implements myObservable {
     public Inventory(View view, String name){
         counter++;
         this.shopNum = String.valueOf(counter);
-        //TODO check if needs shop num in item!
-        this.myItemController = new itemsController(view);
+        this.myItemController = new itemsController(view, shopNum);
         this.myRecoredController = new recordController(view, shopNum);
         this.myDefectivesController = new defectiveController(view, shopNum);
         observers = new ArrayList<>();
@@ -42,8 +39,7 @@ public class Inventory implements myObservable {
         counter++;
         this.shopNum = invDTO.getShopNum();
         this.shopName = invDTO.getShopName();
-        //TODO check if needs shop num in item!
-        this.myItemController = new itemsController(view);
+        this.myItemController = new itemsController(view, shopNum);
         this.myRecoredController = new recordController(view, shopNum);
         this.myDefectivesController = new defectiveController(view, shopNum);
         observers = new ArrayList<>();

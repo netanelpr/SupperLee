@@ -3,11 +3,7 @@ import DataAccess.SupInvDBConn;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.DefectiveDTO;
-import Inventory.Persistence.DTO.ItemDTO;
-import Inventory.Persistence.DTO.RecordDTO;
-import Inventory.Persistence.DummyItem;
 import Inventory.Persistence.Mappers.DefectivesMapper;
-import Inventory.Persistence.Mappers.ItemToProductMapper;
 import Suppliers.Service.OrderDTO;
 import Suppliers.Service.ProductInOrderDTO;
 

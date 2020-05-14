@@ -2,7 +2,6 @@ package Inventory.Logic;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.ItemDTO;
-import Inventory.Persistence.DummyItem;
 
 import java.util.ArrayList;
 import java.util.List;
