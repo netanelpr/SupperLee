@@ -21,22 +21,22 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public String getPaymentOptions() {
-        return supplierSystem.getPaymentOptions();
+    public List<String> getPaymentOptions() {
+        return supplierSystem.getOfferedPaymentOptions();
     }
 
     @Override
-    public String getPaymentOptions(int supId) {
+    public List<String> getPaymentOptions(int supId) {
         return supplierSystem.getPaymentOptions(supId);
     }
 
     @Override
-    public boolean addPaymentOptions(int supId, String[] paymentInfo) {
+    public boolean addPaymentOption(int supId, String paymentInfo) {
         return supplierSystem.addPaymentOptions(supId, paymentInfo);
     }
 
     @Override
-    public boolean removePaymentOptions(int supId, String[] paymentInfo) {
+    public boolean removePaymentOptions(int supId, String paymentInfo) {
         return supplierSystem.removePaymentOptions(supId, paymentInfo);
     }
 

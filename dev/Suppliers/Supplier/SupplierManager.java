@@ -32,7 +32,37 @@ public class SupplierManager {
     public int insert(Supplier supplier){
         return supplierMapper.insert(supplier);
     }
+    public boolean deleteSupplier(Supplier sup) {
 
+        List<ContactInfo> contactInfos=supplierMapper.getAllSupplierContacts(sup.getSupId());
+        boolean ans=true;
+        for (ContactInfo contact:
+             contactInfos) {
+            ans=supplierMapper.deleteContactInfo(sup.getSupId(),contact.getEmail());
+            if(!ans)
+            {
+                break;
+            }
+        }
+        if(ans) {
+            return supplierMapper.deleteById(sup.getSupId());
+        }
+        else
+            return false;
+    }
+    public String insertNewContactInfo(ContactInfo contactInfo) {
+        return supplierMapper.insertContactInfo(contactInfo);
+    }
+    public boolean removeContactFromSupplier(int supID, String email) {
+        if(supplierMapper.getAllSupplierContacts(supID).size()<2)
+        {
+            return false;
+        }
+        else {
+            return supplierMapper.deleteContactInfo(supID, email);
+        }
+
+    }
     public Supplier getOrNull(int supplierId){
         //TODO implement
         return null;
@@ -87,5 +117,38 @@ public class SupplierManager {
     public List<Integer> getAllSupplierWithSupplyDays(List<Days> days) {
         //TODO implement return empty list is there isnt any one
         return  null;
+    }
+
+
+    public boolean addPaymentOption(int supId, String paymentInfo) {
+        List<String> supplierPaymentInfo= supplierMapper.getAllSupplierPaymentInfo(supId);
+        for ( String info:
+              supplierPaymentInfo) {
+            if(info.equals(paymentInfo))
+            {
+                return false;
+            }
+        }
+        return supplierMapper.addPaymentInfo(supId,paymentInfo);
+
+    }
+
+    public boolean removePaymentOption(int supId, String paymentInfo) {
+        List<String> supplierPaymentInfo=this.supplierMapper.getAllSupplierPaymentInfo(supId);
+        boolean ans=false;
+        for ( String info:
+                supplierPaymentInfo) {
+            if(info.equals(paymentInfo))
+            {
+                ans=true;
+                break;
+            }
+        }
+        if(ans)
+        {
+            supplierMapper.removePaymentOption(supId,paymentInfo);
+        }
+
+        return ans;
     }
 }

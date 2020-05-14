@@ -11,7 +11,7 @@ public class Supplier {
     private int supId=-1;
     private String incNum;
     private String accountNumber;
-    private String paymentInfo;
+    private List<String> paymentInfo;
     private String address;
 
     //Suppliers.Supplier.Suppliers.Supplier Details
@@ -25,7 +25,8 @@ public class Supplier {
         this.name=name;
         this.incNum=incNum;
         this.accountNumber=accountNumber;
-        this.paymentInfo=paymentInfo;
+        this.paymentInfo=new LinkedList<>();
+        this.paymentInfo.add(paymentInfo);
         this.supId=supID;
 
 
@@ -40,7 +41,9 @@ public class Supplier {
         this.name=name;
         this.incNum=incNum;
         this.accountNumber=accountNumber;
-        this.paymentInfo=paymentInfo;
+        this.paymentInfo=new LinkedList<>();
+        this.paymentInfo.add(paymentInfo);
+        this.address=address;
 
 
 
@@ -53,7 +56,7 @@ public class Supplier {
     
 
     public boolean addContactInfo(String name, String phone, String email){
-        this.contacts.add(new ContactInfo(name, phone, email));
+        this.contacts.add(new ContactInfo(name, phone, email,this.supId));
         return true;
     }
 
@@ -111,7 +114,7 @@ public class Supplier {
         return supId;
     }
 
-    public String getPaymentInfo(){
+    public List<String> getPaymentInfo(){
         return paymentInfo;
     }
 
@@ -141,15 +144,11 @@ public class Supplier {
      * @param paymentInfo Array of payments info
      * @return true
      */
-    public boolean addPaymentOptions(String[] paymentInfo) {
-        String[] options = this.paymentInfo.toUpperCase().split(",");
-        List<String> paymentOptions = Arrays.asList(options);
+    public boolean addPaymentOptions(String paymentInfo) {
 
-        for(String option : paymentInfo){
-            if(!paymentOptions.contains(option.toUpperCase())){
-                this.paymentInfo = String.format("%s,%s",this.paymentInfo, option.toUpperCase());
+            if(!this.paymentInfo.contains(paymentInfo.toUpperCase())){
+                this.paymentInfo.add(paymentInfo);
             }
-        }
 
         return true;
     }
@@ -160,20 +159,16 @@ public class Supplier {
      * @param paymentInfo Array of payment info
      * @return true if all of the payment are removed, false otherwise
      */
-    public boolean RemovePaymentOptions(String[] paymentInfo) {
-        String[] options = this.paymentInfo.split(",");
-        List<String> optionsAfterRemove = Arrays.asList(options);
-
-        for(String option : paymentInfo){
-            optionsAfterRemove.remove(option.toUpperCase());
+    public boolean RemovePaymentOptions(String paymentInfo) {
+        boolean removed=false;
+        for(String option : this.paymentInfo){
+            if(option.equals(paymentInfo))
+            {
+                removed=true;
+                this.paymentInfo.remove(option);
+            }
         }
-
-        if(optionsAfterRemove.isEmpty()){
-            return false;
-        }
-
-        this.paymentInfo = String.join(",", optionsAfterRemove);
-        return true;
+        return removed;
     }
 
     public boolean RemoveContactFromSupplier(String email)

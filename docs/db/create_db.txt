@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS Supplier(
 	address TEXT NOT NULL,
 	account_number TEXT NOT NULL,
 	paymentInfo TEXT NOT NULL,
-	inc_number TEXT NOT NULL.
+	inc_number TEXT NOT NULL,
 	UNIQUE(inc_number)
 );
 
@@ -83,8 +83,7 @@ CREATE TABLE IF NOT EXISTS Supplier_order(
 	shop_number INTEGER NOT NULL,
 	status INTEGER NOT NULL,
 	delivery_day TEXT,
-	
-	FOREIGN KEY (contract_id)
+	FOREIGN KEY (id)
 		REFERENCES Contract(id)
 );
 
@@ -95,7 +94,7 @@ CREATE TABLE IF NOT EXISTS Periodical_supplier_order(
 	PRIMARY KEY (id)
 	FOREIGN KEY(id)
 		REFERENCES Supplier_order(id)
-	CHECK weekp > 0)
+	CHECK (weekp > 0)
 );
 
 CREATE TABLE IF NOT EXISTS Periodical_supplier_order_days(
@@ -122,7 +121,7 @@ CREATE TABLE IF NOT EXISTS Product_in_order(
 	contract_id INTEGER NOT NULL,
 	catalog_number TEXT NOT NULL,
 	amount INTEGER NOT NULL,
-	price_per_unit DOUBLE NOT NULL
+	price_per_unit DOUBLE NOT NULL,
 	PRIMARY KEY (order_id, catalog_number)
 	FOREIGN KEY (order_id)
 		REFERENCES Supplier_order(id)
@@ -130,6 +129,13 @@ CREATE TABLE IF NOT EXISTS Product_in_order(
 		REFERENCES Product_in_contract(catalog_number, contract_id)
 	CONSTRAINT amount_in_order
 		CHECK (amount > 0)
+);
+
+CREATE TABLE "Supplier_paymentOptions" (
+	"sup_id"	INTEGER NOT NULL,
+	"paymentOption"	TEXT NOT NULL,
+	PRIMARY KEY("sup_id","paymentOption"),
+	FOREIGN KEY("sup_id") REFERENCES "Supplier"("id")
 );
 
 --Views
@@ -140,3 +146,4 @@ SELECT S.id AS supplier_id,PIC.catalog_number as catalog_number, PIC.barcode AS 
 FROM Supplier AS S JOIN Contract AS C
 	JOIN Product_in_contract AS PIC
 	ON S.id = C.supplier_id AND C.id = PIC.contract_id
+

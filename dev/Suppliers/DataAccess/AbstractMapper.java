@@ -1,5 +1,10 @@
 package Suppliers.DataAccess;
 
+import Suppliers.Supplier.ContactInfo;
+import Suppliers.Supplier.ContractProduct;
+import Suppliers.Supplier.ContractWithSupplier;
+import Suppliers.Supplier.DiscountOfProduct;
+
 import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,9 +14,11 @@ public abstract class AbstractMapper<T> {
 
     protected WeakValueHashMap<Integer, T> loadedMap;
 
+
     public AbstractMapper(Connection conn){
         this.conn = conn;
         loadedMap = new WeakValueHashMap<>();
+
     }
 
     /**
@@ -89,4 +96,6 @@ public abstract class AbstractMapper<T> {
      * @return The id of the product
      */
     protected abstract int insert(T product);
+
+
 }

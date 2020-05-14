@@ -21,14 +21,14 @@ public interface SupplierManagment {
     public int createSupplierCard(String name, String incNum, String address, String accountNumber, String paymentInfo,
                                   String contactName, String phoneNumber,String email);
 
-    public String getPaymentOptions();
+    public List<String> getPaymentOptions();
 
     /**
      * Return the payment information of specific supplier.
      * @param supId ID of the supplier
      * @return null if the supplier doesnt exist in the system, otherwise its payment information
      */
-    public String getPaymentOptions(int supId);
+    public List<String> getPaymentOptions(int supId);
 
     /**
      * Add all or noting of the payments info to the supplier
@@ -36,7 +36,7 @@ public interface SupplierManagment {
      * @param paymentInfo list of payments options
      * @return true if added false otherwise
      */
-    public boolean addPaymentOptions(int supId, String[] paymentInfo);
+    public boolean addPaymentOption(int supId, String paymentInfo);
 
     /**
      * Remove all or noting of the payments info from supplier
@@ -44,7 +44,7 @@ public interface SupplierManagment {
      * @param paymentInfo list of payments options
      * @return true if added false otherwise
      */
-    public boolean removePaymentOptions(int supId, String[] paymentInfo);
+    public boolean removePaymentOptions(int supId, String paymentInfo);
 
     /**
      * Return the details for each supplier in the system.

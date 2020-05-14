@@ -12,7 +12,7 @@ public class SupDBConn {
     public static Connection getInstance(){
         try {
             if(conn == null) {
-                conn = DriverManager.getConnection("jdbc:sqlite:DB/supplier_only.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:DB/superlee_db_dor.db");
             }
             return conn;
         } catch (SQLException throwables) {

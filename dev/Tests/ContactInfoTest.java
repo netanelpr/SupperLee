@@ -11,7 +11,7 @@ class ContactInfoTest {
 
     @BeforeEach
     void setUp() {
-        contactInfo=new ContactInfo("David","054","@com");
+        contactInfo=new ContactInfo("David","054","@com",1);
     }
 
     @AfterEach

@@ -1,6 +1,7 @@
 package Suppliers.Supplier;
 
 import Result.Result;
+import Suppliers.Presentation.PaymentOptions;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Supplier.Order.*;
@@ -62,7 +63,17 @@ public class SupplierSystem {
         }
 
         Supplier sup = new Supplier(name,address,incNum,accountNumber,paymentInfo,contactName,phoneNumber,email);
-        supplierManager.insert(sup);
+        int returnedId=supplierManager.insert(sup);
+        if(returnedId!=-1) {
+            String returnedEmail=supplierManager.insertNewContactInfo(new ContactInfo(contactName, phoneNumber, email, sup.getSupId()));
+            if (returnedEmail==null)
+            {
+                boolean ans=supplierManager.deleteSupplier(sup);
+                return  -1;
+            }
+            return returnedId;
+
+        }
 
 
         if(sup.getSupId() < 0){
@@ -83,7 +94,7 @@ public class SupplierSystem {
      * @param supId ID of the supplier
      * @return null if the supplier doesnt exist in the system, otherwise its payment information
      */
-    public String getPaymentOptions(int supId) {
+    public List<String> getPaymentOptions(int supId) {
         Supplier sup = suppliers.getOrDefault(supId, null);
 
         if(sup == null){
@@ -98,7 +109,7 @@ public class SupplierSystem {
      * @param paymentInfo Array of payment options
      * @return true if the payment options was added or already exist, false otherwise
      */
-    public boolean addPaymentOptions(int supId, String[] paymentInfo) {
+    public boolean addPaymentOptions(int supId, String paymentInfo) {
         Supplier sup = suppliers.getOrDefault(supId, null);
         if(sup == null){
             return  false;
@@ -106,12 +117,11 @@ public class SupplierSystem {
 
         // payment doesnt in the allowed list
         List<String> paymentOptions = Arrays.asList(this.paymentOptions);
-        for(String paymentO : paymentInfo) {
-            if (!paymentOptions.contains(paymentO.toUpperCase())) {
+        if (!paymentOptions.contains(paymentInfo.toUpperCase())) {
                 return false;
-            }
-        }
 
+        }
+        supplierManager.addPaymentOption(supId,paymentInfo);
         return sup.addPaymentOptions(paymentInfo);
     }
 
@@ -123,20 +133,18 @@ public class SupplierSystem {
      * @param paymentInfo Array of payment options to remove
      * @return true if the all the payment are removed, false otherwise
      */
-    public boolean removePaymentOptions(int supId, String[] paymentInfo) {
+    public boolean removePaymentOptions(int supId, String paymentInfo) {
         Supplier sup = suppliers.getOrDefault(supId, null);
         if(sup == null){
             return  false;
         }
 
         // payment doesnt in the allowed list
-        for(String option : paymentInfo){
-            if(Arrays.binarySearch(paymentOptions, option.toUpperCase()) < 0){
+            if(Arrays.binarySearch(paymentOptions, paymentInfo) < 0){
                 return false;
             }
-        }
+        return supplierManager.removePaymentOption(supId,paymentInfo);
 
-        return sup.RemovePaymentOptions(paymentInfo);
     }
 
 
@@ -170,13 +178,22 @@ public class SupplierSystem {
         if(supplier == null){
             return false;
         }
-
-        return supplier.addContactInfo(contactPersonName, phoneNumber, email);
+        String returnedEmail=supplierManager.insertNewContactInfo(new ContactInfo(contactPersonName,phoneNumber,email,supplierId));
+        if(returnedEmail!=null) {
+            return supplier.addContactInfo(contactPersonName, phoneNumber, email);
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean RemoveContactFromSupplier(int supID,String email)
     {
-        return this.suppliers.get(supID).RemoveContactFromSupplier(email);
+        if(this.supplierManager.removeContactFromSupplier(supID,email)) {
+            return this.suppliers.get(supID).RemoveContactFromSupplier(email);
+        }
+        else
+            return false;
     }
 
     /**
@@ -452,5 +469,13 @@ public class SupplierSystem {
             }
         }
         return cheapestSupplierId;
+    }
+
+    public List<String> getOfferedPaymentOptions() {
+        List<String> options= new LinkedList<>();
+        for (Suppliers.Structs.PaymentOptions option: Suppliers.Structs.PaymentOptions.values()) {
+            options.add(option.name());
+        }
+        return options;
     }
 }
