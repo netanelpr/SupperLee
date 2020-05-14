@@ -90,7 +90,7 @@ public class Inventory2SuppliersCtrl implements myObservable {
         //myInvenoryService.getOrderFromSuppliers();
    }
 
-    public void receiveSuppliersOrderTmp(int orderID){
+    public Result receiveSuppliersOrderTmp(int orderID){
 
         List <ProductInOrderDTO> productsLss = new ArrayList();
         ProductInOrderDTO item1 = new ProductInOrderDTO(1, 100, 7.34);
@@ -107,7 +107,7 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
         myInvenoryService.getOrderFromSuppliers(order);
 
-
+        return null;
     }
 
 
