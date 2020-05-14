@@ -91,9 +91,9 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     }
 
-    public Result placePeriodicalOrder(List<ProductInOrderDTO> shoppingList, List<Days> days, int weekPeriod)
+    public Result placePeriodicalOrder(List<ProductInOrderDTO> shoppingList, List<Days> days, int weekPeriod, int shopNumber)
     {
-        return this.myOrderAndProductManagement.createPeriodicalOrder(shoppingList,days,weekPeriod);
+        return this.myOrderAndProductManagement.createPeriodicalOrder(shoppingList,days,weekPeriod, shopNumber);
     }
 
     //TODO: understand how to make this work- which order id? of supplier? of inventory?

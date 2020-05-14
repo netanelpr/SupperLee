@@ -20,7 +20,7 @@ public class SupplierPeriodicalOrder {
                                     order.getOrderId(), order.getShopNumber(),order.getDeliveryDay(),
                                     order.getStatus().toString(), order.getContractId(),order.getWeekPeriod(), order.getDays().toString());
         String productsStr = "";
-        for(ProductInOrder product : order.retrunProducts()){
+        for(ProductInOrder product : order.getProducts()){
             String productStr = String.format("barcode:%d\tcatalog number:%s\tamount: %d\tPrice per unit: %f", product.getBarcode(),
                     product.getProductCatalogNumber(), product.getAmount(), product.getPricePerUnit());
             productsStr = String.format("%s\n%s", productsStr, productStr);

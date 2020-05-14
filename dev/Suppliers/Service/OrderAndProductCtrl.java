@@ -3,9 +3,8 @@ package Suppliers.Service;
 import Result.Result;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
-import Suppliers.Supplier.Order.OrderManager;
+import Suppliers.Supplier.Order.*;
 import Suppliers.Supplier.Product;
-import Suppliers.Supplier.Order.ProductInOrder;
 import Suppliers.Supplier.ProductsManager;
 import Suppliers.Supplier.SupplierSystem;
 
@@ -95,14 +94,40 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         return supplierSystem.createPeriodicalOrder(productInOrders, days, weekPeriod, shopNumber);
     }
 
+    /**
+     *
+     * @param orderId
+     * @return
+     */
+    public OrderDTO orderArrived(int orderId){
+        List<ProductInOrderDTO> products = new ArrayList<>();
+        Order order;
+        order = orderManager.getRegularOrder(orderId);
+        if(order == null) {
+            order = orderManager.getPeriodicalOrder(orderId);
+        } else {
+            updateOrderStatus(orderId, OrderStatus.Close);
+        }
+
+        if(order == null){
+            //TODO no such orderId
+        }
+
+        for(ProductInOrder product : order.getProducts()){
+            products.add(ProductInOrderToDTO(product));
+        }
+
+        return new OrderDTO(order.getShopNumber(), products);
+    }
+
     @Override
     public boolean updateOrderArrivalTime(int orderId, Date date) {
-        return supplierSystem.updateOrderArrivalTime(orderId, date);
+        return orderManager.updateOrderDelivery(orderId, date);
     }
 
     @Override
     public boolean updateOrderStatus(int orderId, OrderStatus status) {
-        return supplierSystem.updateOrderStatus(orderId, status);
+        return orderManager.updateOrderStatus(orderId, status);
     }
 
     @Override
@@ -114,5 +139,12 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         return new ProductInOrder(
                 productInOrderDTO.barcode,
                 productInOrderDTO.amount);
+    }
+
+    public static ProductInOrderDTO ProductInOrderToDTO(ProductInOrder productInOrder){
+        return new ProductInOrderDTO(
+                productInOrder.getBarcode(),
+                productInOrder.getAmount(),
+                productInOrder.getPricePerUnit());
     }
 }

@@ -118,7 +118,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
             }
 
             if (rowAffected != 0) {
-                for (ProductInOrder productInOrder : product.retrunProducts()) {
+                for (ProductInOrder productInOrder : product.getProducts()) {
                     productInsertPstmt.clearParameters();
                     productInsertPstmt.setInt(1, orderId);
                     productInsertPstmt.setInt(2, contractId);
@@ -183,10 +183,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
         return false;
     }
 
-    public boolean updateStatus(){
-        return true;
-    }
-
     private String allShopOpenOrdersStatement(){
         return "SELECT id\n" +
                 "FROM Supplier_order\n" +
@@ -211,5 +207,29 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
         }
 
         return orderIds;
+    }
+
+    private String updateDeliveryStatusStatement(){
+        return "UPDATE Supplier_order\n" +
+                "SET status = ?\n" +
+                "WHERE id = ?";
+    }
+
+    public boolean updateOrderStatus(int orderId, OrderStatus status){
+        try(PreparedStatement ptsmt = conn.prepareStatement(updateDeliveryStatusStatement())){
+
+            int statusInt = StructUtils.getOrderStatusInt(status);
+            ptsmt.setInt(1,statusInt);
+            ptsmt.setInt(2, orderId);
+
+            ptsmt.executeUpdate();
+            return true;
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return false;
     }
 }

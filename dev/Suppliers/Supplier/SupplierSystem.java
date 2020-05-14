@@ -369,39 +369,6 @@ public class SupplierSystem {
     }
 
     /**
-     * Update the day of order arrival
-     * @param orderId The order id
-     * @param date The arrival day
-     * @return true if it was updated.
-     */
-    public boolean updateOrderArrivalTime(int orderId, Date date) {
-        //TODO may remove this
-        if(date.compareTo(Calendar.getInstance().getTime()) > 0){
-            return false;
-        }
-
-        return orderManager.updateOrderDelivery(orderId, date);
-    }
-
-
-    /**
-     * Update the status of the given order id
-     * @param orderId Order id
-     * @param status Status
-     * @return True if the update was successful
-     */
-    public boolean updateOrderStatus(int orderId, OrderStatus status) {
-        Order order = orderIdToOrder.getOrDefault(orderId, null);
-
-        if(order == null){
-            return false;
-        }
-
-        return order.setStatus(status);
-    }
-
-
-    /**
      * Return all the supplier products
      * @param supplierId supplier ID
      * @return List with all the supplier product info
