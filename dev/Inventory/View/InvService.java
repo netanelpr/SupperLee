@@ -65,7 +65,11 @@ public class InvService implements myObservable {
                 inventoriesMapper.insert(new InventoryDTO(currInv.getShopNum(), currInv.getShopName()));
             }
             else if (ansStr.equals("2")) {
-                notifyObserver("Type your shop number:");
+                String shops = "Super lee shops:\n";
+                for (String shop : superLeeInvs.keySet())
+                     shops += String.format("\t%s. %s\t", shop, superLeeInvs.get(shop).getShopName());
+                shops += "\n";
+                notifyObserver(shops + "Type your shop number:");
                 ansStr = myScanner.nextLine();
                 if (!superLeeInvs.containsKey(ansStr)) {
                     notifyObserver("I know that you can't wait to be part of Super-Lee, but please remember your shop id...");
@@ -82,7 +86,7 @@ public class InvService implements myObservable {
             }
             //endregion
             while (!terminateInv) {
-                notifyObserver("Choose option:\n-------\n" +
+                notifyObserver("\n__'" + currInv.getShopName() + "' inventory__\nChoose option:\n-------\n" +
                         "1) Items: update and reports quantities\n" +
                         "2) Records: update and reports\n" +
                         "3) Defectives and Expired Items: update and reports\n" +
@@ -124,7 +128,7 @@ public class InvService implements myObservable {
     private boolean itemsFunctions() {
         while(!terminateSys) {
             notifyObserver(
-                    "__Items__\nChoose option:\n" +
+                    "\n__Items__\nChoose option:\n" +
                             "\t1) Receive arrived order to inventory \n" +
                             "\t2) Update quantities in your inventory after stocktaking \n" +
                             "\t3) Get All Items Report \n" +
@@ -196,7 +200,7 @@ public class InvService implements myObservable {
                 quanMissStock = Integer.parseInt(splited[1]);
                 quanMissShop = Integer.parseInt(splited[2]);
                 currOrderItem = currInv.updateInventoryWorkers(id, quanMissStock, quanMissShop);
-                if(currOrderItem.getId() == -1)
+                if(currOrderItem != null && currOrderItem.getId() == -1)
                     notifyObserver("wrong id - item isn't exist, type again");
                 else if (currOrderItem != null)
                     shortageOrder.addItemToOrder(currOrderItem);
@@ -257,7 +261,7 @@ public class InvService implements myObservable {
         String[] lastRecInfo = currInv.getLastRec(id);
         String nameLast = lastRecInfo[0];
         String priceLast = lastRecInfo[1];
-        notifyObserver(id + ". " + nameLast + " -> current price: " + priceLast + "\n" +
+        notifyObserver("item #" + id + " -> current price: " + priceLast + "\n" +
                 "type new price: ");
         String newPrice = myScanner.nextLine();
         currInv.setNewPrice(id, newPrice, nameLast, priceLast);
@@ -284,7 +288,7 @@ public class InvService implements myObservable {
             else if (ansStr.equals("3")) {
                 notifyObserver("enter id:");
                 String id = myScanner.nextLine();
-                notifyObserver(String.format("-- Defective/Expired Report By Id : %s--"));
+                notifyObserver("-- Defective/Expired Report By Id : "+ id + "--");
                 currInv.getDefectivesReportById(id);
             }
             else if (ansStr.equals("4")) {terminateSys=true;}
@@ -334,7 +338,7 @@ public class InvService implements myObservable {
             ans = ans.substring(2);//ans is the new price
             double newPrice = Double.parseDouble(ans);
             //newRecord = new Record(observers, id, name, newCost, LocalDate.now(), newPrice, LocalDate.now());
-            notifyObserver("price changed! new price for " + id + ". " + name + ": " + newPrice + "$\n");
+            notifyObserver("price changed! new price for item # " + id + ": " + newPrice + "$\n");
             return newPrice;
         }
         else {

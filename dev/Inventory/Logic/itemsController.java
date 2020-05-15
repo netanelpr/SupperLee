@@ -66,8 +66,11 @@ public class itemsController implements myObservable {
 
     //region report_items
     public void getItemReport() {
-        for (String id : items.keySet()) {
-            items.get(id).itemStatus();
+        if(items.size() == 0)
+            notifyObserver("no items on your shop, call the suppliers");
+        else{
+            for (String id : items.keySet())
+                items.get(id).itemStatus();
         }
     }
     public void getItemReportById(String id) {

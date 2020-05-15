@@ -87,15 +87,25 @@ public class defectiveController implements myObservable {
 
     //region defective reports
     public void getDefectivesReport() {
-        for(String id : defectives.keySet())
-            for(Defective def : defectives.get(id))
-                if(def.getQuantity() != 0)
-                    def.defectiveItemStatus();
+        if(defectives.size() > 0) {
+            for (String id : defectives.keySet())
+                for (Defective def : defectives.get(id))
+                    if (def.getQuantity() != 0)
+                        def.defectiveItemStatus();
+        }
+        else
+            notifyObserver("no defectives - expired reports.");
     }
     public void getDefectivesReportById(String id) {
         List<Defective> defectLst = defectives.get(id);
-        for (Defective dft : defectLst)
-            dft.defectiveItemStatus();
+        if(defectLst != null && defectLst.size() > 0) {
+            for (Defective dft : defectLst)
+                dft.defectiveItemStatus();
+            notifyObserver("|------------");
+        }
+        else
+            notifyObserver("no defectives - expired reports.");
+
     }
     //endregion
 

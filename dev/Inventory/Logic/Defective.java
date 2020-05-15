@@ -36,11 +36,11 @@ public class Defective implements myObservable {
 
     public Defective(List<Observer> observers, DefectiveDTO DTO){
         this.defId = DTO.getDefId();
-        this.itemId = DTO.getDefId();
+        this.itemId = DTO.getItemId();
         this.quantity = DTO.getQuantity();
         this.updateDate = DTO.getUpdateDate();
         this.expired = DTO.isExpired();
-        this.expired = DTO.isDefective();
+        this.defective = DTO.isDefective();
         this.shopNum = DTO.getShopNum();
         this.observers = observers;
     }
@@ -79,20 +79,19 @@ public class Defective implements myObservable {
 
     //region defective functions
     public void defectiveItemStatus() {
-        notifyObserver("|---------------\n" +
+        String out = "|---------------\n" +
                 "| itemId; " + itemId + "\n" +
-                "| update Date; " + toPrint(updateDate) + " quantity = " + quantity + " ==>");
-                if(expired&&defective)
-                    notifyObserver(" expired AND has a defect");
+                "| update Date; " + toPrint(updateDate) + "\t quantity = " + quantity + " ==>";
+                if(expired && defective)
+                    out += " expired AND has a defect";
                 else
                 {
                     if(expired)
-                        notifyObserver(" has expired");
-                    if(defective)
-                        notifyObserver(" has defect");
+                        out += " has expired";
+                    else if(defective)
+                        out += " has defect";
                 }
-
-                notifyObserver("|---------------");
+                notifyObserver(out);
     }
     private String toPrint(Date costChangeDate) {
         String cost = costChangeDate.toString();

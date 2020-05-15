@@ -56,8 +56,8 @@ public class ItemsMapper<T> extends AbstractMappers  {
         try (PreparedStatement pstmt = conn.prepareStatement("UPDATE Items SET qShop = ? ,qStorage = ? WHERE id = ? AND shopNum = ?")) {
             pstmt.setString(1, currDTO.getQuantityShop());
             pstmt.setString(2, currDTO.getQuantityStorage());
-            pstmt.setString(3, currDTO.getShopNum());
-            pstmt.setString(4, currDTO.getId());
+            pstmt.setString(4, currDTO.getShopNum());
+            pstmt.setString(3, currDTO.getId());
             pstmt.executeUpdate();
 
         } catch (java.sql.SQLException e) { }

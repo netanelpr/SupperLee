@@ -26,7 +26,7 @@ public class Item implements myObservable {
     private int quantShop;
     private int totalQuantity;
     private int capacityShop = 50;
-    private boolean minimum = false;//for alerts
+    private boolean minimum;//for alerts
     public final List<Observer> observers;
     //endregion
 
@@ -44,6 +44,7 @@ public class Item implements myObservable {
         this.size = itemDTO.getSize();
         this.freqBuySupply = String.valueOf(itemDTO.getFreqBuySupply());
         this.shopNum = itemDTO.getShopNum();
+        checkMinimum();
     }
 
     //region getters
@@ -67,14 +68,11 @@ public class Item implements myObservable {
         if(c == '-'){
             this.quanStrg -= qstrg;
             this.quantShop -= qshop;
-            //this.totalQuantity -= (qstrg + qshop);
         }
         else{
             this.quanStrg += qstrg;
             this.quantShop += qshop;
-            //this.totalQuantity += (qstrg + qshop);
         }
-        //TODO increase decrease quantity
         int missInShop = this.capacityShop - this.quantShop;
         if (missInShop > 0 & this.quanStrg > 0)
         {
@@ -93,18 +91,10 @@ public class Item implements myObservable {
         if(quantShop < 0) quantShop = 0;
         totalQuantity = quanStrg+quantShop;
 
-        //TODO: write the func updateItemDB();... because we changed item's quantities here
-
         if(this.checkMinimumQuant())
             return issueOrderForShortageItem();
         return null;
     }
-
-    private OrderItem issueOrderForShortageItem() {
-        int quantityToOrder = (Integer.parseInt(freqBuySupply)*10 + 10) - totalQuantity;
-        return new OrderItem(Integer.parseInt(id), quantityToOrder);
-    }
-
     private Boolean checkMinimumQuant() {
 
         if((totalQuantity) < Integer.parseInt(freqBuySupply)*10)
@@ -131,6 +121,20 @@ public class Item implements myObservable {
         }
         itemStatusUpdated();
         return minimum;
+    }
+    private OrderItem issueOrderForShortageItem() {
+        int quantityToOrder = (Integer.parseInt(freqBuySupply)*10 + 10) - totalQuantity;
+        return new OrderItem(Integer.parseInt(id), quantityToOrder);
+    }
+    private void checkMinimum() {
+        if((totalQuantity) < Integer.parseInt(freqBuySupply)*10)
+            minimum = true;
+        else if((totalQuantity) < Integer.parseInt(freqBuySupply)*10 + 10)
+            minimum = true;
+        else if(quanStrg == 0)
+            minimum = true;
+        else
+            minimum = false;
     }
     public void itemStatus() {
         notifyObserver("|--------------------------------------------------\n" +

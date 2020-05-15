@@ -65,7 +65,7 @@ public class recordController implements myObservable {
                     else
                         newRecord = new Record(observers, String.valueOf(recIdCounter++), lastRecordInfo[1],
                                                 newCost, new Date(System.currentTimeMillis()),
-                                                newPrice, new Date(lastRecordInfo[3]), shopNum);
+                                                newPrice, lastRecord.getPriceChangeDate(), shopNum);
                     records.get(id).add(newRecord);
                     myRecordMapper.insert(new RecordDTO(newRecord));
                 }
@@ -78,12 +78,8 @@ public class recordController implements myObservable {
             }
         }
     }
-    private LocalDate changeToDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-        //convert String to LocalDate
-        LocalDate localDate = LocalDate.parse(date, formatter);
-        return localDate;
-    }
+
+
 
     public String[] getLastRecInfo(String id){
         String[] lastRecInfo = new String[2];

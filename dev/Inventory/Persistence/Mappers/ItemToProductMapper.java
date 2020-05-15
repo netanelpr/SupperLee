@@ -66,9 +66,9 @@ public ItemToProductMapper(Connection conn){
     }
 
     public ItemDTO loadById(String barcode, String shopNum) {
-        String query = "SELECT * " +
-                "FROM Product " +
-                "WHERE barcode = ?  ";
+            String query = "SELECT * " +
+                    "FROM Product " +
+                    "WHERE barcode = ?  ";
 
         PreparedStatement statement = null;
         try {
