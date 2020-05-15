@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class RecordsMapper extends AbstractMappers {
         this.conn = conn;
     }
 
-    public HashMap<String, List<RecordDTO>> load(String shopNum) throws SQLException {
+    public HashMap<String, List<RecordDTO>> load(String shopNum) {
         String query = "SELECT * " +
                         "FROM Records " +
                 "WHERE shopNum = ?";
@@ -35,19 +37,19 @@ public class RecordsMapper extends AbstractMappers {
             return builtDTOfromRes(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    private HashMap<String, List<RecordDTO>> builtDTOfromRes(ResultSet res) throws SQLException {
+    private HashMap<String, List<RecordDTO>> builtDTOfromRes(ResultSet res) throws SQLException, ParseException {
 
-        String itemId, recId, shopNum, tmpCost, tmpPrice;
+        String itemId, recId, shopNum;
         Double cost, price;
-        LocalDate costChangeDate, priceChangeDate;
-
+        Date costChangeDate, priceChangeDate;
         RecordDTO currRec;
         HashMap<String, List<RecordDTO>> RecsDTO = new HashMap<>();
-
 
         while(res.next()){
             List<RecordDTO> tmpRecLst = new ArrayList<>();
@@ -56,22 +58,42 @@ public class RecordsMapper extends AbstractMappers {
             shopNum = res.getString(res.findColumn("shopNum"));
             cost = res.getDouble(res.findColumn("cost"));
             price = res.getDouble(res.findColumn("price"));
-            tmpCost = res.getString(res.findColumn("costChangeDate"));
-            tmpPrice = res.getString(res.findColumn("costChangeDate"));
-            costChangeDate = LocalDate.parse(tmpCost);
-            priceChangeDate = LocalDate.parse((tmpPrice));
+            String costTmp = res.getString(res.findColumn("costChangeDate"));
+            costChangeDate = new SimpleDateFormat("yyyy-MM-dd").parse(convertToFormat(costTmp));
+            String priceTmp = res.getString(res.findColumn("priceChangeDate"));
+            priceChangeDate = new SimpleDateFormat("yyyy-MM-dd").parse(convertToFormat(priceTmp));
             currRec = new RecordDTO(recId, itemId, shopNum, cost, costChangeDate, price ,priceChangeDate);
-
             if(RecsDTO.keySet().contains(itemId))
                 RecsDTO.get(itemId).add(currRec);
             else{
                 tmpRecLst.add(currRec);
-                RecsDTO.put(currRec.getRecId(), tmpRecLst);
+                RecsDTO.put(currRec.getItemId(), tmpRecLst);
             }
         }
         return RecsDTO;
     }
 
+    private String convertToFormat(String costTmp) {
+        String[] splited = costTmp.split(" ");
+        String output = splited[5] + "-";
+        switch (splited[1]){
+            case "Jan": output += "01"; break;
+            case "Feb": output += "02"; break;
+            case "Mar": output += "03"; break;
+            case "Apr": output += "04"; break;
+            case "May": output += "05"; break;
+            case "Jun": output += "06"; break;
+            case "Jul": output += "07"; break;
+            case "Aug": output += "08"; break;
+            case "Sep": output += "09"; break;
+            case "Oct": output += "10"; break;
+            case "Nov": output += "11"; break;
+            case "Dec": output += "12"; break;
+            default: //error!!!
+        }
+        output = output + "-" + splited[2];
+        return output;
+    }
     public LocalDate convertToLocalDate(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
@@ -81,29 +103,47 @@ public class RecordsMapper extends AbstractMappers {
     @Override
     public void insert() {
     }
-
     public void insert(RecordDTO recDTO){
-
-
         try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Records" +
-                " (recId, shopNum, itemId, cost, price, costChangeDate, priceChangeDate) " +
-                "Values (?, ?, ?, ?, ?, ?, ?)")){
+                " (recId, shopNum, itemId, cost, price, costChangeDate, priceChangeDate)" +
+                " Values (?, ?, ?, ?, ?, ?, ?)")){
             pstmt.setString(1, recDTO.getRecId());
             pstmt.setString(2, recDTO.getShopNum());
             pstmt.setString(3, recDTO.getItemId());
             pstmt.setDouble(4, recDTO.getCost());
             pstmt.setDouble(5, recDTO.getPrice());
-            //TODO deal with the dates and types!
-            //pstmt.setDate(6, recDTO.getCostChangeDate());
-            //pstmt.setDate(7, recDTO.getPriceChangeDate());
+            pstmt.setString(6, recDTO.getCostChangeDate().toString());
+            pstmt.setString(7,recDTO.getPriceChangeDate().toString());
             pstmt.executeUpdate();
-
         } catch (java.sql.SQLException e) { }
     }
+
     @Override
     public void update() {
 
     }
+//    public void update(RecordDTO recDTO){
+//
+//        try (PreparedStatement pstmt = conn.prepareStatement("UPDATE Records " +
+//                                            "SET " +
+//                                            "cost = ?, price = ?, costChangeDate = ?, " +
+//                                            "priceChangeDate = ? WHERE recId = ? AND " +
+//                                            "shopNum = ?" +
+//                                            "Values (?, ?, ?, ?, ?, ?)")) {
+//
+//            pstmt.setDouble(1, recDTO.getCost());
+//            pstmt.setDouble(2, recDTO.getPrice());
+//            pstmt.setString(3, recDTO.getCostChangeDate().toString());
+//            pstmt.setString(4, recDTO.getPriceChangeDate().toString());
+//            pstmt.setString(5, recDTO.getRecId());
+//            pstmt.setString(6, recDTO.getShopNum());
+//
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
     @Override
     public void delete() {
 

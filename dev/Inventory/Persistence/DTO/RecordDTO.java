@@ -1,6 +1,10 @@
 package Inventory.Persistence.DTO;
 
 
+import Inventory.Logic.Record;
+
+import java.util.Date;
+
 import java.time.LocalDate;
 
 public class RecordDTO {
@@ -9,12 +13,12 @@ public class RecordDTO {
     private String itemId;
     private String shopNum;
     private double cost;
-    private LocalDate costChangeDate;
+    private Date costChangeDate;
     private double price;
-    private LocalDate priceChangeDate;
+    private Date priceChangeDate;
 
 
-    public RecordDTO(String recId, String itemId, String shopNum, double cost, LocalDate costChangeDate, double price, LocalDate priceChangeDate) {
+    public RecordDTO(String recId, String itemId, String shopNum, double cost, Date costChangeDate, double price, Date priceChangeDate) {
         this.recId = recId;
         this.itemId = itemId;
         this.shopNum = shopNum;
@@ -22,6 +26,16 @@ public class RecordDTO {
         this.costChangeDate = costChangeDate;
         this.price = price;
         this.priceChangeDate = priceChangeDate;
+    }
+
+    public RecordDTO(Record rec) {
+        this.recId = rec.getRecId();
+        this.itemId = rec.getItemId();
+        this.shopNum = rec.getShopNum();
+        this.cost = rec.getCost();
+        this.costChangeDate = rec.getCostChangeDate();
+        this.price = rec.getPrice();
+        this.priceChangeDate = rec.getPriceChangeDate();
     }
 
     // region getters&setters
@@ -58,11 +72,11 @@ public class RecordDTO {
         this.cost = cost;
     }
 
-    public LocalDate getCostChangeDate() {
+    public Date getCostChangeDate() {
         return costChangeDate;
     }
 
-    public void setCostChangeDate(LocalDate costChangeDate) {
+    public void setCostChangeDate(Date costChangeDate) {
         this.costChangeDate = costChangeDate;
     }
 
@@ -74,11 +88,11 @@ public class RecordDTO {
         this.price = price;
     }
 
-    public LocalDate getPriceChangeDate() {
+    public Date getPriceChangeDate() {
         return priceChangeDate;
     }
 
-    public void setPriceChangeDate(LocalDate priceChangeDate) {
+    public void setPriceChangeDate(Date priceChangeDate) {
         this.priceChangeDate = priceChangeDate;
     }
 

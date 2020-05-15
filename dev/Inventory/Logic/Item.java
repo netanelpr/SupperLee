@@ -13,7 +13,6 @@ public class Item implements myObservable {
     //supplier item info
     private String id;
     private String name;
-
     private String shopNum;
 
     private String manufacturer;
@@ -21,10 +20,11 @@ public class Item implements myObservable {
     private String sub_category;
     private String size;
     private String freqBuySupply;
+
     //item info
-    private int quanStrg = 0;
-    private int quantShop = 0 ;
-    private int totalQuantity = 0;
+    private int quanStrg;
+    private int quantShop;
+    private int totalQuantity;
     private int capacityShop = 50;
     private boolean minimum = false;//for alerts
     public final List<Observer> observers;
@@ -33,6 +33,9 @@ public class Item implements myObservable {
     public Item(Observer o, ItemDTO itemDTO) {
         this.observers = new ArrayList<>();
         this.register(o);
+        this.quanStrg = Integer.parseInt(itemDTO.getQuantityStorage());
+        this.quantShop = Integer.parseInt(itemDTO.getQuantityShop());
+        this.totalQuantity = this.quanStrg + this.quantShop;
         this.id = itemDTO.getId();
         this.name = itemDTO.getName();
         this.manufacturer = itemDTO.getManufacturer();
@@ -40,6 +43,7 @@ public class Item implements myObservable {
         this.sub_category = itemDTO.getSub_category();
         this.size = itemDTO.getSize();
         this.freqBuySupply = String.valueOf(itemDTO.getFreqBuySupply());
+        this.shopNum = itemDTO.getShopNum();
     }
 
     //region getters
@@ -47,6 +51,15 @@ public class Item implements myObservable {
     public boolean getIfQuantityMinimum() { return this.minimum; }
     public String getId() { return id; }
     public String getName() { return this.name; }
+    public String getShopNum() {
+        return shopNum;
+    }
+    public int getQuanStrg() {
+        return quanStrg;
+    }
+    public int getQuantShop() {
+        return quantShop;
+    }
     //endregion
 
     //region item functions

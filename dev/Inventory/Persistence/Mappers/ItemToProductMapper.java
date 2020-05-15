@@ -64,15 +64,12 @@ public ItemToProductMapper(Connection conn){
         }
         return null;
     }
+
     public ItemDTO loadById(String barcode, String shopNum) {
         String query = "SELECT * " +
                 "FROM Product " +
                 "WHERE barcode = ?  ";
-//                "FROM Items " +
-//                "JOIN Product " +
-//                "ON Items.id = Product.barcode " +
-//                "WHERE shopNum = ? " +
-//                "AND Items.id = ? ";
+
         PreparedStatement statement = null;
         try {
             statement = conn.prepareStatement(query);
@@ -113,6 +110,7 @@ public ItemToProductMapper(Connection conn){
         }
         return itemsDTO;
     }
+
     private ItemDTO builtOneDTOfromRes(ResultSet res, String shopNumCurr) throws SQLException {
 
         String shopNum, id, quantityShop, quantityStorage;

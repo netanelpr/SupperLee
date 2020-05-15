@@ -5,6 +5,7 @@ import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.DefectiveDTO;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class Defective implements myObservable {
@@ -13,15 +14,16 @@ public class Defective implements myObservable {
     private String defId;
     private String itemId;
     private String shopNum;
+
     private int quantity;
-    private LocalDate updateDate;
+    private Date updateDate;
     public final List<Observer> observers;
     private boolean expired = false;
     private boolean defective = false;
     //endregion
 
     //region constructors
-    public Defective(List<Observer> observers, String defId, String itemId, int quantity, LocalDate updateDate, Boolean expired, Boolean defective, String shopNum) {
+    public Defective(List<Observer> observers, String defId, String itemId, int quantity, Date updateDate, Boolean expired, Boolean defective, String shopNum) {
         this.itemId = itemId;
         this.defId = defId;
         this.quantity = quantity;
@@ -45,11 +47,41 @@ public class Defective implements myObservable {
 
     //endregion
 
+    //region getters
+    public String getDefId() {
+        return defId;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public String getShopNum() {
+        return shopNum;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public List<Observer> getObservers() {
+        return observers;
+    }
+
+    public boolean isExpired() {
+        return expired;
+    }
+
+    public boolean isDefective() {
+        return defective;
+    }
+    //endregion
+
     //region defective functions
     public void defectiveItemStatus() {
-        notifyObserver("|------------------------------\n" +
+        notifyObserver("|---------------\n" +
                 "| itemId; " + itemId + "\n" +
-                " update Date; " + updateDate + " quantity = " + quantity + " ==>");
+                "| update Date; " + toPrint(updateDate) + " quantity = " + quantity + " ==>");
                 if(expired&&defective)
                     notifyObserver(" expired AND has a defect");
                 else
@@ -60,7 +92,12 @@ public class Defective implements myObservable {
                         notifyObserver(" has defect");
                 }
 
-                notifyObserver("|------------------------------");
+                notifyObserver("|---------------");
+    }
+    private String toPrint(Date costChangeDate) {
+        String cost = costChangeDate.toString();
+        String[] splited = cost.split(" ");
+        return splited[0] + " " + splited[1] + " " + splited[2] + " " + splited[5];
     }
     public int getQuantity() {
         return quantity;

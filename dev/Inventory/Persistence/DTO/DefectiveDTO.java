@@ -1,19 +1,22 @@
 package Inventory.Persistence.DTO;
 
 
+import Inventory.Logic.Defective;
+
 import java.time.LocalDate;
+import java.util.Date;
 
 public class DefectiveDTO {
 
     private String defId;
     private String itemId;
     private int quantity;
-    private LocalDate updateDate;
+    private Date updateDate;
     private boolean expired;
     private boolean defective;
     private String shopNum;
 
-    public DefectiveDTO(String defId, String itemId, String shopNum, int quantity, LocalDate updateDate, boolean expired, boolean defective) {
+    public DefectiveDTO(String defId, String itemId, String shopNum, int quantity, Date updateDate, boolean expired, boolean defective) {
         this.defId = defId;
         this.itemId = itemId;
         this.shopNum = shopNum;
@@ -21,6 +24,16 @@ public class DefectiveDTO {
         this.updateDate = updateDate;
         this.expired = expired;
         this.defective = defective;
+    }
+
+    public DefectiveDTO(Defective def) {
+        this.defId = def.getDefId();
+        this.itemId = def.getItemId();
+        this.shopNum = def.getShopNum();
+        this.quantity = def.getQuantity();
+        this.updateDate = def.getUpdateDate();
+        this.expired = def.isExpired();
+        this.defective = def.isDefective();
     }
 
     //region getters&setters
@@ -37,7 +50,7 @@ public class DefectiveDTO {
         return quantity;
     }
 
-    public LocalDate getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 

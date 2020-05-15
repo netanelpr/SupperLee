@@ -28,7 +28,7 @@ public class itemsController implements myObservable {
         this.shopNum = shopNum;
         this.register(o);
         this.myItemToProductMapper = new ItemToProductMapper(SupInvDBConn.getInstance());
-        this.myItemMapper = new ItemsMapper((SupInvDBConn.getInstance()));
+        this.myItemMapper = new ItemsMapper(SupInvDBConn.getInstance());
     }
 
     public HashMap<String, Item> getItems() {
@@ -37,7 +37,11 @@ public class itemsController implements myObservable {
 
     //region update items
     public OrderItem updateInventoryWorkers(String id, int quanMissStock, int quanMissShop) {
-        return items.get(id).updateMyQuantities(quanMissStock, quanMissShop, '-');
+        if(!items.containsKey(id))
+            return new OrderItem(-1, -1);
+        OrderItem orderItem = items.get(id).updateMyQuantities(quanMissStock, quanMissShop, '-');
+        myItemMapper.update(new ItemDTO(items.get(id)));
+        return orderItem;
     }
 
     public void updateInventorySuppliers(OrderDTO order) { //int -> quantity
@@ -46,14 +50,15 @@ public class itemsController implements myObservable {
             if(items.containsKey(String.valueOf(p.barcode))) {
                 Item currItem = items.get(String.valueOf(p.barcode));
                 currItem.updateMyQuantities(p.amount, 0, '+');
+                myItemMapper.update(new ItemDTO(currItem));
             }
             else
             {
-                ItemDTO itemDTO = (myItemToProductMapper.loadById(String.valueOf(p.barcode), String.valueOf(order.shopID)));
+                ItemDTO itemDTO = myItemToProductMapper.loadById(String.valueOf(p.barcode), String.valueOf(order.shopID));
                 Item newItem = new Item(observers.get(0), itemDTO);
                 newItem.updateMyQuantities(p.amount, 0, '+');
                 items.put(newItem.getId(), newItem);
-                myItemMapper.insert(itemDTO);
+                myItemMapper.insert(new ItemDTO(newItem));
             }
         }
     }

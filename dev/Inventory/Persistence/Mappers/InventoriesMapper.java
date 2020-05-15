@@ -54,8 +54,17 @@ public class InventoriesMapper extends AbstractMappers {
     }
 
     @Override
-    public void insert() {
+    public void insert() {}
+    public void insert(InventoryDTO invDTO) {
+        try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Inventory" +
+                " (id, name) " +
+                "Values (?, ?)")){
+            pstmt.setString(1, invDTO.getShopNum());
+            pstmt.setString(2, invDTO.getShopName());
 
+            pstmt.executeUpdate();
+
+        } catch (java.sql.SQLException e) { }
     }
 
     @Override
