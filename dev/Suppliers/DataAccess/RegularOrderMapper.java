@@ -130,9 +130,8 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
             insertPstmt.setInt(1,product.getShopNumber());
             insertPstmt.setInt(2, StructUtils.getOrderStatusInt(product.getStatus()));
-            //TODO edit it
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            String strDate = dateFormat.format(product.getDeliveryDay());
+
+            String strDate = StructUtils.dateToForamt(product.getDeliveryDay());
             insertPstmt.setString(3, strDate);
 
             rowAffected = insertPstmt.executeUpdate();
@@ -317,5 +316,73 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
         }
 
         return details;
+    }
+
+    private String getTheSupplierOfOrderStatement(){
+        return "SELECT C.supplier_id\n" +
+                "FROM Product_in_order AS P JOIN Contract AS C\n" +
+                "ON P.contract_id = C.id\n" +
+                "WHERE P.order_id = ?";
+    }
+
+    public int getTheSupplierOfOrder(int orderId) {
+        try(PreparedStatement ptsmt = conn.prepareStatement(getTheSupplierOfOrderStatement())){
+
+            ptsmt.setInt(1, orderId);
+
+            ResultSet res = ptsmt.executeQuery();
+
+            if(res.next()){
+                return res.getInt(1);
+            }
+
+        } catch (SQLException e) {
+        }
+        return -1;
+    }
+
+    private String getTheOrderContractStatement(){
+        return "SELECT DISTINCT(contract_id)\n" +
+                "FROM Product_in_order\n" +
+                "WHERE order_id = ?";
+    }
+
+    public int getTheOrderContract(int orderId) {
+        try(PreparedStatement ptsmt = conn.prepareStatement(getTheOrderContractStatement())){
+
+            ptsmt.setInt(1, orderId);
+
+            ResultSet res = ptsmt.executeQuery();
+
+            if(res.next()){
+                return res.getInt(1);
+            }
+
+        } catch (SQLException e) {
+        }
+        return -1;
+    }
+
+    private String removeProductsFromOrderStatement(){
+        return "DELETE FROM Product_in_order\n" +
+                "WHERE order_id = ? AND catalog_number = ?";
+    }
+
+    public List<String> removeProductsFromOrder(int orderId, List<String> catalogs) {
+        List<String> wasntDeleted = new ArrayList<>();
+
+        for(String catalog : catalogs) {
+            try (PreparedStatement ptsmt = conn.prepareStatement(removeProductsFromOrderStatement())) {
+
+                ptsmt.setInt(1, orderId);
+                ptsmt.setString(2, catalog);
+
+                ptsmt.executeUpdate();
+
+            } catch (SQLException e) {
+                wasntDeleted.add(catalog);
+            }
+        }
+        return wasntDeleted;
     }
 }

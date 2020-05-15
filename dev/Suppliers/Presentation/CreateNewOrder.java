@@ -35,7 +35,7 @@ public class CreateNewOrder extends Menu_Option {
 
             int numberOfProducts = readInt("Enter the numbers of product you want the order", reader);
 
-            System.out.println("Enter product ID and amount\n\t format <productID> <amount>");
+            System.out.println("Enter product ID and amount\nformat: <productID> <amount>");
             for(int i=0; i < numberOfProducts; i=i+1){
                 String[] productAndAmount = reader.readLine().split(" ");
 
