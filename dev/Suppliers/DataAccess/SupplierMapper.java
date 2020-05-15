@@ -5,6 +5,7 @@ import Suppliers.Structs.Days;
 import Suppliers.Structs.PaymentOptions;
 import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.*;
+import Suppliers.Supplier.Order.ProductInOrder;
 
 
 import java.sql.*;
@@ -582,7 +583,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     public ContractWithSupplier getContractBySupplier(int supplierID) {
 
         //TODO Circle with getSupplyDays that call this function if the contract is not loaded
-        List<Days> supplyDays=getSupplyDays(supplierID);
+        List<Days> supplyDays = getSupplyDays(supplierID);
         try (PreparedStatement pstmtContract = conn.prepareStatement(findContractBySupplierIDStatement())) {
             pstmtContract.setInt(1, supplierID);
             ResultSet res = pstmtContract.executeQuery();
@@ -686,5 +687,67 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
         }
 
         return supplierIds;
+    }
+
+    private String getCatalogsFromBarcodesStatement() {
+        return "SELECT catalog_number\n" +
+                "FROM Suppliers_products\n" +
+                "WHERE barcode = ?";
+    }
+
+    /**
+     * Return all the catalog numbers of the product that the supplier has
+     * @param supplierId the supplier id
+     * @param barcodes the barcodes of the catalog numbers
+     * @return list of catalogs
+     */
+    public List<String> getCatalogsFromBarcodes(int supplierId, List<Integer> barcodes) {
+        List<String> catalogs = new ArrayList<>();
+
+        for(Integer barcode : barcodes) {
+            try (PreparedStatement ptsmt = conn.prepareStatement(getCatalogsFromBarcodesStatement())) {
+
+                ptsmt.setInt(1, barcode);
+
+                ResultSet res = ptsmt.executeQuery();
+                if(res.next()){
+                    catalogs.add(res.getString(1));
+                }
+
+            } catch (SQLException e) {
+            }
+        }
+        return catalogs;
+    }
+
+    private String getBarcodesFromCatalogStatement() {
+        return "SELECT barcode\n" +
+                "FROM Suppliers_products\n" +
+                "WHERE catalog_number = ?";
+    }
+
+    /**
+     * Return all the barcodes of the product that the supplier has
+     * @param supplierId the supplier id
+     * @param catalogs the barcodes of the catalog numbers
+     * @return list of barcodes
+     */
+    public List<Integer> getBarcodesFromCatalog(int supplierId, List<String> catalogs) {
+        List<Integer> barcodes = new ArrayList<>();
+
+        for(String catalog : catalogs) {
+            try (PreparedStatement ptsmt = conn.prepareStatement(getCatalogsFromBarcodesStatement())) {
+
+                ptsmt.setString(1, catalog);
+
+                ResultSet res = ptsmt.executeQuery();
+                if(res.next()){
+                    barcodes.add(res.getInt(1));
+                }
+
+            } catch (SQLException e) {
+            }
+        }
+        return barcodes;
     }
 }

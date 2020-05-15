@@ -8,7 +8,6 @@ import Suppliers.Structs.OrderStatus;
 import java.util.Date;
 import java.util.List;
 
-//TODO add the order options to here from the supplierManagement
 public interface OrderAndProductManagement {
 
     /**
@@ -43,6 +42,23 @@ public interface OrderAndProductManagement {
     Result<Integer> createRegularOrder(List<ProductInOrderDTO> products, int shopNumber);
 
     Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod, int shopNumber);
+
+    /**
+     * Add products to the order. The proucts can be added up to day before the order
+     * delivery day. If the product already exist in the order do noting with it.
+     * @param orderId the order id
+     * @param products the products to add
+     * @return the list of product that wasnt added
+     */
+    public Result<List<Integer>> addProductsToPeriodicalOrder(int orderId, List<ProductInOrderDTO> products);
+
+    /**
+     * Remove products in the order. If the product doesnt exist, do noting.
+     * @param orderId the order id
+     * @param barcodes the barcodes to remove
+     * @return the list of product that wasnt updated
+     */
+    public Result<List<Integer>> RemoveProductsFromPeriodicalOrder(int orderId,  List<Integer> barcodes);
 
     /**
      * Update the day of order arrival

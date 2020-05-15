@@ -112,7 +112,7 @@ public class SupplierManager {
      * @return Return list with all the supplier ids which supply in the given days
      */
     public List<Integer> getAllSupplierWithSupplyDays(List<Days> days) {
-        List<Integer>  integerDays = new ArrayList<>();
+        List<Integer> integerDays = new ArrayList<>();
 
         for(Days day : days){
             integerDays.add(StructUtils.getDayInt(day));
@@ -205,5 +205,13 @@ public class SupplierManager {
 
     public List<ContractProduct> getAllSupplierProductsBardoces(int supplierId) {
         return this.supplierMapper.getAllSupplierProducts(supplierId);
+    }
+
+    public List<String> getCatalogsFromBarcodes(int supplierId, List<Integer> barcodes) {
+        return supplierMapper.getCatalogsFromBarcodes(supplierId, barcodes);
+    }
+
+    public List<Integer> getBarcodesFromCatalog(int supplierId, List<String> catalogNumbers) {
+        return supplierMapper.getBarcodesFromCatalog(supplierId, catalogNumbers);
     }
 }

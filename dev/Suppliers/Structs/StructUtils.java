@@ -108,7 +108,7 @@ public class StructUtils {
      * @param days the days to compare
      * @return number of days to the nearest day from the list, return 8 if the list is empty or null
      */
-    protected static int nearestDayInDays(List<Days> days){
+    public static int nearestDayInDays(List<Days> days){
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_WEEK);
         int nearestDayInDays = 8;

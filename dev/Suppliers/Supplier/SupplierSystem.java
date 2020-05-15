@@ -1,7 +1,6 @@
 package Suppliers.Supplier;
 
 import Result.Result;
-import Suppliers.DataAccess.ProductMapper;
 import Suppliers.Service.*;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
@@ -9,7 +8,9 @@ import Suppliers.Structs.PaymentOptions;
 import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.Order.*;
 
+import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class SupplierSystem {
 
@@ -24,8 +25,6 @@ public class SupplierSystem {
     private SupplierManager supplierManager;
     private OrderManager orderManager;
 
-    private final String[] paymentOptions;
-
     private SupplierSystem() {
         suppliers = new HashMap<>();
         orders = new HashMap<>();
@@ -34,9 +33,6 @@ public class SupplierSystem {
         supplierManager = SupplierManager.getInstance();
         productsManager = ProductsManager.getInstance();
         orderManager = OrderManager.getInstance();
-
-        //TODO is it needed
-        paymentOptions = new String[]{"CASH", "BANKTRANSFER","PAYMENTS","+30DAYSPAYMENT","CHECK"};
     }
 
     public static SupplierSystem getInstance(){
@@ -65,15 +61,6 @@ public class SupplierSystem {
     public int createSupplierCard(String name, String incNum, String address, String accountNumber, String paymentInfo,
                                   String contactName, String phoneNumber,String email) {
 
-//        paymentInfo = paymentInfo.toUpperCase();
-//        String[] paymentOArr = paymentInfo.split(",");
-//        List<String> paymentOptions = Arrays.asList(this.paymentOptions);
-//        for(String paymentO : paymentOArr) {
-//            if (!paymentOptions.contains(paymentO.toUpperCase())) {
-//                return -1;
-//            }
-//        }
-
         Supplier sup = new Supplier(name,address,incNum,accountNumber,paymentInfo);
         int returnedId=supplierManager.insert(sup);
         if(returnedId!=-1) {
@@ -99,10 +86,6 @@ public class SupplierSystem {
         return sup.getSupId();
     }
 
-    public String getPaymentOptions(){
-        return String.join(" ", paymentOptions);
-    }
-
     /**
      * Return the payment information of specific supplier.
      * @param supId ID of the supplier
@@ -110,8 +93,7 @@ public class SupplierSystem {
      */
     public List<String> getPaymentOptions(int supId) {
         List<String> options = new LinkedList<>();
-        for (PaymentOptions theOpt:
-                this.supplierManager.getSupplierPaymentOptions(supId)) {
+        for (PaymentOptions theOpt : this.supplierManager.getSupplierPaymentOptions(supId)) {
             options.add(theOpt.name());
 
         }
@@ -354,6 +336,7 @@ public class SupplierSystem {
 
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
+        sup.fillWithCatalogNumber(products);
 
         RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1,products, shopNumber);
         regularOrder.setDeliveryDay(sup.getNextDeliveryDate());
@@ -397,6 +380,7 @@ public class SupplierSystem {
 
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
+        sup.fillWithCatalogNumber(products);
 
         PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days,
                 weekPeriod, shopNumber, sup.getNextDeliveryDate());
@@ -407,6 +391,37 @@ public class SupplierSystem {
         }
 
         return Result.makeOk("Order was created", periodicalOrder.getOrderId());
+    }
+
+    public Result<List<Integer>> addProductsToPeriodicalOrder(int orderId, List<ProductInOrder> products) {
+        Supplier sup;
+        if(!orderManager.isPeriodicalOrder(orderId)){
+            return Result.makeFailure("The order doesnt exist or this is not periodical order");
+        }
+
+        int supplierId = orderManager.getTheSupplierOfOrder(orderId);
+        if(supplierId == -1){
+            //not need to get here
+            return Result.makeFailure("The supplier of this order desnt exist");
+        }
+
+        Order order = orderManager.getOrderBasicDetails(orderId);
+        long diff = order.getDeliveryDay().getTime() - Calendar.getInstance().getTime().getTime();
+        long days =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
+        if(days < 2){
+            return Result.makeFailure("Cant edit order day before delivery");
+        }
+
+        sup = supplierManager.getById(supplierId);
+        if(sup == null){
+            //not need to get here
+            return Result.makeFailure("The supplier of this order desnt exist");
+        }
+        sup.fillWithCatalogNumber(products);
+        sup.setPricePerUnit(products);
+
+        return Result.makeOk("Product was inserted",orderManager.addProductsToPeriodicalOrder(orderId, products));
     }
 
     /**
@@ -579,5 +594,24 @@ public class SupplierSystem {
     }
 
 
+    public Result<List<Integer>> removeProductsFromOrder(int orderId, List<Integer> barcodes) {
+        List<String> catalogNumbers;
+        int supplierId;
+        if((supplierId = orderManager.getTheSupplierOfOrder(orderId)) == -1){
+            return Result.makeFailure("No such orderId");
+        }
 
+        Order order = orderManager.getOrderBasicDetails(orderId);
+        long diff = order.getDeliveryDay().getTime() - Calendar.getInstance().getTime().getTime();
+        long days =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
+        if(days < 2){
+            return Result.makeFailure("Cant edit order day before delivery");
+        }
+
+        catalogNumbers = supplierManager.getCatalogsFromBarcodes(supplierId, barcodes);
+        catalogNumbers.removeAll(orderManager.removeProductsFromOrder(orderId, catalogNumbers));
+
+        return Result.makeOk("Remove product",supplierManager.getBarcodesFromCatalog(supplierId, catalogNumbers));
+    }
 }

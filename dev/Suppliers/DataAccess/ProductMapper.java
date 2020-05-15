@@ -5,6 +5,7 @@ import Suppliers.Supplier.Product;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ProductMapper extends AbstractMapper<Product> {
 
@@ -35,7 +36,6 @@ public class ProductMapper extends AbstractMapper<Product> {
         return null;
     }
 
-    //TODO edit
     protected String insertStatement() {
         return "INSERT INTO Product (barcode, name, manufacture, category, subCategory, size, freqSupply, minPrice)  " +
                 "Values (?, ?, ?, ?, ?, ?, ?, ?)";
