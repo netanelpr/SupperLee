@@ -19,6 +19,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     protected WeakValueHashMap<Integer, ContractProduct> loadedProductsInContract;
     protected WeakValueHashMap<Integer, DiscountOfProduct> loadedDiscountsOfProducts;
 
+
     public SupplierMapper(Connection conn) {
         super(conn);
         loadedContacts            = new WeakValueHashMap<>();
@@ -164,9 +165,10 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             if(res.next()) {
                 //int supID,String name, String address, String incNum, String accountNumber, String paymentInfo,
                 //                    String contactName, String phoneNumber,String email
-                return new Supplier(res.getInt("id"),res.getString("sup_name"),
+                Supplier myNewSupplier=new Supplier(res.getInt("id"),res.getString("sup_name"),
                         res.getString("address"), res.getString("inc_number"),res.getString("account_number"), res.getString("paymentInfo"),
                         res.getString("name"), res.getString("phone_number"), res.getString("email"));
+                ContractWithSupplier new_contractWithSupplier= this.getContractBySupplier(myNewSupplier.getSupId());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -529,34 +531,19 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     }
 
     public List<Days> getSupplyDays(int supplierID) {
-        int contractID;
-        Supplier supplier = findById(supplierID);
 
-        if(supplier == null){
-            return null;
-        }
-
-        if (supplier.hasContract()) {
-            contractID = supplier.getContract().getContractID();
-        } else {
-            contractID = getContractBySupplier(supplierID).getContractID();
-        }
-        return getDaysByContractID(contractID);
-    }
-    public List<Days> getDaysByContractID(int contractID)
-    {
-        List<Days> daysList=new LinkedList<>();
+        List<Days> daysList = new LinkedList<>();
         try (PreparedStatement pstmtDays = conn.prepareStatement(getAllSupplierDaysStatement())) {
-            pstmtDays.setInt(1, contractID);
+            pstmtDays.setInt(1, supplierID);
             ResultSet res = pstmtDays.executeQuery();
             while (res.next()) {
                 daysList.add(StructUtils.getDayWithInt(res.getInt("supplay_day")));
             }
+        } catch (java.sql.SQLException e) {
+            return null;
         }
-            catch (java.sql.SQLException e) {
-                return null;
-            }
         return daysList;
+
     }
 
 
@@ -581,7 +568,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
 
     public ContractWithSupplier getContractBySupplier(int supplierID) {
 
-        //TODO Circle with getSupplyDays that call this function if the contract is not loaded
         List<Days> supplyDays=getSupplyDays(supplierID);
         try (PreparedStatement pstmtContract = conn.prepareStatement(findContractBySupplierIDStatement())) {
             pstmtContract.setInt(1, supplierID);
