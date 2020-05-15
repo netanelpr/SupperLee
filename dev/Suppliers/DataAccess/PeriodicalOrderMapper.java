@@ -136,6 +136,26 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
                 "VALUES (?, ?)";
     }
 
+    private String isValidShopStatement(){
+        return "SELECT shopNum Items " +
+                "WHERE shopNum = (?)";
+    }
+
+    public boolean isValidShopNumber(int shopNumber){
+        try(PreparedStatement pstmt = conn.prepareStatement(isValidShopStatement())){
+            pstmt.setString(1,""+shopNumber);
+            ResultSet res = pstmt.executeQuery();
+
+            if(res.next()){
+                return true;
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public int insert(PeriodicalOrder product) {
 
@@ -143,6 +163,10 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
         int rowAffected;
         boolean rollback = false;
         ResultSet res = null;
+
+        if(!isValidShopNumber(product.getShopNumber())){
+            return -2;
+        }
 
         try{
             conn.setAutoCommit(false);

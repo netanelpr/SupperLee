@@ -34,6 +34,7 @@ public class SupplierSystem {
         productsManager = ProductsManager.getInstance();
         orderManager = OrderManager.getInstance();
 
+        //TODO is it needed
         paymentOptions = new String[]{"CASH", "BANKTRANSFER","PAYMENTS","+30DAYSPAYMENT","CHECK"};
     }
 
@@ -43,6 +44,14 @@ public class SupplierSystem {
         }
         return instance;
     }
+
+    //TODO payment option upper case
+    // in update payment option send usefull message, code the Remove option for supplier
+    // supplier payment options print list, and not with /n
+    // getAllSupplier
+    // init with list of categorys and subcategoty for all the system
+    // the same for product size
+    //
 
     /**
      * Create new supplier in the system
