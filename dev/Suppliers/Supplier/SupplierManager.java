@@ -6,6 +6,7 @@ import Suppliers.Structs.Days;
 import Suppliers.Structs.PaymentOptions;
 import Suppliers.Structs.StructUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,10 +66,6 @@ public class SupplierManager {
         }
 
     }
-    public Supplier getOrNull(int supplierId){
-        //TODO implement
-        return null;
-    }
 
     /**
      * Check if supplier have all the products
@@ -76,9 +73,9 @@ public class SupplierManager {
      * @param barcodes list of barcodes
      * @return true if the supplier have all the barcodes
      */
-    public boolean haveAllBarcodes(int supplierId, List<Integer> barcodes){
-        //TODO implement
-        return true;
+    public boolean hasAllBarcodes(int supplierId, List<Integer> barcodes){
+        // TODO not needed for now, can be implement for faster speed
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -86,18 +83,8 @@ public class SupplierManager {
      * @param barcodes the barcodes to check
      * @return Return list with all the supplier ids which have all the barcodes
      */
-    public List<Integer> getAllSupplierWithBarcodes(List<Integer> barcodes){
-        //TODO implement return empty list is there isnt any one
-        /*
-         * sql query
-         * SELECT S.id
-         * FROM Supplier AS S
-         * WHERE (SELECT barcode
-		 *        FROM Suppliers_products as SP
-		 *         WHERE SP.supplier_id = S.id) IN (?)
-		 * Use conn.createArrayOf(...)
-         */
-        return null;
+    public List<Integer> getAllSupplierIdsWithBarcodes(List<Integer> barcodes){
+        return supplierMapper.getAllSupplierIdsWithBarcodes(barcodes);
     }
 
     /**
@@ -106,9 +93,17 @@ public class SupplierManager {
      * @param barcodes the barcodes to check
      * @return Return list with all the supplier ids which have all the barcodes
      */
-    public List<Integer> getAllSupplierWithBarcodes(List<Integer> supplierIds, List<Integer> barcodes){
-        //TODO implement return empty list is there isnt any one
-        return null;
+    public List<Integer> getAllSuppliersWithBarcodes(List<Integer> supplierIds, List<Integer> barcodes){
+        List<Integer> suppliers = new ArrayList<>();
+        List<Integer> allSupplierWithBarcodes = getAllSupplierIdsWithBarcodes(barcodes);
+
+        for(Integer id : supplierIds){
+            if(allSupplierWithBarcodes.contains(id)){
+                suppliers.add(id);
+            }
+        }
+
+        return suppliers;
     }
 
     /**
@@ -117,8 +112,13 @@ public class SupplierManager {
      * @return Return list with all the supplier ids which supply in the given days
      */
     public List<Integer> getAllSupplierWithSupplyDays(List<Days> days) {
-        //TODO implement return empty list is there isnt any one
-        return null;
+        List<Integer>  integerDays = new ArrayList<>();
+
+        for(Days day : days){
+            integerDays.add(StructUtils.getDayInt(day));
+        }
+
+        return supplierMapper.getAllSupplierWithSupplyDays(integerDays);
     }
 
     public boolean addPaymentOption(int supId, String paymentInfo) {

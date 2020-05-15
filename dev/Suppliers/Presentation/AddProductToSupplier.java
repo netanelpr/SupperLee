@@ -89,7 +89,9 @@ public class AddProductToSupplier extends Menu_Option {
                 added = supplierManagment.addProductToContract(supId,new SupplierProductDTO(barcode, input[0], originaPrice, product, systemProduct));
             }
 
-            added = supplierManagment.addProductToContract(supId,new SupplierProductDTO(barcode, input[0], originaPrice, product));
+            if(!added) {
+                added = supplierManagment.addProductToContract(supId, new SupplierProductDTO(barcode, input[0], originaPrice, product));
+            }
 
             if(added){
                 System.out.println("The product has been added");

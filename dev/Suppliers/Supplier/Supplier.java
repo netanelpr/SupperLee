@@ -215,7 +215,7 @@ public class Supplier {
      * @return true if the supplier supply this barcode
      */
     public boolean hasProduct(int barcode) {
-        if(contract == null){
+        if(!hasContract()){
             return false;
         }
         return contract.hasProduct(barcode);
@@ -279,5 +279,34 @@ public class Supplier {
     public ContractWithSupplier getContract()
     {
         return contract;
+    }
+
+    /**
+     * Check if the supplier has all the barcodes
+     * @param barcodes the barcodes to check
+     * @return true if the supplier have all the barcodes
+     */
+    public boolean hasAllBarcodes(List<Integer> barcodes) {
+        List<ContractProduct> products;
+        boolean hasBarcode = false;
+        if(!hasContract()){
+            return false;
+        }
+
+        products = contract.getProducts();
+
+        for(Integer barcode : barcodes) {
+            for (ContractProduct contractProduct : products) {
+                if (contractProduct.getBarCode() == barcode){
+                    hasBarcode = true;
+                    break;
+                }
+            }
+            if(!hasBarcode) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

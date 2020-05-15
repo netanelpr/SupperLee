@@ -531,6 +531,11 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     public List<Days> getSupplyDays(int supplierID) {
         int contractID;
         Supplier supplier = findById(supplierID);
+
+        if(supplier == null){
+            return null;
+        }
+
         if (supplier.hasContract()) {
             contractID = supplier.getContract().getContractID();
         } else {
@@ -576,6 +581,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
 
     public ContractWithSupplier getContractBySupplier(int supplierID) {
 
+        //TODO Circle with getSupplyDays that call this function if the contract is not loaded
         List<Days> supplyDays=getSupplyDays(supplierID);
         try (PreparedStatement pstmtContract = conn.prepareStatement(findContractBySupplierIDStatement())) {
             pstmtContract.setInt(1, supplierID);
@@ -632,5 +638,53 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
         return theProducts;
     }
 
+    private String getAllSupplierIdsWithBarcodesStatement(){
+        return "SELECT S.id\n" +
+                "FROM Supplier AS S\n" +
+                "WHERE (?) IN (SELECT barcode\n" +
+                "\tFROM Suppliers_products as SP\n" +
+                "\tWHERE SP.supplier_id = S.id)";
+    }
 
+    public List<Integer> getAllSupplierIdsWithBarcodes(List<Integer> barcodes) {
+        List<Integer> supplierIds = new ArrayList<>();
+
+        try(PreparedStatement pstmt = conn.prepareStatement(getAllSupplierIdsWithBarcodesStatement())){
+
+            pstmt.setArray(1, conn.createArrayOf("INTEGER", barcodes.toArray()));
+            ResultSet res = pstmt.executeQuery();
+            while(res.next()){
+                supplierIds.add(res.getInt(1));
+            }
+
+        } catch (java.sql.SQLException e) {
+        }
+
+        return supplierIds;
+    }
+
+    private String getAllSupplierWithSupplyDaysStatement() {
+        return "SELECT id\n" +
+                "FROM Supplier\n" +
+                "WHERE (?) IN (SELECT supplay_day\n" +
+                "\t\t\tFROM supplay_days\n" +
+                "\t\t\tWHERE supplier_id = id)";
+    }
+
+    public List<Integer> getAllSupplierWithSupplyDays(List<Integer> integerDays) {
+        List<Integer> supplierIds = new ArrayList<>();
+
+        try(PreparedStatement pstmt = conn.prepareStatement(getAllSupplierWithSupplyDaysStatement())){
+
+            pstmt.setArray(1, conn.createArrayOf("INTEGER", integerDays.toArray()));
+            ResultSet res = pstmt.executeQuery();
+            while(res.next()){
+                supplierIds.add(res.getInt(1));
+            }
+
+        } catch (java.sql.SQLException e) {
+        }
+
+        return supplierIds;
+    }
 }

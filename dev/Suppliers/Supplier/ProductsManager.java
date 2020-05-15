@@ -25,9 +25,9 @@ public class ProductsManager {
         return instance;
     }
 
-    public boolean addIfAbsent(AddProduct addProduct){
+    public boolean addIfAbsent(Product product){
 
-        return productMapper.insert(addProduct.product) > -1;
+        return productMapper.insert(product) > -1;
 
 
         /*if(!productMap.containsKey(addProduct.barCode))
@@ -49,5 +49,27 @@ public class ProductsManager {
 
     public Product getProduct(int barcode) {
         return productMapper.findById(barcode);
+    }
+
+    public void updateIfNeededFreqSupplyAndMinPrice(int barCode, int freqSupply, double minPrice) {
+        boolean update = false;
+        Product product = getProduct(barCode);
+        if(product == null){
+            return;
+        }
+
+        if(product.getFreqSupply() > freqSupply){
+            product.setFreqSupply(freqSupply);
+            update = true;
+        }
+
+        if(product.getMinPrice() > minPrice){
+            update = true;
+            product.setMinPrice(minPrice);
+        }
+
+        if(update){
+            productMapper.update(product);
+        }
     }
 }

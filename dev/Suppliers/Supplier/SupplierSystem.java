@@ -1,6 +1,7 @@
 package Suppliers.Supplier;
 
 import Result.Result;
+import Suppliers.DataAccess.ProductMapper;
 import Suppliers.Service.*;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
@@ -197,31 +198,63 @@ public class SupplierSystem {
      *          supplier already have one.
      */
     public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProduct> products) {
-//        Supplier supplier = suppliers.getOrDefault(supplierId, null);
-//
-//        List<Integer> productIdError = new LinkedList<>();
-//
-//        if(supplier == null){
-//            return null;
-//        }
-        List<Integer> badProducts=new LinkedList<>();
-        //TODO add to addproduct.product if not null the freqSupply and min price that is the original price
-        int contractID=supplierManager.addContractToSupplier(supplierId,new ContractWithSupplier(contractInfo,days));
-        if(contractID<0)
-        {
+        List<Integer> badProducts = new LinkedList<>();
+        int freqSupply;
+
+        int contractID = supplierManager.addContractToSupplier(supplierId,new ContractWithSupplier(contractInfo,days));
+        if(contractID < 0) {
             return null;
         }
-        boolean ans=true;
-        for (AddProduct product:products
-             ) {
-            ans=addProductToContract(supplierId,product);
-            if(!ans)
-            {
+
+        freqSupply = getFreqSupply(days);
+
+        boolean ans = true;
+        for (AddProduct product : products) {
+
+            if(product.product != null){
+                product.product.setFreqSupply(freqSupply);
+                product.product.setMinPrice(product.originalPrice);
+            }
+
+            ans = addProductToContract(supplierId, freqSupply, product);
+            if(!ans) {
                 badProducts.add(product.barCode);
             }
         }
+
         return badProducts;
 
+    }
+
+    private int getFreqSupply(List<Days> days) {
+        int freqSupply;
+        if(days.size() == 1){
+            freqSupply = 1;
+        } else {
+            freqSupply = days.size() / 2;
+        }
+        return freqSupply;
+    }
+
+    /**
+     * Add a product to the supplier contract
+     * @param supplierID Suppliers.Supplier ID
+     * @param product Data of the product
+     * @return true if the product have been added
+     */
+    public boolean addProductToContract(int supplierID, int freqSupply, AddProduct product) {
+        boolean ans;
+
+        if(ans = supplierManager.addProductToContract(supplierID,product))
+        {
+            if(product.product != null) {
+                productsManager.addIfAbsent(product.product);
+            } else {
+                productsManager.updateIfNeededFreqSupplyAndMinPrice(product.barCode, freqSupply, product.originalPrice);
+            }
+
+        }
+        return ans;
     }
 
     /**
@@ -231,16 +264,14 @@ public class SupplierSystem {
      * @return true if the product have been added
      */
     public boolean addProductToContract(int supplierID, AddProduct product) {
-        boolean ans;
-
-        if(ans=supplierManager.addProductToContract(supplierID,product))
-        {
-            //TODO: make the next line workable
-            //productsManager.addIfAbsent(product);
+        List<Days> days = supplierManager.getSupplyingDaysBySupID(supplierID);
+        if(days == null){
+            return false;
         }
-        return ans;
-
+        return addProductToContract(supplierID, getFreqSupply(days), product);
     }
+
+
 
 
     /**
@@ -267,20 +298,19 @@ public class SupplierSystem {
      * @return -1 if cant create the order, otherwise return the order id
      */
     public Result<Integer> createNewOrder(int supplierId, List<ProductInOrder> products, int shopNumber) {
-        Supplier supplier = supplierManager.getOrNull(supplierId);
+        Supplier supplier = supplierManager.getById(supplierId);
         List<Integer> barcodes = new ArrayList<>();
 
         if(supplier == null){
             return Result.makeFailure("Supplier doesnt exist");
         }
 
-
         for(ProductInOrder product : products){
             barcodes.add(product.getBarcode());
         }
 
-        //TODO this may not be needed as the product contract have all this info
-        if(!supplierManager.haveAllBarcodes(supplierId,barcodes)){
+        //TODO can be faster if we use the db
+        if(!supplier.hasAllBarcodes(barcodes)){
             return Result.makeFailure("The supplier do not supply some of this products");
         }
 
@@ -315,7 +345,7 @@ public class SupplierSystem {
         for(ProductInOrder product : products){
             barcodes.add(product.getBarcode());
         }
-        suppliersId = supplierManager.getAllSupplierWithBarcodes(barcodes);
+        suppliersId = supplierManager.getAllSupplierIdsWithBarcodes(barcodes);
         if(suppliersId.isEmpty()){
             return Result.makeFailure("There isnt one supplier with all of this products");
         }
@@ -337,6 +367,14 @@ public class SupplierSystem {
 
     }
 
+    /**
+     * Create periodical order
+     * @param products the product to order
+     * @param days the days to supply
+     * @param weekPeriod week
+     * @param shopNumber to shop number
+     * @return the id of the order
+     */
     public Result<Integer> createPeriodicalOrder(List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber) {
         List<Integer> barcodes = new ArrayList<>();
         List<Integer> suppliersId;
@@ -350,7 +388,7 @@ public class SupplierSystem {
         for(ProductInOrder product : products){
             barcodes.add(product.getBarcode());
         }
-        suppliersId = supplierManager.getAllSupplierWithBarcodes(suppliersId, barcodes);
+        suppliersId = supplierManager.getAllSuppliersWithBarcodes(suppliersId, barcodes);
         if(suppliersId.isEmpty()){
             return Result.makeFailure("There isnt one supplier with all of this products");
         }
@@ -539,6 +577,7 @@ public class SupplierSystem {
         }
         return days;
     }
+
 
 
 }
