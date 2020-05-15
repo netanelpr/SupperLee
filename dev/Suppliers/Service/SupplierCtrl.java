@@ -95,19 +95,8 @@ public class SupplierCtrl implements SupplierManagment {
     }
 
     @Override
-    public List<SimpleSupplierProductDTO> getAllSupplierProducts(int supplierId) {
-        List<SimpleSupplierProductDTO> productDTOS = new LinkedList<>();
-        List<SupplierProductInfo> supplierProducts = supplierSystem.getAllSupplierProducts(supplierId);
-
-        if(supplierProducts == null){
-            return null;
-        }
-
-        for(SupplierProductInfo product : supplierProducts){
-            productDTOS.add(ContractProductToSupplerProductDTO(product));
-        }
-
-        return productDTOS;
+    public List<SupplierProductDTO> getAllSupplierProducts(int supplierId) {
+        return this.supplierSystem.getAllSupplierProducts(supplierId);
     }
 
     @Override
@@ -120,6 +109,30 @@ public class SupplierCtrl implements SupplierManagment {
     public List<String> getPurchaseHistory(int supplierId) {
         return supplierSystem.getPurchaseHistory(supplierId);
     }
+
+    public SupplierDetailsDTO getSupplierInfo(int supID)
+    {
+        return this.supplierSystem.getSupplierInformation(supID);
+    }
+
+    public List<ContactInfoDTO> getSupplierContacts(int supID)
+    {
+        return this.supplierSystem.getSupplierContacts(supID);
+    }
+
+    public ContractWithSupplierDTO getSupplierContractInfo(int supID)
+    {
+        return this.supplierSystem.getSupplierContractInfo(supID);
+    }
+
+    public List<String> getSupplyingDaysNamesBySupID(int supID) {
+        return this.supplierSystem.getSupplyingDaysNamesBySupID(supID);
+    }
+
+    public List<Integer> getSupplyingDaysNumbersBySupID(int supID) {
+        return this.supplierSystem.getSupplyingDaysNumbersBySupID(supID);
+    }
+
 
 
 
@@ -188,4 +201,6 @@ public class SupplierCtrl implements SupplierManagment {
                 product.barCode,
                 product.productCatalogNumber);
     }
+
+
 }

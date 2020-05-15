@@ -18,4 +18,23 @@ public class ProductDiscounts {
 
         }
     }
+
+    public ProductDiscounts(int barCode,Double originalPrice)
+    {
+        this.barCode=barCode;
+        this.originalPrice=originalPrice;
+        this.discountPerAmount=new HashMap<>();
+    }
+
+    public void addDiscountPerAmount(int amount,Double discount)
+    {
+        if(!this.discountPerAmount.containsKey(amount))
+        {
+            this.discountPerAmount.put(amount,discount);
+        }
+        else
+        {
+            this.discountPerAmount.replace(amount,discount);
+        }
+    }
 }

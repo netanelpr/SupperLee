@@ -1,12 +1,16 @@
 package Suppliers.Supplier;
 
 import Result.Result;
+import Suppliers.Service.*;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
+import Suppliers.Structs.PaymentOptions;
 import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.Order.*;
 
+import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class SupplierSystem {
 
@@ -21,8 +25,6 @@ public class SupplierSystem {
     private SupplierManager supplierManager;
     private OrderManager orderManager;
 
-    private final String[] paymentOptions;
-
     private SupplierSystem() {
         suppliers = new HashMap<>();
         orders = new HashMap<>();
@@ -31,8 +33,6 @@ public class SupplierSystem {
         supplierManager = SupplierManager.getInstance();
         productsManager = ProductsManager.getInstance();
         orderManager = OrderManager.getInstance();
-
-        paymentOptions = new String[]{"CASH", "BANKTRANSFER","PAYMENTS","+30DAYSPAYMENT","CHECK"};
     }
 
     public static SupplierSystem getInstance(){
@@ -41,6 +41,14 @@ public class SupplierSystem {
         }
         return instance;
     }
+
+    //TODO payment option upper case
+    // in update payment option send usefull message, code the Remove option for supplier
+    // supplier payment options print list, and not with /n
+    // getAllSupplier
+    // init with list of categorys and subcategoty for all the system
+    // the same for product size
+    //
 
     /**
      * Create new supplier in the system
@@ -53,29 +61,22 @@ public class SupplierSystem {
     public int createSupplierCard(String name, String incNum, String address, String accountNumber, String paymentInfo,
                                   String contactName, String phoneNumber,String email) {
 
-        paymentInfo = paymentInfo.toUpperCase();
-        String[] paymentOArr = paymentInfo.split(",");
-        List<String> paymentOptions = Arrays.asList(this.paymentOptions);
-        for(String paymentO : paymentOArr) {
-            if (!paymentOptions.contains(paymentO.toUpperCase())) {
-                return -1;
-            }
-        }
-
-        Supplier sup = new Supplier(name,address,incNum,accountNumber,paymentInfo,contactName,phoneNumber,email);
+        Supplier sup = new Supplier(name,address,incNum,accountNumber,paymentInfo);
         int returnedId=supplierManager.insert(sup);
         if(returnedId!=-1) {
-            String returnedEmail=supplierManager.insertNewContactInfo(new ContactInfo(contactName, phoneNumber, email, sup.getSupId()));
-            if (returnedEmail==null)
-            {
-                boolean ans=supplierManager.deleteSupplier(sup);
-                return  -1;
+            String returnedEmail = supplierManager.insertNewContactInfo(new ContactInfo(contactName, phoneNumber, email, sup.getSupId()));
+            if (returnedEmail == null) {
+
+                boolean ans = supplierManager.deleteSupplier(sup);
+                return -1;
             }
+            if (!this.addPaymentOptions(sup.getSupId(), sup.getPaymentInfo().get(0))) {
+                boolean ans = supplierManager.deleteSupplier(sup);
+                return -1;
+            }
+
             return returnedId;
-
         }
-
-
         if(sup.getSupId() < 0){
             return -1;
         }
@@ -85,22 +86,18 @@ public class SupplierSystem {
         return sup.getSupId();
     }
 
-    public String getPaymentOptions(){
-        return String.join(" ", paymentOptions);
-    }
-
     /**
      * Return the payment information of specific supplier.
      * @param supId ID of the supplier
      * @return null if the supplier doesnt exist in the system, otherwise its payment information
      */
     public List<String> getPaymentOptions(int supId) {
-        Supplier sup = suppliers.getOrDefault(supId, null);
+        List<String> options = new LinkedList<>();
+        for (PaymentOptions theOpt : this.supplierManager.getSupplierPaymentOptions(supId)) {
+            options.add(theOpt.name());
 
-        if(sup == null){
-            return  null;
         }
-        return sup.getPaymentInfo();
+        return options;
     }
 
     /**
@@ -110,19 +107,11 @@ public class SupplierSystem {
      * @return true if the payment options was added or already exist, false otherwise
      */
     public boolean addPaymentOptions(int supId, String paymentInfo) {
-        Supplier sup = suppliers.getOrDefault(supId, null);
-        if(sup == null){
-            return  false;
-        }
 
-        // payment doesnt in the allowed list
-        List<String> paymentOptions = Arrays.asList(this.paymentOptions);
-        if (!paymentOptions.contains(paymentInfo.toUpperCase())) {
+        if (Arrays.stream(PaymentOptions.values()).filter(x->x.name().equals(paymentInfo)).findFirst().orElse(null)==null) {
                 return false;
-
         }
-        supplierManager.addPaymentOption(supId,paymentInfo);
-        return sup.addPaymentOptions(paymentInfo);
+        return supplierManager.addPaymentOption(supId,paymentInfo);
     }
 
     /**
@@ -134,15 +123,7 @@ public class SupplierSystem {
      * @return true if the all the payment are removed, false otherwise
      */
     public boolean removePaymentOptions(int supId, String paymentInfo) {
-        Supplier sup = suppliers.getOrDefault(supId, null);
-        if(sup == null){
-            return  false;
-        }
 
-        // payment doesnt in the allowed list
-            if(Arrays.binarySearch(paymentOptions, paymentInfo) < 0){
-                return false;
-            }
         return supplierManager.removePaymentOption(supId,paymentInfo);
 
     }
@@ -173,27 +154,20 @@ public class SupplierSystem {
      * @return True if the contact as been added.
      */
     public boolean addContactInfo(int supplierId, String contactPersonName, String phoneNumber, String email) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
-
-        if(supplier == null){
-            return false;
-        }
         String returnedEmail=supplierManager.insertNewContactInfo(new ContactInfo(contactPersonName,phoneNumber,email,supplierId));
-        if(returnedEmail!=null) {
-            return supplier.addContactInfo(contactPersonName, phoneNumber, email);
-        }
-        else {
+        if(returnedEmail==null)
+        {
             return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
     public boolean RemoveContactFromSupplier(int supID,String email)
     {
-        if(this.supplierManager.removeContactFromSupplier(supID,email)) {
-            return this.suppliers.get(supID).RemoveContactFromSupplier(email);
-        }
-        else
-            return false;
+        return this.supplierManager.removeContactFromSupplier(supID,email);
     }
 
     /**
@@ -206,55 +180,80 @@ public class SupplierSystem {
      *          supplier already have one.
      */
     public List<Integer> addContractToSupplier(int supplierId, String contractInfo, List<Days> days, List<AddProduct> products) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
+        List<Integer> badProducts = new LinkedList<>();
+        int freqSupply;
 
-        List<Integer> productIdError = new LinkedList<>();
-
-        if(supplier == null){
+        int contractID = supplierManager.addContractToSupplier(supplierId,new ContractWithSupplier(contractInfo,days));
+        if(contractID < 0) {
             return null;
         }
 
-        //TODO add to addproduct.product if not null the freqSupply and min price that is the original price
-        boolean ans= supplier.addContractInfo(contractInfo,days);
-        if(ans) {
-            for (AddProduct product : products) {
-                if (!supplier.addProduct(product)) {
-                    productIdError.add(product.barCode);
-                } else {
-                    productsManager.addIfAbsent(product);
-                }
+        freqSupply = getFreqSupply(days);
+
+        boolean ans = true;
+        for (AddProduct product : products) {
+
+            if(product.product != null){
+                product.product.setFreqSupply(freqSupply);
+                product.product.setMinPrice(product.originalPrice);
             }
 
-            return productIdError;
-        }
-        else {
-            return null;
+            ans = addProductToContract(supplierId, freqSupply, product);
+            if(!ans) {
+                badProducts.add(product.barCode);
+            }
         }
 
+        return badProducts;
+
+    }
+
+    private int getFreqSupply(List<Days> days) {
+        int freqSupply;
+        if(days.size() == 1){
+            freqSupply = 1;
+        } else {
+            freqSupply = days.size() / 2;
+        }
+        return freqSupply;
     }
 
     /**
      * Add a product to the supplier contract
-     * @param supplierId Suppliers.Supplier ID
+     * @param supplierID Suppliers.Supplier ID
      * @param product Data of the product
      * @return true if the product have been added
      */
-    public boolean addProductToContract(int supplierId, AddProduct product) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
+    public boolean addProductToContract(int supplierID, int freqSupply, AddProduct product) {
+        boolean ans;
 
-        if(supplier == null){
-            return false;
-        }
-        boolean ans=false;
-        //TODO add to addproduct.product if not null the freqSupply and min price that is the original price
-
-        if(ans=supplier.addProduct(product))
+        if(ans = supplierManager.addProductToContract(supplierID,product))
         {
-            productsManager.addIfAbsent(product);
+            if(product.product != null) {
+                productsManager.addIfAbsent(product.product);
+            } else {
+                productsManager.updateIfNeededFreqSupplyAndMinPrice(product.barCode, freqSupply, product.originalPrice);
+            }
+
         }
         return ans;
-
     }
+
+    /**
+     * Add a product to the supplier contract
+     * @param supplierID Suppliers.Supplier ID
+     * @param product Data of the product
+     * @return true if the product have been added
+     */
+    public boolean addProductToContract(int supplierID, AddProduct product) {
+        List<Days> days = supplierManager.getSupplyingDaysBySupID(supplierID);
+        if(days == null){
+            return false;
+        }
+        return addProductToContract(supplierID, getFreqSupply(days), product);
+    }
+
+
 
 
     /**
@@ -281,20 +280,19 @@ public class SupplierSystem {
      * @return -1 if cant create the order, otherwise return the order id
      */
     public Result<Integer> createNewOrder(int supplierId, List<ProductInOrder> products, int shopNumber) {
-        Supplier supplier = supplierManager.getOrNull(supplierId);
+        Supplier supplier = supplierManager.getById(supplierId);
         List<Integer> barcodes = new ArrayList<>();
 
         if(supplier == null){
             return Result.makeFailure("Supplier doesnt exist");
         }
 
-
         for(ProductInOrder product : products){
             barcodes.add(product.getBarcode());
         }
 
-        //TODO this may not be needed as the product contract have all this info
-        if(!supplierManager.haveAllBarcodes(supplierId,barcodes)){
+        //TODO can be faster if we use the db
+        if(!supplier.hasAllBarcodes(barcodes)){
             return Result.makeFailure("The supplier do not supply some of this products");
         }
 
@@ -329,7 +327,7 @@ public class SupplierSystem {
         for(ProductInOrder product : products){
             barcodes.add(product.getBarcode());
         }
-        suppliersId = supplierManager.getAllSupplierWithBarcodes(barcodes);
+        suppliersId = supplierManager.getAllSupplierIdsWithBarcodes(barcodes);
         if(suppliersId.isEmpty()){
             return Result.makeFailure("There isnt one supplier with all of this products");
         }
@@ -338,6 +336,7 @@ public class SupplierSystem {
 
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
+        sup.fillWithCatalogNumber(products);
 
         RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1,products, shopNumber);
         regularOrder.setDeliveryDay(sup.getNextDeliveryDate());
@@ -351,6 +350,14 @@ public class SupplierSystem {
 
     }
 
+    /**
+     * Create periodical order
+     * @param products the product to order
+     * @param days the days to supply
+     * @param weekPeriod week
+     * @param shopNumber to shop number
+     * @return the id of the order
+     */
     public Result<Integer> createPeriodicalOrder(List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber) {
         List<Integer> barcodes = new ArrayList<>();
         List<Integer> suppliersId;
@@ -364,7 +371,7 @@ public class SupplierSystem {
         for(ProductInOrder product : products){
             barcodes.add(product.getBarcode());
         }
-        suppliersId = supplierManager.getAllSupplierWithBarcodes(suppliersId, barcodes);
+        suppliersId = supplierManager.getAllSuppliersWithBarcodes(suppliersId, barcodes);
         if(suppliersId.isEmpty()){
             return Result.makeFailure("There isnt one supplier with all of this products");
         }
@@ -373,6 +380,7 @@ public class SupplierSystem {
 
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
+        sup.fillWithCatalogNumber(products);
 
         PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days,
                 weekPeriod, shopNumber, sup.getNextDeliveryDate());
@@ -385,18 +393,57 @@ public class SupplierSystem {
         return Result.makeOk("Order was created", periodicalOrder.getOrderId());
     }
 
+    public Result<List<Integer>> addProductsToPeriodicalOrder(int orderId, List<ProductInOrder> products) {
+        Supplier sup;
+        if(!orderManager.isPeriodicalOrder(orderId)){
+            return Result.makeFailure("The order doesnt exist or this is not periodical order");
+        }
+
+        int supplierId = orderManager.getTheSupplierOfOrder(orderId);
+        if(supplierId == -1){
+            //not need to get here
+            return Result.makeFailure("The supplier of this order desnt exist");
+        }
+
+        Order order = orderManager.getOrderBasicDetails(orderId);
+        long diff = order.getDeliveryDay().getTime() - Calendar.getInstance().getTime().getTime();
+        long days =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
+        if(days < 2){
+            return Result.makeFailure("Cant edit order day before delivery");
+        }
+
+        sup = supplierManager.getById(supplierId);
+        if(sup == null){
+            //not need to get here
+            return Result.makeFailure("The supplier of this order desnt exist");
+        }
+        sup.fillWithCatalogNumber(products);
+        sup.setPricePerUnit(products);
+
+        return Result.makeOk("Product was inserted",orderManager.addProductsToPeriodicalOrder(orderId, products));
+    }
+
     /**
      * Return all the supplier products
      * @param supplierId supplier ID
      * @return List with all the supplier product info
      */
-    public List<SupplierProductInfo> getAllSupplierProducts(int supplierId) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
+    public List<SupplierProductDTO> getAllSupplierProducts(int supplierId) {
+        List<SupplierProductDTO> supplierProductDTOs=new LinkedList<>();
+        //int barcode, String productCatalogNumber, double originalPrice, ProductDiscountsDTO discountPerAmount
+        for (ContractProduct product:
+                this.supplierManager.getAllSupplierProductsBardoces(supplierId)) {
+            ProductDiscountsDTO productDiscountsDTO= new ProductDiscountsDTO(product.getBarCode(),product.getOriginalPrice());
+            for (int amount:
+                 product.getDiscounts().discountPerAmount.keySet()) {
+                productDiscountsDTO.addDiscount(amount,product.getDiscounts().discountPerAmount.get(amount));
+            }
+            supplierProductDTOs.add(new SupplierProductDTO(product.getBarCode(),
+                    product.getProductCatalogNumber(),product.getOriginalPrice(), productDiscountsDTO));
 
-        if(supplier == null){
-            return null;
         }
-        return supplier.getAllProducts();
+        return supplierProductDTOs;
     }
 
 
@@ -491,5 +538,80 @@ public class SupplierSystem {
         Supplier supplier = supplierManager.loadSupplierAndContacts(supplierId);
 
         return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details);
+    }
+
+    public SupplierDetailsDTO getSupplierInformation(int supID) {
+        Supplier supplier=supplierManager.getById(supID);
+        //int supplierID, String supplierName, String incNum, String accountNumber,
+        //                              String address, String contactName, String phoneNumber, String email) {
+        if(supplier!=null) {
+            SupplierDetailsDTO supplierDetails = new SupplierDetailsDTO(supplier.getSupId(), supplier.getSupplierName(),
+                    supplier.getIncNum(), supplier.getAccountNumber(), supplier.getAddress(),
+                    supplier.getContacts().get(0).getName(), supplier.getContacts().get(0).getPhoneNumber(), supplier.getContacts().get(0).getEmail());
+            return supplierDetails;
+        }
+        return null;
+    }
+
+    public List<ContactInfoDTO> getSupplierContacts(int supID) {
+        List<ContactInfoDTO> contactInfoDTOS= new LinkedList<>();
+        for (ContactInfo contact:
+             supplierManager.getAllSupplierContacts(supID)) {
+                contactInfoDTOS.add(new ContactInfoDTO(contact.getName(),contact.getPhoneNumber(),contact.getEmail(),contact.getSupID()));
+        }
+        return contactInfoDTOS;
+    }
+
+    public ContractWithSupplierDTO getSupplierContractInfo(int supID) {
+        ContractWithSupplier contractWithSupplier=this.supplierManager.getSupplierContract(supID);
+        if(contractWithSupplier!=null)
+        {
+            List<String> days=this.getSupplyingDaysNamesBySupID(supID);
+            return new ContractWithSupplierDTO(days,contractWithSupplier.getContractDetails());
+        }
+        return null;
+    }
+
+    public List<String> getSupplyingDaysNamesBySupID(int supID) {
+        List<String> days = new LinkedList<>();
+        for (Days day:
+                this.supplierManager.getSupplyingDaysBySupID(supID)) {
+            days.add(day.name());
+
+        }
+        return days;
+    }
+
+    public List<Integer> getSupplyingDaysNumbersBySupID(int supID) {
+        List<Integer> days = new LinkedList<>();
+        for (Days day:
+                this.supplierManager.getSupplyingDaysBySupID(supID)) {
+            Integer dayInt=StructUtils.getDayInt(day);
+            days.add(dayInt);
+
+        }
+        return days;
+    }
+
+
+    public Result<List<Integer>> removeProductsFromOrder(int orderId, List<Integer> barcodes) {
+        List<String> catalogNumbers;
+        int supplierId;
+        if((supplierId = orderManager.getTheSupplierOfOrder(orderId)) == -1){
+            return Result.makeFailure("No such orderId");
+        }
+
+        Order order = orderManager.getOrderBasicDetails(orderId);
+        long diff = order.getDeliveryDay().getTime() - Calendar.getInstance().getTime().getTime();
+        long days =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
+        if(days < 2){
+            return Result.makeFailure("Cant edit order day before delivery");
+        }
+
+        catalogNumbers = supplierManager.getCatalogsFromBarcodes(supplierId, barcodes);
+        catalogNumbers.removeAll(orderManager.removeProductsFromOrder(orderId, catalogNumbers));
+
+        return Result.makeOk("Remove product",supplierManager.getBarcodesFromCatalog(supplierId, catalogNumbers));
     }
 }

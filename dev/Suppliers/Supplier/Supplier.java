@@ -53,10 +53,30 @@ public class Supplier {
         contract = null;
     }
 
+    public Supplier(String name, String address, String incNum, String accountNumber, String paymentInfo){
+        this.name=name;
+        this.incNum=incNum;
+        this.accountNumber=accountNumber;
+        this.paymentInfo=new LinkedList<>();
+        this.paymentInfo.add(paymentInfo);
+        this.address=address;
+
+
+
+        this.contacts = new LinkedList<>();
+
+        contract = null;
+    }
+
     
 
     public boolean addContactInfo(String name, String phone, String email){
         this.contacts.add(new ContactInfo(name, phone, email,this.supId));
+        return true;
+    }
+
+    public boolean addContactInfo(ContactInfo contactInfo){
+        this.contacts.add(contactInfo);
         return true;
     }
 
@@ -195,7 +215,7 @@ public class Supplier {
      * @return true if the supplier supply this barcode
      */
     public boolean hasProduct(int barcode) {
-        if(contract == null){
+        if(!hasContract()){
             return false;
         }
         return contract.hasProduct(barcode);
@@ -246,5 +266,47 @@ public class Supplier {
         }
 
         return null;
+    }
+
+    public void addContract(ContractWithSupplier contract) {
+        this.contract=contract;
+    }
+
+    public boolean hasContract() {
+        return this.contract!=null;
+    }
+
+    public ContractWithSupplier getContract()
+    {
+        return contract;
+    }
+
+    /**
+     * Check if the supplier has all the barcodes
+     * @param barcodes the barcodes to check
+     * @return true if the supplier have all the barcodes
+     */
+    public boolean hasAllBarcodes(List<Integer> barcodes) {
+        List<ContractProduct> products;
+        boolean hasBarcode = false;
+        if(!hasContract()){
+            return false;
+        }
+
+        products = contract.getProducts();
+
+        for(Integer barcode : barcodes) {
+            for (ContractProduct contractProduct : products) {
+                if (contractProduct.getBarCode() == barcode){
+                    hasBarcode = true;
+                    break;
+                }
+            }
+            if(!hasBarcode) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

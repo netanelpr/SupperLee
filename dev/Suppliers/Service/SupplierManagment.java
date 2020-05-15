@@ -100,7 +100,7 @@ public interface SupplierManagment {
      * @param supplierId supplier ID
      * @return List with all the supplier product info
      */
-    public List<SimpleSupplierProductDTO> getAllSupplierProducts(int supplierId);
+    public List<SupplierProductDTO> getAllSupplierProducts(int supplierId);
 
     /**
      * Return all the information that was added to the system about a product
@@ -120,5 +120,25 @@ public interface SupplierManagment {
     public List<String> getPurchaseHistory(int supplierId);
 
 
+    /**
+     * Return all the supplierInfo by a given supplier id
+     * @param supID Suppliers.Supplier ID
+     * @return DTO with all info
+     */
+    public SupplierDetailsDTO getSupplierInfo(int supID);
+
+    /**
+     * Return all the contact of a supplier by a given supplier id
+     * @param supID Suppliers.Supplier ID
+     * @return contactInfoDTO with all info
+     */
+    public List<ContactInfoDTO> getSupplierContacts(int supID);
+
+    /**
+     * Return the contract of a supplier by a given supplier id days and details text
+     * @param supID Suppliers.Supplier ID
+     * @return contractWithSupplierDTO with all info
+     */
+    public ContractWithSupplierDTO getSupplierContractInfo(int supID);
 
 }

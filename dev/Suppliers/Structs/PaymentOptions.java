@@ -5,7 +5,7 @@ public enum PaymentOptions {
     Credit,
     Check,
     Bankwire,
-    Bit,
+    BitApp,
     BitCoin,
     Dollars,
     NIS,

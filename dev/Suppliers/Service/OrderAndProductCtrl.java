@@ -92,6 +92,22 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         return supplierSystem.createPeriodicalOrder(productInOrders, days, weekPeriod, shopNumber);
     }
 
+    @Override
+    public Result<List<Integer>> addProductsToPeriodicalOrder(int orderId, List<ProductInOrderDTO> products) {
+        List<ProductInOrder> productInOrders = new LinkedList<>();
+
+        for(ProductInOrderDTO productInOrderDTO : products){
+            productInOrders.add(ProductInOrderDTOToPIO(productInOrderDTO));
+        }
+
+        return supplierSystem.addProductsToPeriodicalOrder(orderId, productInOrders);
+    }
+
+    @Override
+    public Result<List<Integer>> RemoveProductsFromPeriodicalOrder(int orderId, List<Integer> barcodes) {
+        return supplierSystem.removeProductsFromOrder(orderId, barcodes);
+    }
+
     /**
      * Return the products information of a order
      * @param orderId the order id

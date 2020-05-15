@@ -104,6 +104,7 @@ public class AddContractToSupplier extends Menu_Option {
                     if(newProduct){
                         systemProduct = new SystemProduct(barcode, name, manufacture, category, subCategoty, size);
                         products.add(new SupplierProductDTO(barcode, input[0], originaPrice, product, systemProduct));
+                        continue;
                     }
 
                     products.add(new SupplierProductDTO(barcode, input[0], originaPrice, product));

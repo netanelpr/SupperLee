@@ -3,8 +3,10 @@ package Suppliers.Supplier;
 import Suppliers.DataAccess.SupDBConn;
 import Suppliers.DataAccess.SupplierMapper;
 import Suppliers.Structs.Days;
+import Suppliers.Structs.PaymentOptions;
 import Suppliers.Structs.StructUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +56,8 @@ public class SupplierManager {
         return supplierMapper.insertContactInfo(contactInfo);
     }
     public boolean removeContactFromSupplier(int supID, String email) {
-        if(supplierMapper.getAllSupplierContacts(supID).size()<2)
+        List<ContactInfo> contacts=supplierMapper.getAllSupplierContacts(supID);
+        if(contacts.size()<2)
         {
             return false;
         }
@@ -63,10 +66,6 @@ public class SupplierManager {
         }
 
     }
-    public Supplier getOrNull(int supplierId){
-        //TODO implement
-        return null;
-    }
 
     /**
      * Check if supplier have all the products
@@ -74,9 +73,9 @@ public class SupplierManager {
      * @param barcodes list of barcodes
      * @return true if the supplier have all the barcodes
      */
-    public boolean haveAllBarcodes(int supplierId, List<Integer> barcodes){
-        //TODO implement
-        return true;
+    public boolean hasAllBarcodes(int supplierId, List<Integer> barcodes){
+        // TODO not needed for now, can be implement for faster speed
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -84,18 +83,8 @@ public class SupplierManager {
      * @param barcodes the barcodes to check
      * @return Return list with all the supplier ids which have all the barcodes
      */
-    public List<Integer> getAllSupplierWithBarcodes(List<Integer> barcodes){
-        //TODO implement return empty list is there isnt any one
-        /*
-         * sql query
-         * SELECT S.id
-         * FROM Supplier AS S
-         * WHERE (SELECT barcode
-		 *        FROM Suppliers_products as SP
-		 *         WHERE SP.supplier_id = S.id) IN (?)
-		 * Use conn.createArrayOf(...)
-         */
-        return null;
+    public List<Integer> getAllSupplierIdsWithBarcodes(List<Integer> barcodes){
+        return supplierMapper.getAllSupplierIdsWithBarcodes(barcodes);
     }
 
     /**
@@ -104,9 +93,17 @@ public class SupplierManager {
      * @param barcodes the barcodes to check
      * @return Return list with all the supplier ids which have all the barcodes
      */
-    public List<Integer> getAllSupplierWithBarcodes(List<Integer> supplierIds, List<Integer> barcodes){
-        //TODO implement return empty list is there isnt any one
-        return null;
+    public List<Integer> getAllSuppliersWithBarcodes(List<Integer> supplierIds, List<Integer> barcodes){
+        List<Integer> suppliers = new ArrayList<>();
+        List<Integer> allSupplierWithBarcodes = getAllSupplierIdsWithBarcodes(barcodes);
+
+        for(Integer id : supplierIds){
+            if(allSupplierWithBarcodes.contains(id)){
+                suppliers.add(id);
+            }
+        }
+
+        return suppliers;
     }
 
     /**
@@ -115,13 +112,18 @@ public class SupplierManager {
      * @return Return list with all the supplier ids which supply in the given days
      */
     public List<Integer> getAllSupplierWithSupplyDays(List<Days> days) {
-        //TODO implement return empty list is there isnt any one
-        return null;
+        List<Integer> integerDays = new ArrayList<>();
+
+        for(Days day : days){
+            integerDays.add(StructUtils.getDayInt(day));
+        }
+
+        return supplierMapper.getAllSupplierWithSupplyDays(integerDays);
     }
 
     public boolean addPaymentOption(int supId, String paymentInfo) {
-        List<String> supplierPaymentInfo= supplierMapper.getAllSupplierPaymentInfo(supId);
-        for ( String info:
+        List<PaymentOptions> supplierPaymentInfo= supplierMapper.getAllSupplierPaymentInfo(supId);
+        for ( PaymentOptions info:
               supplierPaymentInfo) {
             if(info.equals(paymentInfo))
             {
@@ -133,9 +135,9 @@ public class SupplierManager {
     }
 
     public boolean removePaymentOption(int supId, String paymentInfo) {
-        List<String> supplierPaymentInfo = this.supplierMapper.getAllSupplierPaymentInfo(supId);
+        List<PaymentOptions> supplierPaymentInfo = this.supplierMapper.getAllSupplierPaymentInfo(supId);
         boolean ans = false;
-        for (String info :
+        for (PaymentOptions info :
                 supplierPaymentInfo) {
             if (info.equals(paymentInfo)) {
                 ans = true;
@@ -150,12 +152,66 @@ public class SupplierManager {
     }
 
     public int getIdByContract(int contractId) {
-        //TODO implement
-        return -1;
+        ContractWithSupplier contractWithSupplier=this.supplierMapper.getContractByContractID(contractId);
+        if(contractWithSupplier!=null)
+        {
+            return contractWithSupplier.getContractID();
+        }
+        else
+        {
+            return -1;
+        }
+
     }
 
     public Supplier loadSupplierAndContacts(int supplierId) {
         //TODO implement
         return null;
+    }
+
+    public int addContractToSupplier(int supplierId, ContractWithSupplier contractInfo) {
+
+        return this.supplierMapper.insertContractToSupplier(supplierId,contractInfo);
+    }
+
+    public boolean addProductToContract(int supplierID,AddProduct product) {
+        ContractWithSupplier contractWithSupplier=supplierMapper.getContractBySupplier(supplierID);
+        if(contractWithSupplier==null)
+        {
+            return false;
+        }
+
+        return supplierMapper.addProductToContract(contractWithSupplier.getContractID(),product);
+    }
+
+    public List<ContactInfo> getAllSupplierContacts(int supID) {
+        return this.supplierMapper.getAllSupplierContacts(supID);
+    }
+
+    public ContractWithSupplier getSupplierContract(int supID) {
+        ContractWithSupplier contractWithSupplier=this.supplierMapper.getContractBySupplier(supID);
+        //System.out.println("SupplierID from contract id: "+getIdByContract(contractWithSupplier.getContractID()));
+        return contractWithSupplier;
+    }
+
+    public List<Days> getSupplyingDaysBySupID(int supID) {
+        return this.supplierMapper.getSupplyDays(supID);
+    }
+
+    public List<PaymentOptions> getSupplierPaymentOptions(int supId) {
+
+        return this.supplierMapper.getAllSupplierPaymentInfo(supId);
+    }
+
+    public List<ContractProduct> getAllSupplierProductsBardoces(int supplierId) {
+        return this.supplierMapper.getAllSupplierProducts(supplierId);
+    }
+
+    public List<String> getCatalogsFromBarcodes(int supplierId, List<Integer> barcodes) {
+        return supplierMapper.getCatalogsFromBarcodes(supplierId, barcodes);
+    }
+
+    public List<Integer> getBarcodesFromCatalog(int supplierId, List<String> catalogNumbers) {
+        return supplierMapper.getBarcodesFromCatalog(supplierId, catalogNumbers);
     }
 }

@@ -16,7 +16,6 @@ public class SupplierDetailsDTO {
     public String phoneNumber;
     public String email;
 
-    //TODO remove after edit
     public SupplierDetailsDTO(int supplierID, String supplierName) {
         this.supplierID = supplierID;
         this.supplierName = supplierName;

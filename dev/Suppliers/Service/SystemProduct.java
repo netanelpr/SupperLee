@@ -2,8 +2,6 @@ package Suppliers.Service;
 
 public class SystemProduct {
 
-    //TODO add the fields they need
-
     public int barcode;
     public String name;
     public String manufacture;

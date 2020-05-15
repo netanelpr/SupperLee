@@ -1,5 +1,6 @@
 package Suppliers.Supplier.Order;
 
+import Result.Result;
 import Suppliers.DataAccess.PeriodicalOrderMapper;
 import Suppliers.DataAccess.RegularOrderMapper;
 import Suppliers.DataAccess.SupDBConn;
@@ -62,5 +63,21 @@ public class OrderManager {
 
     public List<AllDetailsOfProductInOrder> getAllProductDetails(int orderId) {
         return regularOrderMapper.getAllProductDetails(orderId);
+    }
+
+    public boolean isPeriodicalOrder(int orderId){
+        return periodicalOrderMapper.isPeriodicalOrder(orderId);
+    }
+
+    public List<Integer> addProductsToPeriodicalOrder(int orderId, List<ProductInOrder> productInOrders) {
+        return periodicalOrderMapper.addProductsToPeriodicalOrder(orderId, productInOrders);
+    }
+
+    public int getTheSupplierOfOrder(int orderId) {
+        return regularOrderMapper.getTheSupplierOfOrder(orderId);
+    }
+
+    public List<String> removeProductsFromOrder(int orderId, List<String> catalog) {
+        return regularOrderMapper.removeProductsFromOrder(orderId, catalog);
     }
 }
