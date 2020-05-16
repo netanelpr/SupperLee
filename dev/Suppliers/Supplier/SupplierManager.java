@@ -1,5 +1,6 @@
 package Suppliers.Supplier;
 
+import DataAccess.SupInvDBConn;
 import Suppliers.DataAccess.SupDBConn;
 import Suppliers.DataAccess.SupplierMapper;
 import Suppliers.Structs.Days;
@@ -17,7 +18,7 @@ public class SupplierManager {
     private SupplierMapper supplierMapper;
 
     private SupplierManager(){
-        supplierMapper = new SupplierMapper(SupDBConn.getInstance());
+        supplierMapper = new SupplierMapper(SupInvDBConn.getInstance());
     }
 
     public static SupplierManager getInstance(){
@@ -31,6 +32,7 @@ public class SupplierManager {
         return supplierMapper.findById(supplierId);
     }
 
+    //Functions
     public int insert(Supplier supplier){
         return supplierMapper.insert(supplier);
     }
@@ -139,7 +141,7 @@ public class SupplierManager {
         boolean ans = false;
         for (PaymentOptions info :
                 supplierPaymentInfo) {
-            if (info.equals(paymentInfo)) {
+            if (info.name().equals(paymentInfo)) {
                 ans = true;
                 break;
             }
@@ -213,5 +215,13 @@ public class SupplierManager {
 
     public List<Integer> getBarcodesFromCatalog(int supplierId, List<String> catalogNumbers) {
         return supplierMapper.getBarcodesFromCatalog(supplierId, catalogNumbers);
+    }
+
+    public List<SupplierDetails> getAllSuppliers() {
+        return this.supplierMapper.getAllSuppliers();
+    }
+
+    public List<ProductDiscounts> getAmountDiscountReport(int supID) {
+        return this.supplierMapper.getAmountDiscountReport(supID);
     }
 }

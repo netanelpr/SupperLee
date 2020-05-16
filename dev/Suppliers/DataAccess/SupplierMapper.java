@@ -29,6 +29,8 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
         loadedDiscountsOfProducts = new WeakValueHashMap<>();
     }
 
+
+
     //Inserts statements
     protected String insertSupplierStatement() {
         return "INSERT INTO Supplier (sup_name,address,account_number,paymentInfo,inc_number)  " +
@@ -65,12 +67,12 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
 
     //Find Statements
 
+
     @Override
     protected String findStatement() {
         return "SELECT * " +
-                "FROM Supplier join Contact_info On Supplier.id=Contact_info.supplier_id " +
-                "WHERE id = ? " +
-                "LIMIT 1";
+                "FROM Supplier join Contact_info on Supplier.id=Contact_info.supplier_id " +
+                "WHERE id = ? ";
     }
 
     protected String findContactStatement()
@@ -95,7 +97,11 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
 
     }
 
-
+    protected String getAllSuppliersStatement()
+    {
+        return "SELECT * " +
+                "FROM Supplier ";
+    }
     protected String getAllSupplierContactsStatement()
     {
         return "SELECT * " +
@@ -166,9 +172,9 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             if(res.next()) {
                 //int supID,String name, String address, String incNum, String accountNumber, String paymentInfo,
                 //                    String contactName, String phoneNumber,String email
-                Supplier myNewSupplier=new Supplier(res.getInt("id"),res.getString("sup_name"),
+                Supplier myNewSupplier=new Supplier(res.getInt("id"),res.getString(2),
                         res.getString("address"), res.getString("inc_number"),res.getString("account_number"), res.getString("paymentInfo"),
-                        res.getString("name"), res.getString("phone_number"), res.getString("email"));
+                        res.getString(5), res.getString("phone_number"), res.getString("email"));
                 List<ContactInfo> contacts=getAllSupplierContacts(myNewSupplier.getSupId());
                 myNewSupplier.setContacts(contacts);
                 ContractWithSupplier new_contractWithSupplier= this.getContractBySupplier(myNewSupplier.getSupId());
@@ -232,6 +238,18 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
                 return theProduct;
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private SupplierDetails buildSupplierDetailsFromResultSet(ResultSet res) {
+        try {
+                //int barCode, String productCatalogNumber, ProductDiscounts discounts
+                SupplierDetails theSup=new SupplierDetails(res.getInt("id"),res.getString("sup_name"));
+                return theSup;
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -389,13 +407,57 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
 
 
     }
+    public int findIfSupplierExists(int supID)
+    {
+        try (PreparedStatement pstmt = conn.prepareStatement(findStatement())){
+            pstmt.setInt(1, supID);
+
+            ResultSet res=pstmt.executeQuery();
+
+            if(res.next())
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        catch (java.sql.SQLException e) {
+            System.out.println(e);
+            return -1;
+        }
+    }
+
+    public int findIfSupplierHasContract(int supID)
+    {
+        try (PreparedStatement pstmt = conn.prepareStatement(findContractBySupplierIDStatement())){
+            pstmt.setInt(1, supID);
+
+            ResultSet res=pstmt.executeQuery();
+
+            if(res.next())
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        catch (java.sql.SQLException e) {
+            System.out.println(e);
+            return -1;
+        }
+    }
+
 
 
 
     public int insertContractToSupplier(int supID, ContractWithSupplier contract)
     {
-        Supplier supplier=findById(supID);
-        if(supplier==null || loadedMap.get(supID).hasContract())
+        int number=findIfSupplierExists(supID);
+        if(number<0 || findIfSupplierHasContract(supID) >0 || (loadedMap.keySet().size()>0 && loadedMap.get(supID).hasContract()))
         {
             return -1;
         }
@@ -435,7 +497,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
 
             if(loadedMap.getOrDefault(supID,null)!=null)
             {
-                loadedMap.get(supplier.getSupId()).addContract(contract);
+                loadedMap.get(supID).addContract(contract);
             }
             loadedContracts.put(contract.getContractID(),contract);
             return contract.getContractID();
@@ -747,13 +809,13 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     public List<Integer> getBarcodesFromCatalog(int supplierId, List<String> catalogs) {
         List<Integer> barcodes = new ArrayList<>();
 
-        for(String catalog : catalogs) {
+        for (String catalog : catalogs) {
             try (PreparedStatement ptsmt = conn.prepareStatement(getCatalogsFromBarcodesStatement())) {
 
                 ptsmt.setString(1, catalog);
 
                 ResultSet res = ptsmt.executeQuery();
-                if(res.next()){
+                if (res.next()) {
                     barcodes.add(res.getInt(1));
                 }
 
@@ -761,5 +823,32 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             }
         }
         return barcodes;
+    }
+
+    public List<SupplierDetails> getAllSuppliers() {
+        List<SupplierDetails> sups = new ArrayList<>();
+        String statement=getAllSuppliersStatement();
+        try(PreparedStatement pstmt = conn.prepareStatement(statement)){
+            ResultSet res = pstmt.executeQuery();
+
+            while(res.next()){
+                sups.add(this.buildSupplierDetailsFromResultSet(res));
+            }
+
+        } catch (java.sql.SQLException e) {
+            return new LinkedList<>();
+        }
+
+        return sups;
+    }
+
+    public List<ProductDiscounts> getAmountDiscountReport(int supID) {
+        List<ContractProduct> products= this.getAllSupplierProducts(supID);
+
+        List<ProductDiscounts> productDiscounts= new LinkedList<>();
+        for (ContractProduct product: products) {
+            productDiscounts.add(this.getProductsDiscounts(product));
+        }
+        return productDiscounts;
     }
 }

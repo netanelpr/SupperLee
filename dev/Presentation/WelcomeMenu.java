@@ -35,6 +35,10 @@ public class WelcomeMenu {
             } catch (IOException e) {
                 System.out.println("Invalid option");
             }
+            catch (Exception e)
+            {
+                System.out.println("Something went wrong");
+            }
 
             if(option == 1){
                 supplierMenu.apply();

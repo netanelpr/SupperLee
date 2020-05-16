@@ -25,9 +25,18 @@ public class SupplierProductDTO {
 
     }
 
+
+
     public String toString(){
-        return String.format("barcode: %d\ncatalog number : %s\noriginal price : %f\n"+
-                        discounts.toString()+"\n%s", barcode, productCatalogNumber, originalPrice, systemProduct.toString());
+        if(systemProduct==null) {
+            return String.format("barcode: %d\ncatalog number : %s\noriginal price : %f\n" +
+                    discounts.toString() + "\n", barcode, productCatalogNumber, originalPrice);
+        }
+        else
+        {
+            return String.format("barcode: %d\ncatalog number : %s\noriginal price : %f\n" +
+                    discounts.toString() + "\n%s", barcode, productCatalogNumber, originalPrice, systemProduct.toString());
+        }
     }
 
     public String shallow_toString() {

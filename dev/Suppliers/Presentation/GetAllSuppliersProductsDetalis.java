@@ -1,8 +1,6 @@
 package Suppliers.Presentation;
 
-import Suppliers.Service.SupplierManagment;
-import Suppliers.Service.SimpleSupplierProductDTO;
-import Suppliers.Service.SupplierProductDTO;
+import Suppliers.Service.*;
 import Suppliers.Supplier.SupplierProductInfo;
 
 import java.io.BufferedReader;
@@ -13,9 +11,11 @@ public class GetAllSuppliersProductsDetalis extends Menu_Option {
 
 
     private SupplierManagment supplierManagment;
+    private OrderAndProductManagement orderAndProductManagement;
 
-    public GetAllSuppliersProductsDetalis(SupplierManagment supplierManagment) {
+    public GetAllSuppliersProductsDetalis(SupplierManagment supplierManagment,OrderAndProductManagement orderAndProductManagement) {
         this.supplierManagment = supplierManagment;
+        this.orderAndProductManagement=orderAndProductManagement;
     }
 
 
@@ -26,11 +26,12 @@ public class GetAllSuppliersProductsDetalis extends Menu_Option {
 
 
         List<SupplierProductDTO> simpleSupplierProductDTOS = supplierManagment.getAllSupplierProducts(supId);
-
+        System.out.println("");
         if(simpleSupplierProductDTOS != null) {
             for(SupplierProductDTO dto : simpleSupplierProductDTOS){
-                String productInfo = supplierManagment.getAllInformationAboutSuppliersProduct(supId, dto.barcode).shallow_toString();
-                System.out.println(productInfo+ "\n");
+                SystemProduct systemProduct=this.orderAndProductManagement.getProduct(dto.barcode);
+                System.out.println(systemProduct.toString());
+                System.out.println("");
             }
         } else {
             System.out.println("Invalid supplier id or no contract");

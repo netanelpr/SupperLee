@@ -1,5 +1,7 @@
 package Suppliers.Service;
 
+import Suppliers.Structs.StructUtils;
+
 public class ContactInfoDTO {
 
     private String phoneNumber;
@@ -32,5 +34,13 @@ public class ContactInfoDTO {
 
     public int getSupID() {
         return SupID;
+    }
+
+    @Override
+    public String toString() {
+        return "ContactInfo: " +
+                "phoneNumber='" + phoneNumber +", email='" + email +
+                ", name='" + name +
+                ", SupID=" + SupID;
     }
 }

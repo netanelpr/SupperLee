@@ -1,5 +1,6 @@
 package Suppliers.Supplier;
 
+import DataAccess.SupInvDBConn;
 import Suppliers.DataAccess.ProductMapper;
 import Suppliers.DataAccess.SupDBConn;
 
@@ -15,7 +16,7 @@ public class ProductsManager {
 
     private ProductsManager(){
         //productMap = new HashMap<>();
-        productMapper = new ProductMapper(SupDBConn.getInstance());
+        productMapper = new ProductMapper(SupInvDBConn.getInstance());
     }
 
     public static ProductsManager getInstance(){

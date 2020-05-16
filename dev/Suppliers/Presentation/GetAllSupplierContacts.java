@@ -1,32 +1,31 @@
 package Suppliers.Presentation;
 
+import Suppliers.Service.ContactInfoDTO;
 import Suppliers.Service.SupplierManagment;
-import Suppliers.Service.SimpleSupplierProductDTO;
 import Suppliers.Service.SupplierProductDTO;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 
-public class GetAllSuppliersProducts extends Menu_Option {
-
+public class GetAllSupplierContacts extends Menu_Option {
 
     private SupplierManagment supplierManagment;
 
-    public GetAllSuppliersProducts(SupplierManagment supplierManagment) {
+    public GetAllSupplierContacts(SupplierManagment supplierManagment) {
         this.supplierManagment = supplierManagment;
     }
 
-
     @Override
-    public void apply() {
+    void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int supId = readInt("Supplier ID", reader);
 
-        List<SupplierProductDTO> simpleSupplierProductDTOS = supplierManagment.getAllSupplierProducts(supId);
-        if(simpleSupplierProductDTOS != null) {
-            for (SupplierProductDTO product : simpleSupplierProductDTOS) {
-                System.out.println("bardoce: {"+product.barcode+"}");
+        List<ContactInfoDTO> simpleSupplierContactsDTOS = supplierManagment.getSupplierContacts(supId);
+        if(simpleSupplierContactsDTOS != null) {
+            for (ContactInfoDTO contact : simpleSupplierContactsDTOS) {
+                System.out.println(contact.toString());
             }
         } else {
             System.out.println("Invalid supplier id or no contract");

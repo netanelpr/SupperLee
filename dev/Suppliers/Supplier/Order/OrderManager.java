@@ -1,5 +1,6 @@
 package Suppliers.Supplier.Order;
 
+import DataAccess.SupInvDBConn;
 import Result.Result;
 import Suppliers.DataAccess.PeriodicalOrderMapper;
 import Suppliers.DataAccess.RegularOrderMapper;
@@ -17,8 +18,8 @@ public class OrderManager {
     private PeriodicalOrderMapper periodicalOrderMapper;
 
     private OrderManager(){
-        regularOrderMapper = new RegularOrderMapper(SupDBConn.getInstance());
-        periodicalOrderMapper = new PeriodicalOrderMapper(SupDBConn.getInstance());
+        regularOrderMapper = new RegularOrderMapper(SupInvDBConn.getInstance());
+        periodicalOrderMapper = new PeriodicalOrderMapper(SupInvDBConn.getInstance());
     }
 
     public static OrderManager getInstance(){

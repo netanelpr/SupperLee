@@ -134,16 +134,8 @@ public class SupplierSystem {
      * @return List<Suppliers.InvService.SupplierDetails> for each supplier in the system.
      */
     public List<SupplierDetails> getAllSuppliers() {
-        List<SupplierDetails> supDetails = new LinkedList<>();
+        return this.supplierManager.getAllSuppliers();
 
-        for(Integer key : suppliers.keySet()){
-            Supplier supplier = suppliers.get(key);
-            supDetails.add(new SupplierDetails(
-                    supplier.getSupId(),
-                    supplier.getSupplierName()));
-        }
-
-        return  supDetails;
     }
     /**
      * Add person contact information to specific supplier
@@ -262,12 +254,8 @@ public class SupplierSystem {
      * @return List of ProductDiscount.
      */
     public List<ProductDiscounts> getAmountDiscountReport(int supplierId) {
-        Supplier supplier = suppliers.getOrDefault(supplierId, null);
-        if(supplier == null){
-            return null;
-        }
 
-        return supplier.getAmountDiscountReport();
+        return this.supplierManager.getAmountDiscountReport(supplierId);
     }
 
 

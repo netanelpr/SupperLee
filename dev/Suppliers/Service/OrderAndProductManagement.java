@@ -89,5 +89,20 @@ public interface OrderAndProductManagement {
      * @return all the details of order as discribed in the docs
      */
     public OrderShipDetails orderDetails(int orderId);
+
+
+    /**
+     * Return all the details of order as discribed in the docs
+     * @param systemProduct object containing all the information about a new product in the system
+     * @return true/false if the adding product to the system process succeeded
+     */
+    public boolean addProductToSystem(SystemProduct systemProduct);
+
+    /**
+     * Notify the supplier management system that an order has arrived to the store
+     * @param orderId the order id
+     * @return all the details of order as described in the docs
+     */
+    public OrderDTO orderArrived(int orderId);
 }
 

@@ -21,11 +21,12 @@ public class SupplierMenu extends MenuOfMenus {
 
         addMenuOption("Init", new InitWithData(supplierManagment));
         addMenuOption("Create supplier card", new HandleSupplierCard(supplierManagment));
-
+        addMenuOption("Get all suppliers", new GetAllSuppliers(supplierManagment));
+        addMenuOption("Get all supplier's contacts", new GetAllSupplierContacts(supplierManagment));
         addMenuOption("Get payment options", new PaymentOptions(supplierManagment));
         addMenuOption("Update payment options", new updatePaymentOptions(supplierManagment));
 
-        addMenuOption("Get all suppliers", new GetAllSuppliers(supplierManagment));
+
 
         addMenuOption("Add contact info to supplier", new AddContactInfoToSupplier(supplierManagment));
         addMenuOption("Add contract to supplier", new AddContractToSupplier(supplierManagment, orderAndProductManagement));
@@ -33,7 +34,7 @@ public class SupplierMenu extends MenuOfMenus {
         addMenuOption("Discount report", new GetAmountDiscountReport(supplierManagment));
 
         addMenuOption("Get all supplier barcode", new GetAllSuppliersProducts(supplierManagment));
-        addMenuOption("Get all supplier products detalis", new GetAllSuppliersProductsDetalis(supplierManagment));
+        addMenuOption("Get all supplier products detalis", new GetAllSuppliersProductsDetalis(supplierManagment,orderAndProductManagement));
 
         addMenuOption("Get purchase history from supplier", new PurchaseHistoryFromSupplier(supplierManagment));
     }

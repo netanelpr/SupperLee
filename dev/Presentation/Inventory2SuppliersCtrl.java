@@ -8,6 +8,7 @@ import Inventory.View.View;
 import Result.Result;
 import Suppliers.Structs.Days;
 import Suppliers.Service.*;
+import Suppliers.Structs.OrderStatus;
 
 import java.util.*;
 
@@ -41,19 +42,6 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     public List<ItemDTO> getAllCatalog()
     {
-        /*List<Integer> barcodes=myOrderAndProductManagement.getAllProductBarcodes();
-
-        List<DummyItem> dummyItems = new LinkedList<>();
-        for (Integer barcode:
-             barcodes) {
-            SystemProduct theProduct=myOrderAndProductManagement.getProduct(barcode);
-            //((String id, String name, String manufacturer, String category,
-            //                     String sub_category, String size, String freqSupply, String cost
-            DummyItem newDummyItem= new DummyItem(String.valueOf(theProduct.barcode),theProduct.name,
-                    theProduct.manufacture,theProduct.category,theProduct.subCategory,theProduct.size, theProduct.freqSupply);
-
-        }
-        return dummyItems;*/
         return null;
     }
     public Result<Integer> placeNewShortageOrder(ShortageOrder shortageOrder)
@@ -84,6 +72,12 @@ public class Inventory2SuppliersCtrl implements myObservable {
     //TODO I delete the result because its didnt work
     public void receiveSupplierOrder(int orderID)
     {
+        OrderDTO theOrder=this.myOrderAndProductManagement.orderArrived(orderID);
+        if(theOrder!=null)
+        {
+            myInvenoryService.getOrderFromSuppliers(theOrder);
+        }
+        this.myOrderAndProductManagement.updateOrderStatus(orderID, OrderStatus.Close);
         /*this.myOrderAndProductManagement.changeOrderStatus(orderID, OrderStatus.Close);
         OrderDTO theOrder= this.myOrderAndProductManagement.getOrder(orderID);
         return myInvenoryService.getOrderFromSuppliers(theOrder);*/

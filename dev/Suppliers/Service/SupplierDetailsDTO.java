@@ -34,6 +34,10 @@ public class SupplierDetailsDTO {
     }
 
     public String toString(){
+        return String.format("SupplierID : %d\nsupplier name : %s",
+                supplierID, supplierName);
+    }
+    public String toStringFull(){
         return String.format("SupplierID : %d\nsupplier name : %s\nincorporation number: %s\naccount number : %s\naddress : %s",
                 supplierID, supplierName, incNum, accountNumber, accountNumber);
     }

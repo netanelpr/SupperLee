@@ -85,7 +85,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
     }
 
     private String isValidShopStatement(){
-        return "SELECT shopNum Items " +
+        return "SELECT shopNum from Items  " +
                 "WHERE shopNum = (?)";
     }
 

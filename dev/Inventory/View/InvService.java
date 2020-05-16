@@ -142,14 +142,15 @@ public class InvService implements myObservable {
             if (ansStr.equals("1")) { //TODO talk about the shops
                 notifyObserver("Type order id:");
                 ansStr = myScanner.nextLine();
-                Result res = myInv2Sup.receiveSuppliersOrderTmp(Integer.parseInt(ansStr));
-                if(res == null) {notifyObserver("//order received successfully and arranged in inventory! !Result not implement!");}//need to implement
-                else if(res.isFailure()){
-                    notifyObserver("Cant receive this order from suppliers. error: " + res.getMessage());
-                }
-                else {
+                myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr));
+                //Result res = myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr));
+                //if(res == null) {notifyObserver("//order received successfully and arranged in inventory! !Result not implement!");}//need to implement
+                //else if(res.isFailure()){
+                //    notifyObserver("Cant receive this order from suppliers. error: " + res.getMessage());
+                //}
+                //else {
                     notifyObserver("order received successfully and arranged in inventory!");
-                }
+                //}
             } //-- Receive arrived order to inventory --
             else if (ansStr.equals("2")) { updInvWorker(); }
             else if (ansStr.equals("3")) {
