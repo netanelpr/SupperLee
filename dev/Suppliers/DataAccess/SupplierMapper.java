@@ -169,6 +169,8 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
                 Supplier myNewSupplier=new Supplier(res.getInt("id"),res.getString("sup_name"),
                         res.getString("address"), res.getString("inc_number"),res.getString("account_number"), res.getString("paymentInfo"),
                         res.getString("name"), res.getString("phone_number"), res.getString("email"));
+                List<ContactInfo> contacts=getAllSupplierContacts(myNewSupplier.getSupId());
+                myNewSupplier.setContacts(contacts);
                 ContractWithSupplier new_contractWithSupplier= this.getContractBySupplier(myNewSupplier.getSupId());
                 myNewSupplier.setContract(new_contractWithSupplier);
                 new_contractWithSupplier.setProducts(this.getAllContractProducts(new_contractWithSupplier.getContractID()));

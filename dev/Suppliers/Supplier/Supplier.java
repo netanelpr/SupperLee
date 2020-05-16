@@ -313,4 +313,8 @@ public class Supplier {
 
         return true;
     }
+
+    public void setContacts(List<ContactInfo> contacts) {
+        this.contacts=contacts;
+    }
 }
