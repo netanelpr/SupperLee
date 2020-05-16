@@ -83,6 +83,8 @@ public class Inventory implements myObservable {
         return myItemController.updateInventoryWorkers(id, quanMissStock, quanMissShop);
     }
     public void updateInventorySuppliers(OrderDTO order, InvService invService) { //<itemDTO, quantity>
+        //TODO: check if need the shop id = shop id after the suppliers function
+        order.shopID = Integer.parseInt(this.shopNum);
         myRecoredController.updateRecordsSuppliers(order, this, invService);
         myItemController.updateInventorySuppliers(order);
         myDefectivesController.updateDefectivesSuppliers(order);

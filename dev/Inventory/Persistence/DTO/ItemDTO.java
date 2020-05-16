@@ -1,5 +1,7 @@
 package Inventory.Persistence.DTO;
 
+import Inventory.Logic.Item;
+
 public class ItemDTO {
 
     //item fields
@@ -29,6 +31,13 @@ public class ItemDTO {
         this.size = size;
         this.freqBuySupply = freqBuySupply;
         this.minPrice = minPrice;
+    }
+
+    public ItemDTO(Item item) {
+        this.shopNum = item.getShopNum();
+        this.id = item.getId();
+        this.quantityShop = String.valueOf(item.getQuantShop());
+        this.quantityStorage = String.valueOf(item.getQuanStrg());
     }
 
 

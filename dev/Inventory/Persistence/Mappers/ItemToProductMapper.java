@@ -64,20 +64,19 @@ public ItemToProductMapper(Connection conn){
         }
         return null;
     }
+
     public ItemDTO loadById(String barcode, String shopNum) {
-        String query = "SELECT * " +
-                "FROM Items " +
-                "JOIN Product " +
-                "ON Items.id = Product.barcode " +
-                "WHERE shopNum = ? " +
-                "AND Items.id = ? ";
+            String query = "SELECT * " +
+                    "FROM Product " +
+                    "WHERE barcode = ?  ";
+
         PreparedStatement statement = null;
         try {
             statement = conn.prepareStatement(query);
-            statement.setString(1, shopNum);
-            statement.setString(2, barcode);
+            statement.setString(1, barcode);
+          //  statement.setString(2, barcode);
             ResultSet resultSet  = statement.executeQuery();
-            return builtOneDTOfromRes(resultSet);
+            return builtOneDTOfromRes(resultSet, shopNum);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -111,7 +110,8 @@ public ItemToProductMapper(Connection conn){
         }
         return itemsDTO;
     }
-    private ItemDTO builtOneDTOfromRes(ResultSet res) throws SQLException {
+
+    private ItemDTO builtOneDTOfromRes(ResultSet res, String shopNumCurr) throws SQLException {
 
         String shopNum, id, quantityShop, quantityStorage;
         String name, manufacturer, category, sub_category, size; int freqBuySupply; double minPrice;
@@ -119,10 +119,10 @@ public ItemToProductMapper(Connection conn){
         ItemDTO currItem = null;
 
         while(res.next()){
-            shopNum = res.getString(res.findColumn("shopNum"));
-            id = res.getString(res.findColumn("id"));
-            quantityShop = res.getString(res.findColumn("qShop"));
-            quantityStorage = res.getString(res.findColumn("qStorage"));
+            shopNum = shopNumCurr;
+            id = res.getString(res.findColumn("barcode"));
+            quantityShop = "0";
+            quantityStorage = "0";
             name = res.getString(res.findColumn("name"));
             manufacturer = res.getString(res.findColumn("manufacture"));
             category = res.getString(res.findColumn("categoty"));

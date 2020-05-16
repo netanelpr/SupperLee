@@ -3,8 +3,7 @@ package Inventory.Logic;
 import Inventory.Interfaces.Observer;
 import Inventory.Interfaces.myObservable;
 import Inventory.Persistence.DTO.RecordDTO;
-
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class Record implements myObservable {
@@ -14,9 +13,9 @@ public class Record implements myObservable {
     private String itemId;
     private String shopNum;
     private double cost;
-    private LocalDate costChangeDate;
+    private Date costChangeDate;
     private double price;
-    private LocalDate priceChangeDate;
+    private Date priceChangeDate;
     public final List<Observer> observers;
 
 
@@ -33,8 +32,11 @@ public class Record implements myObservable {
     //endregion
 
     //region getters
-    public LocalDate getPriceChangeDate() {
+    public Date getPriceChangeDate() {
         return priceChangeDate;
+    }
+    public Date getCostChangeDate() {
+        return costChangeDate;
     }
     public double getCost() {
         return cost;
@@ -51,7 +53,7 @@ public class Record implements myObservable {
     public String getShopNum() { return shopNum; }
     //endregion
 
-    public Record(List<Observer> observers, String id, String itemId, double cost, LocalDate costChangeDate, LocalDate priceChangeDate, String shopNum) {
+    public Record(List<Observer> observers, String id, String itemId, double cost, Date costChangeDate, Date priceChangeDate, String shopNum) {
         this.recId = id;
         this.itemId = itemId;
         this.cost = cost;
@@ -61,7 +63,7 @@ public class Record implements myObservable {
         this.observers = observers;
         this.shopNum = shopNum;
     }
-    public Record(List<Observer> observers, String id, String itemId, double cost, LocalDate costChangeDate, double newPrice, LocalDate priceChangeDate, String shopNum) {
+    public Record(List<Observer> observers, String id, String itemId, double cost, Date costChangeDate, double newPrice, Date priceChangeDate, String shopNum) {
         this.recId = id;
         this.itemId = itemId;
         this.cost = cost;
@@ -73,13 +75,19 @@ public class Record implements myObservable {
     }
 
     public void recordItemStatus() {
-        notifyObserver("|--$-$-$-$-$-$-$-$-$-$-$-$-$--\n" +
-                "| Rec id; " + recId + " item id; " + itemId + "\n" +
+        notifyObserver("|-------\n" +
+                "| item id; " + itemId + "\n" +
                 "| cost; " + cost +
-                " cost Change Date; " + costChangeDate + "\n" +
+                " \tChange Date; " + toPrint(costChangeDate) + "\n" +
                 "| price; " + price +
-                " price Change Date; " + priceChangeDate + "\n" +
-                "|--$-$-$-$-$-$-$-$-$-$-$-$-$--");
+                " \tChange Date; " + toPrint(priceChangeDate) + "\n" +
+                "|-------\n");
+    }
+
+    private String toPrint(Date costChangeDate) {
+        String cost = costChangeDate.toString();
+        String[] splited = cost.split(" ");
+        return splited[0] + " " + splited[1] + " " + splited[2] + " " + splited[5];
     }
 
     //region observer

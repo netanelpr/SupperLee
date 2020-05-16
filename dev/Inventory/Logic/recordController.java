@@ -9,10 +9,10 @@ import DataAccess.SupInvDBConn;
 import Suppliers.Service.OrderDTO;
 import Suppliers.Service.ProductInOrderDTO;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class recordController implements myObservable {
     public final List<Observer> observers;
     private String shopNum;
     private RecordsMapper myRecordMapper;
-    private int idCounter = 0;
+    private int recIdCounter = 0;
 
     //endregion
 
@@ -59,28 +59,27 @@ public class recordController implements myObservable {
                     lastRecordInfo[3] = String.valueOf(lastRecord.getPriceChangeDate());
                     newPrice = inv.askUserPrice(newCost, oldCost, lastRecordInfo, invService);
                     if(newPrice != lastRecord.getPrice())
-                        newRecord = new Record(observers, String.valueOf(idCounter++), lastRecordInfo[1], newCost, LocalDate.now(),
-                                                newPrice, LocalDate.now(), shopNum);
+                        newRecord = new Record(observers, String.valueOf(recIdCounter++), lastRecordInfo[1],
+                                                newCost, new Date(System.currentTimeMillis()),
+                                                newPrice, new Date(System.currentTimeMillis()), shopNum);
                     else
-                        newRecord = new Record(observers, String.valueOf(idCounter++), lastRecordInfo[1], newCost, LocalDate.now(),
-                                                newPrice, changeToDate(lastRecordInfo[3]), shopNum);
+                        newRecord = new Record(observers, String.valueOf(recIdCounter++), lastRecordInfo[1],
+                                                newCost, new Date(System.currentTimeMillis()),
+                                                newPrice, lastRecord.getPriceChangeDate(), shopNum);
                     records.get(id).add(newRecord);
+                    myRecordMapper.insert(new RecordDTO(newRecord));
                 }
             }
             else {
-
-                newRecord = new Record(observers, String.valueOf(idCounter++), id, prod.price, LocalDate.now(), LocalDate.now(), shopNum);
+                newRecord = new Record(observers, String.valueOf(recIdCounter++), id, prod.price, new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), shopNum);
                 records.put(id, new ArrayList<>());
                 records.get(id).add(newRecord);
+                myRecordMapper.insert(new RecordDTO(newRecord));
             }
         }
     }
-    private LocalDate changeToDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-        //convert String to LocalDate
-        LocalDate localDate = LocalDate.parse(date, formatter);
-        return localDate;
-    }
+
+
 
     public String[] getLastRecInfo(String id){
         String[] lastRecInfo = new String[2];
@@ -91,17 +90,15 @@ public class recordController implements myObservable {
         return lastRecInfo;
     }
     public void setNewPrice(String id, String newPrice, String nameLast, String priceLast) {
-//        notifyObserver("which id to set deal?");
-//        String id = myScanner.nextLine();
-        //notifyObserver(id + ". " + lastRec.getName() + " -> current price: " + lastRec.getPrice() + "\n" +
-//                "type new price: ");
+
         double dNewPrice = Double.parseDouble(newPrice);
         double oldPrice = Double.parseDouble(priceLast);
         List<Record> recList = records.get(id);
         Record lastRec = recList.get(recList.size()-1);
-        Record newRecord = new Record(observers, id, nameLast, lastRec.getCost(), LocalDate.now(),
-                dNewPrice , LocalDate.now(), shopNum);
+        Record newRecord = new Record(observers, id, nameLast, lastRec.getCost(), new Date(System.currentTimeMillis()),
+                dNewPrice , new Date(System.currentTimeMillis()), shopNum);
         records.get(id).add(newRecord);
+        myRecordMapper.insert(new RecordDTO(newRecord));
         if(dNewPrice  < oldPrice)
             notifyObserver("(~:\tNew Sale\t:~)");
         else
@@ -139,11 +136,7 @@ public class recordController implements myObservable {
 
     public void loadRecordsFromDB(String shopNum) {
         HashMap<String, List<RecordDTO>> recordsDTO = null;
-        try {
-            recordsDTO = myRecordMapper.load(shopNum);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        recordsDTO = myRecordMapper.load(shopNum);
         for (String id : recordsDTO.keySet()) {
             List <Record> currRecords = new ArrayList<>();
             for (RecordDTO currDTORec : recordsDTO.get(id)) {
@@ -151,6 +144,7 @@ public class recordController implements myObservable {
                 currRecords.add(rec);
             }
             records.put(id, currRecords);
+            recIdCounter++;
         }
     }
 }

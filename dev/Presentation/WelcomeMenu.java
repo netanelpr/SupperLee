@@ -13,6 +13,7 @@ public class WelcomeMenu {
 
     MainMenu supplierMenu;
     InvService inventoryMenu;
+    Boolean terminate;
 
     public WelcomeMenu(){
         supplierMenu = new MainMenu();
@@ -20,11 +21,12 @@ public class WelcomeMenu {
     }
 
     public void start(){
+        terminate = false;
         int option = 0;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         inventoryMenu.loadDB();
 
-        while(true){
+        while(!terminate){
             System.out.println("1) Supplier menu\n2) Inventory menu\n3) Close");
             System.out.print("Option: ");
 
@@ -37,7 +39,7 @@ public class WelcomeMenu {
             if(option == 1){
                 supplierMenu.apply();
             } else if(option == 2){
-                inventoryMenu.mainLoop();
+                terminate = inventoryMenu.mainLoop();
             } else if(option == 3){
                 break;
             } else {

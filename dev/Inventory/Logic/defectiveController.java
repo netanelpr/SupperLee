@@ -7,8 +7,8 @@ import Inventory.Persistence.Mappers.DefectivesMapper;
 import Suppliers.Service.OrderDTO;
 import Suppliers.Service.ProductInOrderDTO;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class defectiveController implements myObservable {
     private HashMap<String, List<Defective>> defectives; //item id, number of defectives items
     public final List<Observer> observers;
     private String shopNum;
-    private DefectivesMapper MyDefectiveMapper;
-    private int idCounter = 0;
+    private DefectivesMapper myDefectiveMapper;
+    private int defIdCounter = 0;
 
     //constructor
     public defectiveController(Observer o, String shopNum) {
@@ -27,7 +27,7 @@ public class defectiveController implements myObservable {
         observers = new ArrayList<>();
         this.register(o);
         this.shopNum = shopNum;
-        this.MyDefectiveMapper = new DefectivesMapper(SupInvDBConn.getInstance());
+        this.myDefectiveMapper = new DefectivesMapper(SupInvDBConn.getInstance());
 
     }
     public HashMap<String, List<Defective>> getDefectives() {
@@ -57,9 +57,10 @@ public class defectiveController implements myObservable {
             if (defectives.containsKey(id)) {
                 List<Defective> defList = defectives.get(id);
                 Defective lastDef = defList.get(defList.size()-1);
-                Defective newDefectReport = new Defective(observers, String.valueOf(idCounter), id, quantity, java.time.LocalDate.now(), expired, defective, shopNum);
-                idCounter++;
+                Defective newDefectReport = new Defective(observers, String.valueOf(defIdCounter), id, quantity, new Date(System.currentTimeMillis()), expired, defective, shopNum);
+                defIdCounter++;
                 defectives.get(id).add(newDefectReport);
+                myDefectiveMapper.insert(new DefectiveDTO(newDefectReport));
                 newDefectReport.defectiveItemStatus();
             }
             else {
@@ -67,16 +68,18 @@ public class defectiveController implements myObservable {
             }
         }
         else
-            notifyObserver("wrong input! type again:");
+            notifyObserver("wrong format input! type again:");
     }
     public void updateDefectivesSuppliers(OrderDTO order) {
+        Defective newDefectReport;
         for (ProductInOrderDTO prod: order.productInOrderDTOList) {
             String id = String.valueOf(prod.barcode);
-            if(!defectives.containsKey(id)) {
-                Defective newDefectReport = new Defective(observers, String.valueOf(idCounter++), id, 0,
-                                                            java.time.LocalDate.now(), false, false, shopNum);
+            if(!defectives.containsKey(id)) { //init the defective list for items in the first time they arrived to system
                 defectives.put(id, new ArrayList<>());
+                newDefectReport = new Defective(observers, String.valueOf(defIdCounter++), id, 0,
+                        new Date(System.currentTimeMillis()), false, false, shopNum);
                 defectives.get(id).add(newDefectReport);
+                myDefectiveMapper.insert(new DefectiveDTO(newDefectReport));
             }
         }
     }
@@ -84,15 +87,25 @@ public class defectiveController implements myObservable {
 
     //region defective reports
     public void getDefectivesReport() {
-        for(String id : defectives.keySet())
-            for(Defective def : defectives.get(id))
-                if(def.getQuantity() != 0)
-                    def.defectiveItemStatus();
+        if(defectives.size() > 0) {
+            for (String id : defectives.keySet())
+                for (Defective def : defectives.get(id))
+                    if (def.getQuantity() != 0)
+                        def.defectiveItemStatus();
+        }
+        else
+            notifyObserver("no defectives - expired reports.");
     }
     public void getDefectivesReportById(String id) {
         List<Defective> defectLst = defectives.get(id);
-        for (Defective dft : defectLst)
-            dft.defectiveItemStatus();
+        if(defectLst != null && defectLst.size() > 0) {
+            for (Defective dft : defectLst)
+                dft.defectiveItemStatus();
+            notifyObserver("|------------");
+        }
+        else
+            notifyObserver("no defectives - expired reports.");
+
     }
     //endregion
 
@@ -109,21 +122,16 @@ public class defectiveController implements myObservable {
 
     public void loadDefectiveFromDB(String shopNum) {
         HashMap<String, List<DefectiveDTO>> defctsDTO = null;
-        try {
-            defctsDTO = MyDefectiveMapper.load(shopNum);
-        } catch (
-                SQLException e) {
-            e.printStackTrace();
-        }
-        for (String id : defctsDTO.keySet()) {
+        defctsDTO = myDefectiveMapper.load(shopNum);
+        for (String itemId : defctsDTO.keySet()) {
             List<Defective> currDefctives = new ArrayList<>();
-            for (DefectiveDTO currDTODef : defctsDTO.get(id)) {
+            for (DefectiveDTO currDTODef : defctsDTO.get(itemId)) {
                 Defective def = new Defective(observers, currDTODef);
                 currDefctives.add(def);
             }
-            defectives.put(id, currDefctives);
+            defectives.put(itemId, currDefctives);
+            defIdCounter++;
         }
-
     }
     //endregion
 }
