@@ -140,4 +140,8 @@ public class ContractWithSupplier {
     {
         this.dailyInfo.add(day);
     }
+
+    public void setProducts(List<ContractProduct> allContractProducts) {
+        this.products=allContractProducts;
+    }
 }

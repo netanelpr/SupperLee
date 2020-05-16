@@ -95,6 +95,10 @@ public class Supplier {
         return false;
     }
 
+    public void setContract(ContractWithSupplier contract) {
+       this.contract=contract;
+    }
+
     /**
      *
      * @param product

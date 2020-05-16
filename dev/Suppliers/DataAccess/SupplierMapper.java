@@ -170,6 +170,12 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
                         res.getString("address"), res.getString("inc_number"),res.getString("account_number"), res.getString("paymentInfo"),
                         res.getString("name"), res.getString("phone_number"), res.getString("email"));
                 ContractWithSupplier new_contractWithSupplier= this.getContractBySupplier(myNewSupplier.getSupId());
+                myNewSupplier.setContract(new_contractWithSupplier);
+                new_contractWithSupplier.setProducts(this.getAllContractProducts(new_contractWithSupplier.getContractID()));
+                for (ContractProduct product:new_contractWithSupplier.getProducts()) {
+                    product.setDiscounts(this.getProductsDiscounts(product));
+                }
+                return myNewSupplier;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -611,6 +617,25 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
 
         try(PreparedStatement pstmt = conn.prepareStatement(getAllSupplierProductsStatement())){
             pstmt.setInt(1,contractWithSupplier.getContractID());
+            ResultSet res = pstmt.executeQuery();
+            ContractProduct product;
+            while((product=buildProductFromResultSet(res))!=null){
+                theProducts.add(product);
+            }
+
+        } catch (java.sql.SQLException e) {
+            return new LinkedList<>();
+        }
+
+        return theProducts;
+    }
+
+    public List<ContractProduct> getAllContractProducts(int contractID) {
+
+        List<ContractProduct> theProducts = new ArrayList<>();
+
+        try(PreparedStatement pstmt = conn.prepareStatement(getAllSupplierProductsStatement())){
+            pstmt.setInt(1,contractID);
             ResultSet res = pstmt.executeQuery();
             ContractProduct product;
             while((product=buildProductFromResultSet(res))!=null){
