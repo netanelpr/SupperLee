@@ -257,6 +257,9 @@ public class Supplier {
      * @param products the products to set
      */
     public void setPricePerUnit(List<ProductInOrder> products) {
+        if(contract != null){
+            contract.setPricePerUnit(products);
+        }
     }
 
     /**

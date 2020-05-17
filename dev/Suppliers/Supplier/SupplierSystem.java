@@ -49,7 +49,7 @@ public class SupplierSystem {
     // init with list of categorys and subcategoty for all the system
     // the same for product size
     //
-
+    // TODO in order update display status and when order is close do not update delivery day and check the delivery date
     /**
      * Create new supplier in the system
      * @param name The name of the supplier
@@ -270,10 +270,12 @@ public class SupplierSystem {
     public Result<Integer> createNewOrder(int supplierId, List<ProductInOrder> products, int shopNumber) {
         Supplier supplier = supplierManager.getById(supplierId);
         List<Integer> barcodes = new ArrayList<>();
+        int contractId;
 
         if(supplier == null){
             return Result.makeFailure("Supplier doesnt exist");
         }
+        contractId = supplier.getContract().getContractID();
 
         for(ProductInOrder product : products){
             barcodes.add(product.getBarcode());
@@ -284,6 +286,7 @@ public class SupplierSystem {
             return Result.makeFailure("The supplier do not supply some of this products");
         }
 
+        supplier.setPricePerUnit(products);
         supplier.fillWithCatalogNumber(products);
 
         RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1, products, shopNumber);
@@ -291,6 +294,7 @@ public class SupplierSystem {
             return Result.makeFailure("Need to have at least one product");
         }
         regularOrder.setDeliveryDay(supplier.getNextDeliveryDate());
+        regularOrder.setContractId(contractId);
 
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){
@@ -328,6 +332,7 @@ public class SupplierSystem {
 
         RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1,products, shopNumber);
         regularOrder.setDeliveryDay(sup.getNextDeliveryDate());
+        regularOrder.setContractId(sup.getContract().getContractID());
 
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){
@@ -372,6 +377,8 @@ public class SupplierSystem {
 
         PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days,
                 weekPeriod, shopNumber, sup.getNextDeliveryDate());
+        periodicalOrder.setContractId(sup.getContract().getContractID());
+
 
         orderManager.createPeriodicalOrder(periodicalOrder);
         if(periodicalOrder.getOrderId() < 0){

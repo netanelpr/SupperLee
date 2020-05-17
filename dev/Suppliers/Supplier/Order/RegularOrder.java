@@ -9,7 +9,7 @@ public class RegularOrder extends Order {
     }
 
     public static RegularOrder CreateRegularOrder(int orderId, List<ProductInOrder> productsInOrder, int shopNumber){
-        if(productsInOrder.isEmpty()){
+        if(productsInOrder != null && productsInOrder.isEmpty()){
             return null;
         }
 

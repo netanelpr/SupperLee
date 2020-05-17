@@ -7,6 +7,7 @@ import Suppliers.DataAccess.RegularOrderMapper;
 import Suppliers.DataAccess.SupDBConn;
 import Suppliers.Structs.OrderStatus;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -46,11 +47,26 @@ public class OrderManager {
         periodicalOrder.setOrderId(periodicalOrderMapper.insert(periodicalOrder));
     }
 
-    public boolean updateOrderDelivery(int orderrId, Date date){
-        return regularOrderMapper.updateDeliveryDate(orderrId, date);
+    public boolean updateOrderDelivery(int orderId, Date date){
+        Date dateNow = Calendar.getInstance().getTime();
+        if(dateNow.compareTo(date) > 0){
+            return false;
+        }
+
+        Order order = regularOrderMapper.loadBasicDetails(orderId);
+        if(order == null || order.getStatus() == OrderStatus.Close){
+            return false;
+        }
+
+        return regularOrderMapper.updateDeliveryDate(orderId, date);
     }
 
     public boolean updateOrderStatus(int orderId, OrderStatus status){
+        Order order = regularOrderMapper.loadBasicDetails(orderId);
+        if(order == null || order.getStatus() == OrderStatus.Close){
+            return false;
+        }
+
         return regularOrderMapper.updateOrderStatus(orderId, status);
     }
 

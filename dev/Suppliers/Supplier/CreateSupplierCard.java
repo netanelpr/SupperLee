@@ -1,12 +1,10 @@
 package Suppliers.Supplier;
 
-import Suppliers.DataAccess.SupDBConn;
+import DataAccess.SupInvDBConn;
 import Suppliers.Service.ContactInfoDTO;
 import Suppliers.Service.SupplierProductDTO;
-import Suppliers.Service.SystemProduct;
 import Suppliers.Structs.Days;
 
-import Suppliers.Structs.StructUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +23,7 @@ class CreateSupplierCard {
     @BeforeEach
     void setUp() {
         mySupplierSystem=SupplierSystem.getInstance();
-        Connection myDbc=SupDBConn.getInstance();
+        Connection myDbc= SupInvDBConn.getInstance();
         try(PreparedStatement pstmt = myDbc.prepareStatement("Delete from Contact_info"))
         {
             pstmt.execute();

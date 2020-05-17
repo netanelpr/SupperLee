@@ -18,5 +18,6 @@ public class OrderMenu extends MenuOfMenus {
         addMenuOption("Create new order", new CreateNewOrder(orderAndProductManagement));
         addMenuOption("Update order arrival day", new UpdateOrderArrivalDay(orderAndProductManagement));
         addMenuOption("Update order status", new UpdateOrderStatus(orderAndProductManagement));
+        addMenuOption("Get order details", new OrderDetails(orderAndProductManagement));
     }
 }

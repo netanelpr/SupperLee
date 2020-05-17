@@ -16,7 +16,9 @@ public abstract class Order {
     protected Order(int orderId, List<ProductInOrder> products , int shopNumber){
         this.products = new HashMap<>();
         for (ProductInOrder product : products) {
-            this.products.put(product.getProductCatalogNumber(), product);
+            if(product != null) {
+                this.products.put(product.getProductCatalogNumber(), product);
+            }
         }
 
         this.orderId = orderId;

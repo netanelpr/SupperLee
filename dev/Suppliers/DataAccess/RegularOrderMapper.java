@@ -85,8 +85,8 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
     }
 
     private String isValidShopStatement(){
-        return "SELECT shopNum from Items  " +
-                "WHERE shopNum = (?)";
+        return "SELECT id from Inventory  " +
+                "WHERE id = (?)";
     }
 
     public boolean isValidShopNumber(int shopNumber){
@@ -279,6 +279,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
                 order.setStatus(StructUtils.getOrderStatus(res.getInt(3)));
                 DateFormat dateFormat = new SimpleDateFormat(StructUtils.dateFormat());
                 order.setDeliveryDay(dateFormat.parse(res.getString(4)));
+                order.setContractId(getTheOrderContract(orderId));
 
                 return order;
             }

@@ -144,4 +144,15 @@ public class ContractWithSupplier {
     public void setProducts(List<ContractProduct> allContractProducts) {
         this.products=allContractProducts;
     }
+
+    public void setPricePerUnit(List<ProductInOrder> products) {
+        for(ContractProduct contractProduct : this.products){
+            for(ProductInOrder product : products){
+                if(product.getBarcode() == contractProduct.getBarCode()){
+                    product.setPricePerUnit(contractProduct.getPricePerAmount(product.getAmount()));
+                    break;
+                }
+            }
+        }
+    }
 }

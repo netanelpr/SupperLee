@@ -40,7 +40,7 @@ public class ProductInOrder {
         return pricePerUnit;
     }
 
-    protected void setPricePerUnit(int pricePerUnit) {
+    public void setPricePerUnit(double pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
     }
 }
