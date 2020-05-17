@@ -16,9 +16,13 @@ public class OrderMenu extends MenuOfMenus {
 
     protected void createMenuMap() {
         addMenuOption("Create new order", new CreateNewOrder(orderAndProductManagement));
+        addMenuOption("Create periodical order", new CreatePeriodicalOrder(orderAndProductManagement));
+
+        addMenuOption("Add products to periodical order", new AddProductsToPeriodicalOrder(orderAndProductManagement));
+        addMenuOption("Remove products from periodical order", new RemoveProductsPeriodicalOrder(orderAndProductManagement));
+
         addMenuOption("Update order arrival day", new UpdateOrderArrivalDay(orderAndProductManagement));
         addMenuOption("Update order status", new UpdateOrderStatus(orderAndProductManagement));
         addMenuOption("Get order details", new OrderDetails(orderAndProductManagement));
-        addMenuOption("Remove products from periodical order", new RemoveProductsPeriodicalOrder(orderAndProductManagement));
     }
 }

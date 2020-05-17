@@ -28,6 +28,7 @@ public class Supplier {
         this.paymentInfo=new LinkedList<>();
         this.paymentInfo.add(paymentInfo);
         this.supId=supID;
+        this.address = address;
 
 
         this.contacts = new LinkedList<>();

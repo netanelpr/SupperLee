@@ -47,7 +47,9 @@ public class RemoveProductsPeriodicalOrder extends Menu_Option {
         Result<List<Integer>> res = orderAndProductManagement.RemoveProductsFromPeriodicalOrder(orderId, barcodes);
 
         if(res.isOk()){
-            System.out.println("Those products wasnt deleted "+res.getValue().toString());
+            if(res.getValue().size() > 0) {
+                System.out.println("Those products was deleted " + res.getValue().toString());
+            }
         } else {
             System.out.println(res.getMessage());
         }

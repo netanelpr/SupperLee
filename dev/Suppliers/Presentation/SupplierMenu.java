@@ -19,7 +19,6 @@ public class SupplierMenu extends MenuOfMenus {
 
     protected void createMenuMap() {
 
-        addMenuOption("Init", new InitWithData(supplierManagment));
         addMenuOption("Create supplier card", new HandleSupplierCard(supplierManagment));
         addMenuOption("Get all suppliers", new GetAllSuppliers(supplierManagment));
         addMenuOption("Get all supplier's contacts", new GetAllSupplierContacts(supplierManagment));

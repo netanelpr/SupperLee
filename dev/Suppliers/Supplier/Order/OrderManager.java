@@ -59,6 +59,10 @@ public class OrderManager {
             return false;
         }
 
+        if(!periodicalOrderMapper.isPeriodicalOrder(orderId)){
+            return false;
+        }
+
         return regularOrderMapper.updateDeliveryDate(orderId, date);
     }
 
@@ -109,7 +113,7 @@ public class OrderManager {
                 long diff = order.getDeliveryDay().getTime() - Calendar.getInstance().getTime().getTime();
                 long days =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 
-                if(days < 2){
+                if(days > 1){
                     return null;
                 }
             }

@@ -3,26 +3,26 @@ package Suppliers.Presentation;
 import Result.Result;
 import Suppliers.Service.OrderAndProductManagement;
 import Suppliers.Service.ProductInOrderDTO;
-import Suppliers.Service.SupplierManagment;
+import Suppliers.Structs.Days;
+import Suppliers.Structs.StructUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CreateNewOrder extends Menu_Option {
+public class CreatePeriodicalOrder extends Menu_Option {
 
 
     private OrderAndProductManagement orderAndProductManagement;
 
-    public CreateNewOrder(OrderAndProductManagement orderAndProductManagement) {
+    public CreatePeriodicalOrder(OrderAndProductManagement orderAndProductManagement) {
         this.orderAndProductManagement = orderAndProductManagement;
     }
 
     @Override
     public void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int supId = readInt("Supplier ID", reader);
         int shopNumber;
 
         try {
@@ -30,6 +30,15 @@ public class CreateNewOrder extends Menu_Option {
 
             shopNumber = readInt("Enter the shop number", reader);
             if(shopNumber < 0){
+                return;
+            }
+
+            String daysStr = readString("Enter supply days : {days of the week (Sunday...) suppurated with coma (,) }\n",reader);
+            String[] dayArr = daysStr.toUpperCase().split(",");
+            List<Days> days = StructUtils.getDaysList(dayArr);
+
+            int weekP = readIntPos("Enter the week period","Week period is positive number", reader);
+            if(weekP < 0){
                 return;
             }
 
@@ -49,7 +58,7 @@ public class CreateNewOrder extends Menu_Option {
                         Integer.parseInt(productAndAmount[1])));
             }
 
-            Result<Integer> res = orderAndProductManagement.createNewSupplierOrder(supId, products, shopNumber);
+            Result<Integer> res = orderAndProductManagement.createPeriodicalOrder(products, days, weekP, shopNumber);
             if(res.isOk()){
                 System.out.println("Order id : "+ res.getValue());
             } else {

@@ -64,7 +64,7 @@ public class AddContractToSupplier extends Menu_Option {
     }
 
     private List<SupplierProductDTO> startReadingProducts(BufferedReader reader, int supId) {
-        System.out.println("Starting the product adding process:\n\n");
+        System.out.println("Starting the product adding process...");
         System.out.print("Enter number of product you want to enter : ");
         try {
             int numberOfProducts = Integer.parseInt(reader.readLine());

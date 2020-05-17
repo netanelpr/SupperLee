@@ -33,9 +33,9 @@ public class OrderDetails extends Menu_Option {
         }
 
         SupplierDetailsDTO supplierDetailsDTO = orderShipDetails.supplier;
-        String info = String.format("Order ID: %d\tSupplier: %s\tAddress: %s\n" +
-                "Contact name: %s\tPhone number: %s\tEmail: %s\n" +
-                "shop number: %d\tDelievry date: %s\n",
+        String info = String.format("Order ID: %d \tSupplier: %s \tAddress: %s\n" +
+                "Contact name: %s \tPhone number: %s \tEmail: %s\n" +
+                "shop number: %d \tDelievry date: %s\n",
                 orderShipDetails.orderId, supplierDetailsDTO.supplierName, supplierDetailsDTO.address,
                 supplierDetailsDTO.contactName, supplierDetailsDTO.phoneNumber, supplierDetailsDTO.email,
                 orderShipDetails.shopNumber, orderShipDetails.deliveryDate);

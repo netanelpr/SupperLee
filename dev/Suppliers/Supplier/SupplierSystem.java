@@ -418,7 +418,7 @@ public class SupplierSystem {
         sup.fillWithCatalogNumber(products);
         sup.setPricePerUnit(products);
 
-        return Result.makeOk("Product was inserted",orderManager.addProductsToPeriodicalOrder(orderId, products));
+        return Result.makeOk("Products was inserted",orderManager.addProductsToPeriodicalOrder(orderId, products));
     }
 
     /**
@@ -612,7 +612,7 @@ public class SupplierSystem {
         }
 
         catalogNumbers = supplierManager.getCatalogsFromBarcodes(supplierId, barcodes);
-        catalogNumbers.removeAll(orderManager.removeProductsFromOrder(orderId, catalogNumbers));
+        catalogNumbers = orderManager.removeProductsFromOrder(orderId, catalogNumbers);
 
         return Result.makeOk("Remove product",supplierManager.getBarcodesFromCatalog(supplierId, catalogNumbers));
     }

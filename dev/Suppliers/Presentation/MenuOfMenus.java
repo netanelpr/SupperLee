@@ -39,7 +39,7 @@ public abstract class MenuOfMenus extends Menu_Option {
     abstract protected void createMenuMap();
 
     public void print_menu(){
-        int index = 0;
+        int index = 1;
 
         System.out.println("\n+++++++++++++++++++++++++++++++++++++\n");
         System.out.println("Choose from the options");
@@ -74,14 +74,13 @@ public abstract class MenuOfMenus extends Menu_Option {
                 System.out.println("Not an menu option");
                 continue;
             }
-            System.out.print("\n");
 
-            if(index > -1 & index < optionToIndex.size()) {
-                if (index == optionToIndex.size() - 1) {
+            if(index > 0 & index <= optionToIndex.size()) {
+                if (index == optionToIndex.size()) {
                     return;
                 }
 
-                Menu_Option option = getMenuWithIndex(index);
+                Menu_Option option = getMenuWithIndex(index-1);
                 if (option == null) {
                     System.out.println("Invalid function");
                     continue;
