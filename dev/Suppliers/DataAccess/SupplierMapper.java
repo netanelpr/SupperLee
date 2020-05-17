@@ -186,7 +186,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
                 return myNewSupplier;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -201,7 +200,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
                         res.getString("email"), res.getInt("supplier_id"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -220,7 +218,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -238,7 +235,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
                 return theProduct;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -250,7 +246,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
                 return theSup;
         }
         catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -313,7 +308,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             return supplier.getSupId();
 
         } catch (java.sql.SQLException e) {
-            System.out.println(e);
             return -1;
         }
     }
@@ -401,7 +395,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             return true;
         }
         catch (java.sql.SQLException e) {
-            System.out.println(e);
             return false;
         }
 
@@ -424,7 +417,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             }
         }
         catch (java.sql.SQLException e) {
-            System.out.println(e);
             return -1;
         }
     }
@@ -446,7 +438,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             }
         }
         catch (java.sql.SQLException e) {
-            System.out.println(e);
             return -1;
         }
     }
@@ -503,7 +494,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             return contract.getContractID();
 
         } catch (java.sql.SQLException e) {
-            System.out.println(e);
             return -1;
         }
     }
@@ -571,7 +561,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             return res;
 
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
         }
 
         return  null;

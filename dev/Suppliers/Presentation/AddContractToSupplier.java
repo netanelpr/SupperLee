@@ -51,6 +51,7 @@ public class AddContractToSupplier extends Menu_Option {
                 return;
             }
             this.supplierManagment.addContractToSupplier(supId,contractInfo,days,supplierProductDTOS);
+            //TODO get the return value from the top and print message
 
 
         }
@@ -75,7 +76,6 @@ public class AddContractToSupplier extends Menu_Option {
                 String supplierProduct;
                 String name = null, manufacture = null, category = null, subCategoty = null, size = null, catalog_number = null, originalPriceString = null;
                 SystemProduct systemProduct;
-                boolean added = false;
 
                 try {
                     System.out.println("Please enter product's barcode:");
@@ -85,6 +85,7 @@ public class AddContractToSupplier extends Menu_Option {
                     }
                     System.out.println("Enter supplier's details about this product:");
 
+                    //TODO why the name is here?
                     name = readString("Product's name:", reader);
                     if (name == null || name.length() <= 0) {
                         return null;
@@ -121,19 +122,15 @@ public class AddContractToSupplier extends Menu_Option {
                     } else {
                         newProduct = false;
                     }
+
+                    ProductDiscountsDTO productDiscounts = new ProductDiscountsDTO(barcode, discounts, originaPrice);
+
                     if (newProduct) {
                         systemProduct = new SystemProduct(barcode, name, manufacture, category, subCategoty, size);
-                        added = this.orderAndProductManagement.addProductToSystem(systemProduct);
-                    }
-                    ProductDiscountsDTO productDiscounts = new ProductDiscountsDTO(barcode, discounts, originaPrice);
-                    if (newProduct && added) {
-                        System.out.println("The new product was added successfully to the system");
-                    }
-                    products.add(new SupplierProductDTO(barcode, catalog_number, originaPrice, productDiscounts));
+                        products.add(new SupplierProductDTO(barcode, catalog_number, originaPrice, productDiscounts, systemProduct));
 
-                    if (!added) {
-                        System.out.println("Problem adding product to the system");
-                        return null;
+                    } else {
+                        products.add(new SupplierProductDTO(barcode, catalog_number, originaPrice, productDiscounts));
                     }
 
                 } catch (NumberFormatException e) {

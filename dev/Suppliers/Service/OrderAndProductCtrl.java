@@ -33,12 +33,6 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         return productToSystemProduct(product);
     }
 
-    public boolean addProductToSystem(SystemProduct systemProduct)
-    {
-
-        return this.productsManager.addIfAbsent(new Product(systemProduct));
-    }
-
     @Override
     public List<Integer> getAllProductBarcodes() {
         return productsManager.getAllBarcodes();

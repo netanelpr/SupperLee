@@ -43,7 +43,7 @@ public class AddProductToSupplier extends Menu_Option {
         List<Integer> barcodes = orderAndProductManagement.getAllProductBarcodes();
         String supplierProduct;
         String name = null, manufacture = null, category = null, subCategoty = null, size = null, catalog_number=null, originalPriceString=null;
-        SystemProduct systemProduct;
+        SystemProduct systemProduct = null;
         boolean added = false;
 
 
@@ -55,6 +55,7 @@ public class AddProductToSupplier extends Menu_Option {
             }
             System.out.println("Enter supplier's details about this product:");
 
+            //TODO name is here?
             name=readString("Product's name:",reader);
             if(name==null || name.length()<=0)
             {
@@ -78,34 +79,10 @@ public class AddProductToSupplier extends Menu_Option {
             System.out.println("Please enter discounts information:");
             //System.out.println("Supplier product format : <catalog number> <original price> <discount per amount {amount:discount,amount:discount...}>");
 
-//            supplierProduct = readString("Enter supplier product", reader);
-//            if (supplierProduct == null) {
-//                return;
-//            }
-//
-//            String[] input = supplierProduct.split(" ");
-//            if (input.length != 3) {
-//                System.out.println("Invalid number of args");
-//                return;
-//            }
-
-
-
             Map<Integer, Double> discounts = new HashMap<>();
             while (getDiscount(reader,discounts));
 
-//            String[] discountArr = input[2].substring(1, input[2].length() - 1).split(",");
-//            if (!((discountArr.length == 1) && (discountArr[0].length() == 0))) {
-//                for (String discount : discountArr) {
-//                    String[] discountS = discount.split(":");
-//                    if (discountS.length != 2) {
-//                        System.out.println("Invalid format of discount");
-//                        continue;
-//                    }
-//
-//                    discounts.put(Integer.parseInt(discountS[0]), Double.parseDouble(discountS[1]));
-//                }
-//            }
+
 
             boolean newProduct;
             if (!barcodes.contains(barcode)) {
@@ -119,13 +96,14 @@ public class AddProductToSupplier extends Menu_Option {
             } else{
                 newProduct = false;
             }
-            if(newProduct)
-            {
-                systemProduct = new SystemProduct(barcode, name, manufacture, category, subCategoty, size);
-                added=this.orderAndProductManagement.addProductToSystem(systemProduct);
-            }
+
             ProductDiscountsDTO product = new ProductDiscountsDTO(barcode, discounts, originaPrice);
-            added =added && supplierManagment.addProductToContract(supId,new SupplierProductDTO(barcode, catalog_number, originaPrice, product));
+
+            if(newProduct) {
+                systemProduct = new SystemProduct(barcode, name, manufacture, category, subCategoty, size);
+            }
+
+            added = supplierManagment.addProductToContract(supId,new SupplierProductDTO(barcode, catalog_number, originaPrice, product, systemProduct));
 
             if(added){
                 System.out.println("The product has been added");

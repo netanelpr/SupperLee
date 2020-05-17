@@ -30,7 +30,6 @@ public class ProductMapper extends AbstractMapper<Product> {
                         res.getString(6), res.getInt(7), res.getInt(8));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return null;

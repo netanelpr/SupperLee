@@ -222,6 +222,8 @@ public class SupplierSystem {
         if(ans = supplierManager.addProductToContract(supplierID,product))
         {
             if(product.product != null) {
+                product.product.setFreqSupply(freqSupply);
+                product.product.setMinPrice(product.originalPrice);
                 productsManager.addIfAbsent(product.product);
             } else {
                 productsManager.updateIfNeededFreqSupplyAndMinPrice(product.barCode, freqSupply, product.originalPrice);

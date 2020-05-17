@@ -51,7 +51,6 @@ public abstract class AbstractMapper<T> {
             }
 
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
         }
 
         return  null;

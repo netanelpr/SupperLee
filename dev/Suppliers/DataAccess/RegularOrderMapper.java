@@ -65,7 +65,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
             regularOrder.setDeliveryDay(dateFormat.parse(deliveryDay));
 
         } catch (SQLException | ParseException e) {
-            e.printStackTrace();
         }
 
         return regularOrder;
@@ -101,7 +100,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
             }
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
         return false;
     }
@@ -121,8 +119,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
         try{
             conn.setAutoCommit(false);
         } catch (SQLException throwables) {
-            //TODO
-            throwables.printStackTrace();
         }
 
         try(PreparedStatement insertPstmt = conn.prepareStatement(insertIntoOrderStatement(), Statement.RETURN_GENERATED_KEYS);
@@ -179,8 +175,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
             }
             conn.setAutoCommit(true);
         } catch (SQLException throwables) {
-            //TODO
-            throwables.printStackTrace();
         }
 
         return orderId;
@@ -230,7 +224,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
                 orderIds.add(rs.getInt(0));
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
 
         return orderIds;
@@ -254,7 +247,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
 
         return false;
@@ -287,7 +279,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
             }
 
         } catch (SQLException | ParseException e) {
-            e.printStackTrace();
         }
         return null;
     }
