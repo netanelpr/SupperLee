@@ -10,6 +10,7 @@ import Suppliers.Structs.OrderStatus;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class OrderManager {
 
@@ -96,5 +97,29 @@ public class OrderManager {
 
     public List<String> removeProductsFromOrder(int orderId, List<String> catalog) {
         return regularOrderMapper.removeProductsFromOrder(orderId, catalog);
+    }
+
+    public Order orderArrived(int orderId) {
+        Order order = getRegularOrder(orderId);
+        if(order == null) {
+            order = getPeriodicalOrder(orderId);
+            if(order != null){
+
+                //TODO need to use result and them too
+                long diff = order.getDeliveryDay().getTime() - Calendar.getInstance().getTime().getTime();
+                long days =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
+                if(days < 2){
+                    return null;
+                }
+            }
+        } else {
+            if(order.getStatus() == OrderStatus.Close){
+                return null;
+            }
+            updateOrderStatus(orderId, OrderStatus.Close);
+        }
+
+        return order;
     }
 }

@@ -122,12 +122,7 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     public OrderDTO orderArrived(int orderId){
         List<ProductInOrderDTO> products = new ArrayList<>();
         Order order;
-        order = orderManager.getRegularOrder(orderId);
-        if(order == null) {
-            order = orderManager.getPeriodicalOrder(orderId);
-        } else {
-            updateOrderStatus(orderId, OrderStatus.Close);
-        }
+        order = orderManager.orderArrived(orderId);
 
         if(order == null){
             return null;
