@@ -392,4 +392,49 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
 
         return orderIds;
     }
+
+    private String getDeliveryDaysStatement(){
+        return "SELECT delivery_weekly_day\n" +
+                "FROM Periodical_supplier_order_days\n" +
+                "WHERE order_id = ?";
+    }
+
+    public List<Days> getDeliveryDays(int orderId) {
+        ResultSet rs;
+        List<Days> days = new ArrayList<>();
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(getDeliveryDaysStatement())){
+            ptsmt.setInt(1, orderId);
+
+            rs = ptsmt.executeQuery();
+            while(rs.next()){
+                days.add(StructUtils.getDayWithInt(rs.getInt(1)));
+            }
+        } catch (SQLException throwables) {
+        }
+
+        return days;
+    }
+
+    private String getWeepPeriodStatement(){
+        return "SELECT weekP\n" +
+                "FROM Periodical_supplier_order\n" +
+                "WHERE id = ?";
+    }
+
+    public int getWeepPeriod(int orderId) {
+        ResultSet rs;
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(getWeepPeriodStatement())){
+            ptsmt.setInt(1, orderId);
+
+            rs = ptsmt.executeQuery();
+            if(rs.next()){
+                return  rs.getInt(1);
+            }
+        } catch (SQLException throwables) {
+        }
+
+        return -1;
+    }
 }

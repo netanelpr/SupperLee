@@ -142,7 +142,7 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
                 contactInfo.getName(), contactInfo.getPhoneNumber(), contactInfo.getEmail());
 
         return new OrderShipDetails(orderDetails.orderId, orderDetails.shopNumber, orderDetails.deliveryDate,
-                supplierDetailsDTO, orderDetails.details);
+                supplierDetailsDTO, orderDetails.details, orderDetails.periodicalOrderData);
 
     }
 

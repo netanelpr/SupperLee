@@ -9,13 +9,16 @@ public class AllOrderDetails {
     public int shopNumber;
     public String  deliveryDate;
     public List<AllDetailsOfProductInOrder> details;
+    public PeriodicalOrderData periodicalOrderData;
     public Supplier supplier;
 
-    public AllOrderDetails(int orderId, int shopNumber, String deliveryDate, Supplier supplier, List<AllDetailsOfProductInOrder> details){
+    public AllOrderDetails(int orderId, int shopNumber, String deliveryDate, Supplier supplier,
+                           List<AllDetailsOfProductInOrder> details, PeriodicalOrderData periodicalOrderData){
         this.orderId = orderId;
         this.shopNumber = shopNumber;
         this.supplier = supplier;
         this.details = details;
         this.deliveryDate = deliveryDate;
+        this.periodicalOrderData = periodicalOrderData;
     }
 }

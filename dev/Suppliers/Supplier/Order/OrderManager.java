@@ -5,6 +5,7 @@ import Result.Result;
 import Suppliers.DataAccess.PeriodicalOrderMapper;
 import Suppliers.DataAccess.RegularOrderMapper;
 import Suppliers.DataAccess.SupDBConn;
+import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 
 import java.util.Calendar;
@@ -133,5 +134,16 @@ public class OrderManager {
 
     public List<Integer> getAllOpenPeriodicalOrder() {
         return periodicalOrderMapper.getAllOpenOrders();
+    }
+
+    public PeriodicalOrderData getPeriodicalOrderData(int orderId) {
+        if(isPeriodicalOrder(orderId)) {
+            List<Days> days = periodicalOrderMapper.getDeliveryDays(orderId);
+            int weekP = periodicalOrderMapper.getWeepPeriod(orderId);
+            return new PeriodicalOrderData(days, weekP);
+        }
+        return null;
+
+
     }
 }

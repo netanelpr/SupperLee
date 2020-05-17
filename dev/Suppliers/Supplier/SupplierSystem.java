@@ -525,8 +525,13 @@ public class SupplierSystem {
 
     public AllOrderDetails getOrderDetails(int orderId) {
         Order order = orderManager.getOrderBasicDetails(orderId);
+        PeriodicalOrderData periodicalOrderData = null;
         if(order == null){
             return null;
+        }
+
+        if(orderManager.isPeriodicalOrder(orderId)){
+            periodicalOrderData = orderManager.getPeriodicalOrderData(orderId);
         }
 
         List<AllDetailsOfProductInOrder> details = orderManager.getAllProductDetails(orderId);
@@ -535,7 +540,7 @@ public class SupplierSystem {
         Supplier supplier = supplierManager.getById(supplierId);
         supplier.setContract(null);
 
-        return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details);
+        return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details, periodicalOrderData);
     }
 
     public SupplierDetailsDTO getSupplierInformation(int supID) {
