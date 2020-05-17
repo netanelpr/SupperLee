@@ -18,7 +18,7 @@ public class GetAllSupplierContacts extends Menu_Option {
     }
 
     @Override
-    void apply() {
+    public void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int supId = readInt("Supplier ID", reader);
 

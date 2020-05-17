@@ -84,11 +84,24 @@ public interface OrderAndProductManagement {
     public List<Integer> getAllOpenOrderIdsByShop(int shopNumber);
 
     /**
+     * Return a list of all the open orders
+     * @return list with all the orders id that are open.
+     */
+    public List<Integer> getAllOpenOrders();
+
+    /**
+     * Return a list of all the open orders that are periodical
+     * @return list with all the orders id that are open.
+     */
+    public List<Integer> getAllOpenPeriodicalOrder();
+
+    /**
      * Return all the details of order as discribed in the docs
      * @param orderId the order id
      * @return all the details of order as discribed in the docs
      */
     public OrderShipDetails orderDetails(int orderId);
+
 
     /**
      * Notify the supplier management system that an order has arrived to the store
@@ -96,5 +109,6 @@ public interface OrderAndProductManagement {
      * @return all the details of order as described in the docs
      */
     public OrderDTO orderArrived(int orderId);
+
 }
 

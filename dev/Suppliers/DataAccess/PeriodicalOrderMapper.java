@@ -369,4 +369,27 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
         }
         return wasntAdded;
     }
+
+    private String allOpenOrdersStatement(){
+        return "SELECT S.id\n" +
+                "FROM Supplier_order AS S JOIN Periodical_supplier_order AS P\n" +
+                "WHERE status = ? AND S.id = P.id";
+    }
+
+    public List<Integer> getAllOpenOrders() {
+        ResultSet rs;
+        List<Integer> orderIds = new ArrayList<>();
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(allOpenOrdersStatement())){
+            ptsmt.setInt(1, StructUtils.getOrderStatusInt(OrderStatus.Open));
+
+            rs = ptsmt.executeQuery();
+            while(rs.next()){
+                orderIds.add(rs.getInt(1));
+            }
+        } catch (SQLException throwables) {
+        }
+
+        return orderIds;
+    }
 }

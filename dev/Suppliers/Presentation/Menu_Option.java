@@ -8,7 +8,7 @@ public abstract class Menu_Option {
     /**
      * Start the sub menu
      */
-    abstract void apply();
+    public abstract void apply();
 
     public String readString(String info, BufferedReader bufferedReader) throws IOException {
         System.out.print(info + ": ");

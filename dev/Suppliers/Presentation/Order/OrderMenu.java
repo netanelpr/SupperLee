@@ -1,12 +1,9 @@
-package Suppliers.Presentation;
+package Suppliers.Presentation.Order;
 
+import Suppliers.Presentation.MenuOfMenus;
+import Suppliers.Presentation.RemoveProductsPeriodicalOrder;
 import Suppliers.Service.OrderAndProductManagement;
 import Suppliers.Service.SupplierManagment;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class OrderMenu extends MenuOfMenus {
 
@@ -23,6 +20,9 @@ public class OrderMenu extends MenuOfMenus {
 
         addMenuOption("Update order arrival day", new UpdateOrderArrivalDay(orderAndProductManagement));
         addMenuOption("Update order status", new UpdateOrderStatus(orderAndProductManagement));
+
+        addMenuOption("Get all open order ids", new GetAllOpenOrdersIds(orderAndProductManagement));
+        addMenuOption("Get all periodical open order ids", new GetAllOpenPeriodicalOrders(orderAndProductManagement));
         addMenuOption("Get order details", new OrderDetails(orderAndProductManagement));
     }
 }

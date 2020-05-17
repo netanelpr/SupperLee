@@ -221,7 +221,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
             rs = ptsmt.executeQuery();
             while(rs.next()){
-                orderIds.add(rs.getInt(0));
+                orderIds.add(rs.getInt(1));
             }
         } catch (SQLException throwables) {
         }
@@ -378,5 +378,28 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
             }
         }
         return wasntDeleted;
+    }
+
+    private String allOpenOrdersStatement(){
+        return "SELECT id\n" +
+                "FROM Supplier_order\n" +
+                "WHERE status = ?";
+    }
+
+    public List<Integer> getAllOpenOrders() {
+        ResultSet rs;
+        List<Integer> orderIds = new ArrayList<>();
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(allOpenOrdersStatement())){
+            ptsmt.setInt(1, StructUtils.getOrderStatusInt(OrderStatus.Open));
+
+            rs = ptsmt.executeQuery();
+            while(rs.next()){
+                orderIds.add(rs.getInt(1));
+            }
+        } catch (SQLException throwables) {
+        }
+
+        return orderIds;
     }
 }

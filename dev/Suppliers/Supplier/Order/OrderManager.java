@@ -126,4 +126,12 @@ public class OrderManager {
 
         return order;
     }
+
+    public List<Integer> getAllOpenOrders() {
+        return regularOrderMapper.getAllOpenOrders();
+    }
+
+    public List<Integer> getAllOpenPeriodicalOrder() {
+        return periodicalOrderMapper.getAllOpenOrders();
+    }
 }

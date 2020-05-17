@@ -161,6 +161,16 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         return orderManager.getAllOpenOrderIdsByShop(shopNumber);
     }
 
+    @Override
+    public List<Integer> getAllOpenPeriodicalOrder(){
+        return orderManager.getAllOpenPeriodicalOrder();
+    }
+
+    @Override
+    public List<Integer> getAllOpenOrders() {
+        return orderManager.getAllOpenOrders();
+    }
+
     public static ProductInOrder ProductInOrderDTOToPIO(ProductInOrderDTO productInOrderDTO){
         return new ProductInOrder(
                 productInOrderDTO.barcode,

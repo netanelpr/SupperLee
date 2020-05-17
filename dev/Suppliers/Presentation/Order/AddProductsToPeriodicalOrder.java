@@ -1,6 +1,7 @@
-package Suppliers.Presentation;
+package Suppliers.Presentation.Order;
 
 import Result.Result;
+import Suppliers.Presentation.Menu_Option;
 import Suppliers.Service.OrderAndProductManagement;
 import Suppliers.Service.ProductInOrderDTO;
 import Suppliers.Structs.Days;
@@ -11,38 +12,29 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CreatePeriodicalOrder extends Menu_Option {
+public class AddProductsToPeriodicalOrder extends Menu_Option {
 
 
     private OrderAndProductManagement orderAndProductManagement;
 
-    public CreatePeriodicalOrder(OrderAndProductManagement orderAndProductManagement) {
+    public AddProductsToPeriodicalOrder(OrderAndProductManagement orderAndProductManagement) {
         this.orderAndProductManagement = orderAndProductManagement;
     }
 
     @Override
     public void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int shopNumber;
+        int orderId;
 
         try {
             List<ProductInOrderDTO> products = new LinkedList<>();
 
-            shopNumber = readInt("Enter the shop number", reader);
-            if(shopNumber < 0){
+            orderId = readInt("Enter the order ID", reader);
+            if(orderId < 0){
                 return;
             }
 
-            String daysStr = readString("Enter supply days : {days of the week (Sunday...) suppurated with coma (,) }\n",reader);
-            String[] dayArr = daysStr.toUpperCase().split(",");
-            List<Days> days = StructUtils.getDaysList(dayArr);
-
-            int weekP = readIntPos("Enter the week period","Week period is positive number", reader);
-            if(weekP < 0){
-                return;
-            }
-
-            int numberOfProducts = readInt("Enter the numbers of product you want the order", reader);
+            int numberOfProducts = readInt("Enter the numbers of product you want the add", reader);
 
             System.out.println("Enter barcode and amount\nformat:<Barcode> <amount>");
             for(int i=0; i < numberOfProducts; i=i+1){
@@ -58,9 +50,11 @@ public class CreatePeriodicalOrder extends Menu_Option {
                         Integer.parseInt(productAndAmount[1])));
             }
 
-            Result<Integer> res = orderAndProductManagement.createPeriodicalOrder(products, days, weekP, shopNumber);
+            Result<List<Integer>> res = orderAndProductManagement.addProductsToPeriodicalOrder(orderId,products);
             if(res.isOk()){
-                System.out.println("Order id : "+ res.getValue());
+                if(res.getValue().size() > 0) {
+                    System.out.println("Those product barcodes wasnt added " + res.getValue().toString());
+                }
             } else {
                 System.out.println(res.getMessage());
             }
