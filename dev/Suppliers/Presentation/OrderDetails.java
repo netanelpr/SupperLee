@@ -46,7 +46,7 @@ public class OrderDetails extends Menu_Option {
             String productInfo = String.format("Name: %s\tBarcode: %d\tCatalog number: %s\tAmmount: %d\tOriginal price: %f\n" +
                             "\tDiscount price: %f\tDiscount: %f\t",
                     details.name, details.getBarcode(), details.getProductCatalogNumber(), details.getAmount(),
-                    details.getOriginalPrice(), details.getDiscount());
+                    details.getOriginalPrice(), details.getPricePerUnit(), details.getDiscount());
             System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             System.out.println(productInfo);
             System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");

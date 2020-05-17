@@ -45,8 +45,10 @@ public abstract class AbstractMapper<T> {
             ResultSet rs  = pstmt.executeQuery();
 
             res = buildTFromResultSet(rs);
-            loadedMap.put(id, res);
-            return res;
+            if(res != null) {
+                loadedMap.put(id, res);
+                return res;
+            }
 
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
@@ -96,6 +98,5 @@ public abstract class AbstractMapper<T> {
      * @return The id of the product
      */
     protected abstract int insert(T product);
-
 
 }

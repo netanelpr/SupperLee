@@ -77,11 +77,6 @@ public class Inventory2SuppliersCtrl implements myObservable {
         {
             myInvenoryService.getOrderFromSuppliers(theOrder);
         }
-        this.myOrderAndProductManagement.updateOrderStatus(orderID, OrderStatus.Close);
-        /*this.myOrderAndProductManagement.changeOrderStatus(orderID, OrderStatus.Close);
-        OrderDTO theOrder= this.myOrderAndProductManagement.getOrder(orderID);
-        return myInvenoryService.getOrderFromSuppliers(theOrder);*/
-        //myInvenoryService.getOrderFromSuppliers();
    }
 
     public Result receiveSuppliersOrderTmp(int orderID){

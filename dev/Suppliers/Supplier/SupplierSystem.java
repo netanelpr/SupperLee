@@ -501,7 +501,7 @@ public class SupplierSystem {
     private int getCheapestSupplierId(List<Integer> suppliersId, List<ProductInOrder> products) {
         Supplier sup;
         int cheapestSupplierId = -1;
-        double totalPrice = -1;
+        double totalPrice = Double.MAX_VALUE;
         for(int id : suppliersId){
             sup = supplierManager.getById(id);
             double orderPrice = sup.calculateOrderPrice(products);
@@ -530,7 +530,8 @@ public class SupplierSystem {
         List<AllDetailsOfProductInOrder> details = orderManager.getAllProductDetails(orderId);
 
         int supplierId = supplierManager.getIdByContract(order.getContractId());
-        Supplier supplier = supplierManager.loadSupplierAndContacts(supplierId);
+        Supplier supplier = supplierManager.getById(supplierId);
+        supplier.setContract(null);
 
         return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details);
     }
@@ -593,7 +594,11 @@ public class SupplierSystem {
         List<String> catalogNumbers;
         int supplierId;
         if((supplierId = orderManager.getTheSupplierOfOrder(orderId)) == -1){
-            return Result.makeFailure("No such orderId");
+            return Result.makeFailure("No such order ID");
+        }
+
+        if(!orderManager.isPeriodicalOrder(orderId)){
+            return Result.makeFailure("This is not periodical order");
         }
 
         Order order = orderManager.getOrderBasicDetails(orderId);

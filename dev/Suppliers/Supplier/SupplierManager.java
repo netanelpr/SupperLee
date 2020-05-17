@@ -86,7 +86,16 @@ public class SupplierManager {
      * @return Return list with all the supplier ids which have all the barcodes
      */
     public List<Integer> getAllSupplierIdsWithBarcodes(List<Integer> barcodes){
-        return supplierMapper.getAllSupplierIdsWithBarcodes(barcodes);
+        List<Integer> supplierIds = new ArrayList<>();
+
+        for(SupplierDetails supplierDetails : supplierMapper.getAllSuppliers()){
+            List<Integer> supplierBarcodes = supplierMapper.getAllBarcodesOfSupplier(supplierDetails.supplierId);
+            if(supplierBarcodes.containsAll(barcodes)){
+                supplierIds.add(supplierDetails.supplierId);
+            }
+        }
+
+        return supplierIds;
     }
 
     /**
@@ -114,13 +123,16 @@ public class SupplierManager {
      * @return Return list with all the supplier ids which supply in the given days
      */
     public List<Integer> getAllSupplierWithSupplyDays(List<Days> days) {
-        List<Integer> integerDays = new ArrayList<>();
+        List<Integer> supplierIds = new ArrayList<>();
 
-        for(Days day : days){
-            integerDays.add(StructUtils.getDayInt(day));
+        for(SupplierDetails supplierDetails : supplierMapper.getAllSuppliers()){
+            List<Days> supplierDays = supplierMapper.getSupplyDays(supplierDetails.supplierId);
+            if(supplierDays.containsAll(days)){
+                supplierIds.add(supplierDetails.supplierId);
+            }
         }
 
-        return supplierMapper.getAllSupplierWithSupplyDays(integerDays);
+        return supplierIds;
     }
 
     public boolean addPaymentOption(int supId, String paymentInfo) {
@@ -154,21 +166,7 @@ public class SupplierManager {
     }
 
     public int getIdByContract(int contractId) {
-        ContractWithSupplier contractWithSupplier=this.supplierMapper.getContractByContractID(contractId);
-        if(contractWithSupplier!=null)
-        {
-            return contractWithSupplier.getContractID();
-        }
-        else
-        {
-            return -1;
-        }
-
-    }
-
-    public Supplier loadSupplierAndContacts(int supplierId) {
-        //TODO implement
-        return null;
+        return supplierMapper.getSupplierIdByContractId(contractId);
     }
 
     public int addContractToSupplier(int supplierId, ContractWithSupplier contractInfo) {

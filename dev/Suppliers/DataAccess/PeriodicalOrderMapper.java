@@ -145,8 +145,8 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
     }
 
     private String isValidShopStatement(){
-        return "SELECT shopNum Items " +
-                "WHERE shopNum = (?)";
+        return "SELECT id from Inventory  " +
+                "WHERE id = (?)";
     }
 
     public boolean isValidShopNumber(int shopNumber){

@@ -1,10 +1,14 @@
 package Tests.Visual;
 
+import Result.Result;
+import Suppliers.Service.OrderAndProductCtrl;
+import Suppliers.Service.OrderAndProductManagement;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.Order.OrderManager;
 import Suppliers.Supplier.Order.PeriodicalOrder;
 import Suppliers.Supplier.Order.ProductInOrder;
+import Suppliers.Supplier.SupplierSystem;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -34,12 +38,12 @@ public class SupplierPeriodicalOrder {
         OrderManager orderManager = OrderManager.getInstance();
 
         List<Days> days = new LinkedList<>();
-        days.add(StructUtils.getDayWithInt(1));
-        days.add(StructUtils.getDayWithInt(5));
+        //days.add(StructUtils.getDayWithInt(1));
+        days.add(StructUtils.getDayWithInt(6));
 
         List<ProductInOrder> products = new LinkedList<>();
-        products.add(new ProductInOrder(1,10,"c1",10));
-        products.add(new ProductInOrder(2,150,"c2",12));
+        products.add(new ProductInOrder(11,10,"c1",10));
+        products.add(new ProductInOrder(88,150,"c2",12));
         PeriodicalOrder order = PeriodicalOrder.CreatePeriodicalOrder(-1, products, days, 1, 1, new Date());
 
         Calendar c = Calendar.getInstance();
@@ -55,6 +59,25 @@ public class SupplierPeriodicalOrder {
             System.out.println("Order wasnt created");
         } else {
             System.out.println("Order id:"+ order.getOrderId());
+        }
+    }
+
+    public static void addPeriodicalOrder2(){
+        SupplierSystem supplierSystem = SupplierSystem.getInstance();
+
+        List<Days> days = new LinkedList<>();
+        //days.add(StructUtils.getDayWithInt(1));
+        days.add(StructUtils.getDayWithInt(6));
+
+        List<ProductInOrder> products = new LinkedList<>();
+        products.add(new ProductInOrder(222,10));
+        products.add(new ProductInOrder(88,150));
+        Result<Integer> res = supplierSystem.createPeriodicalOrder(products, days, 3,1);
+
+        if(res.isOk()){
+            System.out.println("Order id:"+ res.getValue());
+        } else {
+            System.out.println(res.getMessage());
         }
     }
 }

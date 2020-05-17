@@ -713,56 +713,6 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
         return theProducts;
     }
 
-    private String getAllSupplierIdsWithBarcodesStatement(){
-        return "SELECT S.id\n" +
-                "FROM Supplier AS S\n" +
-                "WHERE (?) IN (SELECT barcode\n" +
-                "\tFROM Suppliers_products as SP\n" +
-                "\tWHERE SP.supplier_id = S.id)";
-    }
-
-    public List<Integer> getAllSupplierIdsWithBarcodes(List<Integer> barcodes) {
-        List<Integer> supplierIds = new ArrayList<>();
-
-        try(PreparedStatement pstmt = conn.prepareStatement(getAllSupplierIdsWithBarcodesStatement())){
-
-            pstmt.setArray(1, conn.createArrayOf("INTEGER", barcodes.toArray()));
-            ResultSet res = pstmt.executeQuery();
-            while(res.next()){
-                supplierIds.add(res.getInt(1));
-            }
-
-        } catch (java.sql.SQLException e) {
-        }
-
-        return supplierIds;
-    }
-
-    private String getAllSupplierWithSupplyDaysStatement() {
-        return "SELECT id\n" +
-                "FROM Supplier\n" +
-                "WHERE (?) IN (SELECT supplay_day\n" +
-                "\t\t\tFROM supplay_days\n" +
-                "\t\t\tWHERE supplier_id = id)";
-    }
-
-    public List<Integer> getAllSupplierWithSupplyDays(List<Integer> integerDays) {
-        List<Integer> supplierIds = new ArrayList<>();
-
-        try(PreparedStatement pstmt = conn.prepareStatement(getAllSupplierWithSupplyDaysStatement())){
-
-            pstmt.setArray(1, conn.createArrayOf("INTEGER", integerDays.toArray()));
-            ResultSet res = pstmt.executeQuery();
-            while(res.next()){
-                supplierIds.add(res.getInt(1));
-            }
-
-        } catch (java.sql.SQLException e) {
-        }
-
-        return supplierIds;
-    }
-
     private String getCatalogsFromBarcodesStatement() {
         return "SELECT catalog_number\n" +
                 "FROM Suppliers_products\n" +
@@ -810,7 +760,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
         List<Integer> barcodes = new ArrayList<>();
 
         for (String catalog : catalogs) {
-            try (PreparedStatement ptsmt = conn.prepareStatement(getCatalogsFromBarcodesStatement())) {
+            try (PreparedStatement ptsmt = conn.prepareStatement(getBarcodesFromCatalogStatement())) {
 
                 ptsmt.setString(1, catalog);
 
@@ -850,5 +800,52 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             productDiscounts.add(this.getProductsDiscounts(product));
         }
         return productDiscounts;
+    }
+
+    private String getAllBarcodesOfSupplierStatement() {
+        return "SELECT barcode\n" +
+                "FROM Suppliers_products\n" +
+                "WHERE supplier_id = ?";
+    }
+
+    public List<Integer> getAllBarcodesOfSupplier(int supplierId) {
+        List<Integer> barcodes = new ArrayList<>();
+
+        try (PreparedStatement ptsmt = conn.prepareStatement(getAllBarcodesOfSupplierStatement())) {
+
+            ptsmt.setInt(1, supplierId);
+
+            ResultSet res = ptsmt.executeQuery();
+            while(res.next()){
+                barcodes.add(res.getInt(1));
+            }
+
+        } catch (SQLException e) {
+        }
+
+        return barcodes;
+    }
+
+    private String getSupplierIdByContractIdStatement() {
+        return "SELECT supplier_id\n" +
+                "FROM Contract\n" +
+                "WHERE id = ?";
+    }
+
+    public int getSupplierIdByContractId(int contractId) {
+
+        try (PreparedStatement ptsmt = conn.prepareStatement(getSupplierIdByContractIdStatement())) {
+
+            ptsmt.setInt(1, contractId);
+
+            ResultSet res = ptsmt.executeQuery();
+            if(res.next()){
+                return res.getInt(1);
+            }
+
+        } catch (SQLException e) {
+        }
+
+        return -1;
     }
 }

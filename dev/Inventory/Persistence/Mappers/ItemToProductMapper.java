@@ -98,8 +98,8 @@ public ItemToProductMapper(Connection conn){
             quantityStorage = res.getString(res.findColumn("qStorage"));
             name = res.getString(res.findColumn("name"));
             manufacturer = res.getString(res.findColumn("manufacture"));
-            category = res.getString(res.findColumn("categoty"));
-            sub_category = res.getString(res.findColumn("subCategoty"));
+            category = res.getString(res.findColumn("category"));
+            sub_category = res.getString(res.findColumn("subCategory"));
             size = res.getString(res.findColumn("size"));
             freqBuySupply = res.getInt(res.findColumn("freqSupply"));
             minPrice = res.getDouble(res.findColumn("minPrice"));
@@ -125,8 +125,8 @@ public ItemToProductMapper(Connection conn){
             quantityStorage = "0";
             name = res.getString(res.findColumn("name"));
             manufacturer = res.getString(res.findColumn("manufacture"));
-            category = res.getString(res.findColumn("categoty"));
-            sub_category = res.getString(res.findColumn("subCategoty"));
+            category = res.getString(res.findColumn("category"));
+            sub_category = res.getString(res.findColumn("subCategory"));
             size = res.getString(res.findColumn("size"));
             freqBuySupply = res.getInt(res.findColumn("freqSupply"));
             minPrice = res.getDouble(res.findColumn("minPrice"));

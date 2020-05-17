@@ -50,6 +50,8 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
                 status = StructUtils.getOrderStatus(res.getInt(3));
                 deliveryDay = res.getString(4);
                 products.add(new ProductInOrder(res.getInt(5), res.getInt(8), res.getString(7), res.getDouble(9)));
+            } else {
+                return null;
             }
 
             while (res.next()) {
