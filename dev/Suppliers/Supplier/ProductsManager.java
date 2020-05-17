@@ -2,7 +2,6 @@ package Suppliers.Supplier;
 
 import DataAccess.SupInvDBConn;
 import Suppliers.DataAccess.ProductMapper;
-import Suppliers.DataAccess.SupDBConn;
 
 import java.util.List;
 

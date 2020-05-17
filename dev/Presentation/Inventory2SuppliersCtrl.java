@@ -63,7 +63,7 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     }
 
-    public Result placePeriodicalOrder(List<ProductInOrderDTO> shoppingList, List<Days> days, int weekPeriod, int shopNumber)
+    public Result<Integer> placePeriodicalOrder(List<ProductInOrderDTO> shoppingList, List<Days> days, int weekPeriod, int shopNumber)
     {
         return this.myOrderAndProductManagement.createPeriodicalOrder(shoppingList,days,weekPeriod, shopNumber);
     }
@@ -100,9 +100,9 @@ public class Inventory2SuppliersCtrl implements myObservable {
     }
 
 
-    public Result receiveAllOpenOrders(int shopNum)
+    public List<Integer> receiveAllOpenOrders(int shopNum)
     {
-        return null;
+        return myOrderAndProductManagement.getAllOpenOrderIdsByShop(shopNum);
     }
 
     //region observer

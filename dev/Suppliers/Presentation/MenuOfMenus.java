@@ -74,6 +74,7 @@ public abstract class MenuOfMenus extends Menu_Option {
                 System.out.println("Not an menu option");
                 continue;
             }
+            System.out.println();
 
             if(index > 0 & index <= optionToIndex.size()) {
                 if (index == optionToIndex.size()) {

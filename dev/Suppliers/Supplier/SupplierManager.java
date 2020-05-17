@@ -1,14 +1,11 @@
 package Suppliers.Supplier;
 
 import DataAccess.SupInvDBConn;
-import Suppliers.DataAccess.SupDBConn;
 import Suppliers.DataAccess.SupplierMapper;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.PaymentOptions;
-import Suppliers.Structs.StructUtils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class SupplierManager {

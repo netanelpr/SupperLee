@@ -1,10 +1,8 @@
 package Suppliers.Supplier.Order;
 
 import DataAccess.SupInvDBConn;
-import Result.Result;
 import Suppliers.DataAccess.PeriodicalOrderMapper;
 import Suppliers.DataAccess.RegularOrderMapper;
-import Suppliers.DataAccess.SupDBConn;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 
