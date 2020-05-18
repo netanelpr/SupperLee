@@ -87,7 +87,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     {
         return "SELECT * " +
                 "FROM Contract " +
-                "WHERE supplier_id = ? ";
+                "WHERE supplier_id = ?";
     }
 
     private String findContractByContractIDStatement() {
@@ -175,13 +175,15 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
                 Supplier myNewSupplier=new Supplier(res.getInt("id"),res.getString(2),
                         res.getString(3), res.getString("inc_number"),res.getString("account_number"), res.getString("paymentInfo"),
                         res.getString(5), res.getString("phone_number"), res.getString("email"));
-                List<ContactInfo> contacts=getAllSupplierContacts(myNewSupplier.getSupId());
+                List<ContactInfo> contacts = getAllSupplierContacts(myNewSupplier.getSupId());
                 myNewSupplier.setContacts(contacts);
-                ContractWithSupplier new_contractWithSupplier= this.getContractBySupplier(myNewSupplier.getSupId());
-                myNewSupplier.setContract(new_contractWithSupplier);
-                new_contractWithSupplier.setProducts(this.getAllContractProducts(new_contractWithSupplier.getContractID()));
-                for (ContractProduct product:new_contractWithSupplier.getProducts()) {
-                    product.setDiscounts(this.getProductsDiscounts(product));
+                ContractWithSupplier new_contractWithSupplier = this.getContractBySupplier(myNewSupplier.getSupId());
+                if(new_contractWithSupplier != null) {
+                    myNewSupplier.setContract(new_contractWithSupplier);
+                    new_contractWithSupplier.setProducts(this.getAllContractProducts(new_contractWithSupplier.getContractID()));
+                    for (ContractProduct product : new_contractWithSupplier.getProducts()) {
+                        product.setDiscounts(this.getProductsDiscounts(product));
+                    }
                 }
                 return myNewSupplier;
             }
@@ -631,7 +633,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     }
 
     public ContractWithSupplier getContractBySupplier(int supplierID) {
-        List<Days> supplyDays=getSupplyDays(supplierID);
+        List<Days> supplyDays = getSupplyDays(supplierID);
         try (PreparedStatement pstmtContract = conn.prepareStatement(findContractBySupplierIDStatement())) {
             pstmtContract.setInt(1, supplierID);
             ResultSet res = pstmtContract.executeQuery();

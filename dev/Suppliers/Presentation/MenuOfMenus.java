@@ -39,7 +39,7 @@ public abstract class MenuOfMenus extends Menu_Option {
         System.out.println("Choose from the options");
 
         for(Pair<String, String> menuOp : optionToIndex){
-            System.out.println(String.format("(%s) %s", menuOp.fst, menuOp.snd));
+            System.out.println(String.format("(%s)\t%s", menuOp.fst, menuOp.snd));
 
         }
     }
@@ -81,9 +81,8 @@ public abstract class MenuOfMenus extends Menu_Option {
 
             if (option == null) {
                 System.out.println("Invalid function");
+                continue;
             }
-
-
 
             option.apply();
         }

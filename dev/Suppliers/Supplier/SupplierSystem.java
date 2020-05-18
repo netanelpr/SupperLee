@@ -277,6 +277,10 @@ public class SupplierSystem {
         if(supplier == null){
             return Result.makeFailure("Supplier doesnt exist");
         }
+
+        if(!supplier.hasContract()){
+            return Result.makeFailure("The supplier doesnt have a contract");
+        }
         contractId = supplier.getContract().getContractID();
 
         for(ProductInOrder product : products){
