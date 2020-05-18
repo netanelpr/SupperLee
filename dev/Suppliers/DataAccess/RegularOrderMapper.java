@@ -164,7 +164,6 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
         } catch (SQLException throwables) {
             rollback = true;
-            throwables.printStackTrace();
         }
 
         try{

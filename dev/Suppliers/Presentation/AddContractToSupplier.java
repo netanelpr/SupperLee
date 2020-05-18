@@ -130,7 +130,7 @@ public class AddContractToSupplier extends Menu_Option {
                     ProductDiscountsDTO productDiscounts = new ProductDiscountsDTO(barcode, discounts, originaPrice);
 
                     if (newProduct) {
-                        systemProduct = new SystemProduct(barcode, name, manufacture, category, subCategoty, size);
+                        systemProduct = new SystemProduct(barcode, manufacture, name, category, subCategoty, size);
                         products.add(new SupplierProductDTO(barcode, catalog_number, originaPrice, productDiscounts, systemProduct));
 
                     } else {

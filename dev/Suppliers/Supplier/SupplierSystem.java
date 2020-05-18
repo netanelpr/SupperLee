@@ -542,6 +542,8 @@ public class SupplierSystem {
 
         int supplierId = supplierManager.getIdByContract(order.getContractId());
         Supplier supplier = supplierManager.getById(supplierId);
+
+
         supplier.setContract(null);
 
         return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details, periodicalOrderData);
