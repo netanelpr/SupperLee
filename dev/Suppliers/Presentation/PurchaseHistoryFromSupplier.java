@@ -22,6 +22,7 @@ public class PurchaseHistoryFromSupplier extends Menu_Option {
         int supId = readInt("Supplier ID", reader);
 
         List<String> catalogNumbers = supplierManagment.getPurchaseHistory(supId);
+
         if(catalogNumbers != null) {
             int index = 0;
             System.out.println("The catalog numbers ids:");

@@ -70,7 +70,7 @@ public class AddContactInfoToSupplier extends Menu_Option {
         if(supplierManagment.addContactInfo(supID, name, phoneNumber, email)){
             System.out.println("The contact has been added");
         } else {
-            System.out.println("The contact wasnt added");
+            System.out.println("The contact wasnt added, maybe exists already? check that and check if the information is valid");
         }
     }
 }

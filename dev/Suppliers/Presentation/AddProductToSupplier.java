@@ -103,7 +103,7 @@ public class AddProductToSupplier extends Menu_Option {
             if(added){
                 System.out.println("The product has been added");
             } else {
-                System.out.println("The product has not been added");
+                System.out.println("The product has not been added, due to duplicity of catalog number or lack of contract of this supplier");
             }
 
         } catch (NumberFormatException e){

@@ -58,10 +58,15 @@ public class AddContractToSupplier extends Menu_Option {
                 System.out.println("problem detected adding the products");
                 return;
             }
-            this.supplierManagment.addContractToSupplier(supId,contractInfo,days,supplierProductDTOS);
-            //TODO get the return value from the top and print message
+            List<Integer> badProducts=this.supplierManagment.addContractToSupplier(supId,contractInfo,days,supplierProductDTOS);
 
+            System.out.println("Contract was added successfully to suppliers data base, together with his supplying days and products");
 
+            if(badProducts!=null || badProducts.size()!=0)
+            {
+                System.out.println("The following products weren't entered to supplier's data base (catalog number already exists):");
+                System.out.println(badProducts.toString());
+            }
         }
         catch (IOException ioe)
         {
@@ -76,6 +81,7 @@ public class AddContractToSupplier extends Menu_Option {
         System.out.print("Enter number of product you want to enter : ");
         try {
             int numberOfProducts = Integer.parseInt(reader.readLine());
+
             List<SupplierProductDTO> products = new LinkedList<>();
             for (int i = 0; i < numberOfProducts; i++) {
 
@@ -148,6 +154,10 @@ public class AddContractToSupplier extends Menu_Option {
         }
         catch (IOException ioe) {
             System.out.println("problem has detected");
+        }
+        catch (NumberFormatException nfe)
+        {
+            System.out.println("invalid input");
         }
         return null;
     }
