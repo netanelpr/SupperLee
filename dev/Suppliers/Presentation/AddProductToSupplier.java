@@ -122,7 +122,7 @@ public class AddProductToSupplier extends Menu_Option {
         else
         {
             String amount=readString("enter amount for discount: ",reader);
-            String discount=readString("enter discount precentage: ",reader);
+            String discount=readString("enter discount precentage from 0 to 1: ",reader);
             if(amount==null || discount==null || amount.length()<=0 || discount.length()<=0)
             {
                 return false;
