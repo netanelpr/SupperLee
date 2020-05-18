@@ -1,5 +1,6 @@
 package Suppliers.DataAccess;
 
+import Result.Result;
 import Suppliers.Structs.OrderStatus;
 import Suppliers.Structs.StructUtils;
 import Suppliers.Supplier.Order.AllDetailsOfProductInOrder;
@@ -414,6 +415,29 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
         try(PreparedStatement ptsmt = conn.prepareStatement(getPurchaseHistoryOfSupplierStatement())){
             ptsmt.setInt(1, supplierId);
+
+            rs = ptsmt.executeQuery();
+            while(rs.next()){
+                catalogs.add(rs.getString(1));
+            }
+        } catch (SQLException throwables) {
+        }
+
+        return catalogs;
+    }
+
+    public String getAllOrderCatalogsStatement() {
+        return "SELECT DISTINCT(catalog_number)\n" +
+                "FROM Product_in_order \n" +
+                "WHERE order_id = ?";
+    }
+
+    public List<String> getAllOrderCatalogs(int orderId) {
+        ResultSet rs;
+        List<String> catalogs = new ArrayList<>();
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(getAllOrderCatalogsStatement())){
+            ptsmt.setInt(1, orderId);
 
             rs = ptsmt.executeQuery();
             while(rs.next()){

@@ -606,7 +606,10 @@ public class SupplierSystem {
         }
 
         catalogNumbers = supplierManager.getCatalogsFromBarcodes(supplierId, barcodes);
-        catalogNumbers = orderManager.removeProductsFromOrder(orderId, catalogNumbers);
+        Result<List<String>> resCatalogs = orderManager.removeProductsFromOrder(orderId, catalogNumbers);
+        if(!resCatalogs.isOk()){
+            return Result.makeFailure(resCatalogs.getMessage());
+        }
 
         return Result.makeOk("Remove product",supplierManager.getBarcodesFromCatalog(supplierId, catalogNumbers));
     }

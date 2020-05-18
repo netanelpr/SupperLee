@@ -39,10 +39,7 @@ public class PaymentOptions extends Menu_Option {
                 System.out.println("There isnt such a supplier with id "+ supId);
             } else {
                 System.out.println("Payment options are: \n");
-                for (String option:
-                     paymentOptions) {
-                    System.out.println(option+"\n");
-                }
+                System.out.println(paymentOptions.toString());
             }
         }
     }
