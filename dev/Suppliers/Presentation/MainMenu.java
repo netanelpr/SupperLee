@@ -17,7 +17,7 @@ public class MainMenu extends MenuOfMenus {
     }
 
     protected void createMenuMap() {
-        addMenuOption("Supplier menu", new SupplierMenu(supplierManagment, orderAndProductManagement));
-        addMenuOption("Order menu", new OrderMenu(supplierManagment, orderAndProductManagement));
+        addMenuOption("Supplier menu", "s", new SupplierMenu(supplierManagment, orderAndProductManagement));
+        addMenuOption("Order menu", "o",new OrderMenu(supplierManagment, orderAndProductManagement));
     }
 }
