@@ -22,16 +22,17 @@ public class WelcomeMenu {
 
     public void start(){
         terminate = false;
-        int option = 0;
+        String option = "";
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         inventoryMenu.loadDB();
 
         while(!terminate){
-            System.out.println("1) Supplier menu\n2) Inventory menu\n3) Close");
+            System.out.println("Please choose one of the following options:");
+            System.out.println("(s) Supplier menu\n(i) Inventory menu\n(c) Close");
             System.out.print("Option: ");
 
             try {
-                option = Integer.parseInt(reader.readLine());
+                option = reader.readLine();
             } catch (IOException e) {
                 System.out.println("Invalid option");
             }
@@ -40,11 +41,11 @@ public class WelcomeMenu {
                 System.out.println("Something went wrong");
             }
 
-            if(option == 1){
+            if(option.equals("s") || option.equals("S")){
                 supplierMenu.apply();
-            } else if(option == 2){
+            } else if(option.equals("i") || option.equals("I")){
                 terminate = inventoryMenu.mainLoop();
-            } else if(option == 3){
+            } else if(option.equals("c") || option.equals("C")){
                 break;
             } else {
                 System.out.println("Invalid option");
