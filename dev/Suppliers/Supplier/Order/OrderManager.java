@@ -56,8 +56,9 @@ public class OrderManager {
         if(order == null || order.getStatus() == OrderStatus.Close){
             return false;
         }
-
-        if(!periodicalOrderMapper.isPeriodicalOrder(orderId)){
+        //TODO: i deleted the ! sign in the if condition. Before it  was: !periodicalOrderMapper.isPeriodicalOrder(orderId)
+        //is it ok now?
+        if(periodicalOrderMapper.isPeriodicalOrder(orderId)){
             return false;
         }
 

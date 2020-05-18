@@ -1,14 +1,14 @@
 package Suppliers.Structs;
 
 public enum PaymentOptions {
-    Cash,
-    Credit,
-    Check,
-    Bankwire,
-    BitApp,
-    BitCoin,
-    Dollars,
+    CASH,
+    CREDIT,
+    CHECK,
+    BANKWIRE,
+    BITAPP,
+    BITCOIN,
+    DOLLARS,
     NIS,
     EURO,
-    RegularPlus90
+    REGULAPLUS90
 }

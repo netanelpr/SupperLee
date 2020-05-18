@@ -60,21 +60,43 @@ public class SupplierSystem {
      */
     public int createSupplierCard(String name, String incNum, String address, String accountNumber, String paymentInfo,
                                   String contactName, String phoneNumber,String email) {
+        String[] arr= paymentInfo.split(",");
 
-        Supplier sup = new Supplier(name,address,incNum,accountNumber,paymentInfo);
+        if(arr.length<1)
+        {
+            return -1;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            String modified=arr[i].trim();
+            modified=modified.toUpperCase();
+            String finalModified = modified;
+            arr[i]=finalModified;
+            if (Arrays.stream(PaymentOptions.values()).filter(x->x.name().equals(finalModified)).findFirst().orElse(null)==null) {
+                return -1;
+            }
+        }
+
+
+
+        Supplier sup = new Supplier(name,address,incNum,accountNumber, arr[0]);
+
         int returnedId=supplierManager.insert(sup);
         if(returnedId!=-1) {
+
             String returnedEmail = supplierManager.insertNewContactInfo(new ContactInfo(contactName, phoneNumber, email, sup.getSupId()));
             if (returnedEmail == null) {
 
                 boolean ans = supplierManager.deleteSupplier(sup);
                 return -1;
             }
-            if (!this.addPaymentOptions(sup.getSupId(), sup.getPaymentInfo().get(0))) {
-                boolean ans = supplierManager.deleteSupplier(sup);
-                return -1;
-            }
+            for (String info: arr) {
 
+                if(!this.addPaymentOptions(sup.getSupId(),info))
+                {
+                    boolean ans = supplierManager.deleteSupplier(sup);
+                    return -1;
+                }
+            }
             return returnedId;
         }
         if(sup.getSupId() < 0){
@@ -107,11 +129,13 @@ public class SupplierSystem {
      * @return true if the payment options was added or already exist, false otherwise
      */
     public boolean addPaymentOptions(int supId, String paymentInfo) {
-
-        if (Arrays.stream(PaymentOptions.values()).filter(x->x.name().equals(paymentInfo)).findFirst().orElse(null)==null) {
+        String modified=paymentInfo.trim();
+        modified=modified.toUpperCase();
+        String finalModified = modified;
+        if (Arrays.stream(PaymentOptions.values()).filter(x->x.name().equals(finalModified)).findFirst().orElse(null)==null) {
                 return false;
         }
-        return supplierManager.addPaymentOption(supId,paymentInfo);
+        return supplierManager.addPaymentOption(supId,finalModified);
     }
 
     /**
@@ -123,8 +147,10 @@ public class SupplierSystem {
      * @return true if the all the payment are removed, false otherwise
      */
     public boolean removePaymentOptions(int supId, String paymentInfo) {
-
-        return supplierManager.removePaymentOption(supId,paymentInfo);
+        String modified=paymentInfo.trim();
+        modified=modified.toUpperCase();
+        String finalModified = modified;
+        return supplierManager.removePaymentOption(supId,finalModified);
 
     }
 
