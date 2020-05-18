@@ -31,9 +31,12 @@ public class StructUtils {
         List<Days> list = new LinkedList<>();
 
         for (String day : days) {
-            Days d =  map.getOrDefault(day.toUpperCase(), null);
+            String correctDay=day;
+            correctDay=correctDay.toUpperCase();
+            correctDay=correctDay.trim();
+            Days d =  map.getOrDefault(correctDay, null);
             if(d == null){
-                return null;
+                return list;
             }
 
             list.add(d);
