@@ -60,7 +60,7 @@ public class InvService implements myObservable {
             //region new_register loop
             notifyObserver("--------------\nWelcome to your Super-Lee inventory!\n--------------\n" +
                     "Please choose one of the following options:\n" +
-                    "\t[n] New shop \n \t[r] Register your shop \t[b] back to main menu");
+                    "\t[n] New shop \n \t[r] Register your shop \n\t[b] back to main menu");
             ansStr = myScanner.nextLine();
             if (ansStr.equals("n") || ansStr.equals("N")) {
                 this.currInv = newShop();
