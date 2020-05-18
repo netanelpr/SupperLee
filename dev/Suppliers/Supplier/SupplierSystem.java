@@ -454,24 +454,7 @@ public class SupplierSystem {
      * @return List with all the orders for the specific supplier
      */
     public List<String> getPurchaseHistory(int supplierId) {
-        List<Order> ordersOfSupplier = orders.getOrDefault(supplierId, null);
-        Map<String,Integer> productsNoDuplicate=new HashMap<>();
-
-
-
-        if(ordersOfSupplier == null){
-            return null;
-        }
-
-        for(Order order : ordersOfSupplier){
-            List<String> productsCatalogNumberInOrder = order.retrunProductsCatalogNumbers();
-            for (String s : productsCatalogNumberInOrder) {
-                productsNoDuplicate.putIfAbsent(s, 0);
-            }
-        }
-        return new LinkedList<>(productsNoDuplicate.keySet());
-
-
+        return orderManager.getPurchaseHistoryOfSupplier(supplierId);
     }
 
     public AddProduct getAllInformationAboutSuppliersProduct(int supplierId, int barcode) {

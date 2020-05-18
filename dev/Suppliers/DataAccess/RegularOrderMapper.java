@@ -401,4 +401,27 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
         return orderIds;
     }
+
+    public String getPurchaseHistoryOfSupplierStatement() {
+        return "SELECT DISTINCT(P.catalog_number)\n" +
+                "FROM Product_in_order AS P JOIN CONTRACT AS C\n" +
+                "WHERE P.contract_id = c.id AND C.supplier_id = ?";
+    }
+
+    public List<String> getPurchaseHistoryOfSupplier(int supplierId) {
+        ResultSet rs;
+        List<String> catalogs = new ArrayList<>();
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(getPurchaseHistoryOfSupplierStatement())){
+            ptsmt.setInt(1, supplierId);
+
+            rs = ptsmt.executeQuery();
+            while(rs.next()){
+                catalogs.add(rs.getString(1));
+            }
+        } catch (SQLException throwables) {
+        }
+
+        return catalogs;
+    }
 }

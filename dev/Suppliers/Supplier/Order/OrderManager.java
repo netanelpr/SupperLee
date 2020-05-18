@@ -141,7 +141,14 @@ public class OrderManager {
             return new PeriodicalOrderData(days, weekP);
         }
         return null;
+    }
 
-
+    /**
+     * Return all of the catalog number that exist is some order of the supplier
+     * @param supplierId the supplier id
+     * @return list of all of the catalog number that exist is some order of the supplier
+     */
+    public List<String> getPurchaseHistoryOfSupplier(int supplierId){
+        return  regularOrderMapper.getPurchaseHistoryOfSupplier(supplierId);
     }
 }
