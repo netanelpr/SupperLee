@@ -40,6 +40,7 @@ public abstract class MenuOfMenus extends Menu_Option {
 
         for(Pair<String, String> menuOp : optionToIndex){
             System.out.println(String.format("(%s) %s", menuOp.fst, menuOp.snd));
+
         }
     }
 

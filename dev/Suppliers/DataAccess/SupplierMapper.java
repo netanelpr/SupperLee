@@ -452,6 +452,10 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
         {
             return -1;
         }
+        if(contract==null|| contract.getDailyInfo()==null||contract.getProducts()==null||contract.getContractDetails()==null||contract.getContractDetails().length()==0)
+        {
+            return -1;
+        }
         String statement=insertContractStatement();
         try(PreparedStatement pstmt = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)){
 
@@ -667,7 +671,10 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
     public List<ContractProduct> getAllSupplierProducts(int supplierId) {
         ContractWithSupplier contractWithSupplier=this.getContractBySupplier(supplierId);
         List<ContractProduct> theProducts = new ArrayList<>();
-
+        if(contractWithSupplier==null)
+        {
+            return theProducts;
+        }
         try(PreparedStatement pstmt = conn.prepareStatement(getAllSupplierProductsStatement())){
             pstmt.setInt(1,contractWithSupplier.getContractID());
             ResultSet res = pstmt.executeQuery();

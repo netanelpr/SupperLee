@@ -25,8 +25,6 @@ public class SupplierMenu extends MenuOfMenus {
         addMenuOption("Get payment options", "gpo",new PaymentOptions(supplierManagment));
         addMenuOption("Update payment options", "upo",new updatePaymentOptions(supplierManagment));
 
-
-
         addMenuOption("Add contact info to supplier", "acis",new AddContactInfoToSupplier(supplierManagment));
         addMenuOption("Add contract to supplier", "acs",new AddContractToSupplier(supplierManagment, orderAndProductManagement));
         addMenuOption("Add product to supplier", "aps",new AddProductToSupplier(supplierManagment, orderAndProductManagement));
@@ -36,5 +34,6 @@ public class SupplierMenu extends MenuOfMenus {
         addMenuOption("Get all supplier products detalis", "gaspd" ,new GetAllSuppliersProductsDetalis(supplierManagment,orderAndProductManagement));
 
         addMenuOption("Get purchase history from supplier", "gph",new PurchaseHistoryFromSupplier(supplierManagment));
+
     }
 }
