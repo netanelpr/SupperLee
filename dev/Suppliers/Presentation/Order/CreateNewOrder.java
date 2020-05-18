@@ -37,7 +37,8 @@ public class CreateNewOrder extends Menu_Option {
             int numberOfProducts = readInt("Enter the numbers of product you want the order", reader);
 
             System.out.println("Enter barcode and amount\nformat:<Barcode> <amount>");
-            for(int i=0; i < numberOfProducts; i=i+1){
+            int index = 0;
+            while (index != numberOfProducts){
                 String[] productAndAmount = reader.readLine().split(" ");
 
                 if(productAndAmount.length != 2){
@@ -48,6 +49,7 @@ public class CreateNewOrder extends Menu_Option {
                 products.add(new ProductInOrderDTO(
                         Integer.parseInt(productAndAmount[0]),
                         Integer.parseInt(productAndAmount[1])));
+                index = index + 1;
             }
 
             Result<Integer> res = orderAndProductManagement.createNewSupplierOrder(supId, products, shopNumber);

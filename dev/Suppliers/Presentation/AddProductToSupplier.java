@@ -55,14 +55,8 @@ public class AddProductToSupplier extends Menu_Option {
             }
             System.out.println("Enter supplier's details about this product:");
 
-            //TODO name is here?
-            name=readString("Product's name:",reader);
-            if(name==null || name.length()<=0)
-            {
-                return;
-            }
             catalog_number=readString("Supplier's catalog number:",reader);
-            if(name==null || name.length()<=0)
+            if(catalog_number==null || catalog_number.length()<=0)
             {
                 return;
             }
@@ -88,6 +82,7 @@ public class AddProductToSupplier extends Menu_Option {
             if (!barcodes.contains(barcode)) {
                 System.out.println("This is a new product in the system enter the following info");
 
+                name = readString("Name", reader);
                 manufacture = readString("Manufacture", reader);
                 category = readString("Categoty", reader);
                 subCategoty = readString("sub categoty", reader);
@@ -100,7 +95,7 @@ public class AddProductToSupplier extends Menu_Option {
             ProductDiscountsDTO product = new ProductDiscountsDTO(barcode, discounts, originaPrice);
 
             if(newProduct) {
-                systemProduct = new SystemProduct(barcode, name, manufacture, category, subCategoty, size);
+                systemProduct = new SystemProduct(barcode, manufacture, name, category, subCategoty, size);
             }
 
             added = supplierManagment.addProductToContract(supId,new SupplierProductDTO(barcode, catalog_number, originaPrice, product, systemProduct));

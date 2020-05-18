@@ -92,6 +92,6 @@ public class ContractProduct {
             return originalPrice;
         }
 
-        return originalPrice * discounts.get(biggestDiscountAmount).getDiscount();
+        return originalPrice * (1 - discounts.get(biggestDiscountAmount).getDiscount());
     }
 }
