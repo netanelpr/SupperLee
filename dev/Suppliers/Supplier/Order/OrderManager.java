@@ -1,14 +1,13 @@
 package Suppliers.Supplier.Order;
 
 import DataAccess.SupInvDBConn;
+import Result.Result;
 import Suppliers.DataAccess.PeriodicalOrderMapper;
 import Suppliers.DataAccess.RegularOrderMapper;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class OrderManager {
@@ -98,8 +97,21 @@ public class OrderManager {
         return regularOrderMapper.getTheSupplierOfOrder(orderId);
     }
 
-    public List<String> removeProductsFromOrder(int orderId, List<String> catalog) {
-        return regularOrderMapper.removeProductsFromOrder(orderId, catalog);
+    public Result<List<String>> removeProductsFromOrder(int orderId, List<String> catalog) {
+        List<String> catalogs = regularOrderMapper.getAllOrderCatalogs(orderId);
+        if(catalogs == null){
+            return Result.makeFailure("No such order id");
+        }
+
+        Set<String> depdupeCatalogs = new LinkedHashSet<>(catalog);
+        catalog.clear();
+        catalog.addAll(depdupeCatalogs);
+
+        if(catalogs.size() == catalog.size()){
+            return Result.makeFailure("Cant remove all the products");
+        }
+
+        return Result.makeOk("Remove products", regularOrderMapper.removeProductsFromOrder(orderId, catalog));
     }
 
     public Order orderArrived(int orderId) {
