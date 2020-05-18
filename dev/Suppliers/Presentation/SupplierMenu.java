@@ -30,11 +30,10 @@ public class SupplierMenu extends MenuOfMenus {
         addMenuOption("Add contact info to supplier", new AddContactInfoToSupplier(supplierManagment));
         addMenuOption("Add contract to supplier", new AddContractToSupplier(supplierManagment, orderAndProductManagement));
         addMenuOption("Add product to supplier", new AddProductToSupplier(supplierManagment, orderAndProductManagement));
-        addMenuOption("Discount report", new GetAmountDiscountReport(supplierManagment));
 
+        addMenuOption("Discount report", new GetAmountDiscountReport(supplierManagment));
         addMenuOption("Get all supplier barcode", new GetAllSuppliersProducts(supplierManagment));
         addMenuOption("Get all supplier products detalis", new GetAllSuppliersProductsDetalis(supplierManagment,orderAndProductManagement));
-
         addMenuOption("Get purchase history from supplier", new PurchaseHistoryFromSupplier(supplierManagment));
     }
 }

@@ -44,6 +44,14 @@ public class AddContractToSupplier extends Menu_Option {
             String daysStr = reader.readLine();
             String[] dayArr = daysStr.toUpperCase().split(",");
             List<Days> days = StructUtils.getDaysList(dayArr);
+            if(days==null)
+            {
+                System.out.println("Problem adding supplying days");
+            }
+            else
+            {
+                System.out.println("Number of correct supplying days that was updated: "+days.size());
+            }
             List<SupplierProductDTO> supplierProductDTOS=startReadingProducts(reader,supId);
             if(supplierProductDTOS==null)
             {

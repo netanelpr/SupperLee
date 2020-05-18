@@ -23,8 +23,8 @@ public class GetAmountDiscountReport extends Menu_Option {
         int supId = readInt("Supplier ID", reader);
 
         List<ProductDiscountsDTO> discountDTOList = supplierManagment.getAmountDiscountReport(supId);
-        if(discountDTOList == null){
-            System.out.println("No such supplier ID or there isnt a contract with the supplier");
+        if(discountDTOList == null || discountDTOList.size()==0){
+            System.out.println("No such supplier ID or there is no contract with the supplier");
             return;
         }
 

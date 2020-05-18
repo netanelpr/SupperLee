@@ -27,7 +27,7 @@ public class WelcomeMenu {
         inventoryMenu.loadDB();
 
         while(!terminate){
-            System.out.println("1) Supplier menu\n2) Inventory menu\n3) Close");
+            System.out.println("[1] Supplier menu\n[2] Inventory menu\n[3] Close");
             System.out.print("Option: ");
 
             try {

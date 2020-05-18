@@ -44,7 +44,7 @@ public abstract class MenuOfMenus extends Menu_Option {
         System.out.println("\n+++++++++++++++++++++++++++++++++++++\n");
         System.out.println("Choose from the options");
         for(String menuString : optionToIndex){
-            System.out.println(String.format("%d) %s",index, menuString));
+            System.out.println(String.format("[%d] %s",index, menuString));
             index = index + 1;
         }
     }
