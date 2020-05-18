@@ -144,7 +144,7 @@ public class InvService implements myObservable {
 
             ansStr = myScanner.nextLine();
             if (ansStr.equals("p") || ansStr.equals("P")) {
-                int shop = Integer.parseInt(currInv.getShopName());
+                int shop = Integer.parseInt(currInv.getShopNum());
                 String orders = "";
                 notifyObserver("Open orders shop # " + shop + ":");
                 List<Integer> openOrders = myInv2Sup.receiveAllOpenOrders(shop);

@@ -124,6 +124,10 @@ public class Item implements myObservable {
     }
     private OrderItem issueOrderForShortageItem() {
         int quantityToOrder = (Integer.parseInt(freqBuySupply)*10 + 10) - totalQuantity;
+        if(quantityToOrder<0)
+        {
+            quantityToOrder=0;
+        }
         return new OrderItem(Integer.parseInt(id), quantityToOrder);
     }
     private void checkMinimum() {
