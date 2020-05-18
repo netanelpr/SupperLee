@@ -60,7 +60,7 @@ public class InvService implements myObservable {
             //region new_register loop
             notifyObserver("--------------\nWelcome to your Super-Lee inventory!\n--------------\n" +
                     "Please choose one of the following options:\n" +
-                    "\t(n) New shop \n \t(r) Register your shop");
+                    "\t[n] New shop \n \t[r] Register your shop \t[b] back to main menu");
             ansStr = myScanner.nextLine();
             if (ansStr.equals("n") || ansStr.equals("N")) {
                 this.currInv = newShop();
@@ -82,6 +82,10 @@ public class InvService implements myObservable {
                     notifyObserver(String.format("Welcome to shop # %s! : %s", ansStr, currInv.getShopName()));
                 }
             }
+            else if (ansStr.equals("b") || ansStr.equals("B")){
+                terminateInv = true;
+                terminateSys = true;
+            }
             else {
                 notifyObserver("wrong typing!");
                 terminateInv = true;
@@ -90,11 +94,11 @@ public class InvService implements myObservable {
             while (!terminateInv) {
                 notifyObserver("\n__'" + currInv.getShopName() + "' inventory__\n" +
                         "Please choose one of the following options:\n-------\n" +
-                        "\t(i) Items: update and reports quantities\n" +
-                        "\t(r) Records: update and reports\n" +
-                        "\t(d) Defectives and Expired Items: update and reports\n" +
-                        "\t(b) Back to suppliers-inventory menu\n" +
-                        "\t(c) Close\n");
+                        "\t[i] Items: update and reports quantities\n" +
+                        "\t[r] Records: update and reports\n" +
+                        "\t[d] Defectives and Expired Items: update and reports\n" +
+                        "\t[b] Back to suppliers-inventory menu\n" +
+                        "\t[c] Close\n");
                 ansStr = myScanner.nextLine();
                 if(ansStr.equals("i") || ansStr.equals("I")) {
                     terminate = itemsFunctions();
@@ -132,19 +136,19 @@ public class InvService implements myObservable {
         while(!terminateSys) {
             notifyObserver(
                     "\n__Items__\nPlease choose one of the following options:\n" +
-                            "\t(p) Print all open orders for your shop\n" +
-                            "\t(r) Receive arrived order to inventory \n" +
-                            "\t(u) Update quantities in your inventory after stocktaking \n" +
-                            "\t(gr) Get All Items Report \n" +
-                            "\t(gi) Get Item Report by id \n" +
-                            "\t(gc) Get Item Report By Category \n" +
-                            "\t(gs) Get Shortage Item Report  \n" +
-                            "\t(b) Back to inventory menu \n" +
-                            "\t(c) Close \n");
+                            "\t[p] Print all open orders for your shop\n" +
+                            "\t[r] Receive arrived order to inventory \n" +
+                            "\t[u] Update quantities in your inventory after stocktaking \n" +
+                            "\t[gr] Get All Items Report \n" +
+                            "\t[gi] Get Item Report by id \n" +
+                            "\t[gc] Get Item Report By Category \n" +
+                            "\t[gs] Get Shortage Item Report  \n" +
+                            "\t[b] Back to inventory menu \n" +
+                            "\t[c] Close \n");
 
             ansStr = myScanner.nextLine();
             if (ansStr.equals("p") || ansStr.equals("P")) {
-                int shop = Integer.parseInt(currInv.getShopName());
+                int shop = Integer.parseInt(currInv.getShopNum());
                 String orders = "";
                 notifyObserver("Open orders shop # " + shop + ":");
                 List<Integer> openOrders = myInv2Sup.receiveAllOpenOrders(shop);
@@ -238,11 +242,11 @@ public class InvService implements myObservable {
         while(!terminateSys) {
             notifyObserver(
                     "__Records__\nPlease choose one of the following options:\n" +
-                            "\t(s) Set New Price For Item \n" +
-                            "\t(gr) Get Cost & Price All Items Report \n" +
-                            "\t(gi) Get Cost & Price Item Report By Id \n" +
-                            "\t(b) Back to inventory menu \n" +
-                            "\t(c) Close \n");
+                            "\t[s] Set New Price For Item \n" +
+                            "\t[gr] Get Cost & Price All Items Report \n" +
+                            "\t[gi] Get Cost & Price Item Report By Id \n" +
+                            "\t[b] Back to inventory menu \n" +
+                            "\t[c] Close \n");
             ansStr = myScanner.nextLine();
                 if (ansStr.equals("s") || ansStr.equals("S")) {
                 setNewPrice();
@@ -282,11 +286,11 @@ public class InvService implements myObservable {
         while(!terminateSys) {
             notifyObserver(
                     "__Defectives-Expired__\nPlease choose one of the following options:n" +
-                            "\t(u) Update defective/expired Items in your inventory \n" +
-                            "\t(gr) Get All Defective and Expired Report\n" +
-                            "\t(gi) Get Defective and Expired Report By Id\n" +
-                            "\t(b) Back to inventory menu \n" +
-                            "\t(c) Close \n");
+                            "\t[u] Update defective/expired Items in your inventory \n" +
+                            "\t[gr] Get All Defective and Expired Report\n" +
+                            "\t[gi] Get Defective and Expired Report By Id\n" +
+                            "\t[b] Back to inventory menu \n" +
+                            "\t[c] Close \n");
             ansStr = myScanner.nextLine();
             if (ansStr.equals("u") || ansStr.equals("U")) {
                 updDef();
