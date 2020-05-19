@@ -75,7 +75,10 @@ public class itemsController implements myObservable {
     }
     public void getItemReportById(String id) {
 //        notifyObserver("enter id:");
-        items.get(id).itemStatus();
+        if(!items.containsKey(id))
+            notifyObserver("id isnt exist");
+        else
+            items.get(id).itemStatus();
     }
     public void getItemReportByCategory(String cat) {
 //        notifyObserver("enter category:");

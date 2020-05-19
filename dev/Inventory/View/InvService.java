@@ -154,8 +154,14 @@ public class InvService implements myObservable {
                 List<Integer> openOrders = myInv2Sup.receiveAllOpenOrders(shop);
                 for (Integer o : openOrders)
                     orders += (o + ", ");
-                orders.substring(0, orders.length()-2);
-                notifyObserver(orders);
+                if(openOrders.size() > 0) {
+                    orders = orders.substring(0, orders.length() - 2);
+                    notifyObserver(orders);
+                }
+                else
+                    notifyObserver("no open order for your shop...");
+
+
             }
             else if (ansStr.equals("r") || ansStr.equals("R")) {
                 notifyObserver("Type order id:");
@@ -285,7 +291,7 @@ public class InvService implements myObservable {
     private boolean defectivesFunctions() {
         while(!terminateSys) {
             notifyObserver(
-                    "__Defectives-Expired__\nPlease choose one of the following options:n" +
+                    "__Defectives-Expired__\nPlease choose one of the following options:\n" +
                             "\t[u] Update defective/expired Items in your inventory \n" +
                             "\t[gr] Get All Defective and Expired Report\n" +
                             "\t[gi] Get Defective and Expired Report By Id\n" +
@@ -348,11 +354,15 @@ public class InvService implements myObservable {
                 "old cost: " + oldCost + "$ -- new cost: " + newCost + "$ -- old price: " + oldPrice + "$\n" +
                 "would you like to change price?\n type: <y 'new_price' | n>");
         String ans = myScanner.nextLine();
+        while(!ans.equals("n") && ans.length() < 3){
+            notifyObserver("wrong input, type: <y 'new_price' | n>");
+            ans = myScanner.nextLine();
+        }
         if(!ans.equals("n")) {
             ans = ans.substring(2);//ans is the new price
             double newPrice = Double.parseDouble(ans);
             //newRecord = new Record(observers, id, name, newCost, LocalDate.now(), newPrice, LocalDate.now());
-            notifyObserver("price changed! new price for item # " + id + ": " + newPrice + "$\n");
+            notifyObserver("price changed to " + newPrice + "$\n");
             return newPrice;
         }
         else {

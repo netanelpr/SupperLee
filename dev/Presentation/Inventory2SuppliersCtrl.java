@@ -69,10 +69,9 @@ public class Inventory2SuppliersCtrl implements myObservable {
     }
 
     //TODO: understand how to make this work- which order id? of supplier? of inventory?
-    //TODO I delete the result because its didnt work
     public void receiveSupplierOrder(int orderID)
     {
-        OrderDTO theOrder=this.myOrderAndProductManagement.orderArrived(orderID);
+        OrderDTO theOrder = this.myOrderAndProductManagement.orderArrived(orderID);
         if(theOrder!=null)
         {
             myInvenoryService.getOrderFromSuppliers(theOrder);

@@ -111,7 +111,7 @@ public class Item implements myObservable {
         }
         else if(quanStrg == 0)
         {
-            minimum = true;
+            minimum = false;
             notifyObserver("|--------------------------------------------------\n" +
                     "|Alert!! this product ENDED in the storage. order more!");
         }

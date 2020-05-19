@@ -24,11 +24,17 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
 
     @Override
     protected String findStatement() {
+        //TODO: problem with regular supplier order - the order isnt exist there!
         return "SELECT S.*, PIC.barcode, P.contract_id, P.catalog_number, P.amount, P.price_per_unit\n" +
                 "FROM Supplier_order AS S JOIN Product_in_order AS P\n" +
                 "JOIN Product_in_contract as PIC\n" +
                 "ON S.id = P.order_id AND P.catalog_number =  PIC.catalog_number\n" +
                 "WHERE S.id IN Regular_supplier_order AND S.id = ?";
+
+        //SELECT S.*, PIC.barcode, P.contract_id, P.catalog_number, P.amount, P.price_per_unit
+        // FROM Supplier_order AS S JOIN Product_in_order AS P JOIN Product_in_contract as PIC
+        // ON S.id = P.order_id AND P.catalog_number =  PIC.catalog_number
+        // WHERE S.id IN Regular_supplier_order AND S.id = 2
     }
 
     @Override
