@@ -12,7 +12,7 @@ public class SupInvDBConn {
     public static Connection getInstance(){
         try {
             if(conn == null) {
-                conn = DriverManager.getConnection("jdbc:sqlite:DB/sup_inv.db");
+                conn = DriverManager.getConnection("jdbc:sqlite::resource:DB/sup_inv.db");
             }
             return conn;
         } catch (SQLException throwables) {
