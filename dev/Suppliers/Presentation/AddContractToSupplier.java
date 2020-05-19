@@ -60,12 +60,20 @@ public class AddContractToSupplier extends Menu_Option {
             }
             List<Integer> badProducts=this.supplierManagment.addContractToSupplier(supId,contractInfo,days,supplierProductDTOS);
 
-            System.out.println("Contract was added successfully to suppliers data base, together with his supplying days and products");
 
-            if(badProducts!=null && badProducts.size()!=0)
+            if(badProducts==null)
+            {
+                System.out.println("Problem detected, check if supplier exists, or if contract already exists");
+                return;
+            }
+            else if(badProducts!=null && badProducts.size()!=0)
             {
                 System.out.println("The following products weren't entered to supplier's data base (catalog number already exists):");
                 System.out.println(badProducts.toString());
+            }
+            else
+            {
+                System.out.println("Contract was added successfully to suppliers data base, together with his supplying days and products");
             }
         }
         catch (IOException ioe)
