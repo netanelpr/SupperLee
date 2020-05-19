@@ -108,7 +108,7 @@ public interface OrderAndProductManagement {
      * @param orderId the order id
      * @return all the details of order as described in the docs
      */
-    public OrderDTO orderArrived(int orderId);
+    public Result<OrderDTO> orderArrived(int orderId);
 
 }
 

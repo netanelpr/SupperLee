@@ -166,8 +166,11 @@ public class InvService implements myObservable {
             else if (ansStr.equals("r") || ansStr.equals("R")) {
                 notifyObserver("Type order id:");
                 ansStr = myScanner.nextLine();
-                myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr));
-                notifyObserver("order received successfully and arranged in inventory!");
+                if(myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr)))
+                {
+                    notifyObserver("order received successfully and arranged in inventory!");
+                }
+
             }
             else if (ansStr.equals("u") || ansStr.equals("U")) {
                 updInvWorker();
@@ -237,10 +240,16 @@ public class InvService implements myObservable {
                 notifyObserver(res.getMessage());
         }
     }
-    public void getOrderFromSuppliers(OrderDTO order){
+    public void getOrderFromSuppliers(Result<OrderDTO> order){
+        if(order.isFailure()){
+            notifyObserver(order.getMessage());
+        }
+        else {
+            currInv.updateInventorySuppliers(order.getValue(), this);
+        }
         //notifyObserver("-- Update Inventory Suppliers --");
         //HashMap<ItemDTO, Integer> supply = new HashMap<>();
-        currInv.updateInventorySuppliers(order, this);
+
     }
     //endregion
     //region records

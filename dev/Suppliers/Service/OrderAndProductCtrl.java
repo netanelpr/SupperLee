@@ -113,20 +113,20 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
      * @param orderId the order id
      * @return OrderDTO that contains the information abount the products, null if no such order id
      */
-    public OrderDTO orderArrived(int orderId){
+    public Result<OrderDTO> orderArrived(int orderId){
         List<ProductInOrderDTO> products = new ArrayList<>();
-        Order order;
+        Result<Order> order;
         order = orderManager.orderArrived(orderId);
 
-        if(order == null){
-            return null;
+        if(order.isFailure()){
+            return Result.makeFailure(order.getMessage());
         }
 
-        for(ProductInOrder product : order.getProducts()){
+        for(ProductInOrder product : order.getValue().getProducts()){
             products.add(ProductInOrderToDTO(product));
         }
 
-        return new OrderDTO(order.getShopNumber(), products);
+        return Result.makeOk("Ok", new OrderDTO(order.getValue().getShopNumber(), products));
     }
 
     public OrderShipDetails orderDetails(int orderId){
