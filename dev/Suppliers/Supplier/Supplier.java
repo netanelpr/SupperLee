@@ -61,15 +61,21 @@ public class Supplier {
         this.paymentInfo=new LinkedList<>();
         this.paymentInfo.add(paymentInfo);
         this.address=address;
-
-
-
         this.contacts = new LinkedList<>();
-
+        contract = null;
+    }
+    public Supplier(String name, String address, String incNum, String accountNumber){
+        this.name=name;
+        this.incNum=incNum;
+        this.accountNumber=accountNumber;
+        this.paymentInfo=new LinkedList<>();
+        this.address=address;
+        this.contacts = new LinkedList<>();
         contract = null;
     }
 
-    
+
+
 
     public boolean addContactInfo(String name, String phone, String email){
         this.contacts.add(new ContactInfo(name, phone, email,this.supId));

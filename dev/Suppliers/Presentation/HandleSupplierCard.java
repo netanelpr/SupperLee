@@ -35,6 +35,8 @@ public class HandleSupplierCard extends Menu_Option {
             phoneNumber = readString("Phone number", reader);
             email = readString("Email", reader);
 
+
+
             int supId = supplierManagment.createSupplierCard(name, incNum, address, bankAccount, payment,
                     contactName, phoneNumber, email);
             if (supId < 0) {

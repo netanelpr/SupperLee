@@ -103,7 +103,7 @@ public class AddProductToSupplier extends Menu_Option {
             if(added){
                 System.out.println("The product has been added");
             } else {
-                System.out.println("The product has not been added");
+                System.out.println("The product has not been added, due to duplicity of catalog number or lack of contract of this supplier");
             }
 
         } catch (NumberFormatException e){
@@ -122,7 +122,7 @@ public class AddProductToSupplier extends Menu_Option {
         else
         {
             String amount=readString("enter amount for discount: ",reader);
-            String discount=readString("enter discount precentage: ",reader);
+            String discount=readString("enter discount precentage from 0 to 1: ",reader);
             if(amount==null || discount==null || amount.length()<=0 || discount.length()<=0)
             {
                 return false;

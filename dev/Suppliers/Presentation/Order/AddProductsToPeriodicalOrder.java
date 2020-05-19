@@ -55,6 +55,10 @@ public class AddProductsToPeriodicalOrder extends Menu_Option {
                 if(res.getValue().size() > 0) {
                     System.out.println("Those product barcodes wasnt added " + res.getValue().toString());
                 }
+                else
+                {
+                    System.out.println("All products added successfully");
+                }
             } else {
                 System.out.println(res.getMessage());
             }
