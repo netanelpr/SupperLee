@@ -6,7 +6,9 @@ import Suppliers.DataAccess.PeriodicalOrderMapper;
 import Suppliers.DataAccess.RegularOrderMapper;
 import Suppliers.Structs.Days;
 import Suppliers.Structs.OrderStatus;
+import Suppliers.Structs.StructUtils;
 
+import java.sql.Struct;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -56,8 +58,7 @@ public class OrderManager {
         if(order == null || order.getStatus() == OrderStatus.Close){
             return false;
         }
-        //TODO: i deleted the ! sign in the if condition. Before it  was: !periodicalOrderMapper.isPeriodicalOrder(orderId)
-        //is it ok now?
+
         if(periodicalOrderMapper.isPeriodicalOrder(orderId)){
             return false;
         }
@@ -123,11 +124,17 @@ public class OrderManager {
 
                 //TODO need to use result and them too
                 long diff = order.getDeliveryDay().getTime() - Calendar.getInstance().getTime().getTime();
-                long days =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                long day =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 
-                if(days > 1){
+                if(day > 1){
                     return Result.makeFailure("Cant recive periodical order if it is not the same date");
                 }
+                List<Days> days = periodicalOrderMapper.getDeliveryDays(orderId);
+                int weekP = periodicalOrderMapper.getWeepPeriod(orderId);
+
+                Date deliveryDate = StructUtils.getTheNearestDateWithWeekPeriod(days, weekP);
+                //TODO to periodical order
+                regularOrderMapper.updateDeliveryDate(orderId,deliveryDate);
             }
         } else {
             if(order.getStatus() == OrderStatus.Close){

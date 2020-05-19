@@ -155,6 +155,7 @@ public class StructUtils {
     public static Date getTheNearestDateWithWeekPeriod(List<Days> days, int weekP){
         Calendar c = Calendar.getInstance();
         int nearestDayInDays = nearestDayInDays(days);
+        c.add(Calendar.DATE, 1);
 
         if(nearestDayInDays != 8){
 
