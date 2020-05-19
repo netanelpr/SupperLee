@@ -1,0 +1,4 @@
+amount,discount,catalog_number,contract_id
+500,0.1,11x,1
+500,0.2,22x,1
+1000,0.5,33xx,1

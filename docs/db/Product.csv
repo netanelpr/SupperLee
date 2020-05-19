@@ -1,0 +1,4 @@
+barcode,name,manufacture,category,subCategory,size,freqSupply,minPrice
+11,Apple,Galil,Fruit,FreshFruit,5gram,1,5.9
+22,Bannana,Golan,Fruit,FreshFruit,4,1,4.9
+33,Bamba,Osem,Dry,Snack,11,1,15.0
