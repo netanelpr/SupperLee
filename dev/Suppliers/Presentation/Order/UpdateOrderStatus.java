@@ -26,7 +26,7 @@ public class UpdateOrderStatus extends Menu_Option {
 
         String statusStr = null;
         try {
-            statusStr = readString("Enter order status", reader);
+            statusStr = readString("Enter order status:[OPEN/CLOSE]", reader);
         } catch (IOException e) {
             System.out.println("Error at reading");
         }

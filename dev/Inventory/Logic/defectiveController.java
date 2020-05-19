@@ -97,15 +97,18 @@ public class defectiveController implements myObservable {
             notifyObserver("no defectives - expired reports.");
     }
     public void getDefectivesReportById(String id) {
-        List<Defective> defectLst = defectives.get(id);
-        if(defectLst != null && defectLst.size() > 0) {
-            for (Defective dft : defectLst)
-                dft.defectiveItemStatus();
-            notifyObserver("|------------");
-        }
-        else
-            notifyObserver("no defectives - expired reports.");
 
+        if (!defectives.containsKey(id))
+            notifyObserver("this id doesnt exist in the shop");
+        else {
+            List<Defective> defectLst = defectives.get(id);
+            if (defectLst != null && defectLst.size() > 0) {
+                for (Defective dft : defectLst)
+                    dft.defectiveItemStatus();
+                notifyObserver("|------------");
+            } else
+                notifyObserver("no defectives - expired reports.");
+        }
     }
     //endregion
 

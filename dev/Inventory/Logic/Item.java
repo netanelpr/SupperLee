@@ -111,7 +111,7 @@ public class Item implements myObservable {
         }
         else if(quanStrg == 0)
         {
-            minimum = true;
+            minimum = false;
             notifyObserver("|--------------------------------------------------\n" +
                     "|Alert!! this product ENDED in the storage. order more!");
         }
@@ -123,11 +123,11 @@ public class Item implements myObservable {
         return minimum;
     }
     private OrderItem issueOrderForShortageItem() {
-        int quantityToOrder = (Integer.parseInt(freqBuySupply)*10 + 10) - totalQuantity;
-        if(quantityToOrder<0)
-        {
-            quantityToOrder=0;
-        }
+        int quantityToOrder;
+        if(quanStrg == 0)
+            quantityToOrder = (Integer.parseInt(freqBuySupply)*10 + 10);
+            else
+        quantityToOrder = (Integer.parseInt(freqBuySupply)*10 + 10) - totalQuantity;
         return new OrderItem(Integer.parseInt(id), quantityToOrder);
     }
     private void checkMinimum() {

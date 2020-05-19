@@ -28,7 +28,7 @@ public class WelcomeMenu {
 
         while(!terminate){
             System.out.println("Please choose one of the following options:");
-            System.out.println("(s) Supplier menu\n(i) Inventory menu\n(c) Close");
+            System.out.println("[s] Supplier menu\n[i] Inventory menu\n[c] Close");
             System.out.print("Option: ");
 
             try {

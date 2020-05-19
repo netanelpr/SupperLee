@@ -56,8 +56,9 @@ public class OrderManager {
         if(order == null || order.getStatus() == OrderStatus.Close){
             return false;
         }
-
-        if(!periodicalOrderMapper.isPeriodicalOrder(orderId)){
+        //TODO: i deleted the ! sign in the if condition. Before it  was: !periodicalOrderMapper.isPeriodicalOrder(orderId)
+        //is it ok now?
+        if(periodicalOrderMapper.isPeriodicalOrder(orderId)){
             return false;
         }
 
@@ -114,7 +115,7 @@ public class OrderManager {
         return Result.makeOk("Remove products", regularOrderMapper.removeProductsFromOrder(orderId, catalog));
     }
 
-    public Order orderArrived(int orderId) {
+    public Result<Order> orderArrived(int orderId) {
         Order order = getRegularOrder(orderId);
         if(order == null) {
             order = getPeriodicalOrder(orderId);
@@ -125,17 +126,17 @@ public class OrderManager {
                 long days =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 
                 if(days > 1){
-                    return null;
+                    return Result.makeFailure("Cant recive periodical order if it is not the same date");
                 }
             }
         } else {
             if(order.getStatus() == OrderStatus.Close){
-                return null;
+                return Result.makeFailure("The order is alerady closed");
             }
             updateOrderStatus(orderId, OrderStatus.Close);
         }
 
-        return order;
+        return Result.makeOk("Ok",order);
     }
 
     public List<Integer> getAllOpenOrders() {

@@ -62,7 +62,7 @@ public class AddContractToSupplier extends Menu_Option {
 
             System.out.println("Contract was added successfully to suppliers data base, together with his supplying days and products");
 
-            if(badProducts!=null || badProducts.size()!=0)
+            if(badProducts!=null && badProducts.size()!=0)
             {
                 System.out.println("The following products weren't entered to supplier's data base (catalog number already exists):");
                 System.out.println(badProducts.toString());

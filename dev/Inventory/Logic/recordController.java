@@ -109,9 +109,13 @@ public class recordController implements myObservable {
 
     //region record reports
     public void getRecordsReport(String id) {
-        List<Record> recordLst = records.get(id);
-        for (Record r : recordLst)
-            r.recordItemStatus();
+        if (!records.containsKey(id))
+            notifyObserver("this id doesnt exist in the shop");
+        else {
+            List<Record> recordLst = records.get(id);
+            for (Record r : recordLst)
+                r.recordItemStatus();
+        }
     }
     public void getGeneralRecordsReport() {
         for(String id : records.keySet())

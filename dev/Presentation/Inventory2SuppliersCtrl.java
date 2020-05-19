@@ -69,36 +69,19 @@ public class Inventory2SuppliersCtrl implements myObservable {
     }
 
     //TODO: understand how to make this work- which order id? of supplier? of inventory?
-    //TODO I delete the result because its didnt work
-    public void receiveSupplierOrder(int orderID)
+    public boolean receiveSupplierOrder(int orderID)
     {
-        OrderDTO theOrder=this.myOrderAndProductManagement.orderArrived(orderID);
+        Result<OrderDTO> theOrder = this.myOrderAndProductManagement.orderArrived(orderID);
         if(theOrder!=null)
         {
             myInvenoryService.getOrderFromSuppliers(theOrder);
+            return true;
+        }
+        else
+        {
+            return false;
         }
    }
-
-    public Result receiveSuppliersOrderTmp(int orderID){
-
-        List <ProductInOrderDTO> productsLss = new ArrayList();
-        ProductInOrderDTO item1 = new ProductInOrderDTO(1, 100, 7.34);
-        ProductInOrderDTO item2 = new ProductInOrderDTO(2, 20, 7.6);
-        ProductInOrderDTO item3 = new ProductInOrderDTO(3, 70, 798);
-        ProductInOrderDTO item4 = new ProductInOrderDTO(4, 200, 9);
-
-        productsLss.add(item1);
-        productsLss.add(item2);
-        productsLss.add(item3);
-        productsLss.add(item4);
-
-        OrderDTO order = new OrderDTO(1, productsLss);
-
-        myInvenoryService.getOrderFromSuppliers(order);
-
-        return null;
-    }
-
 
     public List<Integer> receiveAllOpenOrders(int shopNum)
     {

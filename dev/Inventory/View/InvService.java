@@ -60,7 +60,7 @@ public class InvService implements myObservable {
             //region new_register loop
             notifyObserver("--------------\nWelcome to your Super-Lee inventory!\n--------------\n" +
                     "Please choose one of the following options:\n" +
-                    "\t(n) New shop \n \t(r) Register your shop");
+                    "\t[n] New shop \n \t[r] Register your shop \n\t[b] back to main menu");
             ansStr = myScanner.nextLine();
             if (ansStr.equals("n") || ansStr.equals("N")) {
                 this.currInv = newShop();
@@ -82,6 +82,10 @@ public class InvService implements myObservable {
                     notifyObserver(String.format("Welcome to shop # %s! : %s", ansStr, currInv.getShopName()));
                 }
             }
+            else if (ansStr.equals("b") || ansStr.equals("B")){
+                terminateInv = true;
+                terminateSys = true;
+            }
             else {
                 notifyObserver("wrong typing!");
                 terminateInv = true;
@@ -90,11 +94,11 @@ public class InvService implements myObservable {
             while (!terminateInv) {
                 notifyObserver("\n__'" + currInv.getShopName() + "' inventory__\n" +
                         "Please choose one of the following options:\n-------\n" +
-                        "\t(i) Items: update and reports quantities\n" +
-                        "\t(r) Records: update and reports\n" +
-                        "\t(d) Defectives and Expired Items: update and reports\n" +
-                        "\t(b) Back to suppliers-inventory menu\n" +
-                        "\t(c) Close\n");
+                        "\t[i] Items: update and reports quantities\n" +
+                        "\t[r] Records: update and reports\n" +
+                        "\t[d] Defectives and Expired Items: update and reports\n" +
+                        "\t[b] Back to suppliers-inventory menu\n" +
+                        "\t[c] Close\n");
                 ansStr = myScanner.nextLine();
                 if(ansStr.equals("i") || ansStr.equals("I")) {
                     terminate = itemsFunctions();
@@ -132,15 +136,15 @@ public class InvService implements myObservable {
         while(!terminateSys) {
             notifyObserver(
                     "\n__Items__\nPlease choose one of the following options:\n" +
-                            "\t(p) Print all open orders for your shop\n" +
-                            "\t(r) Receive arrived order to inventory \n" +
-                            "\t(u) Update quantities in your inventory after stocktaking \n" +
-                            "\t(gr) Get All Items Report \n" +
-                            "\t(gi) Get Item Report by id \n" +
-                            "\t(gc) Get Item Report By Category \n" +
-                            "\t(gs) Get Shortage Item Report  \n" +
-                            "\t(b) Back to inventory menu \n" +
-                            "\t(c) Close \n");
+                            "\t[p] Print all open orders for your shop\n" +
+                            "\t[r] Receive arrived order to inventory \n" +
+                            "\t[u] Update quantities in your inventory after stocktaking \n" +
+                            "\t[gr] Get All Items Report \n" +
+                            "\t[gi] Get Item Report by id \n" +
+                            "\t[gc] Get Item Report By Category \n" +
+                            "\t[gs] Get Shortage Item Report  \n" +
+                            "\t[b] Back to inventory menu \n" +
+                            "\t[c] Close \n");
 
             ansStr = myScanner.nextLine();
             if (ansStr.equals("p") || ansStr.equals("P")) {
@@ -150,14 +154,23 @@ public class InvService implements myObservable {
                 List<Integer> openOrders = myInv2Sup.receiveAllOpenOrders(shop);
                 for (Integer o : openOrders)
                     orders += (o + ", ");
-                orders.substring(0, orders.length()-2);
-                notifyObserver(orders);
+                if(openOrders.size() > 0) {
+                    orders = orders.substring(0, orders.length() - 2);
+                    notifyObserver(orders);
+                }
+                else
+                    notifyObserver("no open order for your shop...");
+
+
             }
             else if (ansStr.equals("r") || ansStr.equals("R")) {
                 notifyObserver("Type order id:");
                 ansStr = myScanner.nextLine();
-                myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr));
-                notifyObserver("order received successfully and arranged in inventory!");
+                if(myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr)))
+                {
+                    notifyObserver("order received successfully and arranged in inventory!");
+                }
+
             }
             else if (ansStr.equals("u") || ansStr.equals("U")) {
                 updInvWorker();
@@ -227,10 +240,16 @@ public class InvService implements myObservable {
                 notifyObserver(res.getMessage());
         }
     }
-    public void getOrderFromSuppliers(OrderDTO order){
+    public void getOrderFromSuppliers(Result<OrderDTO> order){
+        if(order.isFailure()){
+            notifyObserver(order.getMessage());
+        }
+        else {
+            currInv.updateInventorySuppliers(order.getValue(), this);
+        }
         //notifyObserver("-- Update Inventory Suppliers --");
         //HashMap<ItemDTO, Integer> supply = new HashMap<>();
-        currInv.updateInventorySuppliers(order, this);
+
     }
     //endregion
     //region records
@@ -238,11 +257,11 @@ public class InvService implements myObservable {
         while(!terminateSys) {
             notifyObserver(
                     "__Records__\nPlease choose one of the following options:\n" +
-                            "\t(s) Set New Price For Item \n" +
-                            "\t(gr) Get Cost & Price All Items Report \n" +
-                            "\t(gi) Get Cost & Price Item Report By Id \n" +
-                            "\t(b) Back to inventory menu \n" +
-                            "\t(c) Close \n");
+                            "\t[s] Set New Price For Item \n" +
+                            "\t[gr] Get Cost & Price All Items Report \n" +
+                            "\t[gi] Get Cost & Price Item Report By Id \n" +
+                            "\t[b] Back to inventory menu \n" +
+                            "\t[c] Close \n");
             ansStr = myScanner.nextLine();
                 if (ansStr.equals("s") || ansStr.equals("S")) {
                 setNewPrice();
@@ -281,12 +300,12 @@ public class InvService implements myObservable {
     private boolean defectivesFunctions() {
         while(!terminateSys) {
             notifyObserver(
-                    "__Defectives-Expired__\nPlease choose one of the following options:n" +
-                            "\t(u) Update defective/expired Items in your inventory \n" +
-                            "\t(gr) Get All Defective and Expired Report\n" +
-                            "\t(gi) Get Defective and Expired Report By Id\n" +
-                            "\t(b) Back to inventory menu \n" +
-                            "\t(c) Close \n");
+                    "__Defectives-Expired__\nPlease choose one of the following options:\n" +
+                            "\t[u] Update defective/expired Items in your inventory \n" +
+                            "\t[gr] Get All Defective and Expired Report\n" +
+                            "\t[gi] Get Defective and Expired Report By Id\n" +
+                            "\t[b] Back to inventory menu \n" +
+                            "\t[c] Close \n");
             ansStr = myScanner.nextLine();
             if (ansStr.equals("u") || ansStr.equals("U")) {
                 updDef();
@@ -344,11 +363,15 @@ public class InvService implements myObservable {
                 "old cost: " + oldCost + "$ -- new cost: " + newCost + "$ -- old price: " + oldPrice + "$\n" +
                 "would you like to change price?\n type: <y 'new_price' | n>");
         String ans = myScanner.nextLine();
+        while(!ans.equals("n") && ans.length() < 3){
+            notifyObserver("wrong input, type: <y 'new_price' | n>");
+            ans = myScanner.nextLine();
+        }
         if(!ans.equals("n")) {
             ans = ans.substring(2);//ans is the new price
             double newPrice = Double.parseDouble(ans);
             //newRecord = new Record(observers, id, name, newCost, LocalDate.now(), newPrice, LocalDate.now());
-            notifyObserver("price changed! new price for item # " + id + ": " + newPrice + "$\n");
+            notifyObserver("price changed to " + newPrice + "$\n");
             return newPrice;
         }
         else {
