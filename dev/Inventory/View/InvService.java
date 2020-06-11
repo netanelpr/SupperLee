@@ -11,6 +11,7 @@ import Inventory.Persistence.DTO.ItemDTO;
 import Inventory.Persistence.Mappers.InventoriesMapper;
 import Result.Result;
 import Suppliers.Service.OrderDTO;
+import Suppliers.Service.ProductInOrderDTO;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -166,10 +167,58 @@ public class InvService implements myObservable {
             else if (ansStr.equals("r") || ansStr.equals("R")) {
                 notifyObserver("Type order id:");
                 ansStr = myScanner.nextLine();
-                if(myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr)))
+                Result<OrderDTO> currOrder = myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr));
+                if(currOrder != null)
                 {
-                    notifyObserver("order received successfully and arranged in inventory!");
+                    if(currOrder.isOk()) {
+                        OrderDTO order = currOrder.getValue();
+                        notifyObserver("Check order validation:\n [v] valid order, order to Inventory.\n [n] not valid order, need to update\n");
+                        ansStr = myScanner.nextLine();
+                        if (ansStr.equals("v") || ansStr.equals("V")) {}
+                        else if (ansStr.equals("n") || ansStr.equals("N")) {
+                            notifyObserver("Order details:\n");
+                            for (ProductInOrderDTO pdto : order.productInOrderDTOList) {
+                                notifyObserver("#" + pdto.barcode + "; amount: " + pdto.amount + ", price: " + pdto.price);
+                            }
+                            notifyObserver("\nYou may have found defective or missing products on order.\n" +
+                                    "Enter in loop the product barcode and correct amount of items you have arranged in the inventory.\n" +
+                                    "enter in this format: \n\t<barcode> <amount>\n\t<barcode> <amount>\n\t\t....'0' when finish");
+
+                            int id, correctAmount;
+                            String currItem = myScanner.nextLine();
+                            String[] splited;
+                            while(!currItem.equals("0"))
+                            {
+                                splited = currItem.split(" ");
+                                if(splited.length == 2) {
+                                    if(checkValidInputNumber(splited[1]) && checkValidInputNumber(splited[0])) {
+                                        id = Integer.parseInt(splited[0]);
+                                        correctAmount = Integer.parseInt(splited[1]);
+                                        order.updateAmountInOrderByID(id, correctAmount);
+                                    }
+                                    else
+                                        notifyObserver("Wrong type, amount its means number");
+                                }
+                                else
+                                    notifyObserver("Wrong type, check your format typing");
+                                currItem = myScanner.nextLine();
+                            }
+                            notifyObserver("finish updating inventory, sending shortage order to suppliers if needed.");
+                        }
+                        else {
+                            notifyObserver("Wrong input!\n");
+                        }
+                        myInv2Sup.getOrderFromSuppliers(order);
+                    }
+                    else{
+                        notifyObserver(currOrder.getMessage());
+                    }
+
                 }
+                // if(myInv2Sup.receiveSupplierOrder(Integer.parseInt(ansStr)))
+                //{
+                //    notifyObserver("order received successfully and arranged in inventory!");
+                //}
 
             }
             else if (ansStr.equals("u") || ansStr.equals("U")) {
@@ -203,6 +252,14 @@ public class InvService implements myObservable {
             terminateSys = false;
         return terminate;
     }
+
+    private boolean checkValidInputNumber(String num_str) {
+        for(int i=0; i<num_str.length(); i++)
+            if(num_str.charAt(i) < '0' || num_str.charAt(i) > '9')
+                return false;
+        return true;
+    }
+
     private void updInvWorker() {
         String id;
         int quanMissStock;
@@ -220,13 +277,18 @@ public class InvService implements myObservable {
             splited = currItem.split(" ");
             if(splited.length == 3) {
                 id = splited[0];
-                quanMissStock = Integer.parseInt(splited[1]);
-                quanMissShop = Integer.parseInt(splited[2]);
-                currOrderItem = currInv.updateInventoryWorkers(id, quanMissStock, quanMissShop);
-                if(currOrderItem != null && currOrderItem.getId() == -1)
-                    notifyObserver("wrong id - item isn't exist, type again");
-                else if (currOrderItem != null)
-                    shortageOrder.addItemToOrder(currOrderItem);
+                if(!checkValidInputNumber(splited[1]) || !checkValidInputNumber(splited[2])){
+                    notifyObserver("Wrong type, amount its means number");
+                }
+                else {
+                    quanMissStock = Integer.parseInt(splited[1]);
+                    quanMissShop = Integer.parseInt(splited[2]);
+                    currOrderItem = currInv.updateInventoryWorkers(id, quanMissStock, quanMissShop);
+                    if(currOrderItem != null && currOrderItem.getId() == -1)
+                        notifyObserver("wrong id - item isn't exist, type again");
+                    else if (currOrderItem != null)
+                        shortageOrder.addItemToOrder(currOrderItem);
+                }
             }
             else
                 notifyObserver("You probably type the wrong format or id that isn't exist, type again in the format:\n" +
@@ -240,16 +302,10 @@ public class InvService implements myObservable {
                 notifyObserver(res.getMessage());
         }
     }
-    public void getOrderFromSuppliers(Result<OrderDTO> order){
-        if(order.isFailure()){
-            notifyObserver(order.getMessage());
-        }
-        else {
-            currInv.updateInventorySuppliers(order.getValue(), this);
-        }
+    public void getOrderFromSuppliers(OrderDTO order){
+        currInv.updateInventorySuppliers(order, this);
         //notifyObserver("-- Update Inventory Suppliers --");
         //HashMap<ItemDTO, Integer> supply = new HashMap<>();
-
     }
     //endregion
     //region records

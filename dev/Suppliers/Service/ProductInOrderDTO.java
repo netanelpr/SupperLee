@@ -16,4 +16,8 @@ public class ProductInOrderDTO {
         this.amount = amount;
         this.price = price;
     }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 }

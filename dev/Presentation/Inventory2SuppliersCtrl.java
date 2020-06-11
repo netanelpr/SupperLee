@@ -69,18 +69,23 @@ public class Inventory2SuppliersCtrl implements myObservable {
     }
 
     //TODO: understand how to make this work- which order id? of supplier? of inventory?
-    public boolean receiveSupplierOrder(int orderID)
+    public Result<OrderDTO> receiveSupplierOrder(int orderID)
     {
-        Result<OrderDTO> theOrder = this.myOrderAndProductManagement.orderArrived(orderID);
-        if(theOrder!=null)
-        {
-            myInvenoryService.getOrderFromSuppliers(theOrder);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return this.myOrderAndProductManagement.orderArrived(orderID);
+        //Result<OrderDTO> theOrder = this.myOrderAndProductManagement.orderArrived(orderID);
+        //if(theOrder!=null)
+        //{
+        //    myInvenoryService.getOrderFromSuppliers(theOrder);
+        //    return true;
+        //}
+        //else
+        //{
+        //    return false;
+        //}
+   }
+
+   public void getOrderFromSuppliers(OrderDTO theOrder){
+       myInvenoryService.getOrderFromSuppliers(theOrder);
    }
 
     public List<Integer> receiveAllOpenOrders(int shopNum)

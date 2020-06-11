@@ -12,4 +12,13 @@ public class OrderDTO {
         this.productInOrderDTOList = productInOrderDTOS;
     }
 
+    public void updateAmountInOrderByID(int barcode, int amount){
+        for (ProductInOrderDTO pd : productInOrderDTOList) {
+            if(pd.barcode == barcode)
+                pd.setAmount(amount);
+        }
+    }
+
+
+
 }
