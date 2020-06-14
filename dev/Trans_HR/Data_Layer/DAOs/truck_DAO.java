@@ -1,11 +1,10 @@
 package Trans_HR.Data_Layer.DAOs;
 
 
+import Sup_Inv.DataAccess.SupInvDBConn;
 import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
-import Trans_HR.Data_Layer.Connection;
 import Trans_HR.Data_Layer.Dummy_objects.dummy_License;
 import Trans_HR.Data_Layer.Dummy_objects.dummy_Truck;
-import javafx.util.Pair;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +20,7 @@ public class truck_DAO {
                 String.format("VALUES ('%s', '%s', '%s', '%.2f', '%.2f');", truck.getSN(), truck.getLicense_number(), truck.getModel(), truck.getWeight(), truck.getMax_weight());
 
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,7 +32,7 @@ public class truck_DAO {
                     "(\"TruckSN\", \"LicenseSN\")\n" +
                     String.format("VALUES ('%d', '%d');",truck.getSN(),SNLicense);
             try {
-                PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query_type);
+                PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query_type);
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -45,10 +44,10 @@ public class truck_DAO {
         for(int SNLicense: license)
         {
             String query_type="INSERT INTO \"main\".\"Truck_License\"\n" +
-                    "(\"TruckSN\", \"LicenseSN\")\n" +
+                    "(\"TruckSN\", \"License`N\")\n" +
                     String.format("VALUES ('%d', '%d');",SN, SNLicense);
             try {
-                PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query_type);
+                PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query_type);
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -64,7 +63,7 @@ public class truck_DAO {
         String query="DELETE FROM \"main\".\"Truck_License\"\n" +
                 String.format("WHERE TruckSN = '%d';",SN);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,7 +72,7 @@ public class truck_DAO {
         String query_type="DELETE FROM \"main\".\"Trucks\"\n" +
                 String.format("WHERE SN = '%d';",SN);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query_type);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query_type);
             statement.executeUpdate();
         } catch (SQLException e) {
             insertTruckLicense(license, SN);
@@ -87,7 +86,7 @@ public class truck_DAO {
                 String.format("WHERE TruckSN = '%d';",SN);
         List<Integer> license = new LinkedList<>();
         try {
-            Statement stmt = Connection.getInstance().getConn().createStatement();
+            Statement stmt = SupInvDBConn.getInstance().createStatement();
             ResultSet rs  = stmt.executeQuery(query2);
             while (rs.next()) {
                 license.add(rs.getInt("LicenseSN"));
@@ -105,7 +104,7 @@ public class truck_DAO {
         String selectQuery = String.format("select * from License where LicenseType = '%s'",type);
         try {
 
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             int SN= rs2.getInt("SN");
             return SN;
@@ -121,7 +120,7 @@ public class truck_DAO {
         String selectQuery = "select * from License";
         List<dummy_License> list=new LinkedList<>();
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             while (rs2.next()){
                 dummy_License add= new dummy_License(rs2.getInt("SN"),
@@ -139,7 +138,7 @@ public class truck_DAO {
         String query="SELECT * FROM Trucks\n" +
         String.format("WHERE SN = '%d';",SN);
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             if(!rs2.next())
                 return null;
@@ -152,7 +151,7 @@ public class truck_DAO {
                         String.format("WHERE TruckSN = '%d';",dummy_truck.getSN());
                 List<Integer> license = new LinkedList<>();
                 try {
-                    Statement stmt = Connection.getInstance().getConn().createStatement();
+                    Statement stmt = SupInvDBConn.getInstance().createStatement();
                     ResultSet rs  = stmt.executeQuery(query2);
                     while (rs.next()) {
                         license.add(rs.getInt("LicenseSN"));
@@ -180,7 +179,7 @@ public class truck_DAO {
         List<dummy_Truck> output = new LinkedList<>();
         String query="SELECT * FROM Trucks";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             while (rs2.next()) {
                 dummy_Truck dummy_truck = new dummy_Truck(rs2.getInt("SN"),rs2.getInt("LicenseNumber"),
@@ -191,7 +190,7 @@ public class truck_DAO {
                         String.format("WHERE TruckSN = '%d';",dummy_truck.getSN());
                 List<Integer> license = new LinkedList<>();
                 try {
-                    Statement stmt = Connection.getInstance().getConn().createStatement();
+                    Statement stmt = SupInvDBConn.getInstance().createStatement();
                     ResultSet rs  = stmt.executeQuery(query2);
                     while (rs.next()) {
                         license.add(rs.getInt("LicenseSN"));
@@ -214,7 +213,7 @@ public class truck_DAO {
     public Integer getNextSN(){
         String query="SELECT MAX(SN) FROM Trucks";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             if(!rs2.next())
                 return 1;
@@ -232,7 +231,7 @@ public class truck_DAO {
         String query = "SELECT TransportationSN FROM Transportation_Truck\n" +
                 String.format("WHERE TruckSN = '%d';", SN);
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2 = stmt2.executeQuery(query);
             while (rs2.next()){
                 items.add(rs2.getInt("TransportationSN"));
@@ -272,11 +271,11 @@ public class truck_DAO {
         String result;
         try {
 
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             sn=rs2.getInt("LicenseSN");
             String query1=String.format("SELECT LicenseType FROM License WHERE SN = '%d' ",sn);
-            Statement stmt = Connection.getInstance().getConn().createStatement();
+            Statement stmt = SupInvDBConn.getInstance().createStatement();
             ResultSet rs  = stmt.executeQuery(query1);
             result=rs.getString("License_Type");
             return result;

@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Contact_info(
 			ON UPDATE CASCADE
 );
 
---Suppliers.Supplier contract
+--Sup_Inv.Suppliers.Supplier contract
 CREATE TABLE IF NOT EXISTS Contract(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	contract_info TEXT NOT NULL,
@@ -166,9 +166,9 @@ FROM Supplier AS S JOIN Contract AS C
 	JOIN Product_in_contract AS PIC
 	ON S.id = C.supplier_id AND C.id = PIC.contract_id;
 
---Inventory
+--Sup_Inv.Inventory
 
-CREATE TABLE Inventory(
+CREATE TABLE Sup_Inv.Inventory(
 	id	TEXT,
 	name	TEXT,
 	PRIMARY KEY(id)

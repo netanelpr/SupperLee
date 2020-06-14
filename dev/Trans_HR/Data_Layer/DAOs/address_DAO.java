@@ -1,6 +1,7 @@
 package Trans_HR.Data_Layer.DAOs;
 
-import Trans_HR.Data_Layer.Connection;
+import Sup_Inv.DataAccess.SupInvDBConn;
+//import Trans_HR.Data_Layer.Connection;
 import Trans_HR.Data_Layer.Dummy_objects.dummy_Address;
 
 import java.sql.PreparedStatement;
@@ -17,7 +18,7 @@ public class address_DAO {
                 "(\"SN\", \"City\", \"Street\", \"Number\")\n" +
                 String.format("VALUES ('%d', '%s', '%s', '%d');", dummy_address.getSN(), dummy_address.getCity(), dummy_address.getStreet(), dummy_address.getNumber());
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(address_query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(address_query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -28,7 +29,7 @@ public class address_DAO {
         String address_query="DELETE FROM \"main\".\"Address\"\n" +
                 String.format("WHERE SN = '%d';",SN);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(address_query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(address_query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,7 +51,7 @@ public class address_DAO {
     public dummy_Address select(int Sn){
         String query="SELECT * FROM Address";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             return new dummy_Address(rs2.getString("City"),rs2.getString("Street"),rs2.getInt("Number"),rs2.getInt("SN"));
         } catch (SQLException e) {
@@ -62,7 +63,7 @@ public class address_DAO {
     private void executeQuery(String query){
         try {
             // java.sql.Date sqlDate = new java.sql.Date(worker.getStart_Date().getTime());
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
             //statement.setDate(7,sqlDate);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -80,7 +81,7 @@ public class address_DAO {
                 " ORDER BY SN DESC\n" +
                 " LIMIT 1;";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             rs2.next();
             return rs2.getInt("SN");
@@ -94,7 +95,7 @@ public class address_DAO {
     public Integer getNextSN(){
         String query="SELECT MAX(SN) FROM Address";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             if(!rs2.next())
                 return 1;
@@ -110,7 +111,7 @@ public class address_DAO {
         List<dummy_Address> output = new LinkedList<>();
         String query="SELECT * FROM Address";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             while (rs2.next()) {
                 dummy_Address dummy_address = new dummy_Address(rs2.getInt("SN"),rs2.getString("City"),rs2.getString("Street"),rs2.getInt("Number"));

@@ -1,10 +1,10 @@
 package Tests;
 
 
-import Suppliers.Structs.OrderStatus;
-import Suppliers.Supplier.*;
-import Suppliers.Supplier.Order.OrderManager;
-import Suppliers.Supplier.Order.ProductInOrder;
+import Sup_Inv.Suppliers.Structs.OrderStatus;
+import Sup_Inv.Suppliers.Supplier.*;
+import Sup_Inv.Suppliers.Supplier.Order.OrderManager;
+import Sup_Inv.Suppliers.Supplier.Order.ProductInOrder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package Trans_HR.Data_Layer.DAOs;
 
 
-import Trans_HR.Data_Layer.Connection;
+import Sup_Inv.DataAccess.SupInvDBConn;
 import Trans_HR.Data_Layer.Dummy_objects.dummy_Items_File;
 import Trans_HR.Data_Layer.Dummy_objects.dummy_Transportation;
 
@@ -38,7 +38,7 @@ public class transportation_DAO {
                         transportation.getLeaving_time(), transportation.getTruck_weight());
 
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query_items);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query_items);
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -49,7 +49,7 @@ public class transportation_DAO {
                 "(\"TruckSN\", \"TransportationSN\")\n" +
                 String.format("VALUES ('%d', '%d');", transportation.getTrucksn(), transportation.getId());
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(truck_query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(truck_query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class transportation_DAO {
                 String.format("VALUES ('%d', '%d');", transportation.getDriverSn(), transportation.getId());
 
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(insert_driver);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(insert_driver);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -71,7 +71,7 @@ public class transportation_DAO {
                     "(\"SupplierSN\", \"TransportationSN\")\n" +
                     String.format("VALUES ('%d', '%d');", transportation.getSuppliers().get(i) ,transportation.getId());
             try {
-                PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query_supplier);
+                PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query_supplier);
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -83,7 +83,7 @@ public class transportation_DAO {
                     "(\"StoreSN\", \"TransportationSN\")\n" +
                     String.format("VALUES ('%d', '%d');", transportation.getStores().get(i), transportation.getId());
             try {
-                PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query_store);
+                PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query_store);
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -95,7 +95,7 @@ public class transportation_DAO {
                     "(\"ItemFileSN\", \"TransportationSN\")\n" +
                     String.format("VALUES ('%d', '%d');", transportation.getItemsFile().get(i), transportation.getId());
             try {
-                PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query_items1);
+                PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query_items1);
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -110,7 +110,7 @@ public class transportation_DAO {
                 String.format("SET TruckWeight = '%.2f'" +
                         "where SN = '%d';", wieght ,SN);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query_items);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query_items);
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -127,7 +127,7 @@ public class transportation_DAO {
                 "On Transportations.SN = Transportation_Truck.TransportationSN\n" +
                 String.format("WHERE SN = '%d';",SN);;
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             if(rs2.next()==false)
                 return null;
@@ -159,7 +159,7 @@ public class transportation_DAO {
                 "On Transportations.SN = Transportation_Truck.TransportationSN\n";
         List<dummy_Transportation> dummy_transportations=new LinkedList<>();
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             while (rs2.next()){
                 String d = rs2.getString("Date");
@@ -184,7 +184,7 @@ public class transportation_DAO {
     public Integer getNextSN(){
         String query="SELECT MAX(SN) FROM Transportations";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             if(rs2.next()==false)
                 return 1;
@@ -201,7 +201,7 @@ public class transportation_DAO {
         String query = "SELECT ItemFileSN FROM Transportation_ItemFile\n" +
                 String.format("WHERE TransportationSN = '%d';", SN);
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2 = stmt2.executeQuery(query);
             while (rs2.next()){
                 items.add(rs2.getInt("ItemFileSN"));
@@ -217,7 +217,7 @@ public class transportation_DAO {
         String query = "SELECT SupplierSN FROM Transportation_Supplier\n" +
                 String.format("WHERE TransportationSN = '%d';", SN);
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2 = stmt2.executeQuery(query);
             while (rs2.next()){
                 suppliers1.add(rs2.getInt("SupplierSN"));
@@ -233,7 +233,7 @@ public class transportation_DAO {
         String query = "SELECT StoreSN FROM Transportation_Store\n" +
                 String.format("WHERE TransportationSN = '%d';", SN);
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2 = stmt2.executeQuery(query);
             while (rs2.next()){
                 suppliers1.add(rs2.getInt("StoreSN"));
@@ -253,7 +253,7 @@ public class transportation_DAO {
         List<Integer> list=new LinkedList<>();
         try {
 
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             while (rs2.next()) {
 
@@ -274,7 +274,7 @@ public class transportation_DAO {
         List<Integer> list=new LinkedList<>();
         try {
 
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             while (rs2.next()) {
 
@@ -292,7 +292,7 @@ public class transportation_DAO {
         String delete_driver=String.format("DELETE from Transportation_Store where" +
                 " StoreSN = '%d' and TransportationSN = '%d'",store,transportationID);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(delete_driver);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(delete_driver);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -304,7 +304,7 @@ public class transportation_DAO {
         String delete_driver=String.format("DELETE from Transportation_Supplier where" +
                 " SupplierSN = '%d' and TransportationSN = '%d'",supplier,transportationID);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(delete_driver);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(delete_driver);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -318,7 +318,7 @@ public class transportation_DAO {
         String delete_driver=String.format("DELETE from Transportation_Driver where" +
                 " Transportation_Driver.TransportationSN = '%d'",sn);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(delete_driver);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(delete_driver);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -330,7 +330,7 @@ public class transportation_DAO {
         String delete_trucks=String.format("DELETE from Transportation_Truck where " +
                 "Transportation_Truck.TransportationSN = '%d'",sn);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(delete_trucks);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(delete_trucks);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -341,7 +341,7 @@ public class transportation_DAO {
     public void delete(int sn) {
         String selectQuery = String.format("DELETE from Transportations where Transportations.SN = '%d'",sn);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(selectQuery);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(selectQuery);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -349,14 +349,14 @@ public class transportation_DAO {
 
         String delete_stores=String.format("DELETE from Transportation_Store where Transportation_Store.TransportationSN = '%d'",sn);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(delete_stores);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(delete_stores);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         String delete_suppliers=String.format("DELETE from Transportation_Supplier where Transportation_Supplier.TransportationSN = '%d'",sn);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(delete_suppliers);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(delete_suppliers);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -364,7 +364,7 @@ public class transportation_DAO {
 
         String delete_items=String.format("DELETE from Transportation_ItemFile where Transportation_ItemFile.TransportationSN = '%d'",sn);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(delete_items);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(delete_items);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -378,7 +378,7 @@ public class transportation_DAO {
         List<dummy_Items_File> list1=new LinkedList<>();
         try {
 
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             while (rs2.next()) {
                 list.add(rs2.getInt("TransportationSN"));
@@ -396,7 +396,7 @@ public class transportation_DAO {
         Integer id_return=-1;
         try {
 
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             id_return=rs2.getInt("DriverSN");
 
@@ -415,7 +415,7 @@ public class transportation_DAO {
                         "where TransportationSN = '%d';", driver ,transport);
 
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(insert_driver);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(insert_driver);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -427,7 +427,7 @@ public class transportation_DAO {
                 String.format("SET TruckSN = '%d'" +
                         "where TransportationSN = '%d';", truck ,transport);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(truck_query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(truck_query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -437,7 +437,7 @@ public class transportation_DAO {
     public void remove_Driver(int transport,int driver){
         String delete_driver=String.format("DELETE from Transportation_Driver where Transportation_Driver.TransportationSN = '%d'",transport);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(delete_driver);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(delete_driver);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -447,7 +447,7 @@ public class transportation_DAO {
     public void remove_Truck(int transport,int truck){
         String delete_trucks=String.format("DELETE from Transportation_Truck where Transportation_Truck.TransportationSN = '%d'",transport);
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(delete_trucks);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(delete_trucks);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
