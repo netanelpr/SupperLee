@@ -15,7 +15,7 @@ public class ProductsManager {
 
     private ProductsManager(){
         //productMap = new HashMap<>();
-        productMapper = new ProductMapper(SupInvDBConn.getInstance());
+        productMapper = new ProductMapper(SupInvDBConn.getInstance().getConn());
     }
 
     public static ProductsManager getInstance(){

@@ -27,7 +27,7 @@ public class defectiveController implements myObservable {
         observers = new ArrayList<>();
         this.register(o);
         this.shopNum = shopNum;
-        this.myDefectiveMapper = new DefectivesMapper(SupInvDBConn.getInstance());
+        this.myDefectiveMapper = new DefectivesMapper(SupInvDBConn.getInstance().getConn());
 
     }
     public HashMap<String, List<Defective>> getDefectives() {

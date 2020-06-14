@@ -27,8 +27,8 @@ public class itemsController implements myObservable {
         observers = new ArrayList<>();
         this.shopNum = shopNum;
         this.register(o);
-        this.myItemToProductMapper = new ItemToProductMapper(SupInvDBConn.getInstance());
-        this.myItemMapper = new ItemsMapper(SupInvDBConn.getInstance());
+        this.myItemToProductMapper = new ItemToProductMapper(SupInvDBConn.getInstance().getConn());
+        this.myItemMapper = new ItemsMapper(SupInvDBConn.getInstance().getConn());
     }
 
     public HashMap<String, Item> getItems() {

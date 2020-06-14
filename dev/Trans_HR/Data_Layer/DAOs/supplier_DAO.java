@@ -19,7 +19,7 @@ public class supplier_DAO {
                 String.format("VALUES ('%d', '%s', '%s', '%s', '%d', '%d');", supplier.getSN(), supplier.getName(), supplier.getPhone(), supplier.getContactName(), supplier.getAddress_Sn() , supplier.getAreaSn());
 
         try {
-            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().getConn().prepareStatement(query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,7 +30,7 @@ public class supplier_DAO {
         String query="SELECT * FROM Supplieres\n"+
                 String.format("WHERE SN = '%d';",SN);;
         try {
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             if(!rs2.next())
                 return null;
@@ -47,7 +47,7 @@ public class supplier_DAO {
         List<dummy_supplier> output = new LinkedList<>();
         String query="SELECT * FROM Supplieres";
         try {
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             while (rs2.next()) {
                 dummy_supplier dummy_supplier = new dummy_supplier(rs2.getInt("SN"),rs2.getString("Name"),rs2.getString("Phone"),
@@ -64,7 +64,7 @@ public class supplier_DAO {
     public Integer getNextSN(){
         String query="SELECT MAX(SN) FROM Supplieres";
         try {
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
 //            System.out.println(rs2.wasNull());
             if(!rs2.next())

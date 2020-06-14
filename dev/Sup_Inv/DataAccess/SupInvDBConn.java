@@ -1,34 +1,40 @@
 package Sup_Inv.DataAccess;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class SupInvDBConn {
-    private static Connection conn;
 
-    private SupInvDBConn(){ }
+    private static java.sql.Connection conn;
+    private static SupInvDBConn SupInvDBConn = null;
 
-    public static Connection getInstance(){
-        try {
-            if(conn == null) {
-                conn = DriverManager.getConnection("jdbc:sqlite::resource:DB/sup_inv.db");
-            }
-            return conn;
-        } catch (SQLException throwables) {
-            //TODO close the program if the conn get here
-            throwables.printStackTrace();
+    public static SupInvDBConn getInstance(){
+        if(SupInvDBConn == null){
+            SupInvDBConn = new SupInvDBConn();
         }
-        return null;
+        return SupInvDBConn;
     }
 
-    public static void closeConn(){
-        if(conn != null) {
+    private SupInvDBConn(){
+        try{
+            String url = "jdbc:sqlite::resource:DB/db.db";
+            conn = DriverManager.getConnection(url);
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }finally {
             try {
-                conn.close();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                if (SupInvDBConn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
             }
         }
+    }
+
+
+    public java.sql.Connection getConn() {
+        return conn;
     }
 }

@@ -15,7 +15,7 @@ public class SupplierManager {
     private SupplierMapper supplierMapper;
 
     private SupplierManager(){
-        supplierMapper = new SupplierMapper(SupInvDBConn.getInstance());
+        supplierMapper = new SupplierMapper(SupInvDBConn.getInstance().getConn());
     }
 
     public static SupplierManager getInstance(){

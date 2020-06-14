@@ -10,17 +10,6 @@ import Trans_HR.Interface_Layer.Workers.SystemInterfaceWorkers;
 import java.util.Scanner;
 
 import static Presentation.WelcomeMenu.chooseJob;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-//import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
-//import org.junit.platform.launcher.Launcher;
-//import org.junit.platform.launcher.LauncherDiscoveryRequest;
-//import org.junit.platform.launcher.core.LauncherFactory;
-//
-//import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
-//import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
-//import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 public class HR {
 

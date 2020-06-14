@@ -19,7 +19,7 @@ public class item_file_DAO {
                 String.format("VALUES ('%d', '%d', '%d');", items_file.getSn(),items_file.getStore_id(), items_file.getSupplier_id());
 
         try {
-            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().getConn().prepareStatement(query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,7 +30,7 @@ public class item_file_DAO {
                     "(\"SN\", \"ItemFileSN\", \"Amount\", \"ItemName\")\n" +
                     String.format("VALUES ('%d', '%d', '%d', '%s');", i, items_file.getSn(), items_file.getItems().get(i).getValue(), items_file.getItems().get(i).getKey());
             try {
-                PreparedStatement statement = SupInvDBConn.getInstance().prepareStatement(query_items);
+                PreparedStatement statement = SupInvDBConn.getInstance().getConn().prepareStatement(query_items);
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -42,7 +42,7 @@ public class item_file_DAO {
         String query="SELECT * FROM ItemFiles\n"+
                 String.format("WHERE SN = '%d';", SN);;
         try {
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             if(!rs2.next())
                 return null;
@@ -54,7 +54,7 @@ public class item_file_DAO {
                         String.format("WHERE ItemFileSN = '%d' ORDER BY SN ASC;", items_file.getSn());
                 List<Pair<String,Integer>> Items = new LinkedList<>();
                 try {
-                    Statement stmt = SupInvDBConn.getInstance().createStatement();
+                    Statement stmt = SupInvDBConn.getInstance().getConn().createStatement();
                     ResultSet rs  = stmt.executeQuery(query2);
                     while (rs.next()) {
                         Pair<String,Integer> pair = new Pair<>(rs.getString("ItemName"),rs.getInt("Amount"));
@@ -78,7 +78,7 @@ public class item_file_DAO {
         List<dummy_Items_File> output = new LinkedList<>();
         String query="SELECT * FROM ItemFiles";
         try {
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             while (rs2.next()) {
                 dummy_Items_File items_file = new dummy_Items_File(rs2.getInt("SN"),
@@ -89,7 +89,7 @@ public class item_file_DAO {
                         String.format("WHERE ItemFileSN = '%d' ORDER BY SN ASC;", items_file.getSn());
                 List<Pair<String,Integer>> Items = new LinkedList<>();
                 try {
-                    Statement stmt = SupInvDBConn.getInstance().createStatement();
+                    Statement stmt = SupInvDBConn.getInstance().getConn().createStatement();
                     ResultSet rs  = stmt.executeQuery(query2);
                     while (rs.next()) {
                         Pair<String,Integer> pair = new Pair<>(rs.getString("ItemName"),rs.getInt("Amount"));
@@ -112,7 +112,7 @@ public class item_file_DAO {
     public Integer getNextSN(){
         String query="SELECT MAX(SN) FROM ItemFiles";
         try {
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             if(!rs2.next())
                 return 1;
@@ -131,7 +131,7 @@ public class item_file_DAO {
                 String.format("WHERE ItemFileSN = '%d';",SN);
         System.out.println(query);
         try {
-            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().getConn().prepareStatement(query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -140,7 +140,7 @@ public class item_file_DAO {
         String query2="DELETE FROM \"main\".\"ItemFiles\"\n" +
                 String.format("WHERE SN = '%d';",SN);
         try {
-            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query2);
+            PreparedStatement statement= SupInvDBConn.getInstance().getConn().prepareStatement(query2);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

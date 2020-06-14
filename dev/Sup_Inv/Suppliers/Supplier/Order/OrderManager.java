@@ -19,8 +19,8 @@ public class OrderManager {
     private PeriodicalOrderMapper periodicalOrderMapper;
 
     private OrderManager(){
-        regularOrderMapper = new RegularOrderMapper(SupInvDBConn.getInstance());
-        periodicalOrderMapper = new PeriodicalOrderMapper(SupInvDBConn.getInstance());
+        regularOrderMapper = new RegularOrderMapper(SupInvDBConn.getInstance().getConn());
+        periodicalOrderMapper = new PeriodicalOrderMapper(SupInvDBConn.getInstance().getConn());
     }
 
     public static OrderManager getInstance(){

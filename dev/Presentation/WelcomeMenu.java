@@ -29,7 +29,7 @@ public class WelcomeMenu {
 
     public void newStart() throws Buisness_Exception {
             chooseStore_start(sc);
-            SupInvDBConn.closeConn();
+            //SupInvDBConn.closeConn();
     }
 
     public static void chooseStore_start(Scanner sc) throws Buisness_Exception {

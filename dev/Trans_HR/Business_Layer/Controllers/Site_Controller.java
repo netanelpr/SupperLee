@@ -59,7 +59,7 @@ public class Site_Controller {
                            String phone, String site_area)
             throws Buisness_Exception{
         Service service = Service.getInstance();
-        if (site_type.equals("store")) {
+        if (site_type.toLowerCase().equals("store")) {
             Address address = new Address(city, street, Integer.parseInt(number),getAddressSnFactory());
             Store store = new Store(name, phone, name_of_contact, address, service.getAreaByName(site_area));
             service.getHashStoresMap().put(store.getId(), store);

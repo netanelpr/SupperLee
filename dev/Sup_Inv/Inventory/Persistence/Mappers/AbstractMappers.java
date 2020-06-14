@@ -9,7 +9,7 @@ public abstract class AbstractMappers<T> {
     private Connection myDB;
 
     public AbstractMappers() {
-        this.myDB = SupInvDBConn.getInstance();
+        this.myDB = SupInvDBConn.getInstance().getConn();
     }
 
     //region getters&setters

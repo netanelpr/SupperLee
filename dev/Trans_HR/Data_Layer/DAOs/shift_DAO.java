@@ -24,7 +24,7 @@ public class shift_DAO {
         java.sql.Date sqlDate = new java.sql.Date(shift.getDate().getTime());
 
         try {
-            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().getConn().prepareStatement(query);
             statement.setDate(1,sqlDate);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -48,7 +48,7 @@ public class shift_DAO {
         String sql = "select * from Shift where SN =" + shiftSN;
 
         try {
-            Statement stmt = SupInvDBConn.getInstance().createStatement();
+            Statement stmt = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs  = stmt.executeQuery(sql);
             return new dummy_Shift(rs.getDate("Date"),rs.getInt("ShiftType"),rs.getInt("ManagerSN"),rs.getInt("SN"),rs.getInt("StoreSN"));
         }
@@ -62,7 +62,7 @@ public class shift_DAO {
         List<dummy_Shift> shiftsToReturn = new LinkedList<>();
         String selectQuery = "select * from Shift where StoreSN =" + StoreSN;
         try {
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             while (rs2.next()) {
                 dummy_Shift toADD = new dummy_Shift(rs2.getDate("Date"),rs2.getInt
@@ -82,7 +82,7 @@ public class shift_DAO {
         String constrainsQuery = String.format("select * from Shift_Worker where SNShift = %d", ShiftSN);
         List<Integer> workers = new LinkedList<>();
         try {
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(constrainsQuery);
             while (rs2.next()) {
                 int toADD =rs2.getInt("SNWorker");
@@ -101,7 +101,7 @@ public class shift_DAO {
 
         try {
 
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(sql_workers);
             while (rs2.next()) {
                 workers.add(rs2.getInt("SNWorker"));
@@ -115,7 +115,7 @@ public class shift_DAO {
     private void executeQuery(String query){
         try {
             // java.sql.Date sqlDate = new java.sql.Date(worker.getStart_Date().getTime());
-            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().getConn().prepareStatement(query);
             //statement.setDate(7,sqlDate);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -139,7 +139,7 @@ public class shift_DAO {
                 " LIMIT 1;";
 
         try {
-            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().getConn().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             while (rs2.next()) {
                 return rs2.getInt("SN");

@@ -31,7 +31,7 @@ public class recordController implements myObservable {
         observers = new ArrayList<>();
         this.register(o);
         this.shopNum = shopNum;
-        this.myRecordMapper = new RecordsMapper(SupInvDBConn.getInstance());
+        this.myRecordMapper = new RecordsMapper(SupInvDBConn.getInstance().getConn());
     }
     public HashMap<String, List<Record>> getRecords() {
         return records;
