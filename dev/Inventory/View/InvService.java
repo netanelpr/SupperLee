@@ -461,7 +461,6 @@ public class InvService implements myObservable {
         for (String inv : superLeeInvs.keySet()) {
             superLeeInvs.get(inv).loadInvDB();
         }
-
     }
     //endregion
 }

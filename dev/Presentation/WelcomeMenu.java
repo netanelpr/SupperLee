@@ -26,6 +26,9 @@ public class WelcomeMenu {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         inventoryMenu.loadDB();
 
+
+
+
         while(!terminate){
             System.out.println("Please choose one of the following options:");
             System.out.println("[s] Supplier menu\n[i] Inventory menu\n[c] Close");
