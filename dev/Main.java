@@ -1,9 +1,10 @@
 import Presentation.WelcomeMenu;
 import Tests.Visual.SupplierPeriodicalOrder;
+import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
 
 public class Main {
-    public static void main (String[] argv){
+    public static void main (String[] argv) throws Buisness_Exception {
         WelcomeMenu menu = new WelcomeMenu();
-        menu.start();
+        menu.newStart();
     }
 }

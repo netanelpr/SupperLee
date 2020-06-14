@@ -1,5 +1,6 @@
 package Trans_HR.Presentation_Layer.Workers;
 
+import Presentation.CurrStore;
 import Trans_HR.Business_Layer.Service;
 import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
 import Trans_HR.Business_Layer.Workers.Utils.InfoObject;
@@ -8,6 +9,7 @@ import Trans_HR.Interface_Layer.Workers.SystemInterfaceWorkers;
 
 import java.util.Scanner;
 
+import static Presentation.WelcomeMenu.chooseJob;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -170,7 +172,7 @@ public class HR {
         SystemInterfaceWorkers.getInstance().clearDB();
     }
 
-    private static void chooseStore(Scanner sc) throws Buisness_Exception{
+    public static void chooseStore(Scanner sc) throws Buisness_Exception{
         try {
             Mapper.getInstance().init();
         }
@@ -196,10 +198,12 @@ public class HR {
                     sc.next();
                 }
                 userChoose = sc.nextInt();
+                CurrStore.getInstance().setStore_id(userChoose);
                 if (!(SystemInterfaceWorkers.getInstance().setCurrentStore(userChoose))) {
                     chooseStore(sc);
                 } else{
-                    workingLoop(sc);
+                    //workingLoop(sc);
+
                 }
             }
         } else if (userChoose == 2) {
@@ -236,7 +240,7 @@ public class HR {
         }
     }
 
-    private static void workingLoop(Scanner sc) throws Buisness_Exception {
+    public static void workingLoop(Scanner sc) throws Buisness_Exception {
         printMenu();
         while (!sc.hasNextInt()) {
             System.out.println("Invalid input, please try again");
@@ -258,7 +262,7 @@ public class HR {
                     displayWorkers(sc);
                     break;
                 case 0: // quit
-                    chooseStore(sc);
+                    chooseJob(sc);
                 default:
                     System.out.println("Invalid input, please try again");
             }
