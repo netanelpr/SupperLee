@@ -1,6 +1,6 @@
 package Tests;
 
-import Suppliers.Supplier.*;
+import Sup_Inv.Suppliers.Supplier.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

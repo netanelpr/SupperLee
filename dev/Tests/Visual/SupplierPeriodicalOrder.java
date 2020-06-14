@@ -1,14 +1,12 @@
 package Tests.Visual;
 
-import Result.Result;
-import Suppliers.Service.OrderAndProductCtrl;
-import Suppliers.Service.OrderAndProductManagement;
-import Suppliers.Structs.Days;
-import Suppliers.Structs.StructUtils;
-import Suppliers.Supplier.Order.OrderManager;
-import Suppliers.Supplier.Order.PeriodicalOrder;
-import Suppliers.Supplier.Order.ProductInOrder;
-import Suppliers.Supplier.SupplierSystem;
+import Sup_Inv.Result.Result;
+import Sup_Inv.Suppliers.Structs.Days;
+import Sup_Inv.Suppliers.Structs.StructUtils;
+import Sup_Inv.Suppliers.Supplier.Order.OrderManager;
+import Sup_Inv.Suppliers.Supplier.Order.PeriodicalOrder;
+import Sup_Inv.Suppliers.Supplier.Order.ProductInOrder;
+import Sup_Inv.Suppliers.Supplier.SupplierSystem;
 
 import java.util.Calendar;
 import java.util.Date;

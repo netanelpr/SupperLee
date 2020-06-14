@@ -111,7 +111,7 @@ public class Transportation_Controller {
             service.upload_Transportation(transportationID);
             List<String> output= new LinkedList<>();
             Transportation transportation = service.getHashTransportation().get(transportationID);
-            output.add("Suppliers:");
+            output.add("Sup_Inv.Suppliers:");
             for(Supplier supplier:transportation.getSuppliers())
             {
                 String line =supplier.getId()+". "+supplier.getName()+".";

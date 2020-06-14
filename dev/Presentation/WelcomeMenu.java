@@ -1,8 +1,8 @@
 package Presentation;
 
-import DataAccess.SupInvDBConn;
-import Inventory.View.InvService;
-import Suppliers.Presentation.MainMenu;
+import Sup_Inv.DataAccess.SupInvDBConn;
+import Sup_Inv.Inventory.View.InvService;
+import Sup_Inv.Suppliers.Presentation.MainMenu;
 import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
 import Trans_HR.Data_Layer.Mapper;
 import Trans_HR.Interface_Layer.Workers.SystemInterfaceWorkers;
@@ -12,7 +12,6 @@ import Trans_HR.Presentation_Layer.Workers.HR;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class WelcomeMenu {
@@ -27,10 +26,10 @@ public class WelcomeMenu {
         inventoryMenu = InvService.getInstance();
     }
 
+
     public void newStart() throws Buisness_Exception {
-        while (true) {
             chooseStore_start(sc);
-        }
+            SupInvDBConn.closeConn();
     }
 
     public static void chooseStore_start(Scanner sc) throws Buisness_Exception {
@@ -39,8 +38,11 @@ public class WelcomeMenu {
         } catch (Exception e) {
 
         }
+        System.out.println("--------------\nWelcome to your Super-Lee!\n--------------\n");
         System.out.println("1. Choose store");
-        System.out.println("2. Add store");
+        System.out.println("2. Add new store");
+        System.out.println("3. Nevermind...");
+        System.out.println("0. Exit");
         while (!sc.hasNextInt()) {
             System.out.println("Invalid input, please try again");
             sc.next();
@@ -91,8 +93,11 @@ public class WelcomeMenu {
                 System.out.println("Input error\n");
                 chooseStore_start(sc);
             }
-        } else if (userChoose == 0) {
-            throw new Buisness_Exception("Going back");
+        } else if (userChoose == 3) {
+            transportNoNeedShopNum();
+        }
+        else if (userChoose == 0) {
+            return;
         } else {
             System.out.println("Invalid input, please try again");
             chooseStore_start(sc);
@@ -103,7 +108,7 @@ public class WelcomeMenu {
 
         while (true) {
             System.out.println("--------------\nPlease choose your job title:");
-            System.out.println("[h] HR\n[s] Storekeeper\n[m] Manager\n[l] Logistic mg\n[b] back");
+            System.out.println("[h] HR\n[s] Storekeeper\n[m] Manager\n[b] back");
             System.out.print("Option: ");
             while (!sc.hasNext()) {
                 System.out.println("Invalid input, please try again");
@@ -119,7 +124,30 @@ public class WelcomeMenu {
             else if(ansStr.equals("m") || ansStr.equals("M")) {
                 managerMenu();
             }
-            else if(ansStr.equals("l") || ansStr.equals("L")) {
+//            else if(ansStr.equals("l") || ansStr.equals("L")) {
+//                TransportationMenu.Menu();
+//            }
+            else if(ansStr.equals("b") || ansStr.equals("B")) {
+                chooseStore_start(sc);
+            }
+            else {
+                System.out.println("Invalid input, please try again");
+            }
+        }
+    }
+
+    private static void transportNoNeedShopNum() throws Buisness_Exception {
+        while (true) {
+            System.out.println("--------------\nYou didn't choose store number, if its mistake, press back\n" +
+                    "Please choose your job title:");
+            System.out.println("[l] Logistic mg\n[b] back");
+            System.out.print("Option: ");
+            while (!sc.hasNext()) {
+                System.out.println("Invalid input, please try again");
+                sc.next();
+            }
+            String ansStr = sc.next();
+            if(ansStr.equals("l") || ansStr.equals("L")) {
                 TransportationMenu.Menu();
             }
             else if(ansStr.equals("b") || ansStr.equals("B")) {
@@ -160,20 +188,29 @@ public class WelcomeMenu {
                 System.out.println("Invalid option");
             }
         }
-        SupInvDBConn.closeConn();
     }
 
     private static void managerMenu() throws Buisness_Exception {
         while (true) {
-            System.out.println("--------------\n");
+            System.out.println("--------------MANAGER MENU-----------\n");
             System.out.println("\t[s] Shift report\n" +
-                    "           \t[w] Workers report\n" +
+                            "\t[w] Workers report\n" +
                             "\t[gr] Get All Items Report \n" +
                             "\t[gi] Get Item Report by id \n" +
                             "\t[gc] Get Item Report By Category \n" +
                             "\t[gs] Get Shortage Item Report\n" +
                             "\t[ss] Show transportation\n" +
                             "\t[st] Show trucks\n" +
+                            "\t[gas] Get all suppliers\n" +
+                            "\t[gac] Get all supplier's contacts\n" +
+                            "\t[gpo] Get payment options \n" +
+                            "\t[dr]	Discount report\n" +
+                            "\t[gasb] Get all supplier barcode\n" +
+                            "\t[gaspd] Get all supplier products detalis\n" +
+                            "\t[gph] Get purchase history from supplier\n" +
+                            "\t[gaodi] Get all open order ids\n" +
+                            "\t[gapoo] Get all periodical open order ids\n" +
+                            "\t[gord] Get order details\n" +
                             "\t[b] back\n");
             System.out.print("Option: ");
             while (!sc.hasNext()) {
@@ -181,29 +218,20 @@ public class WelcomeMenu {
                 sc.next();
             }
             String ansStr = sc.next().toUpperCase();
-            if(ansStr.equals("S")) {
-
+            if(ansStr.equals("S") || ansStr.equals("W")) {
+                //TODO HR
             }
-            else if(ansStr.equals("W")){
-
+            else if(ansStr.equals("GR") || ansStr.equals("GI") || ansStr.equals("GC") || ansStr.equals("GS") ||
+                    ansStr.equals("RGR") || ansStr.equals("RGI") || ansStr.equals("DGR") || ansStr.equals("DGI")) {
+                inventoryMenu.invMngMenu(ansStr);
             }
-            else if(ansStr.equals("GR")) {
-
+            else if(ansStr.equals("SS") || ansStr.equals("ST")) {
+                //TODO Transportation
             }
-            else if(ansStr.equals("GI")) {
-
-            }
-            else if(ansStr.equals("GC")) {
-
-            }
-            else if(ansStr.equals("GS")) {
-
-            }
-            else if(ansStr.equals("SS")) {
-
-            }
-            else if(ansStr.equals("ST")) {
-
+            else if(ansStr.equals("gas") || ansStr.equals("gac") ||ansStr.equals("gpo") ||ansStr.equals("dr") ||
+                    ansStr.equals("gasb") ||ansStr.equals("gaspd") ||ansStr.equals("gph") ||ansStr.equals("gaodi") ||
+                    ansStr.equals("gapoo") ||ansStr.equals("gord")) {
+                //TODO Suppliers
             }
             else if(ansStr.equals("b") || ansStr.equals("B")) {
                 chooseJob(sc);

@@ -1,15 +1,12 @@
 package Tests;
 
-import Suppliers.Supplier.*;
+import Sup_Inv.Suppliers.Supplier.*;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 class SupplierTest {

@@ -1,6 +1,6 @@
 package Tests;
 
-import Suppliers.Supplier.ContactInfo;
+import Sup_Inv.Suppliers.Supplier.ContactInfo;
 import org.junit.Assert;
 import org.junit.*;
 import org.junit.jupiter.api.AfterEach;

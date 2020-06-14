@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "Items" (
 	"qStorage"	TEXT,
 	PRIMARY KEY("shopNum","id")
 );
-CREATE TABLE IF NOT EXISTS "Inventory" (
+CREATE TABLE IF NOT EXISTS "Sup_Inv.Inventory" (
 	"id"	TEXT,
 	"name"	TEXT,
 	PRIMARY KEY("id")
@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS "Supplier" (
 	"paymentInfo"	TEXT NOT NULL,
 	"inc_number"	TEXT NOT NULL UNIQUE
 );
-INSERT INTO "Inventory" ("id","name") VALUES ('1','Macolet');
+INSERT INTO "Sup_Inv.Inventory" ("id","name") VALUES ('1','Macolet');
 INSERT INTO "Supplier_paymentOptions" ("sup_id","paymentOption") VALUES (1,'Cash');
 INSERT INTO "Product" ("barcode","name","manufacture","category","subCategory","size","freqSupply","minPrice") VALUES (11,'Osem','Bamba','Snack','Snack','10',0,0.0);
 INSERT INTO "Product" ("barcode","name","manufacture","category","subCategory","size","freqSupply","minPrice") VALUES (88,'elit','Kifkef','Choco','sweet','5',0,0.0);

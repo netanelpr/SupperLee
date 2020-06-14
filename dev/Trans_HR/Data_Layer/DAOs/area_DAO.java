@@ -1,7 +1,7 @@
 package Trans_HR.Data_Layer.DAOs;
 
 
-import Trans_HR.Data_Layer.Connection;
+import Sup_Inv.DataAccess.SupInvDBConn;
 import Trans_HR.Data_Layer.Dummy_objects.dummy_Area;
 
 import java.sql.PreparedStatement;
@@ -25,7 +25,7 @@ public class area_DAO {
     private void executeQuery(String query) {
         try {
             // java.sql.Date sqlDate = new java.sql.Date(worker.getStart_Date().getTime());
-            PreparedStatement statement = Connection.getInstance().getConn().prepareStatement(query);
+            PreparedStatement statement = SupInvDBConn.getInstance().prepareStatement(query);
             //statement.setDate(7,sqlDate);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -45,7 +45,7 @@ public class area_DAO {
         List<dummy_Area> output = new LinkedList<>();
         String query="SELECT * FROM Area";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             while (rs2.next()) {
                 dummy_Area dummy_area = new dummy_Area(rs2.getInt("SN"),rs2.getString("AreaName"));

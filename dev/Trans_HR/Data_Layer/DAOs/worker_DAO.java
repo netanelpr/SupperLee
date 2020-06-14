@@ -1,7 +1,7 @@
 package Trans_HR.Data_Layer.DAOs;
 
+import Sup_Inv.DataAccess.SupInvDBConn;
 import Trans_HR.Business_Layer.Workers.Modules.Worker.Worker;
-import Trans_HR.Data_Layer.Connection;
 import Trans_HR.Data_Layer.Dummy_objects.dummy_Worker;
 import javafx.util.Pair;
 
@@ -10,10 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class worker_DAO {
     /*public void insert(Worker workerToInsert){
@@ -50,7 +48,7 @@ public class worker_DAO {
 
         try {
             java.sql.Date sqlDate = new java.sql.Date(worker.getStart_Date().getTime());
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
             statement.setDate(1,sqlDate);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -80,7 +78,7 @@ public class worker_DAO {
         Worker workerToReturn = null;
         String selectQuery = String.format("select * from Workers where Workers.SN = '%d'",workerSN);
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             rs2.next();
             dummy_Worker toADD = new dummy_Worker(rs2.getInt("SN"),rs2.getInt
@@ -98,7 +96,7 @@ public class worker_DAO {
         List<dummy_Worker> listToReturn = new LinkedList<>();
         String selectQuery = "select * from Workers where Workers.Job_Title = 'Driver' Or Workers.Job_Title = 'driver' ";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             while(rs2.next()) {
                 dummy_Worker toADD = new dummy_Worker(rs2.getInt("SN"), rs2.getInt
@@ -119,7 +117,7 @@ public class worker_DAO {
         List<dummy_Worker> workerToReturn = new LinkedList<>();
         String selectQuery = String.format("select * from Workers where StoreSN = '%d'", storeSN);
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             while (rs2.next()) {
                dummy_Worker toADD = new dummy_Worker(rs2.getInt("SN"),rs2.getInt
@@ -138,7 +136,7 @@ public class worker_DAO {
         String constrainsQuery = String.format("select * from Constrains where WorkerSN = %d", workerSN);
         List<Pair<Integer,Integer>> constraints = new LinkedList<>();
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(constrainsQuery);
             while (rs2.next()) {
                 Pair<Integer,Integer> toADD =new Pair<>(rs2.getInt("DayOfWeek"),rs2.getInt
@@ -156,7 +154,7 @@ public class worker_DAO {
         String constrainsQuery = String.format("select * from Driver_License where DriverSN = %d", workerSN);
         List<Integer> license = new LinkedList<>();
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(constrainsQuery);
             while (rs2.next()) {
                 int toADD =rs2.getInt("LicenseSN");
@@ -247,7 +245,7 @@ public class worker_DAO {
     private void executeNOexception(String query){
         try {
             // java.sql.Date sqlDate = new java.sql.Date(worker.getStart_Date().getTime());
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
             //statement.setDate(7,sqlDate);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -258,7 +256,7 @@ public class worker_DAO {
     private void executeQuery(String query){
         try {
            // java.sql.Date sqlDate = new java.sql.Date(worker.getStart_Date().getTime());
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
             //statement.setDate(7,sqlDate);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -296,7 +294,7 @@ public class worker_DAO {
                 " ORDER BY SN DESC\n" +
                 " LIMIT 1;";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             rs2.next();
             return rs2.getInt("SN");

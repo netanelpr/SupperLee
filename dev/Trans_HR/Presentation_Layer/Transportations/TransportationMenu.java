@@ -19,7 +19,7 @@ public class TransportationMenu {
         String choice = "0";
         do {
             System.out.println("Please choose your option:");
-            String[] A = new String[]{"Transportations", "Suppliers", "Trucks","Quit"};
+            String[] A = new String[]{"Transportations", "Sup_Inv/Suppliers", "Trucks","Quit"};
             //  String choice = null;
             for (int i = 0; i < A.length; i++) {
                 System.out.println(i + 1 + ". " + A[i]);
@@ -70,7 +70,7 @@ public class TransportationMenu {
             }
 
             else if (choice.equals("2")) {
-                String[] sites = new String[]{"Add new Suppliers", "Show Suppliers List", "Cancel"};
+                String[] sites = new String[]{"Add new Sup_Inv.Suppliers", "Show Sup_Inv.Suppliers List", "Cancel"};
                 String option = null;
                 for (int i = 0; i < sites.length; i++) {
                     System.out.println(i + 1 + ". " + sites[i]);

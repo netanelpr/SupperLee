@@ -2,7 +2,7 @@ package Trans_HR.Data_Layer.DAOs;
 
 
 
-import Trans_HR.Data_Layer.Connection;
+import Sup_Inv.DataAccess.SupInvDBConn;
 import Trans_HR.Data_Layer.Dummy_objects.dummy_Address;
 import Trans_HR.Data_Layer.Dummy_objects.dummy_store;
 
@@ -25,7 +25,7 @@ public class store_DAO {
                 String.format("VALUES ('%d', '%s', '%s', '%d');", store.getAddress_Sn(), store.getCity(), store.getStreet(), store.getNumber());
 
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(address_query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(address_query);
             statement.executeUpdate();
         } catch (SQLException e) {
             //e.printStackTrace();
@@ -37,7 +37,7 @@ public class store_DAO {
                 String.format("VALUES ('%d', '%s', '%s', '%s', '%d', '%d');", store.getId(), store.getName(), store.getPhone(), store.getContact_name(), store.getAddress_Sn() , store.getAreaSn());
 
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,7 +50,7 @@ public class store_DAO {
 
         String sql = "DELETE FROM \"main\".\"Stores\"\n WHERE SN = " + sn;
         try {
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(sql);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(sql);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,7 +62,7 @@ public class store_DAO {
         List <dummy_store> list_to_return=new LinkedList<>();
         String query="SELECT * FROM Stores";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             while (rs2.next()) {
                 int AddressSn=rs2.getInt("AddressSN");
@@ -81,14 +81,14 @@ public class store_DAO {
         String selectQuery = String.format("select * from Stores where Stores.SN = '%d'",id);
         try {
 
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             int AddressSn=rs2.getInt("AddressSN");
             dummy_Address dummy_address=address_dao.select(AddressSn);
             int AreaSN = rs2.getInt("AreaSN");
             String areaNae = "select * from Area where SN = " + AreaSN;
             try{
-                Statement stmt3 = Connection.getInstance().getConn().createStatement();
+                Statement stmt3 = SupInvDBConn.getInstance().createStatement();
                 ResultSet rs3  = stmt3.executeQuery(areaNae);
                 String aName = rs3.getString("AreaName");
             }
@@ -108,7 +108,7 @@ public class store_DAO {
         List<dummy_store> list=new LinkedList<>();
         try {
 
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(selectQuery);
             while (rs2.next()) {
                 int AddressSn=rs2.getInt("AddressSN");
@@ -135,7 +135,7 @@ public class store_DAO {
     private void executeQuery(String query){
         try {
             // java.sql.Date sqlDate = new java.sql.Date(worker.getStart_Date().getTime());
-            PreparedStatement statement= Connection.getInstance().getConn().prepareStatement(query);
+            PreparedStatement statement= SupInvDBConn.getInstance().prepareStatement(query);
             //statement.setDate(7,sqlDate);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -152,7 +152,7 @@ public class store_DAO {
                 " ORDER BY SN DESC\n" +
                 " LIMIT 1;";
         try {
-            Statement stmt2 = Connection.getInstance().getConn().createStatement();
+            Statement stmt2 = SupInvDBConn.getInstance().createStatement();
             ResultSet rs2  = stmt2.executeQuery(query);
             rs2.next();
             return rs2.getInt("SN");

@@ -1,14 +1,13 @@
 package Presentation;
-import Inventory.Interfaces.Observer;
-import Inventory.Interfaces.myObservable;
-import Inventory.Logic.ShortageOrder;
-import Inventory.Persistence.DTO.ItemDTO;
-import Inventory.View.InvService;
-import Inventory.View.View;
-import Result.Result;
-import Suppliers.Structs.Days;
-import Suppliers.Service.*;
-import Suppliers.Structs.OrderStatus;
+import Sup_Inv.Inventory.Interfaces.Observer;
+import Sup_Inv.Inventory.Interfaces.myObservable;
+import Sup_Inv.Inventory.Logic.ShortageOrder;
+import Sup_Inv.Inventory.Persistence.DTO.ItemDTO;
+import Sup_Inv.Inventory.View.InvService;
+import Sup_Inv.Inventory.View.View;
+import Sup_Inv.Result.Result;
+import Sup_Inv.Suppliers.Structs.Days;
+import Sup_Inv.Suppliers.Service.*;
 
 import java.util.*;
 
@@ -72,7 +71,7 @@ public class Inventory2SuppliersCtrl implements myObservable {
     public Result<OrderDTO> receiveSupplierOrder(int orderID)
     {
         return this.myOrderAndProductManagement.orderArrived(orderID);
-        //Result<OrderDTO> theOrder = this.myOrderAndProductManagement.orderArrived(orderID);
+        //Sup_Inv.Result<OrderDTO> theOrder = this.myOrderAndProductManagement.orderArrived(orderID);
         //if(theOrder!=null)
         //{
         //    myInvenoryService.getOrderFromSuppliers(theOrder);

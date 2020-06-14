@@ -1,8 +1,8 @@
 package Tests.Visual;
 
-import Suppliers.Supplier.Order.OrderManager;
-import Suppliers.Supplier.Order.RegularOrder;
-import Suppliers.Supplier.Order.ProductInOrder;
+import Sup_Inv.Suppliers.Supplier.Order.OrderManager;
+import Sup_Inv.Suppliers.Supplier.Order.RegularOrder;
+import Sup_Inv.Suppliers.Supplier.Order.ProductInOrder;
 
 import java.util.Calendar;
 import java.util.Date;

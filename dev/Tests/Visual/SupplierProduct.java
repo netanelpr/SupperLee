@@ -1,7 +1,7 @@
 package Tests.Visual;
 
-import Suppliers.Service.OrderAndProductCtrl;
-import Suppliers.Supplier.Product;
+import Sup_Inv.Suppliers.Service.OrderAndProductCtrl;
+import Sup_Inv.Suppliers.Supplier.Product;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
