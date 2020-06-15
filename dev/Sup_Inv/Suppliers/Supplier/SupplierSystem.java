@@ -552,7 +552,7 @@ public class SupplierSystem {
         Supplier supplier = supplierManager.getById(supplierId);
 
 
-        supplier.setContract(null);
+        //supplier.setContract(null);
 
         return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details, periodicalOrderData);
     }
@@ -564,7 +564,8 @@ public class SupplierSystem {
         if(supplier!=null) {
             SupplierDetailsDTO supplierDetails = new SupplierDetailsDTO(supplier.getSupId(), supplier.getSupplierName(),
                     supplier.getIncNum(), supplier.getAccountNumber(), supplier.getAddress(),
-                    supplier.getContacts().get(0).getName(), supplier.getContacts().get(0).getPhoneNumber(), supplier.getContacts().get(0).getEmail());
+                    supplier.getContacts().get(0).getName(), supplier.getContacts().get(0).getPhoneNumber(), supplier.getContacts().get(0).getEmail(),
+                    supplier.getContract().getDailyInfo());
             return supplierDetails;
         }
         return null;

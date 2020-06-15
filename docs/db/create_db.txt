@@ -120,6 +120,14 @@ CREATE TABLE IF NOT EXISTS Periodical_supplier_order_days(
 	CHECK (delivery_weekly_day > 0 AND delivery_weekly_day < 8)
 );
 
+CREATE TABLE IF NOT EXISTS PeriodicalOrderDates(
+	orderId INTEGER NOT NULL,
+	orderDate VARCHAR(10) NOT NULL,
+	
+	PRIMARY KEY (orderId, orderDate)
+	FOREIGN KEY (orderId)
+		REFERENCES Periodical_supplier_order(id)
+);
 
 CREATE TABLE IF NOT EXISTS Regular_supplier_order(
 	id INTEGER NOT NULL,

@@ -157,7 +157,8 @@ public class OrderManager {
         if(isPeriodicalOrder(orderId)) {
             List<Days> days = periodicalOrderMapper.getDeliveryDays(orderId);
             int weekP = periodicalOrderMapper.getWeepPeriod(orderId);
-            return new PeriodicalOrderData(days, weekP);
+            List<Date> orderDates =  periodicalOrderMapper.getOrderDates(orderId);
+            return new PeriodicalOrderData(days, weekP, orderDates);
         }
         return null;
     }
