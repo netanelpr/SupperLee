@@ -34,7 +34,8 @@ public class TranspirationToSupplier {
                     orderShipDetails.supplier.supplierID,
                     orderShipDetails.orderId,
                     orderShipDetails.shopNumber,
-                    orderShipDetails.supplier.supplyDays
+                    orderShipDetails.supplier.supplyDays,
+                    Integer.parseInt(orderShipDetails.supplier.area)
                     ));
         }
 
@@ -45,7 +46,7 @@ public class TranspirationToSupplier {
 
         List<PeriodicalOrderDTOforTransport> orders = new LinkedList<>();
         List<Integer> orderIds = orderAndProductCtrl.getAllOpenPeriodicalOrder();
-
+        //TODO: change parseInt to int
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
             orders.add(new PeriodicalOrderDTOforTransport(
@@ -53,7 +54,7 @@ public class TranspirationToSupplier {
                     orderShipDetails.orderId,
                     orderShipDetails.shopNumber,
                     orderShipDetails.supplier.supplyDays,
-                    orderShipDetails.periodicalOrderData.orderDates
+                    Integer.parseInt(orderShipDetails.supplier.area)
             ));
         }
 
@@ -68,7 +69,7 @@ public class TranspirationToSupplier {
     public SupplierDetailsDTO getSupplierInfo(int supplierId){
         return supplierCtrl.getSupplierInfo(supplierId);
     }
-
+    //TODO: add statuses: open: in store,
     /**
      * Set order as approved and give it an arrival date
      * @param orderId order id
@@ -78,8 +79,8 @@ public class TranspirationToSupplier {
         throw new UnsupportedOperationException();
     }
 
-    //TODO check what they are doing if the wont be send in the delivery date they said, will they rescheduled it
-    public void setOrderStatusAsWontBeSentInTime(int orderId){
+    public void setOrderStatusBackToOpen(int orderId){
         throw new UnsupportedOperationException();
     }
+
 }
