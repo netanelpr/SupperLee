@@ -27,7 +27,7 @@ public class area_DAO {
             // java.sql.Date sqlDate = new java.sql.Date(worker.getStart_Date().getTime());
             PreparedStatement statement = SupInvDBConn.getInstance().getConn().prepareStatement(query);
             //statement.setDate(7,sqlDate);
-            statement.executeUpdate();
+            statement.executeQuery();
         } catch (SQLException e) {
             //e.printStackTrace();
         }

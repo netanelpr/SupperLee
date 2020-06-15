@@ -1,9 +1,5 @@
 package Trans_HR.Data_Layer;
 
-
-
-
-
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +14,6 @@ import Trans_HR.Business_Layer.Workers.Modules.Worker.Worker;
 import Trans_HR.Business_Layer.Workers.Utils.enums;
 import Trans_HR.Data_Layer.DAOs.*;
 import Trans_HR.Data_Layer.Dummy_objects.*;
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import javafx.util.Pair;
 
 

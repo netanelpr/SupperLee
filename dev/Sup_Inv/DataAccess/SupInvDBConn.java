@@ -17,19 +17,22 @@ public class SupInvDBConn {
 
     private SupInvDBConn(){
         try{
-            String url = "jdbc:sqlite::resource:DB/db.db";
+            //for the build project
+            //String url = "jdbc:sqlite::resource:db.db";
+            // for easy use
+            String url = "jdbc:sqlite:DB/db.db";
             conn = DriverManager.getConnection(url);
         }
         catch (SQLException e){
             System.out.println(e.getMessage());
         }finally {
-            try {
+            /*try {
                 if (SupInvDBConn != null) {
                     conn.close();
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
-            }
+            }*/
         }
     }
 
