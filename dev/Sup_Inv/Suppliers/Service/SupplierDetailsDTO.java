@@ -1,5 +1,7 @@
 package Sup_Inv.Suppliers.Service;
 
+import java.util.List;
+
 public class SupplierDetailsDTO {
 
     public int supplierID;
@@ -7,6 +9,9 @@ public class SupplierDetailsDTO {
     public String incNum;
     public String accountNumber;
     public String address;
+
+    //TODO Edit this accroding to tanport area zones
+    public String area;
 
     public String contactName;
     public String phoneNumber;
