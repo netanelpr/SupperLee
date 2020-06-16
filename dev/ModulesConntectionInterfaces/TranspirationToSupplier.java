@@ -83,7 +83,7 @@ public class TranspirationToSupplier {
     }
 
     public void setOrderStatusBackToOpen(int orderId){
-        orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.Open)
+        orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.Open);
     }
 
 }
