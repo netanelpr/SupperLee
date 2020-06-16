@@ -1,6 +1,7 @@
 package ModulesConntectionInterfaces;
 
 import Sup_Inv.Suppliers.Service.*;
+import Sup_Inv.Suppliers.Structs.OrderStatus;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -75,12 +76,14 @@ public class TranspirationToSupplier {
      * @param orderId order id
      * @param arrivalDate date that the order will arrive to the store
      */
-    public void setOrderStatusAsApproved(int orderId, Date arrivalDate){
-        throw new UnsupportedOperationException();
+    public void setOrderStatusAsShipped(int orderId, Date arrivalDate){
+        if(orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.WaitingForShipping)){
+            orderAndProductCtrl.updateOrderArrivalTime(orderId, arrivalDate);
+        }
     }
 
     public void setOrderStatusBackToOpen(int orderId){
-        throw new UnsupportedOperationException();
+        orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.Open)
     }
 
 }

@@ -40,7 +40,7 @@ public class HandleSupplierCard extends Menu_Option {
             int supId = supplierManagment.createSupplierCard(name, incNum, address, bankAccount, payment,
                     contactName, phoneNumber, email);
             if (supId < 0) {
-                System.out.println("Sup_Inv.Suppliers.Supplier card wasnt created");
+                System.out.println("Supplier card wasnt created");
             } else {
                 System.out.println("New supplier ID: " + supId);
             }

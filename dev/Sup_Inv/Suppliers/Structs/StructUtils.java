@@ -196,7 +196,7 @@ public class StructUtils {
 
         map.put("OPEN", OrderStatus.Open);
         map.put("CLOSE", OrderStatus.Close);
-        map.put("WAITINGFORSHIPPING", OrderStatus.WaitingForShipping);
+        map.put("WAITING_FOR_SHIPPING", OrderStatus.WaitingForShipping);
 
 
         return  map;
