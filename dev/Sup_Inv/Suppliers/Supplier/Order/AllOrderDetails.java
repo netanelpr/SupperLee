@@ -9,16 +9,16 @@ public class AllOrderDetails {
     public int shopNumber;
     public String  deliveryDate;
     public List<AllDetailsOfProductInOrder> details;
-    public PeriodicalOrderData periodicalOrderData;
+    public boolean isPeriodicalOrder;
     public Supplier supplier;
 
     public AllOrderDetails(int orderId, int shopNumber, String deliveryDate, Supplier supplier,
-                           List<AllDetailsOfProductInOrder> details, PeriodicalOrderData periodicalOrderData){
+                           List<AllDetailsOfProductInOrder> details, boolean isPeriodicalOrder){
         this.orderId = orderId;
         this.shopNumber = shopNumber;
         this.supplier = supplier;
         this.details = details;
         this.deliveryDate = deliveryDate;
-        this.periodicalOrderData = periodicalOrderData;
+        this.isPeriodicalOrder = isPeriodicalOrder;
     }
 }

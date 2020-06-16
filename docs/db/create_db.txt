@@ -98,35 +98,12 @@ CREATE TABLE IF NOT EXISTS Supplier_order(
 
 CREATE TABLE IF NOT EXISTS Periodical_supplier_order(
 	id INTEGER NOT NULL,
-	weekp INTEGER NOT NULL,
 	
 	PRIMARY KEY (id)
 	FOREIGN KEY(id)
 		REFERENCES Supplier_order(id)
 			ON DELETE CASCADE
 			ON UPDATE CASCADE
-	CHECK (weekp > 0)
-);
-
-CREATE TABLE IF NOT EXISTS Periodical_supplier_order_days(
-	order_id INTEGER NOT NULL,
-	delivery_weekly_day INTEGER NOT NULL,
-	
-	PRIMARY KEY (order_id, delivery_weekly_day)
-	FOREIGN KEY (order_id)
-		REFERENCES Supplier_order(id)
-			ON DELETE RESTRICT
-			ON UPDATE RESTRICT
-	CHECK (delivery_weekly_day > 0 AND delivery_weekly_day < 8)
-);
-
-CREATE TABLE IF NOT EXISTS PeriodicalOrderDates(
-	orderId INTEGER NOT NULL,
-	orderDate VARCHAR(10) NOT NULL,
-	
-	PRIMARY KEY (orderId, orderDate)
-	FOREIGN KEY (orderId)
-		REFERENCES Periodical_supplier_order(id)
 );
 
 CREATE TABLE IF NOT EXISTS Regular_supplier_order(

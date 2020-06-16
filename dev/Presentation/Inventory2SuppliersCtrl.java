@@ -62,7 +62,7 @@ public class Inventory2SuppliersCtrl implements myObservable {
 
     }
 
-    public Result<Integer> placePeriodicalOrder(List<ProductInOrderDTO> shoppingList, List<Days> days, int weekPeriod, int shopNumber)
+    public Result<List<Integer>> placePeriodicalOrder(List<ProductInOrderDTO> shoppingList, List<Days> days, int weekPeriod, int shopNumber)
     {
         return this.myOrderAndProductManagement.createPeriodicalOrder(shoppingList,days,weekPeriod, shopNumber);
     }

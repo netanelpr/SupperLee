@@ -382,9 +382,10 @@ public class SupplierSystem {
      * @param shopNumber to shop number
      * @return the id of the order
      */
-    public Result<Integer> createPeriodicalOrder(List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber) {
+    public Result<List<Integer>> createPeriodicalOrder(List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber) {
         List<Integer> barcodes = new ArrayList<>();
         List<Integer> suppliersId;
+        List<Integer> ordersId = new LinkedList<>();
         Supplier sup;
 
         suppliersId = supplierManager.getAllSupplierWithSupplyDays(days);
@@ -405,18 +406,18 @@ public class SupplierSystem {
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
         sup.fillWithCatalogNumber(products);
-
+        /*
         PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days,
                 weekPeriod, shopNumber, sup.getNextDeliveryDate());
-        periodicalOrder.setContractId(sup.getContract().getContractID());
+        periodicalOrder.setContractId(sup.getContract().getContractID());*/
 
 
-        orderManager.createPeriodicalOrder(periodicalOrder);
-        if(periodicalOrder.getOrderId() < 0){
-            return Result.makeFailure("Order wasnt created");
+        ordersId = orderManager.createPeriodicalOrder(products, days, weekPeriod, shopNumber, sup.getContract().getContractID());
+        if(ordersId.isEmpty()){
+            return Result.makeFailure("Orders wasnt created, week period can be 1 or 2");
         }
 
-        return Result.makeOk("Order was created", periodicalOrder.getOrderId());
+        return Result.makeOk("Orders was created", ordersId);
     }
 
     public Result<List<Integer>> addProductsToPeriodicalOrder(int orderId, List<ProductInOrder> products) {
@@ -537,13 +538,13 @@ public class SupplierSystem {
 
     public AllOrderDetails getOrderDetails(int orderId) {
         Order order = orderManager.getOrderBasicDetails(orderId);
-        PeriodicalOrderData periodicalOrderData = null;
+        boolean isPeriodicalOrder = false;
         if(order == null){
             return null;
         }
 
         if(orderManager.isPeriodicalOrder(orderId)){
-            periodicalOrderData = orderManager.getPeriodicalOrderData(orderId);
+            isPeriodicalOrder = true;
         }
 
         List<AllDetailsOfProductInOrder> details = orderManager.getAllProductDetails(orderId);
@@ -554,7 +555,7 @@ public class SupplierSystem {
 
         //supplier.setContract(null);
 
-        return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details, periodicalOrderData);
+        return new AllOrderDetails(orderId, order.getShopNumber(), StructUtils.dateToForamt(order.getDeliveryDay()), supplier, details, isPeriodicalOrder);
     }
 
     public SupplierDetailsDTO getSupplierInformation(int supID) {

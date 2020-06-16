@@ -5,6 +5,7 @@ import Sup_Inv.Suppliers.Structs.OrderStatus;
 import Sup_Inv.Suppliers.Structs.StructUtils;
 import Sup_Inv.Suppliers.Supplier.Order.PeriodicalOrder;
 import Sup_Inv.Suppliers.Supplier.Order.ProductInOrder;
+import Sup_Inv.Suppliers.Supplier.Order.RegularOrder;
 
 import java.sql.*;
 import java.text.DateFormat;
@@ -19,59 +20,13 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
         super(conn);
     }
 
-    @Override
     protected String findStatement() {
-        return "SELECT S.*, PSO.weekp, PIC.barcode, P.contract_id, P.catalog_number, P.amount, P.price_per_unit, POD.orderDate\n" +
-                "FROM Supplier_order AS S JOIN Periodical_supplier_order AS PSO\n" +
-                "JOIN Product_in_order AS P JOIN Product_in_contract as PIC\n" +
-                "JOIN PeriodicalOrderDates as POD\n" +
-                "\tON S.id = P.order_id AND P.catalog_number =  PIC.catalog_number\n" +
-                "\tAND PSO.id = S.id AND POD.orderId = PSO.id\n" +
-                "\tWHERE PSO.id = 1";
-    }
 
-    protected String findAllDays(){
-        return "SELECT delivery_weekly_day AS days\n" +
-                "FROM Periodical_supplier_order_days AS PSOD\n" +
-                "WHERE PSOD.order_id = ?";
-    }
-
-    @Override
-    public PeriodicalOrder findById(int id) {
-        List<Days> days = new LinkedList<>();
-
-        PeriodicalOrder res = loadedMap.getOrDefault(id, null);
-
-        if(res != null){
-            return res;
-        }
-
-
-
-        try(PreparedStatement pstmt = conn.prepareStatement(findStatement());
-            PreparedStatement daysPstmt = conn.prepareStatement(findAllDays())){
-
-            ResultSet rs;
-
-            daysPstmt.setInt(1, id);
-            rs = daysPstmt.executeQuery();
-
-            while (rs.next()){
-                days.add(StructUtils.getDayWithInt(rs.getInt(1)));
-            }
-
-            pstmt.setInt(1,id);
-            rs  = pstmt.executeQuery();
-
-            res = buildTFromResultSet(rs, days);
-            loadedMap.put(id, res);
-            return res;
-
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-        }
-
-        return  null;
+        return "SELECT S.*, PIC.barcode, P.contract_id, P.catalog_number, P.amount, P.price_per_unit\n" +
+                "FROM Supplier_order AS S JOIN Product_in_order AS P\n" +
+                "JOIN Product_in_contract as PIC\n" +
+                "ON S.id = P.order_id AND P.catalog_number =  PIC.catalog_number\n" +
+                "WHERE S.id IN Periodical_supplier_order AND S.id = ?";
     }
 
     @Override
@@ -81,16 +36,11 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
 
     @Override
     protected PeriodicalOrder buildTFromResultSet(ResultSet res) {
-        throw new UnsupportedOperationException();
-    }
-
-    protected PeriodicalOrder buildTFromResultSet(ResultSet res, List<Days> days) {
         PeriodicalOrder periodicalOrder = null;
-        int orderId = -1, shopNumber = -1, weekP = -1;
+        int orderId = -1, shopNumber = -1;
         OrderStatus status = null;
         String deliveryDay = "";
         List<ProductInOrder> products = new ArrayList<>();
-        List<Date> orderDates = new ArrayList<>();
 
         try {
             if(res.next()) {
@@ -98,33 +48,22 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
                 shopNumber = res.getInt(2);
                 status = StructUtils.getOrderStatus(res.getInt(3));
                 deliveryDay = res.getString(4);
-                weekP = res.getInt(5);
-                products.add(new ProductInOrder(res.getInt(6), res.getInt(9), res.getString(8), res.getDouble(10)));
-                DateFormat dateFormat = new SimpleDateFormat(StructUtils.dateFormat());
-                orderDates.add(dateFormat.parse(res.getString(11)));
+                products.add(new ProductInOrder(res.getInt(5), res.getInt(8), res.getString(7), res.getDouble(9)));
+            } else {
+                return null;
             }
 
             while (res.next()) {
-                products.add(new ProductInOrder(res.getInt(6), res.getInt(9), res.getString(8), res.getDouble(10)));
-                DateFormat dateFormat = new SimpleDateFormat(StructUtils.dateFormat());
-                orderDates.add(dateFormat.parse(res.getString(11)));
+                products.add(new ProductInOrder(res.getInt(5), res.getInt(8), res.getString(7), res.getDouble(9)));
             }
 
-            DateFormat dateFormat = new SimpleDateFormat(StructUtils.dateFormat());
-            Date deliveryDate = dateFormat.parse(deliveryDay);
-            if(Calendar.getInstance().getTime().compareTo(deliveryDate) > 0) {
-                deliveryDate = getNextDate(dateFormat.parse(deliveryDay), days, weekP);
-                updateDeliveryDate(orderId, deliveryDate);
-            }
-
-
-            periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(orderId, products, days, weekP, shopNumber, deliveryDate, orderDates);
+            periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(orderId, products, shopNumber);
             periodicalOrder.setStatus(status);
 
-
+            DateFormat dateFormat = new SimpleDateFormat(StructUtils.dateFormat());
+            periodicalOrder.setDeliveryDay(dateFormat.parse(deliveryDay));
 
         } catch (SQLException | ParseException e) {
-            e.printStackTrace();
         }
 
         return periodicalOrder;
@@ -140,19 +79,9 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
                 "VALUES (?, ?, ?, ?, ?)";
     }
 
-    private String insertIdToPeriodicalOrderStatement(){
-        return "INSERT INTO Periodical_supplier_order (id, weekp) " +
-                "VALUES (?, ?)";
-    }
-
-    private String insertPeriodicalOrderDaysStatement(){
-        return "INSERT INTO Periodical_supplier_order_days (order_id, delivery_weekly_day) " +
-                "VALUES (?, ?)";
-    }
-
-    private String insertIdToPeriodicalOrderDates(){
-        return "INSERT INTO PeriodicalOrderDates (orderId, orderDate) " +
-                "VALUES (?, ?)";
+    private String insertIdToRegularOrderStatement(){
+        return "INSERT INTO Periodical_supplier_order (id) " +
+                "VALUES (?)";
     }
 
     private String isValidShopStatement(){
@@ -170,7 +99,6 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
             }
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
         return false;
     }
@@ -190,15 +118,11 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
         try{
             conn.setAutoCommit(false);
         } catch (SQLException throwables) {
-            //TODO
-            throwables.printStackTrace();
         }
 
         try(PreparedStatement insertPstmt = conn.prepareStatement(insertIntoOrderStatement(), Statement.RETURN_GENERATED_KEYS);
             PreparedStatement productInsertPstmt = conn.prepareStatement(insertIntoProductInOrderStatement());
-            PreparedStatement insertPeriodicalIdPstmt = conn.prepareStatement(insertIdToPeriodicalOrderStatement(), Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement insertDaysPstmt = conn.prepareStatement(insertPeriodicalOrderDaysStatement());
-            PreparedStatement insertDatePstmt = conn.prepareStatement(insertIdToPeriodicalOrderDates())){
+            PreparedStatement insertRegularIdPstmt = conn.prepareStatement(insertIdToRegularOrderStatement(), Statement.RETURN_GENERATED_KEYS)){
             conn.setAutoCommit(false);
 
             insertPstmt.setInt(1,product.getShopNumber());
@@ -227,27 +151,10 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
                 }
                 productInsertPstmt.executeBatch();
 
-                for (Days day : product.getDays()) {
-                    System.out.println(day);
-                    insertDaysPstmt.clearParameters();
-                    insertDaysPstmt.setInt(1, orderId);
-                    insertDaysPstmt.setInt(2, StructUtils.getDayInt(day));
-                    insertDaysPstmt.addBatch();
-                }
-                insertDaysPstmt.executeBatch();
-
-                insertPeriodicalIdPstmt.setInt(1, orderId);
-                insertPeriodicalIdPstmt.setInt(2, product.getWeekPeriod());
-                rowAffected = insertPeriodicalIdPstmt.executeUpdate();
+                insertRegularIdPstmt.setInt(1, orderId);
+                rowAffected = insertRegularIdPstmt.executeUpdate();
                 if (rowAffected == 0) {
                     rollback = true;
-                } else {
-                    insertDatePstmt.setInt(1, orderId);
-                    for(Date date: product.getOrderDates()){
-                        insertDatePstmt.setString(2, StructUtils.dateToForamt(date));
-                        insertDatePstmt.addBatch();
-                    }
-                    insertDatePstmt.executeBatch();
                 }
             } else {
                 rollback = true;
@@ -256,7 +163,6 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
 
         } catch (SQLException throwables) {
             rollback = true;
-            throwables.printStackTrace();
         }
 
         try{
@@ -267,8 +173,6 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
             }
             conn.setAutoCommit(true);
         } catch (SQLException throwables) {
-            //TODO
-            throwables.printStackTrace();
         }
 
         return orderId;
@@ -410,74 +314,5 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
         }
 
         return orderIds;
-    }
-
-    private String getDeliveryDaysStatement(){
-        return "SELECT delivery_weekly_day\n" +
-                "FROM Periodical_supplier_order_days\n" +
-                "WHERE order_id = ?";
-    }
-
-    public List<Days> getDeliveryDays(int orderId) {
-        ResultSet rs;
-        List<Days> days = new ArrayList<>();
-
-        try(PreparedStatement ptsmt = conn.prepareStatement(getDeliveryDaysStatement())){
-            ptsmt.setInt(1, orderId);
-
-            rs = ptsmt.executeQuery();
-            while(rs.next()){
-                days.add(StructUtils.getDayWithInt(rs.getInt(1)));
-            }
-        } catch (SQLException throwables) {
-        }
-
-        return days;
-    }
-
-    private String getWeepPeriodStatement(){
-        return "SELECT weekP\n" +
-                "FROM Periodical_supplier_order\n" +
-                "WHERE id = ?";
-    }
-
-    public int getWeepPeriod(int orderId) {
-        ResultSet rs;
-
-        try(PreparedStatement ptsmt = conn.prepareStatement(getWeepPeriodStatement())){
-            ptsmt.setInt(1, orderId);
-
-            rs = ptsmt.executeQuery();
-            if(rs.next()){
-                return  rs.getInt(1);
-            }
-        } catch (SQLException throwables) {
-        }
-
-        return -1;
-    }
-
-    private String getWeepPeriodOrderDates(){
-        return "SELECT orderDate\n" +
-                "FROM PeriodicalOrderDates\n" +
-                "WHERE orderId = 1";
-    }
-
-    public List<Date> getOrderDates(int orderId) {
-        List<Date> orderDate = new LinkedList<>();
-        ResultSet rs;
-
-        try(PreparedStatement ptsmt = conn.prepareStatement(getWeepPeriodOrderDates())){
-            ptsmt.setInt(1, orderId);
-
-            rs = ptsmt.executeQuery();
-            if(rs.next()){
-                DateFormat dateFormat = new SimpleDateFormat(StructUtils.dateFormat());
-                orderDate.add(dateFormat.parse(rs.getString(1)));
-            }
-        } catch (Exception throwables) {
-        }
-
-        return orderDate;
     }
 }

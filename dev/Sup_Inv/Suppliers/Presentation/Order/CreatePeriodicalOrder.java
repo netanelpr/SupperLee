@@ -59,9 +59,9 @@ public class CreatePeriodicalOrder extends Menu_Option {
                         Integer.parseInt(productAndAmount[1])));
             }
 
-            Result<Integer> res = orderAndProductManagement.createPeriodicalOrder(products, days, weekP, shopNumber);
+            Result<List<Integer>> res = orderAndProductManagement.createPeriodicalOrder(products, days, weekP, shopNumber);
             if(res.isOk()){
-                System.out.println("Order id : "+ res.getValue());
+                System.out.println("Orders id : "+ res.getValue());
             } else {
                 System.out.println(res.getMessage());
             }
