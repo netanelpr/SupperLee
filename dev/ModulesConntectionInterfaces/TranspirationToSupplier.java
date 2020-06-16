@@ -36,7 +36,7 @@ public class TranspirationToSupplier {
                     orderShipDetails.orderId,
                     orderShipDetails.shopNumber,
                     orderShipDetails.supplier.supplyDays,
-                    Integer.parseInt(orderShipDetails.supplier.area)
+                    orderShipDetails.supplier.area
                     ));
         }
 
@@ -47,7 +47,6 @@ public class TranspirationToSupplier {
 
         List<PeriodicalOrderDTOforTransport> orders = new LinkedList<>();
         List<Integer> orderIds = orderAndProductCtrl.getAllOpenPeriodicalOrder();
-        //TODO: change parseInt to int
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
             orders.add(new PeriodicalOrderDTOforTransport(
@@ -55,7 +54,7 @@ public class TranspirationToSupplier {
                     orderShipDetails.orderId,
                     orderShipDetails.shopNumber,
                     orderShipDetails.supplier.supplyDays,
-                    Integer.parseInt(orderShipDetails.supplier.area)
+                    orderShipDetails.supplier.area
             ));
         }
 

@@ -12,9 +12,7 @@ public class SupplierDetailsDTO {
     public String accountNumber;
     public String address;
     public List<Days> supplyDays;
-
-    //TODO Edit this accroding to tanport area zones
-    public String area;
+    public int area;
 
     public String contactName;
     public String phoneNumber;
@@ -27,7 +25,7 @@ public class SupplierDetailsDTO {
 
     public SupplierDetailsDTO(int supplierID, String supplierName, String incNum, String accountNumber,
                               String address, String contactName, String phoneNumber, String email,
-                              List<Days> supplyDays) {
+                              List<Days> supplyDays, int area) {
         this.supplierID = supplierID;
         this.supplierName = supplierName;
         this.incNum = incNum;
@@ -37,6 +35,7 @@ public class SupplierDetailsDTO {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.supplyDays = supplyDays;
+        this.area = area;
     }
 
     public String toString(){

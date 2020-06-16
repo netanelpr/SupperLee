@@ -13,6 +13,7 @@ public class Supplier {
     private String accountNumber;
     private List<String> paymentInfo;
     private String address;
+    private int area;
 
     //Sup_Inv.Suppliers.Supplier.Sup_Inv.Suppliers.Supplier Details
     private String name;
@@ -45,11 +46,9 @@ public class Supplier {
         this.paymentInfo=new LinkedList<>();
         this.paymentInfo.add(paymentInfo);
         this.address=address;
-
-
-
         this.contacts = new LinkedList<>();
         this.addContactInfo(contactName,phoneNumber,email);
+        setArea(address);
 
         contract = null;
     }
@@ -63,7 +62,9 @@ public class Supplier {
         this.address=address;
         this.contacts = new LinkedList<>();
         contract = null;
+        setArea(address);
     }
+
     public Supplier(String name, String address, String incNum, String accountNumber){
         this.name=name;
         this.incNum=incNum;
@@ -72,6 +73,7 @@ public class Supplier {
         this.address=address;
         this.contacts = new LinkedList<>();
         contract = null;
+        setArea(address);
     }
 
 
@@ -326,5 +328,13 @@ public class Supplier {
 
     public void setContacts(List<ContactInfo> contacts) {
         this.contacts=contacts;
+    }
+
+    public int getArea(){
+        return area;
+    }
+
+    private void setArea(String area){
+        this.area = area.length() % 4;
     }
 }

@@ -20,7 +20,7 @@ public class GetAllSuppliers extends Menu_Option {
         List<SupplierDetailsDTO> supplierDetails = supplierManagment.getAllSuppliers();
 
         if(supplierDetails != null) {
-            for (SupplierDetailsDTO supD : supplierManagment.getAllSuppliers()) {
+            for (SupplierDetailsDTO supD : supplierDetails) {
                 System.out.println(supD.toString());
             }
         } else {

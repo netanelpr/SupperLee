@@ -566,7 +566,7 @@ public class SupplierSystem {
             SupplierDetailsDTO supplierDetails = new SupplierDetailsDTO(supplier.getSupId(), supplier.getSupplierName(),
                     supplier.getIncNum(), supplier.getAccountNumber(), supplier.getAddress(),
                     supplier.getContacts().get(0).getName(), supplier.getContacts().get(0).getPhoneNumber(), supplier.getContacts().get(0).getEmail(),
-                    supplier.getContract().getDailyInfo());
+                    supplier.getContract().getDailyInfo(), supplier.getArea());
             return supplierDetails;
         }
         return null;
