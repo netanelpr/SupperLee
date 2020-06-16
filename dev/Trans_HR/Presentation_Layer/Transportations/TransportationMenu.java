@@ -14,18 +14,14 @@ public class TransportationMenu {
 
     public static void Menu() {
         System.out.println("Welcome to SuperLee - Transportation");
-//        if (args.length > 0 && args[0].equals("upload"))
-    //    systemInterfaceTransportations.uploadData();
         String choice = "0";
         do {
             System.out.println("Please choose your option:");
-            String[] A = new String[]{"Transportations", "Sup_Inv/Suppliers", "Trucks","Quit"};
-            //  String choice = null;
+            String[] A = new String[]{"Transportations", "Trucks","Quit"};
             for (int i = 0; i < A.length; i++) {
                 System.out.println(i + 1 + ". " + A[i]);
             }
             Scanner scan = new Scanner(System.in);
-
             choice = scan.nextLine();
             if (choice.equals("1")) {
                 String[] transports = new String[]{"Add new transport", "Show transport list", "Remove transport",
@@ -69,19 +65,19 @@ public class TransportationMenu {
                 }
             }
 
+//            else if (choice.equals("2")) {
+//                String[] sites = new String[]{"Add new Sup_Inv.Suppliers", "Show Sup_Inv.Suppliers List", "Cancel"};
+//                String option = null;
+//                for (int i = 0; i < sites.length; i++) {
+//                    System.out.println(i + 1 + ". " + sites[i]);
+//                }
+//                option = scan.nextLine();
+//                if (option.equals("1"))
+//                    Add_supplier();
+//                else if (option.equals("2"))
+//                    Show_supplier();
+//            }
             else if (choice.equals("2")) {
-                String[] sites = new String[]{"Add new Sup_Inv.Suppliers", "Show Sup_Inv.Suppliers List", "Cancel"};
-                String option = null;
-                for (int i = 0; i < sites.length; i++) {
-                    System.out.println(i + 1 + ". " + sites[i]);
-                }
-                option = scan.nextLine();
-                if (option.equals("1"))
-                    Add_supplier();
-                else if (option.equals("2"))
-                    Show_supplier();
-            }
-            else if (choice.equals("3")) {
                 String[] suppliers = new String[]{"Add new Truck", "Show trucks List", "Remove truck","Cancel"};
                 String option = null;
                 for (int i = 0; i < suppliers.length; i++) {
