@@ -20,7 +20,7 @@ public class SupInvDBConn {
             //for the build project
             //String url = "jdbc:sqlite::resource:db.db";
             // for easy use
-            String url = "jdbc:sqlite:DB/a.db";
+            String url = "jdbc:sqlite:DB/db.db";
             conn = DriverManager.getConnection(url);
         }
         catch (SQLException e){

@@ -28,7 +28,6 @@ public class WelcomeMenu {
 
 
     public void newStart() throws Buisness_Exception {
-        supplierMenu.apply();
             chooseStore_start(sc);
             //SupInvDBConn.closeConn();
     }
