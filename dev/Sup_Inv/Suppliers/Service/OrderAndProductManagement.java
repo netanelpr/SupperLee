@@ -41,7 +41,7 @@ public interface OrderAndProductManagement {
 
     Result<Integer> createRegularOrder(List<ProductInOrderDTO> products, int shopNumber);
 
-    Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod, int shopNumber);
+    Result<List<Integer>> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod, int shopNumber);
 
     /**
      * Add products to the order. The proucts can be added up to day before the order

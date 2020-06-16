@@ -31,9 +31,8 @@ public class OrderDetails extends Menu_Option {
 
         SupplierDetailsDTO supplierDetailsDTO = orderShipDetails.supplier;
 
-        if(orderShipDetails.periodicalOrderData != null){
-            String periodicalInfo = String.format("This is periodical order\nDelivery day: %s\nWeek period: %d",
-                    orderShipDetails.periodicalOrderData.days.toString(), orderShipDetails.periodicalOrderData.weekP);
+        if(orderShipDetails.isPeriodicalOrder){
+            String periodicalInfo = "This order was created as part of periodicals order";
             System.out.println(periodicalInfo);
         }
 
