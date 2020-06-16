@@ -82,7 +82,7 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
     }
 
     @Override
-    public Result<Integer> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod, int shopNumber) {
+    public Result<List<Integer>> createPeriodicalOrder(List<ProductInOrderDTO> products, List<Days> days, int weekPeriod, int shopNumber) {
         List<ProductInOrder> productInOrders = new LinkedList<>();
 
         for(ProductInOrderDTO productInOrderDTO : products){
@@ -139,10 +139,11 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         ContactInfo contactInfo = supplier.getContacts().get(0);
         SupplierDetailsDTO supplierDetailsDTO = new SupplierDetailsDTO(supplier.getSupId(), supplier.getSupplierName(),
                 supplier.getIncNum(),supplier.getAccountNumber(), supplier.getAddress(),
-                contactInfo.getName(), contactInfo.getPhoneNumber(), contactInfo.getEmail());
+                contactInfo.getName(), contactInfo.getPhoneNumber(), contactInfo.getEmail(),
+                supplier.getContract().getDailyInfo());
 
         return new OrderShipDetails(orderDetails.orderId, orderDetails.shopNumber, orderDetails.deliveryDate,
-                supplierDetailsDTO, orderDetails.details, orderDetails.periodicalOrderData);
+                supplierDetailsDTO, orderDetails.details, orderDetails.isPeriodicalOrder);
 
     }
 

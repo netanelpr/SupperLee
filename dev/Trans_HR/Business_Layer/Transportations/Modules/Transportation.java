@@ -25,6 +25,11 @@ public class Transportation {
     private double weight_truck = -1;
     private Driver driver;
     private List<ItemsFile> itemsFiles;
+//    TODO: status
+//    Canceled
+//    InProcess
+//    Completed
+    private String status;
 
     public Transportation(Date date, int DepartureTime, Driver drivers, Truck truck, List<Supplier> suppliers, List<Store> stores) {
         this.id = idcounter++;

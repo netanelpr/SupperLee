@@ -43,8 +43,33 @@ public class OrderManager {
         regularOrder.setOrderId(regularOrderMapper.insert(regularOrder));
     }
 
-    public void createPeriodicalOrder(PeriodicalOrder periodicalOrder){
-        periodicalOrder.setOrderId(periodicalOrderMapper.insert(periodicalOrder));
+    public List<Integer> createPeriodicalOrder(List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber, int contractID){
+        List<Integer> orderIds = new LinkedList<>();
+        Date deliveryDate = StructUtils.getTheNearestDate(days);
+        int orderToMake = days.size();
+
+        if(weekPeriod == 1){
+            orderToMake *= 4;
+        } else if(weekPeriod == 2) {
+            orderToMake *= 2;
+        } else {
+            return orderIds;
+        }
+
+        for(int j=0; j < orderToMake; j++){
+            PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1, products, shopNumber);
+            periodicalOrder.setDeliveryDay(deliveryDate);
+            periodicalOrder.setContractId(contractID);
+            int orderId = periodicalOrderMapper.insert(periodicalOrder);
+            if(orderId > -1){
+                orderIds.add(orderId);
+            }
+
+            deliveryDate = StructUtils.getTheNearestDateWithWeekPeriod(deliveryDate, days, weekPeriod);
+
+        }
+
+        return orderIds;
     }
 
     public boolean updateOrderDelivery(int orderId, Date date){
@@ -119,28 +144,15 @@ public class OrderManager {
         Order order = getRegularOrder(orderId);
         if(order == null) {
             order = getPeriodicalOrder(orderId);
-            if(order != null){
-
-                //TODO need to use result and them too
-                long diff = order.getDeliveryDay().getTime() - Calendar.getInstance().getTime().getTime();
-                long day =  TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-
-                if(day > 1){
-                    return Result.makeFailure("Cant recive periodical order if it is not the same date");
-                }
-                List<Days> days = periodicalOrderMapper.getDeliveryDays(orderId);
-                int weekP = periodicalOrderMapper.getWeepPeriod(orderId);
-
-                Date deliveryDate = StructUtils.getTheNearestDateWithWeekPeriod(days, weekP);
-                //TODO to periodical order
-                regularOrderMapper.updateDeliveryDate(orderId,deliveryDate);
+            if(order != null) {
+                return Result.makeFailure("Invalid order id");
             }
-        } else {
-            if(order.getStatus() == OrderStatus.Close){
-                return Result.makeFailure("The order is alerady closed");
-            }
-            updateOrderStatus(orderId, OrderStatus.Close);
         }
+
+        if(order.getStatus() == OrderStatus.Close){
+            return Result.makeFailure("The order is alerady closed");
+        }
+        updateOrderStatus(orderId, OrderStatus.Close);
 
         return Result.makeOk("Ok",order);
     }
@@ -151,15 +163,6 @@ public class OrderManager {
 
     public List<Integer> getAllOpenPeriodicalOrder() {
         return periodicalOrderMapper.getAllOpenOrders();
-    }
-
-    public PeriodicalOrderData getPeriodicalOrderData(int orderId) {
-        if(isPeriodicalOrder(orderId)) {
-            List<Days> days = periodicalOrderMapper.getDeliveryDays(orderId);
-            int weekP = periodicalOrderMapper.getWeepPeriod(orderId);
-            return new PeriodicalOrderData(days, weekP);
-        }
-        return null;
     }
 
     /**

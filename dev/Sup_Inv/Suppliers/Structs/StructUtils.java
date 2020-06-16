@@ -170,11 +170,34 @@ public class StructUtils {
         return null;
     }
 
+    public static Date getTheNearestDateWithWeekPeriod(Date from, List<Days> days, int weekP){
+        Calendar c = Calendar.getInstance();
+        int nearestDayInDays = nearestDayInDays(days);
+        c.setTime(from);
+        c.add(Calendar.DATE, 1);
+
+        if(nearestDayInDays != 8){
+
+            if(c.get(Calendar.DAY_OF_WEEK) + nearestDayInDays < 8){
+                weekP = 0;
+            } else{
+                weekP = weekP - 1;
+            }
+
+            c.add(Calendar.DATE, nearestDayInDays + (7 * weekP));
+            return c.getTime();
+        }
+
+        return null;
+    }
+
     private static Map<String, OrderStatus> createStatusMap(){
         Map<String, OrderStatus> map = new HashMap<>();
 
         map.put("OPEN", OrderStatus.Open);
         map.put("CLOSE", OrderStatus.Close);
+        map.put("WAITING_FOR_SHIPPING", OrderStatus.WaitingForShipping);
+
 
         return  map;
     }
@@ -204,6 +227,10 @@ public class StructUtils {
             return OrderStatus.Open;
         }
 
+        if(orderStatus == 2) {
+            return OrderStatus.WaitingForShipping;
+        }
+
         return null;
     }
 
@@ -214,6 +241,10 @@ public class StructUtils {
 
         if(orderStatus == OrderStatus.Open) {
             return 1;
+        }
+
+        if(orderStatus == OrderStatus.WaitingForShipping) {
+            return 2;
         }
 
         return -1;
