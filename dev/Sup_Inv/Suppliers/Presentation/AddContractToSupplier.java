@@ -28,13 +28,6 @@ public class AddContractToSupplier extends Menu_Option {
     public void apply() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int supId = readInt("Supplier ID", reader);
-        int barcode = -1;
-        List<Integer> barcodes = orderAndProductManagement.getAllProductBarcodes();
-        String supplierProduct;
-        String name = null, manufacture = null, category = null, subCategoty = null, size = null;
-        SystemProduct systemProduct;
-
-        boolean newProduct;
 
         try {
             System.out.print("Enter contract info : ");
@@ -50,6 +43,10 @@ public class AddContractToSupplier extends Menu_Option {
             }
             else
             {
+                if(days.size() == 0){
+                    System.out.println("The supplier must have at least one supply day");
+                    return;
+                }
                 System.out.println("Number of correct supplying days that was updated: "+days.size());
             }
             List<SupplierProductDTO> supplierProductDTOS=startReadingProducts(reader,supId);

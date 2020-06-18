@@ -31,13 +31,15 @@ public class TranspirationToSupplier {
 
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
-            orders.add(new RegularOrderDTOforTransport(
-                    orderShipDetails.supplier.supplierID,
-                    orderShipDetails.orderId,
-                    orderShipDetails.shopNumber,
-                    orderShipDetails.supplier.supplyDays,
-                    orderShipDetails.supplier.area
-                    ));
+            if(!orderShipDetails.supplier.selfDelivery) {
+                orders.add(new RegularOrderDTOforTransport(
+                        orderShipDetails.supplier.supplierID,
+                        orderShipDetails.orderId,
+                        orderShipDetails.shopNumber,
+                        orderShipDetails.supplier.supplyDays,
+                        orderShipDetails.supplier.area
+                ));
+            }
         }
 
         return orders;
@@ -49,13 +51,15 @@ public class TranspirationToSupplier {
         List<Integer> orderIds = orderAndProductCtrl.getAllOpenPeriodicalOrder();
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
-            orders.add(new PeriodicalOrderDTOforTransport(
-                    orderShipDetails.supplier.supplierID,
-                    orderShipDetails.orderId,
-                    orderShipDetails.shopNumber,
-                    orderShipDetails.supplier.supplyDays,
-                    orderShipDetails.supplier.area
-            ));
+            if(!orderShipDetails.supplier.selfDelivery) {
+                orders.add(new PeriodicalOrderDTOforTransport(
+                        orderShipDetails.supplier.supplierID,
+                        orderShipDetails.orderId,
+                        orderShipDetails.shopNumber,
+                        orderShipDetails.supplier.supplyDays,
+                        orderShipDetails.supplier.area
+                ));
+            }
         }
 
         return orders;
@@ -69,7 +73,7 @@ public class TranspirationToSupplier {
     public SupplierDetailsDTO getSupplierInfo(int supplierId){
         return supplierCtrl.getSupplierInfo(supplierId);
     }
-    //TODO: add statuses: open: in store,
+
     /**
      * Set order as approved and give it an arrival date
      * @param orderId order id

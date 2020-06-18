@@ -58,7 +58,7 @@ public class SupplierSystem {
      * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
      */
     public int createSupplierCard(String name, String incNum, String address, String accountNumber, String paymentInfo,
-                                  String contactName, String phoneNumber,String email) {
+                                  String contactName, String phoneNumber,String email, boolean selfDelivery) {
         String[] arr= paymentInfo.split(",");
 
         if(arr.length<1)
@@ -77,7 +77,7 @@ public class SupplierSystem {
 
 
 
-        Supplier sup = new Supplier(name,address,incNum,accountNumber, arr[0]);
+        Supplier sup = new Supplier(name,address,incNum,accountNumber, arr[0], selfDelivery);
 
         int returnedId=supplierManager.insert(sup);
         if(returnedId!=-1) {
@@ -329,6 +329,9 @@ public class SupplierSystem {
 
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){
+            if(regularOrder.getOrderId() == -2){
+                return Result.makeFailure("No such shop id");
+            }
             return Result.makeFailure("Order wasnt created");
         }
 
@@ -342,7 +345,6 @@ public class SupplierSystem {
      * @return orderId if it was created otherwise -1
      */
     public Result<Integer> createRegularOrder(List<ProductInOrder> products, int shopNumber) {
-        //TODO suupliers with no delivery day, do not open for them an order
         List<Integer> barcodes = new ArrayList<>();
         List<Integer> suppliersId;
         Supplier sup;
@@ -367,6 +369,9 @@ public class SupplierSystem {
 
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){
+            if(regularOrder.getOrderId() == -2){
+                return Result.makeFailure("No such shop id");
+            }
             return Result.makeFailure("Order wasnt created");
         }
 
@@ -566,7 +571,7 @@ public class SupplierSystem {
             SupplierDetailsDTO supplierDetails = new SupplierDetailsDTO(supplier.getSupId(), supplier.getSupplierName(),
                     supplier.getIncNum(), supplier.getAccountNumber(), supplier.getAddress(),
                     supplier.getContacts().get(0).getName(), supplier.getContacts().get(0).getPhoneNumber(), supplier.getContacts().get(0).getEmail(),
-                    supplier.getContract().getDailyInfo(), supplier.getArea());
+                    supplier.getContract().getDailyInfo(), supplier.getArea(), supplier.isSelfDelivery());
             return supplierDetails;
         }
         return null;

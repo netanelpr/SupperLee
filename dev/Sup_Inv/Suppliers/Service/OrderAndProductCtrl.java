@@ -140,7 +140,7 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         SupplierDetailsDTO supplierDetailsDTO = new SupplierDetailsDTO(supplier.getSupId(), supplier.getSupplierName(),
                 supplier.getIncNum(),supplier.getAccountNumber(), supplier.getAddress(),
                 contactInfo.getName(), contactInfo.getPhoneNumber(), contactInfo.getEmail(),
-                supplier.getContract().getDailyInfo(), supplier.getArea());
+                supplier.getContract().getDailyInfo(), supplier.getArea(), supplier.isSelfDelivery());
 
         return new OrderShipDetails(orderDetails.orderId, orderDetails.shopNumber, orderDetails.deliveryDate,
                 supplierDetailsDTO, orderDetails.details, orderDetails.isPeriodicalOrder);

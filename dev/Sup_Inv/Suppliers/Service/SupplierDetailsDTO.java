@@ -13,6 +13,7 @@ public class SupplierDetailsDTO {
     public String address;
     public List<Days> supplyDays;
     public int area;
+    public boolean selfDelivery;
 
     public String contactName;
     public String phoneNumber;
@@ -25,7 +26,7 @@ public class SupplierDetailsDTO {
 
     public SupplierDetailsDTO(int supplierID, String supplierName, String incNum, String accountNumber,
                               String address, String contactName, String phoneNumber, String email,
-                              List<Days> supplyDays, int area) {
+                              List<Days> supplyDays, int area, boolean selfDelivery) {
         this.supplierID = supplierID;
         this.supplierName = supplierName;
         this.incNum = incNum;
@@ -36,6 +37,7 @@ public class SupplierDetailsDTO {
         this.email = email;
         this.supplyDays = supplyDays;
         this.area = area;
+        this.selfDelivery = selfDelivery;
     }
 
     public String toString(){

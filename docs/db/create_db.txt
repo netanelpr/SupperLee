@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS Supplier(
 	account_number TEXT NOT NULL,
 	paymentInfo TEXT NOT NULL,
 	inc_number TEXT NOT NULL,
+	area INTEGER NOT NULL,
+	self_delivery INTEGER NOT NULL,
 	UNIQUE(inc_number)
 );
 
