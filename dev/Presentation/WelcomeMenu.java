@@ -231,7 +231,7 @@ public class WelcomeMenu {
             else if(ansStr.equals("gas") || ansStr.equals("gac") ||ansStr.equals("gpo") ||ansStr.equals("dr") ||
                     ansStr.equals("gasb") ||ansStr.equals("gaspd") ||ansStr.equals("gph") ||ansStr.equals("gaodi") ||
                     ansStr.equals("gapoo") ||ansStr.equals("gord")) {
-                //TODO Suppliers
+                supplierMenu.apply(ansStr);
             }
             else if(ansStr.equals("b") || ansStr.equals("B")) {
                 chooseJob(sc);
