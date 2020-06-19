@@ -35,9 +35,9 @@ public class OrderDetails extends Menu_Option {
             String periodicalInfo = "This order was created as part of periodicals order";
             System.out.println(periodicalInfo);
         }
-        String area = Character.getName(supplierDetailsDTO.area + 65);
+        char area = (char)(supplierDetailsDTO.area + 65);
         String info = String.format("Order ID: %d \tSupplier: %s \tAddress: %s\n" +
-                "Area: %s \tDeliver by the supplier: %s\n" +
+                "Area: %c \tDeliver by the supplier: %s\n" +
                 "Contact name: %s \tPhone number: %s \tEmail: %s\n" +
                 "shop number: %d \tDelievry date: %s\n",
                 orderShipDetails.orderId, supplierDetailsDTO.supplierName, supplierDetailsDTO.address,
