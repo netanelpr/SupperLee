@@ -26,7 +26,7 @@ public class InitWithData extends Menu_Option {
     }
 
     private void createSuppliers(){
-        int supId = -1;
+        /*int supId = -1;
         supId = supplierManagment.createSupplierCard("supplier1", "123","a","12345", "Cash", "Supi",
                 "051111111","supi@supplier1.com");
 
@@ -44,7 +44,7 @@ public class InitWithData extends Menu_Option {
             System.out.println("supplier with id " + supId + " wasnt created");
         }
 
-        addProductToSupplier(0);
+        addProductToSupplier(0);*/
     }
 
     private void addProductToSupplier(int supId){

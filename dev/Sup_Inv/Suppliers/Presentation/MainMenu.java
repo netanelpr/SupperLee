@@ -20,4 +20,13 @@ public class MainMenu extends MenuOfMenus {
         addMenuOption("Supplier menu", "s", new SupplierMenu(supplierManagment, orderAndProductManagement));
         addMenuOption("Order menu", "o",new OrderMenu(supplierManagment, orderAndProductManagement));
     }
+
+    public void apply(String optionInput){
+        Menu_Option option = getMenuWithIndex(optionInput);
+        if (option == null) {
+            System.out.println("Invalid function");
+            return;
+        }
+        option.apply();
+    }
 }

@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 public class OrderDetails extends Menu_Option {
 
 
-    private OrderAndProductManagement orderAndProductManagement;
+    private final OrderAndProductManagement orderAndProductManagement;
 
     public OrderDetails(OrderAndProductManagement orderAndProductManagement) {
         this.orderAndProductManagement = orderAndProductManagement;
@@ -35,11 +35,13 @@ public class OrderDetails extends Menu_Option {
             String periodicalInfo = "This order was created as part of periodicals order";
             System.out.println(periodicalInfo);
         }
-
+        char area = (char)(supplierDetailsDTO.area + 65);
         String info = String.format("Order ID: %d \tSupplier: %s \tAddress: %s\n" +
+                "Area: %c \tDeliver by the supplier: %s\n" +
                 "Contact name: %s \tPhone number: %s \tEmail: %s\n" +
                 "shop number: %d \tDelievry date: %s\n",
                 orderShipDetails.orderId, supplierDetailsDTO.supplierName, supplierDetailsDTO.address,
+                area, Boolean.toString(supplierDetailsDTO.selfDelivery),
                 supplierDetailsDTO.contactName, supplierDetailsDTO.phoneNumber, supplierDetailsDTO.email,
                 orderShipDetails.shopNumber, orderShipDetails.deliveryDate);
 
