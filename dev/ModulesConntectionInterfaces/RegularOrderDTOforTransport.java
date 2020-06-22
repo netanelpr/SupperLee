@@ -11,15 +11,15 @@ public class RegularOrderDTOforTransport {
     protected int supplierId;
     protected int shopID;
     protected int orderId;
-    protected Date date;
+    protected List<Days> daysCanSupply;
     protected int supplierArea;
 
 
-    public RegularOrderDTOforTransport(int supplierId, int orderId, int shopID, Date date,int supplierArea){
+    public RegularOrderDTOforTransport(int supplierId, int orderId, int shopID, List<Days> daysCanSupply,int supplierArea){
         this.supplierId = supplierId;
         this.shopID = shopID;
         this.orderId = orderId;
-        this.date = date;
+        this.daysCanSupply = daysCanSupply;
         this.supplierArea=supplierArea;
     }
 
@@ -36,11 +36,10 @@ public class RegularOrderDTOforTransport {
     }
 
     public Date getDate(){
-        return this.date;
+        return StructUtils.getTheNearestDate(daysCanSupply);
     }
 
     public int getSupplierArea() {
         return supplierArea;
     }
 }
-
