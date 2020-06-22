@@ -46,21 +46,44 @@ public class SystemInterfaceTransportations {
         }
         return current.getMessage();
     }
-
-    public List<String> getMissingItemsStores() throws Buisness_Exception {
-        return service.missing_items_controller.getMissingItemsStores();
+    public List<String> get_Dates_Periodical_Order() throws Buisness_Exception {
+        return service.transportation_controller.get_Dates_Periodical_Order();
     }
 
-    public List<String> getSupplierAreaByStore(int id) {
-        return service.site_controller.getSupplierAreaByStore(id);
+    public List<String> get_stores_by_date_Periodical_Order(Date date) throws Buisness_Exception {
+        return service.transportation_controller.get_stores_by_date_Periodical_Order(date);
+
     }
 
-    public List<String> getSupplierByStoreArea(int id, String area) {
-        return service.site_controller.getSupplierByStoreArea(id, area);
+    public List<String> get_area_for_suppliers_by_date_store_Periodical_Order(Date date, Integer storeID) throws Buisness_Exception {
+        return service.transportation_controller.get_area_for_suppliers_by_date_store_Periodical_Order(date,storeID);
+
     }
 
-    public List<String> getFreeTrucks(Date date, int departureTime) throws Buisness_Exception {
-        return service.trucks_controller.getFreeTrucks(date, departureTime);
+    public List<String> get_Suppliers_by_area_Periodical_Order(Date date, Integer storeID, String area) throws Buisness_Exception {
+        return service.transportation_controller.get_Suppliers_by_area_Periodical_Order(date,storeID,area);
+
+    }
+
+//    public List<String> getMissingItemsStores() throws Buisness_Exception {
+//        return service.missing_items_controller.getMissingItemsStores();
+//    }
+
+//    public List<String> getSupplierAreaByStore(int id) {
+//        return service.site_controller.getSupplierAreaByStore(id);
+//    }
+//
+//    public List<String> getSupplierByStoreArea(int id, String area) {
+//        return service.site_controller.getSupplierByStoreArea(id, area);
+//    }
+
+    public List<String> getFreeTrucks(Date date, int departureTime, boolean lastCheck) throws Buisness_Exception {
+        List<String> out = service.trucks_controller.getFreeTrucks(date, departureTime);
+        if(out.isEmpty() && lastCheck )
+        {
+            throw new Buisness_Exception("There are no Trucks available, cancel transport");
+        }
+        return out;
     }
 
     public List<String> getDriverToTrucks(int truckId, Date date){
@@ -89,16 +112,16 @@ public class SystemInterfaceTransportations {
         return service.site_controller.get_Stores_By_specific_area(area);
     }
 
-    public void addItemFiletotransport(List<Pair<String, Integer>> items, int store, int supplier) throws Buisness_Exception {
-        service.transportation_controller.addItemFiletotransport(items, store, supplier);
-    }
+//    public void addItemFiletotransport(List<Pair<String, Integer>> items, int store, int supplier) throws Buisness_Exception {
+//        service.transportation_controller.addItemFiletotransport(items, store, supplier);
+//    }
 
-    public void createRegularTransportation(Date date, int DepartureTime, int driver_id,
-                                            int truck_license_number, List<Integer> suppliers, List<Integer> stores)
-            throws Buisness_Exception{
-        service.transportation_controller.createRegularTransportation(date, DepartureTime, driver_id,
-                truck_license_number, suppliers, stores);
-    }
+//    public void createRegularTransportation(Date date, int DepartureTime, int driver_id,
+//                                            int truck_license_number, List<Integer> suppliers, List<Integer> stores)
+//            throws Buisness_Exception{
+//        service.transportation_controller.createRegularTransportation(date, DepartureTime, driver_id,
+//                truck_license_number, suppliers, stores);
+//    }
 
     public List<String> Show_transports() throws Buisness_Exception {
         return service.transportation_controller.Show_transports();
@@ -176,12 +199,26 @@ public class SystemInterfaceTransportations {
         return service.trucks_controller.Show_LicenseList();
     }
 
-    public List<String> getAllDrivers(Date date,String shiftType,List<String> licenses) throws Buisness_Exception{
-        return service.getWorkerController().getAllDrivers(date, shiftType, licenses);
+    public List<String> getAllDrivers(Date date,String shiftType,List<String> licenses, boolean lastCheck) throws Buisness_Exception{
+        List<String> out = service.getWorkerController().getAllDrivers(date, shiftType, licenses);
+        if(out.isEmpty() && lastCheck )
+        {
+            // TODO: call function of workers
+            throw new Buisness_Exception("There are no Drivers available message send to HR Manager");
+        }
+        else return out;
+
     }
 
-    public boolean isStoreKeeperAvailable(Date date,String shiftType, int storeSN){
-        return service.getWorkerController().isStoreKeeperAvailable(date, shiftType, storeSN);
+    public boolean isStoreKeeperAvailable(Date date,String shiftType, int storeSN, boolean lastCheck) throws Buisness_Exception{
+        boolean out = service.getWorkerController().isStoreKeeperAvailable(date, shiftType, storeSN);
+        if(!out && lastCheck )
+        {
+            // TODO: call function of workers
+            throw new Buisness_Exception("There are no Store Keeper available message send to HR Manager");
+        }
+        else return out;
+
     }
 
     public List<String> Show_shiftTypeList() throws Buisness_Exception {

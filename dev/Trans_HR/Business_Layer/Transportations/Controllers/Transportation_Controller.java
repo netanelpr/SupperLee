@@ -1,10 +1,12 @@
 package Trans_HR.Business_Layer.Transportations.Controllers;
 
+import ModulesConntectionInterfaces.PeriodicalOrderDTOforTransport;
+import ModulesConntectionInterfaces.TranspirationToSupplier;
+import Trans_HR.Business_Layer.Modules.Site;
 import Trans_HR.Business_Layer.Modules.Store;
 import Trans_HR.Business_Layer.Modules.Supplier;
 import Trans_HR.Business_Layer.Service;
 import Trans_HR.Business_Layer.Transportations.Modules.ItemsFile;
-import Trans_HR.Business_Layer.Transportations.Modules.MissingItems;
 import Trans_HR.Business_Layer.Transportations.Modules.Transportation;
 import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
 import Trans_HR.Business_Layer.Workers.Utils.ShiftType;
@@ -53,7 +55,7 @@ public class Transportation_Controller {
         try{
             Service service = Service.getInstance();
             Transportation transportation = service.getHashTransportation().get(transportationID);
-            List<Supplier> suppliers = transportation.getSuppliers();
+            List<Integer> suppliers = transportation.getSuppliers();
             List<Store> stores= transportation.getStores();
             if(suppliers.size()==suppliersToRemove.length)
             {
@@ -112,9 +114,15 @@ public class Transportation_Controller {
             List<String> output= new LinkedList<>();
             Transportation transportation = service.getHashTransportation().get(transportationID);
             output.add("Sup_Inv.Suppliers:");
-            for(Supplier supplier:transportation.getSuppliers())
+//            TODO: Check how to get the name
+//            for(Supplier supplier:transportation.getSuppliers())
+//            {
+//                String line =supplier.getId()+". "+supplier.getName()+".";
+//                output.add(line);
+//            }
+            for(Integer supplier:transportation.getSuppliers())
             {
-                String line =supplier.getId()+". "+supplier.getName()+".";
+                String line =supplier+". ";
                 output.add(line);
             }
             return output;
@@ -253,12 +261,12 @@ public class Transportation_Controller {
             {
                 service.set_ItemFile_idCouter();
             }
-            List<Supplier> suppliers1 = new LinkedList<Supplier>();
+//            List<Supplier> suppliers1 = new LinkedList<Supplier>();
             List<Store> stores1 = new LinkedList<Store>();
-            for (Supplier site : service.getSuppliersMap().values()) {
-                if (suppliers.contains(site.getId()))
-                    suppliers1.add(site);
-            }
+//            for (Supplier site : service.getSuppliersMap().values()) {
+//                if (suppliers.contains(site.getId()))
+//                    suppliers1.add(site);
+//            }
 
             for (Store site : service.getHashStoresMap().values()) {
                 if (stores.contains(site.getId()))
@@ -266,30 +274,34 @@ public class Transportation_Controller {
             }
             Transportation transportation =
                     new Transportation(date, DepartureTime, service.getDrivers().get(driver_id),
-                            service.getHashTrucks().get(truck_id), suppliers1, stores1);
+                            service.getHashTrucks().get(truck_id), suppliers, stores1);
 
-            List<Integer> id_to_delete = new LinkedList<Integer>();
-            for (MissingItems missingItems : service.getMissing().values()) {
-                if (stores.contains(missingItems.getStoreId()) && suppliers.contains(missingItems.getSupplierId())) {
-                    ItemsFile itemFile = new ItemsFile(missingItems.getItems_list(),
-                            service.getHashStoresMap().get(missingItems.getStoreId()),
-                            service.getSuppliersMap().get(missingItems.getSupplierId()));
+            TranspirationToSupplier transpirationToSupplier = TranspirationToSupplier.getInstance();
+            List<PeriodicalOrderDTOforTransport> orderList = transpirationToSupplier.getPeriodicalOpenOrders();
 
-                    itemFile.setTransportationID(transportation.getId());
-                    itemFile.setFrom_missing_items();
+            if (orderList.size() == 0) {
+                throw new Buisness_Exception("There are no Periodical Orders");
+            } else {
+                for (PeriodicalOrderDTOforTransport order : orderList) {
 
-                    service.add_ItemFile(itemFile);
-                    id_to_delete.add(missingItems.getID());
-                    transportation.addItemFile(itemFile);
+                    if (stores.contains(order.getShopId()) && suppliers.contains(order.getSupplierId()) &&
+                            date.equals(order.getDate())) {
+                        ItemsFile itemFile = new ItemsFile(
+                                service.getHashStoresMap().get(order.getShopId()),
+                                service.getSuppliersMap().get(order.getSupplierId()),order.getOrderId());
+
+                        itemFile.setTransportationID(transportation.getId());
+                        itemFile.setFrom_missing_items();
+
+                        service.add_ItemFile(itemFile);
+                        transportation.addItemFile(itemFile);
+                    }
+
                 }
             }
             service.getHashTrucks().get(truck_id).addDate(transportation);
             service.getDrivers().get(driver_id).addDate(transportation);
             service.add_Transportation(transportation);
-
-            for (Integer id : id_to_delete) {
-                service.remove_MissingItem(id);
-            }
         }
         catch (Exception e)
         {
@@ -299,47 +311,47 @@ public class Transportation_Controller {
 
     }
 
-    public void createRegularTransportation(Date date, int DepartureTime, int driver_id,
-                                            int truck_license_number, List<Integer> suppliers, List<Integer> stores)
-            throws Buisness_Exception{
-        try {
-            Service service = Service.getInstance();
-            service.set_Transportation_idCouter();
-            service.set_ItemFile_idCouter();
-
-            List<Supplier> suppliers1 = new LinkedList<Supplier>();
-            List<Store> stores1 = new LinkedList<Store>();
-            for (Supplier site : service.getSuppliersMap().values()) {
-                if (suppliers.contains(site.getId()))
-                    suppliers1.add(site);
-            }
-
-            for (Store site : service.getHashStoresMap().values()) {
-                if (stores.contains(site.getId()))
-                    stores1.add(site);
-            }
-
-            Transportation transportation =
-                    new Transportation(date, DepartureTime, service.getDrivers().get(driver_id), service.getHashTrucks().get(truck_license_number), suppliers1, stores1);
-
-            for (ItemsFile itemsFile : current) {
-                itemsFile.setTransportationID(transportation.getId());
-                transportation.addItemFile(itemsFile);
-
-                service.add_ItemFile(itemsFile);
-            }
-            this.current = new LinkedList<>();
-            service.getDrivers().get(driver_id).addDate(transportation);
-            service.getHashTrucks().get(truck_license_number).addDate(transportation);
-
-            service.add_Transportation(transportation);
-
-        }
-        catch (Exception e)
-        {
-            throw new Buisness_Exception("-Error couldn't create Transportation-\n");
-        }
-    }
+//    public void createRegularTransportation(Date date, int DepartureTime, int driver_id,
+//                                            int truck_license_number, List<Integer> suppliers, List<Integer> stores)
+//            throws Buisness_Exception{
+//        try {
+//            Service service = Service.getInstance();
+//            service.set_Transportation_idCouter();
+//            service.set_ItemFile_idCouter();
+//
+//            List<Supplier> suppliers1 = new LinkedList<Supplier>();
+//            List<Store> stores1 = new LinkedList<Store>();
+//            for (Supplier site : service.getSuppliersMap().values()) {
+//                if (suppliers.contains(site.getId()))
+//                    suppliers1.add(site);
+//            }
+//
+//            for (Store site : service.getHashStoresMap().values()) {
+//                if (stores.contains(site.getId()))
+//                    stores1.add(site);
+//            }
+//
+//            Transportation transportation =
+//                    new Transportation(date, DepartureTime, service.getDrivers().get(driver_id), service.getHashTrucks().get(truck_license_number), suppliers1, stores1);
+//
+//            for (ItemsFile itemsFile : current) {
+//                itemsFile.setTransportationID(transportation.getId());
+//                transportation.addItemFile(itemsFile);
+//
+//                service.add_ItemFile(itemsFile);
+//            }
+//            this.current = new LinkedList<>();
+//            service.getDrivers().get(driver_id).addDate(transportation);
+//            service.getHashTrucks().get(truck_license_number).addDate(transportation);
+//
+//            service.add_Transportation(transportation);
+//
+//        }
+//        catch (Exception e)
+//        {
+//            throw new Buisness_Exception("-Error couldn't create Transportation-\n");
+//        }
+//    }
 
 
     public void delete_Transport(int transport_id) throws Buisness_Exception {
@@ -383,17 +395,18 @@ public class Transportation_Controller {
         } else {
             List<String> result = new LinkedList<>();
             for (Transportation transportation : service.getHashTransportation().values()) {
-                result.add(transportation.getId().toString());
+                if(!transportation.getStatus().equals("Canceled"))
+                    result.add(transportation.getId().toString());
             }
             return result;
         }
     }
 
-    public void addItemFiletotransport(List<Pair<String, Integer>> items, int store, int supplier)throws Buisness_Exception {
+    public void addItemFiletotransport(int store, int supplier, int orderID)throws Buisness_Exception {
         try {
             Service service = Service.getInstance();
             service.set_ItemFile_idCouter();
-            ItemsFile itemsFile = new ItemsFile(items, service.getHashStoresMap().get(store), service.getSuppliersMap().get(supplier));
+            ItemsFile itemsFile = new ItemsFile(service.getHashStoresMap().get(store), service.getSuppliersMap().get(supplier), orderID);
             current.add(itemsFile);
         }
         catch (Exception e)
@@ -408,7 +421,8 @@ public class Transportation_Controller {
         List<String> output = new LinkedList<>();
         service.upload__all_Transportation();
         for (Transportation transportation : service.getHashTransportation().values()) {
-            output.add(transportation.toString());
+            if(!transportation.getStatus().equals("Canceled"))
+                output.add(transportation.toString());
         }
         if(output.isEmpty())
             throw new Buisness_Exception("There are no transports to show\n");
@@ -446,4 +460,121 @@ public class Transportation_Controller {
         }
     }
 
+    //TODO:ASS 4
+
+    public List<String> get_Dates_Periodical_Order() throws Buisness_Exception {
+
+        TranspirationToSupplier transpirationToSupplier = TranspirationToSupplier.getInstance();
+        List<String> output = new LinkedList<>();
+
+        List<PeriodicalOrderDTOforTransport> orderList = transpirationToSupplier.getPeriodicalOpenOrders();
+        if (orderList.size() == 0) {
+            throw new Buisness_Exception("There are no Orders");
+        } else {
+            for (PeriodicalOrderDTOforTransport order : orderList) {
+                if (!output.contains(order.getDate().toString())) {
+                    output.add(order.getDate().toString());
+                }
+            }
+            output.sort(String.CASE_INSENSITIVE_ORDER);
+            return output;
+        }
+    }
+
+    public List<String> get_stores_by_date_Periodical_Order(Date date) throws Buisness_Exception {
+        try
+        {
+            Service service = Service.getInstance();
+            TranspirationToSupplier transpirationToSupplier = TranspirationToSupplier.getInstance();
+            List<String> output = new LinkedList<>();
+            List<PeriodicalOrderDTOforTransport> orderList = transpirationToSupplier.getPeriodicalOpenOrders();
+
+            if (orderList.size() == 0) {
+                throw new Buisness_Exception("There are no Orders");
+            } else {
+                service.getAllStores();
+                if (service.getHashStoresMap().size() == 0) {
+                    throw new Buisness_Exception("There are no stores to supply to");
+                }
+                for (PeriodicalOrderDTOforTransport order : orderList) {
+                    if(date.equals(order.getDate()))
+                    {
+                        String store = service.getHashStoresMap().get(order.getShopId()).getName();
+                        String line = order.getShopId() + ". " + "Name: " + store + ".";
+                        if (!output.contains(line)) {
+                            output.add(line);
+                        }
+                    }
+                }
+                output.sort(String.CASE_INSENSITIVE_ORDER);
+                return output;
+            }
+        }
+        catch (Exception e)
+        {
+            throw new Buisness_Exception("Store error");
+        }
+    }
+
+
+    public List<String> get_area_for_suppliers_by_date_store_Periodical_Order(Date date, Integer storeID) throws Buisness_Exception {
+        try
+        {
+            Service service = Service.getInstance();
+            TranspirationToSupplier transpirationToSupplier = TranspirationToSupplier.getInstance();
+            List<String> output = new LinkedList<>();
+            List<PeriodicalOrderDTOforTransport> orderList = transpirationToSupplier.getPeriodicalOpenOrders();
+
+            if (orderList.size() == 0) {
+                throw new Buisness_Exception("There are no Orders");
+            } else {
+                for (PeriodicalOrderDTOforTransport order : orderList) {
+                    if(storeID==order.getShopId() && date.equals(order.getDate()))
+                    {
+                        if (!output.contains(service.getArea_list().get(order.getSupplierArea()).getAreaName())) {
+                            output.add(service.getArea_list().get(order.getSupplierArea()).getAreaName());
+                        }
+                    }
+                }
+                output.sort(String.CASE_INSENSITIVE_ORDER);
+                return output;
+            }
+        }
+        catch (Exception e)
+        {
+            throw new Buisness_Exception("Area error");
+        }
+    }
+
+    public List<String> get_Suppliers_by_area_Periodical_Order(Date date, Integer storeID, String area) throws Buisness_Exception {
+        try
+        {
+            Service service = Service.getInstance();
+            TranspirationToSupplier transpirationToSupplier = TranspirationToSupplier.getInstance();
+            List<String> output = new LinkedList<>();
+            List<PeriodicalOrderDTOforTransport> orderList = transpirationToSupplier.getPeriodicalOpenOrders();
+
+            if (orderList.size() == 0) {
+                throw new Buisness_Exception("There are no Orders");
+            } else {
+                for (PeriodicalOrderDTOforTransport order : orderList) {
+                    if(storeID==order.getShopId() && date.equals(order.getDate())&&
+                            area.equals(service.getArea_list().get(order.getSupplierArea()).getAreaName()))
+                    {
+                        String line = order.getSupplierId() + ". " + "Name: " +
+                                transpirationToSupplier.getSupplierInfo(order.getSupplierId()).supplierName + ".";
+                        if (!output.contains(line)) {
+                            output.add(line);
+                        }
+                    }
+                }
+                output.sort(String.CASE_INSENSITIVE_ORDER);
+                return output;
+            }
+        }
+        catch (Exception e)
+        {
+            throw new Buisness_Exception("Area error");
+        }
+    }
 }

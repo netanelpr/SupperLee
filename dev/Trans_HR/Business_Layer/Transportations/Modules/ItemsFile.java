@@ -13,25 +13,24 @@ public class ItemsFile {
 
     private static int idcounter = 0;
     private int transportationID=-1;
-//    private HashMap<String,Integer> items_list;
-    private List<Pair<String,Integer>> items_list;
     private Store store;
     private Supplier supplier;
     boolean from_missing_items=false;
     private int id;
+    private int orderID;
 
-    public ItemsFile(List<Pair<String,Integer>> items_list, Store store,Supplier supplier)
+    public ItemsFile(Store store,Supplier supplier, int orderID)
     {
         this.id=idcounter++;
-        this.items_list=items_list;
+        this.orderID =orderID;
         this.store=store;
         this.supplier=supplier;
     }
 
-    public ItemsFile(int id, List<Pair<String,Integer>> items_list, Store store,Supplier supplier)
+    public ItemsFile(int id, Store store,Supplier supplier, int orderID)
     {
         this.id=id;
-        this.items_list=items_list;
+        this.orderID =orderID;
         this.store=store;
         this.supplier=supplier;
     }
@@ -45,15 +44,11 @@ public class ItemsFile {
     }
 
 
-
-    public List<Pair<String,Integer>> getItems_list() {
-        return items_list;
-    }
-
-
-
     public int getId(){
         return this.id;
+    }
+    public int getorderID(){
+        return this.orderID;
     }
     public Supplier getSupplier() {return this.supplier;}
     public Store getStore(){return this.store;}

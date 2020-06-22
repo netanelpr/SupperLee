@@ -1,7 +1,9 @@
 package ModulesConntectionInterfaces;
 
+import Sup_Inv.Result.Result;
 import Sup_Inv.Suppliers.Service.*;
 import Sup_Inv.Suppliers.Structs.OrderStatus;
+import Trans_HR.Business_Layer.Service;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -15,6 +17,14 @@ public class TranspirationToSupplier {
     public TranspirationToSupplier(){
         orderAndProductCtrl = new OrderAndProductCtrl();
         supplierCtrl = new SupplierCtrl();
+    }
+
+    public static TranspirationToSupplier getInstance() {
+        return TranspirationToSupplier.SingletonTranspirationToSupplier.instance;
+    }
+
+    private static class SingletonTranspirationToSupplier {
+        private static TranspirationToSupplier instance = new TranspirationToSupplier();
     }
 
     /**
@@ -31,13 +41,13 @@ public class TranspirationToSupplier {
 
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
-            orders.add(new RegularOrderDTOforTransport(
-                    orderShipDetails.supplier.supplierID,
-                    orderShipDetails.orderId,
-                    orderShipDetails.shopNumber,
-                    orderShipDetails.supplier.supplyDays,
-                    Integer.parseInt(orderShipDetails.supplier.area)
-                    ));
+//            orders.add(new RegularOrderDTOforTransport(
+//                    orderShipDetails.supplier.supplierID,
+//                    orderShipDetails.orderId,
+//                    orderShipDetails.shopNumber,
+//                    orderShipDetails.supplier.supplyDays[0],
+//                    Integer.parseInt(orderShipDetails.supplier.area)
+//                    ));
         }
 
         return orders;
@@ -50,13 +60,13 @@ public class TranspirationToSupplier {
         //TODO: change parseInt to int
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
-            orders.add(new PeriodicalOrderDTOforTransport(
-                    orderShipDetails.supplier.supplierID,
-                    orderShipDetails.orderId,
-                    orderShipDetails.shopNumber,
-                    orderShipDetails.supplier.supplyDays,
-                    Integer.parseInt(orderShipDetails.supplier.area)
-            ));
+//            orders.add(new PeriodicalOrderDTOforTransport(
+//                    orderShipDetails.supplier.supplierID,
+//                    orderShipDetails.orderId,
+//                    orderShipDetails.shopNumber,
+//                    orderShipDetails.supplier.supplyDays,
+//                    Integer.parseInt(orderShipDetails.supplier.area)
+//            ));
         }
 
         return orders;

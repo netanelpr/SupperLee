@@ -15,10 +15,11 @@ public class dummy_Transportation {
     private List<Integer> suppliers;
     private List<Integer> stores;
     private int DriverSn;
+    private String status;
 
 
     public dummy_Transportation(int Id,Date date, int leaving_time, double truck_weight,int trucksn, int Driver,
-                                List<Integer> suppliers, List<Integer> stores, List<Integer> itemsFile){
+                                List<Integer> suppliers, List<Integer> stores, List<Integer> itemsFile,String status){
         this.Id=Id;
         this.date=date;
         this.leaving_time=leaving_time;
@@ -28,9 +29,10 @@ public class dummy_Transportation {
         this.suppliers=suppliers;
         this.stores=stores;
         this.DriverSn=Driver;
+        this.status=status;
     }
 
-    public dummy_Transportation(int Id,Date date, int leaving_time, double truck_weight,int trucksn, int Driver){
+    public dummy_Transportation(int Id,Date date, int leaving_time, double truck_weight,int trucksn, int Driver,String status){
         this.Id=Id;
         this.date=date;
         this.leaving_time=leaving_time;
@@ -40,6 +42,12 @@ public class dummy_Transportation {
         this.suppliers=new LinkedList<>();
         this.stores=new LinkedList<>();
         this.DriverSn=Driver;
+        this.status=status;
+    }
+
+    public String getStatus()
+    {
+        return this.status;
     }
 
 

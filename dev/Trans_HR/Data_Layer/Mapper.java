@@ -23,7 +23,6 @@ public class Mapper {
     private address_DAO address_Mapper;
     private area_DAO area_Mapper;
     private item_file_DAO itemFile_Mapper;
-    private missing_items_DAO missingItems_Mapper;
     private shift_DAO shift_Mapper;
     private store_DAO store_Mapper;
     private supplier_DAO supplier_Mapper;
@@ -42,7 +41,6 @@ public class Mapper {
         address_Mapper = new address_DAO();
         area_Mapper = new area_DAO();
         itemFile_Mapper = new item_file_DAO();
-        missingItems_Mapper = new missing_items_DAO();
         shift_Mapper = new shift_DAO();
         store_Mapper = new store_DAO();
         supplier_Mapper = new supplier_DAO();
@@ -187,9 +185,9 @@ public class Mapper {
 
     public void insertTransportation(int Sn, Date date, int leaving_time, double truck_weight,
                                      int trucksn, int Driver, List<Integer> suppliers,
-                                     List<Integer> stores, List<Integer> itemsFile){
+                                     List<Integer> stores, List<Integer> itemsFile,String status){
         dummy_Transportation toAdd = new dummy_Transportation( Sn,date, leaving_time, truck_weight,
-                trucksn,Driver,suppliers, stores,itemsFile);
+                trucksn,Driver,suppliers, stores,itemsFile,status);
         transportation_Mapper.insert(toAdd);
     }
 
@@ -240,8 +238,8 @@ public class Mapper {
     } */
 
     //Itemfile
-    public void insertItemfile(int Sn, int supplier_id,int store_id, List<Pair<String,Integer>> items){
-        dummy_Items_File toAdd = new dummy_Items_File(Sn,supplier_id,store_id, items);
+    public void insertItemfile(int Sn, int supplier_id,int store_id, int orderID){
+        dummy_Items_File toAdd = new dummy_Items_File(Sn,supplier_id,store_id, orderID);
         itemFile_Mapper.insert(toAdd);
     }
 
@@ -258,18 +256,14 @@ public class Mapper {
     }
 
     //MissingItem
-    public void insertMissingItem(int id, int store_id, int supplier_id,List<Pair<String,Integer>> missing){
-        dummy_Missing_items toAdd = new dummy_Missing_items(id,store_id,supplier_id,missing);
-        missingItems_Mapper.insert(toAdd);
-    }
+//    public void insertMissingItem(int id, int store_id, int supplier_id,List<Pair<String,Integer>> missing){
+//        dummy_Missing_items toAdd = new dummy_Missing_items(id,store_id,supplier_id,missing);
+//        missingItems_Mapper.insert(toAdd);
+//    }
 
-    public List<dummy_Missing_items> selectAllMissing_items(){
-        return missingItems_Mapper.selectAll();
-    }
-
-    public void deleteMissing_items(int SN){
-        missingItems_Mapper.delete(SN);
-    }
+//    public List<dummy_Missing_items> selectAllMissing_items(){
+//        return missingItems_Mapper.selectAll();
+//    }
 
 
     public void deleteAddress(int SN){

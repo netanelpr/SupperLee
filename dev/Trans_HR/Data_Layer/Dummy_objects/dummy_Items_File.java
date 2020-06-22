@@ -10,21 +10,22 @@ public class dummy_Items_File {
     private int Sn;
     private int supplier_id;
     private int store_id;
-    private List<Pair<String, Integer>> Items;
+    private int orderID;
 
-    public dummy_Items_File(int Sn, int supplier_id,int store_id, List<Pair<String,Integer>> items){
+    public dummy_Items_File(int Sn, int supplier_id,int store_id, int orderID){
         this.Sn=Sn;
         this.supplier_id=supplier_id;
         this.store_id=store_id;
-        this.Items=items;
+        this.orderID =orderID;
     }
 
-    public dummy_Items_File(int SN, int store_id, int supplier_id){
-        this.Sn = SN;
-        this.store_id=store_id;
-        this.supplier_id=supplier_id;
-        this.Items = new LinkedList<>();
-    }
+//    public dummy_Items_File(int SN, int store_id, int supplier_id){
+//        this.Sn = SN;
+//        this.store_id=store_id;
+//        this.supplier_id=supplier_id;
+//        this.orderID =orderID;
+//
+//    }
 
     public int getSupplier_id() {
         return supplier_id;
@@ -50,11 +51,11 @@ public class dummy_Items_File {
         Sn = sn;
     }
 
-    public List<Pair<String, Integer>> getItems() {
-        return Items;
+    public int getorderID() {
+        return orderID;
     }
 
-    public void setItems(List<Pair<String, Integer>> items) {
-        Items = items;
+    public void setorderID(int orderID) {
+        this.orderID = orderID;
     }
 }
