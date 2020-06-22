@@ -13,6 +13,8 @@ public class Supplier {
     private String accountNumber;
     private List<String> paymentInfo;
     private String address;
+    private int area;
+    private boolean selfDelivery;
 
     //Sup_Inv.Suppliers.Supplier.Sup_Inv.Suppliers.Supplier Details
     private String name;
@@ -21,7 +23,7 @@ public class Supplier {
     private ContractWithSupplier contract;
 
     public Supplier(int supID,String name, String address, String incNum, String accountNumber, String paymentInfo,
-                    String contactName, String phoneNumber,String email){
+                    String contactName, String phoneNumber,String email, boolean selfDelivery){
         this.name=name;
         this.incNum=incNum;
         this.accountNumber=accountNumber;
@@ -29,6 +31,8 @@ public class Supplier {
         this.paymentInfo.add(paymentInfo);
         this.supId=supID;
         this.address = address;
+        setArea(address);
+        this.selfDelivery = selfDelivery;
 
 
         this.contacts = new LinkedList<>();
@@ -38,23 +42,22 @@ public class Supplier {
     }
 
     public Supplier(String name, String address, String incNum, String accountNumber, String paymentInfo,
-                    String contactName, String phoneNumber,String email){
+                    String contactName, String phoneNumber,String email, boolean selfDelivery){
         this.name=name;
         this.incNum=incNum;
         this.accountNumber=accountNumber;
         this.paymentInfo=new LinkedList<>();
         this.paymentInfo.add(paymentInfo);
         this.address=address;
-
-
-
         this.contacts = new LinkedList<>();
         this.addContactInfo(contactName,phoneNumber,email);
+        setArea(address);
+        this.selfDelivery = selfDelivery;
 
         contract = null;
     }
 
-    public Supplier(String name, String address, String incNum, String accountNumber, String paymentInfo){
+    public Supplier(String name, String address, String incNum, String accountNumber, String paymentInfo, boolean selfDelivery){
         this.name=name;
         this.incNum=incNum;
         this.accountNumber=accountNumber;
@@ -63,19 +66,10 @@ public class Supplier {
         this.address=address;
         this.contacts = new LinkedList<>();
         contract = null;
+        setArea(address);
+        this.selfDelivery = selfDelivery;
+
     }
-    public Supplier(String name, String address, String incNum, String accountNumber){
-        this.name=name;
-        this.incNum=incNum;
-        this.accountNumber=accountNumber;
-        this.paymentInfo=new LinkedList<>();
-        this.address=address;
-        this.contacts = new LinkedList<>();
-        contract = null;
-    }
-
-
-
 
     public boolean addContactInfo(String name, String phone, String email){
         this.contacts.add(new ContactInfo(name, phone, email,this.supId));
@@ -326,5 +320,17 @@ public class Supplier {
 
     public void setContacts(List<ContactInfo> contacts) {
         this.contacts=contacts;
+    }
+
+    public int getArea(){
+        return area;
+    }
+
+    private void setArea(String area){
+        this.area = area.length() % 4;
+    }
+
+    public boolean isSelfDelivery() {
+        return selfDelivery;
     }
 }

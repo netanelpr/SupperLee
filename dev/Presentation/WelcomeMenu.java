@@ -2,7 +2,7 @@ package Presentation;
 
 import Sup_Inv.DataAccess.SupInvDBConn;
 import Sup_Inv.Inventory.View.InvService;
-import Sup_Inv.Suppliers.Presentation.MainMenu;
+import Sup_Inv.Suppliers.Presentation.AllSupplierOptionsMenu;
 import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
 import Trans_HR.Data_Layer.Mapper;
 import Trans_HR.Interface_Layer.Workers.SystemInterfaceWorkers;
@@ -16,13 +16,13 @@ import java.util.Scanner;
 
 public class WelcomeMenu {
 
-    private static MainMenu supplierMenu;
+    private static AllSupplierOptionsMenu supplierMenu;
     private static InvService inventoryMenu;
     private static Boolean terminate;
     private static Scanner sc = new Scanner(System.in);
 
     public WelcomeMenu() {
-        supplierMenu = new MainMenu();
+        supplierMenu = new AllSupplierOptionsMenu();
         inventoryMenu = InvService.getInstance();
     }
 
@@ -228,10 +228,10 @@ public class WelcomeMenu {
             else if(ansStr.equals("SS") || ansStr.equals("ST")) {
                 //TODO Transportation
             }
-            else if(ansStr.equals("gas") || ansStr.equals("gac") ||ansStr.equals("gpo") ||ansStr.equals("dr") ||
-                    ansStr.equals("gasb") ||ansStr.equals("gaspd") ||ansStr.equals("gph") ||ansStr.equals("gaodi") ||
-                    ansStr.equals("gapoo") ||ansStr.equals("gord")) {
-                //TODO Suppliers
+            else if(ansStr.equals("GAS") || ansStr.equals("GAC") ||ansStr.equals("GPO") ||ansStr.equals("DR") ||
+                    ansStr.equals("GASB") ||ansStr.equals("GASPD") ||ansStr.equals("GPH") ||ansStr.equals("GAODI") ||
+                    ansStr.equals("GAPOO") ||ansStr.equals("GORD")) {
+                supplierMenu.apply(ansStr.toLowerCase());
             }
             else if(ansStr.equals("b") || ansStr.equals("B")) {
                 chooseJob(sc);

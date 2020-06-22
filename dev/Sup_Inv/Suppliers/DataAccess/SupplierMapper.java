@@ -30,8 +30,8 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
 
     //Inserts statements
     protected String insertSupplierStatement() {
-        return "INSERT INTO Supplier (sup_name,address,account_number,paymentInfo,inc_number)  " +
-                "Values (?,?,?,?,?)";
+        return "INSERT INTO Supplier (sup_name,address,account_number,paymentInfo,inc_number, area, self_delivery)  " +
+                "Values (?,?,?,?,?,?,?)";
     }
     protected String insertContactStatement() {
         return "INSERT INTO Contact_info (name,phone_number,email,supplier_id)  " +
@@ -169,9 +169,11 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             if(res.next()) {
                 //int supID,String name, String address, String incNum, String accountNumber, String paymentInfo,
                 //                    String contactName, String phoneNumber,String email
+                boolean selfDelivery = res.getInt("self_delivery") == 1;
                 Supplier myNewSupplier=new Supplier(res.getInt("id"),res.getString(2),
                         res.getString(3), res.getString("inc_number"),res.getString("account_number"), res.getString("paymentInfo"),
-                        res.getString(5), res.getString("phone_number"), res.getString("email"));
+                        res.getString(5), res.getString("phone_number"), res.getString("email"),
+                        selfDelivery);
                 List<ContactInfo> contacts = getAllSupplierContacts(myNewSupplier.getSupId());
                 myNewSupplier.setContacts(contacts);
                 ContractWithSupplier new_contractWithSupplier = this.getContractBySupplier(myNewSupplier.getSupId());
@@ -279,6 +281,11 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             return supplier.getSupId();
         }
 
+        int selfDelivery = 0;
+        if(supplier.isSelfDelivery()){
+            selfDelivery = 1;
+        }
+
         try(PreparedStatement pstmt = conn.prepareStatement(insertSupplierStatement(), Statement.RETURN_GENERATED_KEYS)){
 
             pstmt.setString(1, supplier.getSupplierName());
@@ -286,6 +293,8 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
             pstmt.setString(3, supplier.getAccountNumber());
             pstmt.setString(4, supplier.getPaymentInfo().get(0));
             pstmt.setString(5, supplier.getIncNum());
+            pstmt.setInt(6, supplier.getArea());
+            pstmt.setInt(7, selfDelivery);
 
             int affectedRows = pstmt.executeUpdate();
 
