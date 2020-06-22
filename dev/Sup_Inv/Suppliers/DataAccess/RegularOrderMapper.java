@@ -92,7 +92,7 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
     }
 
     private String isValidShopStatement(){
-        return "SELECT id from Sup_Inv.Inventory  " +
+        return "SELECT id from Inventory  " +
                 "WHERE id = (?)";
     }
 

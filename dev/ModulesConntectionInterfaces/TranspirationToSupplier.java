@@ -1,9 +1,7 @@
 package ModulesConntectionInterfaces;
 
-import Sup_Inv.Result.Result;
 import Sup_Inv.Suppliers.Service.*;
 import Sup_Inv.Suppliers.Structs.OrderStatus;
-import Trans_HR.Business_Layer.Service;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -17,14 +15,6 @@ public class TranspirationToSupplier {
     public TranspirationToSupplier(){
         orderAndProductCtrl = new OrderAndProductCtrl();
         supplierCtrl = new SupplierCtrl();
-    }
-
-    public static TranspirationToSupplier getInstance() {
-        return TranspirationToSupplier.SingletonTranspirationToSupplier.instance;
-    }
-
-    private static class SingletonTranspirationToSupplier {
-        private static TranspirationToSupplier instance = new TranspirationToSupplier();
     }
 
     /**
@@ -41,13 +31,15 @@ public class TranspirationToSupplier {
 
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
-//            orders.add(new RegularOrderDTOforTransport(
-//                    orderShipDetails.supplier.supplierID,
-//                    orderShipDetails.orderId,
-//                    orderShipDetails.shopNumber,
-//                    orderShipDetails.supplier.supplyDays[0],
-//                    Integer.parseInt(orderShipDetails.supplier.area)
-//                    ));
+            if(!orderShipDetails.supplier.selfDelivery) {
+                orders.add(new RegularOrderDTOforTransport(
+                        orderShipDetails.supplier.supplierID,
+                        orderShipDetails.orderId,
+                        orderShipDetails.shopNumber,
+                        orderShipDetails.supplier.supplyDays,
+                        orderShipDetails.supplier.area
+                ));
+            }
         }
 
         return orders;
@@ -57,16 +49,17 @@ public class TranspirationToSupplier {
 
         List<PeriodicalOrderDTOforTransport> orders = new LinkedList<>();
         List<Integer> orderIds = orderAndProductCtrl.getAllOpenPeriodicalOrder();
-        //TODO: change parseInt to int
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
-//            orders.add(new PeriodicalOrderDTOforTransport(
-//                    orderShipDetails.supplier.supplierID,
-//                    orderShipDetails.orderId,
-//                    orderShipDetails.shopNumber,
-//                    orderShipDetails.supplier.supplyDays,
-//                    Integer.parseInt(orderShipDetails.supplier.area)
-//            ));
+            if(!orderShipDetails.supplier.selfDelivery) {
+                orders.add(new PeriodicalOrderDTOforTransport(
+                        orderShipDetails.supplier.supplierID,
+                        orderShipDetails.orderId,
+                        orderShipDetails.shopNumber,
+                        orderShipDetails.supplier.supplyDays,
+                        orderShipDetails.supplier.area
+                ));
+            }
         }
 
         return orders;
@@ -80,7 +73,7 @@ public class TranspirationToSupplier {
     public SupplierDetailsDTO getSupplierInfo(int supplierId){
         return supplierCtrl.getSupplierInfo(supplierId);
     }
-    //TODO: add statuses: open: in store,
+
     /**
      * Set order as approved and give it an arrival date
      * @param orderId order id

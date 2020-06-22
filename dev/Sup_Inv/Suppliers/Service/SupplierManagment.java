@@ -19,7 +19,7 @@ public interface SupplierManagment {
      * @return -1 if cant create a new supplier otherwise return new supplier ID in the system.
      */
     public int createSupplierCard(String name, String incNum, String address, String accountNumber, String paymentInfo,
-                                  String contactName, String phoneNumber,String email);
+                                  String contactName, String phoneNumber,String email, boolean selfDelivery);
 
     public List<String> getPaymentOptions();
 
