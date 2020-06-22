@@ -4,6 +4,7 @@ import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
 import Trans_HR.Interface_Layer.Transportations.SystemInterfaceTransportations;
 import javafx.util.Pair;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -47,7 +48,7 @@ public class TransportationMenu {
                     Remove_transport();
                 else if (option.equals("4")) {
                     Pair<Boolean,Integer> check= Truck_weight_in_supplier();
-                    if(check!=null)
+                    if(check==null||!check.getKey())
                     {
                         System.out.println("Choose how to fix the transport");
                         String option2 = "";
@@ -190,7 +191,7 @@ public class TransportationMenu {
                 }
             }
 
-            systemInterfaceTransportations.createTransportation(orderDate, shiftType, driverId,
+            systemInterfaceTransportations.createTransportation_Periodical_Order(orderDate, shiftType, driverId,
                     truckId, supplier_list, stores);
             System.out.println("The transport was registered successfully" + "\n");
         } catch (Buisness_Exception e) {
@@ -200,14 +201,14 @@ public class TransportationMenu {
 
     public static void Complete_Regular_Open_Order() {
         try {
-            List<String> Dates_Periodical_Order = systemInterfaceTransportations.get_Dates_Periodical_Order();
+            List<String> Dates_Periodical_Order = systemInterfaceTransportations.get_Dates_Regular_Open_Order();
             Dates_Periodical_Order.forEach(System.out::println);
             System.out.println("Please choose date to transportation from dates");
             Date orderDate = new Date();
             orderDate = parseToDate(scan.nextLine());
             checkDateInList(Dates_Periodical_Order,orderDate);
 
-            List<String> Periodical_Order_Stores = systemInterfaceTransportations.get_stores_by_date_Periodical_Order(orderDate);
+            List<String> Periodical_Order_Stores = systemInterfaceTransportations.get_stores_by_date_Regular_Open_Order(orderDate);
             Periodical_Order_Stores.forEach(System.out::println);
             System.out.println("Please choose store to transportation by id");
             Integer storeId = parseToNumber(scan.nextLine());
@@ -216,13 +217,13 @@ public class TransportationMenu {
             stores.add(storeId);
 
             System.out.println("Please choose area to transportation from the following choices");
-            List<String> SupplierAreaByStore = systemInterfaceTransportations.get_area_for_suppliers_by_date_store_Periodical_Order(orderDate, storeId);
+            List<String> SupplierAreaByStore = systemInterfaceTransportations.get_area_for_suppliers_by_date_store_Regular_Open_Order(orderDate, storeId);
             System.out.println(SupplierAreaByStore);
             String area = scan.nextLine();
             checkIdInList(SupplierAreaByStore,area);
 
             System.out.println("Please choose suppliers to transportation from the following, if you want to choose more than one, please separate them by space");
-            List<String> SupplierByStoreArea = systemInterfaceTransportations.get_Suppliers_by_area_Periodical_Order(orderDate, storeId, area);
+            List<String> SupplierByStoreArea = systemInterfaceTransportations.get_Suppliers_by_area_Regular_Open_Order(orderDate, storeId, area);
             SupplierByStoreArea.forEach(System.out::println);
             Integer [] suppliers = parseArrayToNumber(scan.nextLine().split(" "));
             for (Integer id : suppliers ) checkIdInList(SupplierByStoreArea, id.toString());
@@ -283,7 +284,7 @@ public class TransportationMenu {
                     lastCheck = true;
                 }
             }
-            systemInterfaceTransportations.createTransportation(orderDate, shiftType, driverId,
+            systemInterfaceTransportations.createTransportation_Regular_Open_Order(orderDate, shiftType, driverId,
                     truckId, supplier_list, stores);
             System.out.println("The transport was registered successfully" + "\n");
         } catch (Buisness_Exception e) {
@@ -810,9 +811,10 @@ public class TransportationMenu {
         if(ls.isEmpty())
             throw new Buisness_Exception("-empty list-\n");
         boolean ifExist = false;
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         for(String s : ls)
         {
-            if(date.toString().equals(s))
+            if(formatter.format(date).equals(s))
                 ifExist = true;
         }
         if (!ifExist)

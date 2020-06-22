@@ -298,7 +298,9 @@ public class Mapper {
 
     public void getAllStores(){
        List<dummy_store> dummy_Stores = store_Mapper.select();
+
        for(dummy_store store: dummy_Stores){
+//           System.out.println("-------------------");
            Address address = selectAddressBySN(store.getAddress_Sn());
            Store toADD = new Store(store.getName(),store.getPhone(),store.getContact_name(),address, Service.getInstance().getArea_list().get(store.getAreaSn()),store.getId());
            Service.getInstance().getHashStoresMap().putIfAbsent(toADD.getId(),toADD);

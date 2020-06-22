@@ -80,7 +80,7 @@ public class Transportation {
         }
         output += "\n\titemsFiles: ";
         for (ItemsFile itemsFile: itemsFiles) {
-            output = output +"\n\t"+itemsFile.getId()+". "+itemsFile.getSupplier().getName()+"->"+itemsFile.getStore().getName()+":";
+            output = output +"\n\t"+itemsFile.getId()+". "+itemsFile.getSupplier()+"->"+itemsFile.getStore().getName()+":";
         }
         if(weight_truck!=-1)
         {

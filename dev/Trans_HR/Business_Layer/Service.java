@@ -184,12 +184,13 @@ public class Service {
         dummy_Items_File dummy_items_file = Mapper.getInstance().selectItemfile(SN);
         if (dummy_items_file!=null)
         {
-            upload_Supplier(dummy_items_file.getSupplier_id());
+//            upload_Supplier(dummy_items_file.getSupplier_id());
+            System.out.println(dummy_items_file.getStore_id());
             upload_Store(dummy_items_file.getStore_id());
             Store store = HashStore.get(dummy_items_file.getStore_id());
             Supplier supplier = HashSuppliers.get(dummy_items_file.getSupplier_id());
             ItemsFile itemsFile = new ItemsFile(dummy_items_file.getSn(),
-                    store,supplier,dummy_items_file.getorderID());
+                    store,dummy_items_file.getSupplier_id(),dummy_items_file.getorderID());
             HashItemsFile.put(itemsFile.getId(),itemsFile);
         }
     }
@@ -223,7 +224,7 @@ public class Service {
         if(!HashItemsFile.containsKey(itemsFile.getId()))
         {
             HashItemsFile.put(itemsFile.getId(),itemsFile);
-            Mapper.getInstance().insertItemfile(itemsFile.getId(),itemsFile.getSupplier().getId(),itemsFile.getStore().getId(),
+            Mapper.getInstance().insertItemfile(itemsFile.getId(),itemsFile.getSupplier(),itemsFile.getStore().getId(),
                     itemsFile.getorderID());
         }
     }

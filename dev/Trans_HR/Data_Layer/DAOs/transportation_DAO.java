@@ -33,7 +33,7 @@ public class transportation_DAO {
 
     public void insert(dummy_Transportation transportation){
         String query_items="INSERT INTO \"main\".\"Transportations\"\n" +
-                "(\"SN\", \"Date\", \"DepartureTime\",\"TruckWeight\")\n" +
+                "(\"SN\", \"Date\", \"DepartureTime\",\"TruckWeight\",\"Status\")\n" +
                 String.format("VALUES ('%d', '%s','%d', '%.2f','%s');", transportation.getId(),simpleDateFormat.format(transportation.getDate()),
                         transportation.getLeaving_time(), transportation.getTruck_weight(), transportation.getStatus());
 
@@ -116,6 +116,17 @@ public class transportation_DAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        String query_items2="UPDATE \"main\".\"Transportations\"\n" +
+                String.format("SET Status = '%s' " +
+                        "where SN = '%d';","Completed" ,SN);
+        try {
+            PreparedStatement statement= SupInvDBConn.getInstance().getConn().prepareStatement(query_items2);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

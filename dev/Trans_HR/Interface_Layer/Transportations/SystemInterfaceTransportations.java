@@ -50,8 +50,17 @@ public class SystemInterfaceTransportations {
         return service.transportation_controller.get_Dates_Periodical_Order();
     }
 
+    public List<String> get_Dates_Regular_Open_Order() throws Buisness_Exception {
+        return service.transportation_controller.get_Dates_Regular_Open_Order();
+    }
+
     public List<String> get_stores_by_date_Periodical_Order(Date date) throws Buisness_Exception {
         return service.transportation_controller.get_stores_by_date_Periodical_Order(date);
+
+    }
+
+    public List<String> get_stores_by_date_Regular_Open_Order(Date date) throws Buisness_Exception {
+        return service.transportation_controller.get_stores_by_date_Regular_Open_Order(date);
 
     }
 
@@ -60,8 +69,18 @@ public class SystemInterfaceTransportations {
 
     }
 
+    public List<String> get_area_for_suppliers_by_date_store_Regular_Open_Order(Date date, Integer storeID) throws Buisness_Exception {
+        return service.transportation_controller.get_area_for_suppliers_by_date_store_Regular_Open_Order(date,storeID);
+
+    }
+
     public List<String> get_Suppliers_by_area_Periodical_Order(Date date, Integer storeID, String area) throws Buisness_Exception {
         return service.transportation_controller.get_Suppliers_by_area_Periodical_Order(date,storeID,area);
+
+    }
+
+    public List<String> get_Suppliers_by_area_Regular_Open_Order(Date date, Integer storeID, String area) throws Buisness_Exception {
+        return service.transportation_controller.get_Suppliers_by_area_Regular_Open_Order(date,storeID,area);
 
     }
 
@@ -90,9 +109,15 @@ public class SystemInterfaceTransportations {
         return service.drivers_controller.getDriverToTrucks(truckId, date);
     }
 
-    public void createTransportation(Date date, int DepartureTime, int driver_id,
+    public void createTransportation_Periodical_Order(Date date, int DepartureTime, int driver_id,
                                         int truck_id, List<Integer> suppliers, List<Integer> stores) throws Buisness_Exception  {
-        service.transportation_controller.createTransportation(date, DepartureTime, driver_id,
+        service.transportation_controller.createTransportation_Periodical_Order(date, DepartureTime, driver_id,
+                truck_id, suppliers, stores);
+    }
+
+    public void createTransportation_Regular_Open_Order(Date date, int DepartureTime, int driver_id,
+                                     int truck_id, List<Integer> suppliers, List<Integer> stores) throws Buisness_Exception  {
+        service.transportation_controller.createTransportation_Regular_Open_Order(date, DepartureTime, driver_id,
                 truck_id, suppliers, stores);
     }
 

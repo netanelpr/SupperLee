@@ -12,7 +12,7 @@ public class dummy_Items_File {
     private int store_id;
     private int orderID;
 
-    public dummy_Items_File(int Sn, int supplier_id,int store_id, int orderID){
+    public dummy_Items_File(int Sn, int store_id, int supplier_id,int orderID){
         this.Sn=Sn;
         this.supplier_id=supplier_id;
         this.store_id=store_id;

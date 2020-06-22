@@ -14,12 +14,12 @@ public class ItemsFile {
     private static int idcounter = 0;
     private int transportationID=-1;
     private Store store;
-    private Supplier supplier;
+    private Integer supplier;
     boolean from_missing_items=false;
     private int id;
     private int orderID;
 
-    public ItemsFile(Store store,Supplier supplier, int orderID)
+    public ItemsFile(Store store,Integer supplier, int orderID)
     {
         this.id=idcounter++;
         this.orderID =orderID;
@@ -27,7 +27,7 @@ public class ItemsFile {
         this.supplier=supplier;
     }
 
-    public ItemsFile(int id, Store store,Supplier supplier, int orderID)
+    public ItemsFile(int id, Store store,Integer supplier, int orderID)
     {
         this.id=id;
         this.orderID =orderID;
@@ -50,7 +50,7 @@ public class ItemsFile {
     public int getorderID(){
         return this.orderID;
     }
-    public Supplier getSupplier() {return this.supplier;}
+    public Integer getSupplier() {return this.supplier;}
     public Store getStore(){return this.store;}
     public void setTransportationID(int id)
     {

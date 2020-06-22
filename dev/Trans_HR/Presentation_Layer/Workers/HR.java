@@ -153,7 +153,7 @@ public class HR {
 
     }
 
-    private static void getAllSN() {
+    public static void getAllSN() {
         SystemInterfaceWorkers.getInstance().getAllSN();
     }
 
