@@ -408,6 +408,30 @@ public class RegularOrderMapper extends AbstractMapper<RegularOrder> {
         return orderIds;
     }
 
+    private String getAllWaitingShippingRegularOrdersStatement(){
+        return "SELECT S.id\n" +
+                "FROM Supplier_order AS S JOIN Regular_supplier_order AS R\n" +
+                "ON S.id = R.id\n" +
+                "WHERE S.status = ?";
+    }
+
+    public List<Integer> getAllWaitingShippingRegularOrders() {
+        ResultSet rs;
+        List<Integer> orderIds = new ArrayList<>();
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(getAllWaitingShippingRegularOrdersStatement())){
+            ptsmt.setInt(1, StructUtils.getOrderStatusInt(OrderStatus.WaitingForShipping));
+
+            rs = ptsmt.executeQuery();
+            while(rs.next()){
+                orderIds.add(rs.getInt(1));
+            }
+        } catch (SQLException throwables) {
+        }
+
+        return orderIds;
+    }
+
     public String getPurchaseHistoryOfSupplierStatement() {
         return "SELECT DISTINCT(P.catalog_number)\n" +
                 "FROM Product_in_order AS P JOIN CONTRACT AS C\n" +

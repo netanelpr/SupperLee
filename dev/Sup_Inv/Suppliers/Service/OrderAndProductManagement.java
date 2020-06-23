@@ -96,6 +96,17 @@ public interface OrderAndProductManagement {
     public List<Integer> getAllOpenPeriodicalOrder();
 
     /**
+     * Return a list of all the waiting for shipping regular orders
+     * @return list of all the waiting for shipping regular orders.
+     */
+    public List<Integer> getAllWaitingShippingRegularOrders();
+    /**
+     * Return a list of all the waiting for shipping periodical orders
+     * @return list of all the waiting for shipping periodical orders.
+     */
+    public List<Integer> getAllWaitingShippingPeriodicalOrders();
+
+    /**
      * Return all the details of order as discribed in the docs
      * @param orderId the order id
      * @return all the details of order as discribed in the docs

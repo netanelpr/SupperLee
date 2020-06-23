@@ -249,6 +249,30 @@ public class PeriodicalOrderMapper extends AbstractMapper<PeriodicalOrder> {
         return false;
     }
 
+    private String getAllWaitingShippingPeriodicalOrdersStatement(){
+        return "SELECT S.id\n" +
+                "FROM Supplier_order AS S JOIN Periodical_supplier_order AS P\n" +
+                "ON S.id = P.id\n" +
+                "WHERE S.status = ?";
+    }
+
+    public List<Integer> getAllWaitingShippingPeriodicalOrders() {
+        ResultSet rs;
+        List<Integer> orderIds = new ArrayList<>();
+
+        try(PreparedStatement ptsmt = conn.prepareStatement(getAllWaitingShippingPeriodicalOrdersStatement())){
+            ptsmt.setInt(1, StructUtils.getOrderStatusInt(OrderStatus.WaitingForShipping));
+
+            rs = ptsmt.executeQuery();
+            while(rs.next()){
+                orderIds.add(rs.getInt(1));
+            }
+        } catch (SQLException throwables) {
+        }
+
+        return orderIds;
+    }
+
     private String getTheOrderContractStatement(){
         return "SELECT DISTINCT(contract_id)\n" +
                 "FROM Product_in_order\n" +
