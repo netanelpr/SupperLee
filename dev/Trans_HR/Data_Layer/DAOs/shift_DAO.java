@@ -146,9 +146,9 @@ public class shift_DAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+
         }
-        throw new NullPointerException();
+        return 1;
 
     }
 

@@ -196,6 +196,40 @@ public class WorkerController {
         return infoObject;
     }
 
+    public InfoObject printAllWorkersByJobAvailableInThisDate(String dateToParse, String shiftType,String jobTitle) {
+        InfoObject infoObject = new InfoObject("",true);
+        Date date = parseDate(dateToParse);
+        if(date==null){
+            infoObject.setMessage("Invalid date format");
+            infoObject.setIsSucceeded(false);
+            return infoObject;
+        }
+        enums sType;
+        try {
+            sType = enums.valueOf(shiftType);
+        }
+        catch (Exception e){
+            infoObject.setMessage("Invalid shift type");
+            infoObject.setIsSucceeded(false);
+            return infoObject;
+        }
+        List<Worker> listOfAvailableWorkers = getAllAvailableWorkers(date,sType);
+        boolean availableWorker = false;
+        for (Worker listOfAvailableWorker : listOfAvailableWorkers) {
+            if(!listOfAvailableWorker.getWorkerJobTitle().toUpperCase().equals("MANAGER")) {
+                if(listOfAvailableWorker.getWorkerJobTitle().toUpperCase().equals(jobTitle.toUpperCase())) {
+                    System.out.println(listOfAvailableWorker.getWorkerSn() + ". ID: " + listOfAvailableWorker.getWorkerId() + " Name: " + listOfAvailableWorker.getWorkerName() + " Job title: " + listOfAvailableWorker.getWorkerJobTitle());
+                    availableWorker = true;
+                }
+            }
+        }
+        if(!availableWorker){
+            infoObject.setMessage("There are no available " + jobTitle + "s");
+            infoObject.setIsSucceeded(true);
+        }
+        return infoObject;
+    }
+
     public InfoObject removeWorkerBySn(int workerSn){
         InfoObject infoObject = new InfoObject("Worker removed successfully",true);
         if(Service.getInstance().getWorkerList(getCurrentStoreSN()).containsValue(getWorkerBySn(workerSn))){

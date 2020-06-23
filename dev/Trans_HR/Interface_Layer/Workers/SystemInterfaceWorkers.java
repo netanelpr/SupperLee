@@ -140,4 +140,8 @@ public class SystemInterfaceWorkers {
     public void initConstants() {
         Service.getInstance().initConstants();
     }
+
+    public void transportationCheck(String date, String shiftType) {
+        Service.getInstance().getShiftController().checkShiftWithDriverAndStoreKeeper(date,shiftType);
+    }
 }

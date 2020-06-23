@@ -2,11 +2,14 @@ package Trans_HR.Business_Layer.Workers.Controllers;
 
 
 import Trans_HR.Business_Layer.Service;
+import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
 import Trans_HR.Business_Layer.Workers.Modules.Shift;
 import Trans_HR.Business_Layer.Workers.Modules.Worker.Worker;
 import Trans_HR.Business_Layer.Workers.Utils.InfoObject;
 import Trans_HR.Business_Layer.Workers.Utils.enums;
 import Trans_HR.Data_Layer.Mapper;
+import Trans_HR.Interface_Layer.Workers.SystemInterfaceWorkers;
+import Trans_HR.Presentation_Layer.Workers.HR;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -305,13 +308,43 @@ public class ShiftController {
         for(Shift shift : Service.getInstance().getShiftHistory(getCurrentStoreSN()).values()){
             if(shift.getDate().compareTo(date) == 0 && shift.getShiftType().compareTo(sType) == 0 ){
                 for(Worker worker : shift.getShiftWorkers()){
-                    if(worker.getWorkerJobTitle().toUpperCase().equals("storekeeper")){
+                    if(worker.getWorkerJobTitle().toLowerCase().equals("storekeeper")){
                         return true;
                     }
                 }
             }
         }
+        return false;
+    }
 
+    public boolean isDriverAvailable(Date date,String shiftType){
+        enums selectedDay;
+        enums sType;
+        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date);
+        try {
+            selectedDay = enums.valueOf(dayOfWeek);
+        }
+        catch (Exception e){
+            System.out.println("No such day");
+            return false;
+        }
+        try{
+            sType = enums.valueOf(shiftType);
+        }
+        catch (Exception e){
+            System.out.println("No such shift type");
+            return false;
+        }
+
+        for(Shift shift : Service.getInstance().getShiftHistory(getCurrentStoreSN()).values()){
+            if(shift.getDate().compareTo(date) == 0 && shift.getShiftType().compareTo(sType) == 0 ){
+                for(Worker worker : shift.getShiftWorkers()){
+                    if(worker.getWorkerJobTitle().toLowerCase().equals("driver")){
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -319,6 +352,335 @@ public class ShiftController {
 
         int Sn = Mapper.getInstance().getShiftSn();
         this.snFactory = ++Sn;
+    }
+
+    public boolean isThereShiftWithThisDate(Date date, String shiftType){
+        enums selectedDay;
+        enums sType;
+        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date);
+        try {
+            selectedDay = enums.valueOf(dayOfWeek);
+        }
+        catch (Exception e){
+            System.out.println("No such day");
+            return false;
+        }
+        try{
+            sType = enums.valueOf(shiftType);
+        }
+        catch (Exception e){
+            System.out.println("No such shift type");
+            return false;
+        }
+
+        for(Shift shift : Service.getInstance().getShiftHistory(getCurrentStoreSN()).values()){
+            if(shift.getDate().compareTo(date) == 0 && shift.getShiftType().compareTo(sType) == 0 ){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isThereShiftWithStoreKeeperAndDriver(Date date, String shiftType){
+        enums selectedDay;
+        boolean driver =false;
+        boolean storekeeper =false;
+        enums sType;
+        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date);
+        try {
+            selectedDay = enums.valueOf(dayOfWeek);
+        }
+        catch (Exception e){
+            System.out.println("No such day");
+            return false;
+        }
+        try{
+            sType = enums.valueOf(shiftType);
+        }
+        catch (Exception e){
+            System.out.println("No such shift type");
+            return false;
+        }
+
+        for(Shift shift : Service.getInstance().getShiftHistory(getCurrentStoreSN()).values()){
+            if(shift.getDate().compareTo(date) == 0 && shift.getShiftType().compareTo(sType) == 0 ){
+                for(Worker worker : shift.getShiftWorkers()){
+                    if(worker.getWorkerJobTitle().toLowerCase().equals("driver")){
+                        driver = true;
+                    }
+                    if(worker.getWorkerJobTitle().toLowerCase().equals("storekeeper")){
+                        storekeeper = true;
+                    }
+                }
+            }
+        }
+        return driver && storekeeper;
+    }
+
+    public Shift getShift(Date date,String shiftType){
+        Shift shiftToReturn = null;
+        enums selectedDay;
+        boolean driver =false;
+        boolean storekeeper =false;
+        enums sType;
+        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date);
+        try {
+            selectedDay = enums.valueOf(dayOfWeek);
+        }
+        catch (Exception e){
+            System.out.println("No such day");
+            return null;
+        }
+        try{
+            sType = enums.valueOf(shiftType);
+        }
+        catch (Exception e){
+            System.out.println("No such shift type");
+            return null;
+        }
+
+        for(Shift shift : Service.getInstance().getShiftHistory(getCurrentStoreSN()).values()){
+            if(shift.getDate().compareTo(date) == 0 && shift.getShiftType().compareTo(sType) == 0 ){
+                return shift;
+            }
+        }
+        return  shiftToReturn;
+    }
+
+
+    public boolean isThereIsStoreKeeper(Date date, String shiftType){
+        enums selectedDay;
+        boolean driver =false;
+        boolean storekeeper =false;
+        enums sType;
+        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date);
+        try {
+            selectedDay = enums.valueOf(dayOfWeek);
+        }
+        catch (Exception e){
+            System.out.println("No such day");
+            return false;
+        }
+        try{
+            sType = enums.valueOf(shiftType);
+        }
+        catch (Exception e){
+            System.out.println("No such shift type");
+            return false;
+        }
+
+        for(Shift shift : Service.getInstance().getShiftHistory(getCurrentStoreSN()).values()){
+            if(shift.getDate().compareTo(date) == 0 && shift.getShiftType().compareTo(sType) == 0 ){
+                for(Worker worker : shift.getShiftWorkers()){
+                    if(worker.getWorkerJobTitle().toLowerCase().equals("storekeeper")){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isThereIsDriver(Date date, String shiftType){
+        enums selectedDay;
+        boolean driver =false;
+        boolean storekeeper =false;
+        enums sType;
+        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date);
+        try {
+            selectedDay = enums.valueOf(dayOfWeek);
+        }
+        catch (Exception e){
+            System.out.println("No such day");
+            return false;
+        }
+        try{
+            sType = enums.valueOf(shiftType);
+        }
+        catch (Exception e){
+            System.out.println("No such shift type");
+            return false;
+        }
+
+        for(Shift shift : Service.getInstance().getShiftHistory(getCurrentStoreSN()).values()){
+            if(shift.getDate().compareTo(date) == 0 && shift.getShiftType().compareTo(sType) == 0 ){
+                for(Worker worker : shift.getShiftWorkers()){
+                    if(worker.getWorkerJobTitle().toLowerCase().equals("driver")){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // for rubin ---------------------------------------------------------------------------------------------------------------------------------------
+    // for rubin ---------------------------------------------------------------------------------------------------------------------------------------
+    // for rubin ---------------------------------------------------------|------------------------------------------------------------------------------
+    // for rubin ---------------------------------------------------------|------------------------------------------------------------------------------
+    // for rubin ---------------------------------------------------------|------------------------------------------------------------------------------
+    // for rubin ---------------------------------------------------------|------------------------------------------------------------------------------
+    // for rubin ---------------------------------------------------------|------------------------------------------------------------------------------
+    // for rubin --------------------------------------------------------\ /-----------------------------------------------------------------------------
+
+
+    public void checkShiftWithDriverAndStoreKeeper(String date, String shiftType) {
+        enums selectedDay;
+        enums sType;
+        Date _date = parseDate(date);
+        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(_date);
+        try {
+            selectedDay = enums.valueOf(dayOfWeek);
+        } catch (Exception e){
+            System.out.println("No such day");
+            return;
+        }
+        try{
+            sType = enums.valueOf(shiftType);
+        } catch (Exception e){
+            System.out.println("No such shift type");
+            return;
+        }
+
+        if(isThereShiftWithThisDate(_date,shiftType)){
+            // there is a shift with this date
+            // need just to add to the workers of this shift
+            if(!(isThereShiftWithStoreKeeperAndDriver(_date,shiftType))){
+                if(isThereIsStoreKeeper(_date,shiftType)){
+                    if(isDriverAvailable(_date,shiftType)){
+                        System.out.println("Choose driver SN from the list to add to the shift");
+                        InfoObject infoObject = Service.getInstance().getWorkerController().printAllWorkersByJobAvailableInThisDate(date,shiftType,"driver");
+                        if(!infoObject.isSucceeded()){
+                            System.out.println(infoObject.getMessage());
+                        } else {
+                            Scanner sc = new Scanner(System.in);
+                            while (!sc.hasNextInt()) {
+                                System.out.println("Invalid input, please try again");
+                                sc.next();
+                            }
+                            int selectedOption = sc.nextInt();
+                            Worker workerToAdd= null;
+                            for(Worker workers :  Service.getInstance().getWorkerList(getCurrentStoreSN()).values()){
+                                if(workers.getWorkerSn() == selectedOption){
+                                    workerToAdd = workers;
+                                }
+                            }
+                            Shift shiftToEdit = getShift(_date,shiftType);
+                            shiftToEdit.getShiftWorkers().add(workerToAdd);
+                            Mapper.getInstance().insert_Shift_Workers(workerToAdd.getWorkerSn(),shiftToEdit.getShiftSn());
+                            /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        }
+                    } else {
+                        System.out.println("There are no available driver that can work for this shift.");
+                    }
+                } else {
+                     if(isThereIsDriver(_date,shiftType)){
+                         System.out.println("Choose storekeeper SN from the list to add to the shift");
+                         InfoObject infoObject = Service.getInstance().getWorkerController().printAllWorkersByJobAvailableInThisDate(date,shiftType,"storekeeper");
+                         if(!infoObject.isSucceeded()){
+                             System.out.println(infoObject.getMessage());
+                         } else {
+                             Scanner sc = new Scanner(System.in);
+                             while (!sc.hasNextInt()) {
+                                 System.out.println("Invalid input, please try again");
+                                 sc.next();
+                             }
+                             int selectedOption = sc.nextInt();
+                             Worker workerToAdd= null;
+                             for(Worker workers :  Service.getInstance().getWorkerList(getCurrentStoreSN()).values()){
+                                 if(workers.getWorkerSn() == selectedOption){
+                                     workerToAdd = workers;
+                                 }
+                             }
+                             Shift shiftToEdit = getShift(_date,shiftType);
+                             shiftToEdit.getShiftWorkers().add(workerToAdd);
+                             Mapper.getInstance().insert_Shift_Workers(workerToAdd.getWorkerSn(),shiftToEdit.getShiftSn());
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                         }
+                     } else {
+                         System.out.println("Choose driver SN from the list to add to the shift");
+                         InfoObject infoObject = Service.getInstance().getWorkerController().printAllWorkersByJobAvailableInThisDate(date,shiftType,"driver");
+                         if(!infoObject.isSucceeded()){
+                             System.out.println(infoObject.getMessage());
+                         } else {
+                             Scanner sc = new Scanner(System.in);
+                             while (!sc.hasNextInt()) {
+                                 System.out.println("Invalid input, please try again");
+                                 sc.next();
+                             }
+                             int selectedOption = sc.nextInt();
+                             Worker workerToAdd= null;
+                             for(Worker workers :  Service.getInstance().getWorkerList(getCurrentStoreSN()).values()){
+                                 if(workers.getWorkerSn() == selectedOption){
+                                     workerToAdd = workers;
+                                 }
+                             }
+                             Shift shiftToEdit = getShift(_date,shiftType);
+                             shiftToEdit.getShiftWorkers().add(workerToAdd);
+                             Mapper.getInstance().insert_Shift_Workers(workerToAdd.getWorkerSn(),shiftToEdit.getShiftSn());
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                         }
+
+                         System.out.println("Choose storekeeper SN from the list to add to the shift");
+                         infoObject = Service.getInstance().getWorkerController().printAllWorkersByJobAvailableInThisDate(date,shiftType,"storekeeper");
+                         if(!infoObject.isSucceeded()){
+                             System.out.println(infoObject.getMessage());
+                         } else {
+                             Scanner sc = new Scanner(System.in);
+                             while (!sc.hasNextInt()) {
+                                 System.out.println("Invalid input, please try again");
+                                 sc.next();
+                             }
+                             int selectedOption = sc.nextInt();
+                             Worker workerToAdd= null;
+                             for(Worker workers :  Service.getInstance().getWorkerList(getCurrentStoreSN()).values()){
+                                 if(workers.getWorkerSn() == selectedOption){
+                                     workerToAdd = workers;
+                                 }
+                             }
+                             Shift shiftToEdit = getShift(_date,shiftType);
+                             shiftToEdit.getShiftWorkers().add(workerToAdd);
+                             Mapper.getInstance().insert_Shift_Workers(workerToAdd.getWorkerSn(),shiftToEdit.getShiftSn());
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             /// add to DATABASE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                         }
+                     }
+                }
+            }
+        } else {
+            System.out.println("There is not shift on this date");
+            System.out.println("Would you like to move to HR position and create a new shift? (choose 1 / 2)");
+            System.out.println("1. Yes");
+            System.out.println("2. No");
+
+            Scanner sc = new Scanner(System.in);
+            while (!sc.hasNextInt()) {
+                System.out.println("Invalid input, please try again");
+                sc.next();
+            }
+            int selectedOption = sc.nextInt();
+
+            if(selectedOption == 1){
+                try {
+                    HR.addShift(sc);
+                } catch (Buisness_Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
 
