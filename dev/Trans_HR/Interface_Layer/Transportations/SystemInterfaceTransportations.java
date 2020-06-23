@@ -2,8 +2,11 @@ package Trans_HR.Interface_Layer.Transportations;
 
 import Trans_HR.Business_Layer.Service;
 import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
+import Trans_HR.Interface_Layer.Workers.SystemInterfaceWorkers;
 import javafx.util.Pair;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -228,7 +231,9 @@ public class SystemInterfaceTransportations {
         List<String> out = service.getWorkerController().getAllDrivers(date, shiftType, licenses);
         if(out.isEmpty() && lastCheck )
         {
-            // TODO: call function of workers
+            DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            String _date = formatter.format(date);
+            SystemInterfaceWorkers.getInstance().transportationCheck(_date,shiftType);
             throw new Buisness_Exception("There are no Drivers available message send to HR Manager");
         }
         else return out;
@@ -239,7 +244,9 @@ public class SystemInterfaceTransportations {
         boolean out = service.getWorkerController().isStoreKeeperAvailable(date, shiftType, storeSN);
         if(!out && lastCheck )
         {
-            // TODO: call function of workers
+            DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            String _date = formatter.format(date);
+            SystemInterfaceWorkers.getInstance().transportationCheck(_date,shiftType);
             throw new Buisness_Exception("There are no Store Keeper available message send to HR Manager");
         }
         else return out;

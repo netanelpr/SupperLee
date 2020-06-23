@@ -525,22 +525,28 @@ public class ShiftController {
 
 
     public void checkShiftWithDriverAndStoreKeeper(String date, String shiftType) {
+
+        System.out.println(date);
+        System.out.println(shiftType);
+
         enums selectedDay;
         enums sType;
         Date _date = parseDate(date);
         String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(_date);
+
         try {
-            selectedDay = enums.valueOf(dayOfWeek);
+            selectedDay = enums.valueOf(dayOfWeek.toUpperCase());
         } catch (Exception e){
             System.out.println("No such day");
             return;
         }
         try{
-            sType = enums.valueOf(shiftType);
+            sType = enums.valueOf(shiftType.toUpperCase());
         } catch (Exception e){
             System.out.println("No such shift type");
             return;
         }
+
 
         if(isThereShiftWithThisDate(_date,shiftType)){
             // there is a shift with this date
