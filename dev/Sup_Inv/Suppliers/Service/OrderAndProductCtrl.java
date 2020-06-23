@@ -172,6 +172,15 @@ public class OrderAndProductCtrl implements OrderAndProductManagement {
         return orderManager.getAllOpenOrders();
     }
 
+    public List<Integer> getAllWaitingShippingRegularOrders() {
+        return orderManager.getAllWaitingShippingRegularOrders();
+    }
+
+    public List<Integer> getAllWaitingShippingPeriodicalOrders() {
+        return orderManager.getAllWaitingShippingPeriodicalOrders();
+    }
+
+
     public static ProductInOrder ProductInOrderDTOToPIO(ProductInOrderDTO productInOrderDTO){
         return new ProductInOrder(
                 productInOrderDTO.barcode,
