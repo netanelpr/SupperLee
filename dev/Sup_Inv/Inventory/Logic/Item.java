@@ -95,7 +95,7 @@ public class Item implements myObservable {
             return issueOrderForShortageItem();
         return null;
     }
-    private Boolean checkMinimumQuant() {
+    public Boolean checkMinimumQuant() {
 
         if((totalQuantity) < Integer.parseInt(freqBuySupply)*10)
         {
