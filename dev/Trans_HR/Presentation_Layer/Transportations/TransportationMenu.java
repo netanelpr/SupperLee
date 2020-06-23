@@ -4,6 +4,7 @@ import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
 import Trans_HR.Interface_Layer.Transportations.SystemInterfaceTransportations;
 import javafx.util.Pair;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -14,18 +15,14 @@ public class TransportationMenu {
 
     public static void Menu() {
         System.out.println("Welcome to SuperLee - Transportation");
-//        if (args.length > 0 && args[0].equals("upload"))
-    //    systemInterfaceTransportations.uploadData();
         String choice = "0";
         do {
             System.out.println("Please choose your option:");
-            String[] A = new String[]{"Transportations", "Sup_Inv/Suppliers", "Trucks","Quit"};
-            //  String choice = null;
+            String[] A = new String[]{"Transportations", "Trucks","Quit"};
             for (int i = 0; i < A.length; i++) {
                 System.out.println(i + 1 + ". " + A[i]);
             }
             Scanner scan = new Scanner(System.in);
-
             choice = scan.nextLine();
             if (choice.equals("1")) {
                 String[] transports = new String[]{"Add new transport", "Show transport list", "Remove transport",
@@ -42,8 +39,8 @@ public class TransportationMenu {
                         System.out.println(i + 1 + ". " + transports_type[i]);
                     }
                     option2 = scan.nextLine();
-                    if (option2.equals("1"))Complete_Stock_Missing();
-                    else if (option2.equals("2"))Regular_stock_transport();
+                    if (option2.equals("1"))Complete_Regular_Open_Order();
+                    else if (option2.equals("2"))Complete_Periodical_Order();
                 }
                 else if (option.equals("2"))
                     Show_transports();
@@ -51,7 +48,7 @@ public class TransportationMenu {
                     Remove_transport();
                 else if (option.equals("4")) {
                     Pair<Boolean,Integer> check= Truck_weight_in_supplier();
-                    if(check!=null)
+                    if(check==null||!check.getKey())
                     {
                         System.out.println("Choose how to fix the transport");
                         String option2 = "";
@@ -69,19 +66,19 @@ public class TransportationMenu {
                 }
             }
 
+//            else if (choice.equals("2")) {
+//                String[] sites = new String[]{"Add new Sup_Inv.Suppliers", "Show Sup_Inv.Suppliers List", "Cancel"};
+//                String option = null;
+//                for (int i = 0; i < sites.length; i++) {
+//                    System.out.println(i + 1 + ". " + sites[i]);
+//                }
+//                option = scan.nextLine();
+//                if (option.equals("1"))
+//                    Add_supplier();
+//                else if (option.equals("2"))
+//                    Show_supplier();
+//            }
             else if (choice.equals("2")) {
-                String[] sites = new String[]{"Add new Sup_Inv.Suppliers", "Show Sup_Inv.Suppliers List", "Cancel"};
-                String option = null;
-                for (int i = 0; i < sites.length; i++) {
-                    System.out.println(i + 1 + ". " + sites[i]);
-                }
-                option = scan.nextLine();
-                if (option.equals("1"))
-                    Add_supplier();
-                else if (option.equals("2"))
-                    Show_supplier();
-            }
-            else if (choice.equals("3")) {
                 String[] suppliers = new String[]{"Add new Truck", "Show trucks List", "Remove truck","Cancel"};
                 String option = null;
                 for (int i = 0; i < suppliers.length; i++) {
@@ -108,40 +105,44 @@ public class TransportationMenu {
         return current.getMessage();
     }
 
-    public static void Complete_Stock_Missing() {
+    public static void Complete_Periodical_Order() {
         try {
-            List<String> MissingItemsStores = systemInterfaceTransportations.getMissingItemsStores();
-            MissingItemsStores.forEach(System.out::println);
+            List<String> Dates_Periodical_Order = systemInterfaceTransportations.get_Dates_Periodical_Order();
+            Dates_Periodical_Order.forEach(System.out::println);
+            System.out.println("Please choose date to transportation from dates");
+            Date orderDate = new Date();
+            orderDate = parseToDate(scan.nextLine());
+            checkDateInList(Dates_Periodical_Order,orderDate);
+
+            List<String> Periodical_Order_Stores = systemInterfaceTransportations.get_stores_by_date_Periodical_Order(orderDate);
+            Periodical_Order_Stores.forEach(System.out::println);
             System.out.println("Please choose store to transportation by id");
             Integer storeId = parseToNumber(scan.nextLine());
-            checkIdInList(MissingItemsStores,storeId.toString());
+            checkIdInList(Periodical_Order_Stores,storeId.toString());
             List<Integer> stores = new LinkedList<Integer>();
             stores.add(storeId);
 
             System.out.println("Please choose area to transportation from the following choices");
-            List<String> SupplierAreaByStore = systemInterfaceTransportations.getSupplierAreaByStore(storeId);
+            List<String> SupplierAreaByStore = systemInterfaceTransportations.get_area_for_suppliers_by_date_store_Periodical_Order(orderDate, storeId);
             System.out.println(SupplierAreaByStore);
             String area = scan.nextLine();
             checkIdInList(SupplierAreaByStore,area);
 
             System.out.println("Please choose suppliers to transportation from the following, if you want to choose more than one, please separate them by space");
-            List<String> SupplierByStoreArea = systemInterfaceTransportations.getSupplierByStoreArea(storeId, area);
+            List<String> SupplierByStoreArea = systemInterfaceTransportations.get_Suppliers_by_area_Periodical_Order(orderDate, storeId, area);
             SupplierByStoreArea.forEach(System.out::println);
             Integer [] suppliers = parseArrayToNumber(scan.nextLine().split(" "));
             for (Integer id : suppliers ) checkIdInList(SupplierByStoreArea, id.toString());
             List<Integer> supplier_list = Arrays.asList(suppliers);
 
             boolean find_truck_driver = false;
-            Date date = new Date();
+            boolean lastCheck = false;
             Integer driverId = 0;
             Integer truckId = 0;
             Integer shiftType = 0;
             while (!find_truck_driver) {
-                System.out.println("Please choose date to transportation by the pattern dd-MM-yyyy");
-                date = parseToDate(scan.nextLine());
 
                 System.out.println("Please choose shiftType by id:");
-                //TODO: Upload shiftTypeList
                 List<String> ShiftTypes = systemInterfaceTransportations.Show_shiftTypeList();
                 ShiftTypes.forEach(System.out::println);
                 shiftType = parseToNumber(scan.nextLine());
@@ -150,17 +151,18 @@ public class TransportationMenu {
                 boolean hasKeeper = true;
                 for (Integer storeId1: stores)
                 {
-                    //TODO: Upload StoreKeeper
-                    if (!systemInterfaceTransportations.isStoreKeeperAvailable(date,shift,storeId1))
+                    //TODO: send to workers
+                    if (!systemInterfaceTransportations.isStoreKeeperAvailable(orderDate,shift,storeId1,lastCheck))
                     {
                         System.out.println("There are no Store Keeper available for store "+storeId1.toString()+
-                                "this date and shift");
+                                "this date and shift\ntry to change shift");
+                        lastCheck = true;
                         hasKeeper = false;
                     }
                 }
                 if(!hasKeeper)
                     continue;
-                List<String> freeTrucks = systemInterfaceTransportations.getFreeTrucks(date, shiftType);
+                List<String> freeTrucks = systemInterfaceTransportations.getFreeTrucks(orderDate, shiftType,lastCheck);
                 if (!freeTrucks.isEmpty()) {
                     System.out.println("The trucks available for the date are:");
                     freeTrucks.forEach(System.out::println);
@@ -168,9 +170,8 @@ public class TransportationMenu {
                     truckId = parseToNumber(scan.nextLine());
                     checkIdInList(freeTrucks,truckId.toString());
                     List<String> licenses = systemInterfaceTransportations.getTruckLicenseList(truckId);
-
-//                    List<String> freeDrivers = systemInterfaceTransportations.getDriverToTrucks(truckId, date);
-                    List<String> freeDrivers = systemInterfaceTransportations.getAllDrivers(date,shift,licenses);
+                    //TODO: send to workers
+                    List<String> freeDrivers = systemInterfaceTransportations.getAllDrivers(orderDate,shift,licenses,lastCheck);
                     if (!freeDrivers.isEmpty()) {
                         System.out.println("The Drivers available for the date are and truck:");
                         freeDrivers.forEach(System.out::println);
@@ -181,14 +182,16 @@ public class TransportationMenu {
 
 
                     } else {
-                        System.out.println("There are no Drivers available for the truck at this date");
+                        System.out.println("There are no Drivers available for the truck at this date\ntry to change shift");
+                        lastCheck = true;
                     }
                 } else {
-                    System.out.println("No trucks available on date");
+                    System.out.println("No trucks available on date\ntry to change shift");
+                    lastCheck = true;
                 }
             }
 
-            systemInterfaceTransportations.createTransportation(date, shiftType, driverId,
+            systemInterfaceTransportations.createTransportation_Periodical_Order(orderDate, shiftType, driverId,
                     truckId, supplier_list, stores);
             System.out.println("The transport was registered successfully" + "\n");
         } catch (Buisness_Exception e) {
@@ -196,45 +199,42 @@ public class TransportationMenu {
         }
     }
 
-    public static void Regular_stock_transport() {
+    public static void  Complete_Regular_Open_Order() {
         try {
-            List<String> area_for_suppliers = systemInterfaceTransportations.get_area_for_suppliers();
-            System.out.println(area_for_suppliers);
-            System.out.println("Please choose area for the suppliers");
+            List<String> Dates_Periodical_Order = systemInterfaceTransportations.get_Dates_Regular_Open_Order();
+            Dates_Periodical_Order.forEach(System.out::println);
+            System.out.println("Please choose date to transportation from dates");
+            Date orderDate = new Date();
+            orderDate = parseToDate(scan.nextLine());
+            checkDateInList(Dates_Periodical_Order,orderDate);
+
+            List<String> Periodical_Order_Stores = systemInterfaceTransportations.get_stores_by_date_Regular_Open_Order(orderDate);
+            Periodical_Order_Stores.forEach(System.out::println);
+            System.out.println("Please choose store to transportation by id");
+            Integer storeId = parseToNumber(scan.nextLine());
+            checkIdInList(Periodical_Order_Stores,storeId.toString());
+            List<Integer> stores = new LinkedList<Integer>();
+            stores.add(storeId);
+
+            System.out.println("Please choose area to transportation from the following choices");
+            List<String> SupplierAreaByStore = systemInterfaceTransportations.get_area_for_suppliers_by_date_store_Regular_Open_Order(orderDate, storeId);
+            System.out.println(SupplierAreaByStore);
             String area = scan.nextLine();
-            checkIdInList(area_for_suppliers,area);
+            checkIdInList(SupplierAreaByStore,area);
 
-            List<String> Suppliersbyarea = systemInterfaceTransportations.getSuppliersbyarea(area);
-            Suppliersbyarea.forEach(System.out::println);
-            System.out.println("Please choose suppliers to transportation by id , if there are many please separate by space"); //choose supplier
-            Integer [] supplier = parseArrayToNumber(scan.nextLine().split(" "));
-            for (Integer id : supplier ) checkIdInList(Suppliersbyarea, id.toString());
-
-            List<String> area_for_stores = systemInterfaceTransportations.get_area_for_stores();
-            System.out.println(area_for_stores);
-            System.out.println("Please choose area for stors to transportation");
-            String area1 = scan.nextLine();
-            checkIdInList(area_for_stores,area1);
-
-            List<String> Stores_By_specific_area = systemInterfaceTransportations.get_Stores_By_specific_area(area1);
-            Stores_By_specific_area.forEach(System.out::println);
-            System.out.println("Please choose stores to transportation by id , if there are many please separate by space"); //choose supplier
-            Integer [] stores = parseArrayToNumber(scan.nextLine().split(" "));
-            for (Integer id : stores ) checkIdInList(Stores_By_specific_area, id.toString());
-
-
-            List<Integer> store_list = Arrays.asList(stores);
-            List<Integer> supplier_list = Arrays.asList(supplier);
-
+            System.out.println("Please choose suppliers to transportation from the following, if you want to choose more than one, please separate them by space");
+            List<String> SupplierByStoreArea = systemInterfaceTransportations.get_Suppliers_by_area_Regular_Open_Order(orderDate, storeId, area);
+            SupplierByStoreArea.forEach(System.out::println);
+            Integer [] suppliers = parseArrayToNumber(scan.nextLine().split(" "));
+            for (Integer id : suppliers ) checkIdInList(SupplierByStoreArea, id.toString());
+            List<Integer> supplier_list = Arrays.asList(suppliers);
 
             boolean find_truck_driver = false;
-            Date date = new Date();
+            boolean lastCheck = false;
             Integer driverId = 0;
             Integer truckId = 0;
             Integer shiftType = 0;
             while (!find_truck_driver) {
-                System.out.println("Please choose date to transportation by the pattern dd-MM-yyyy");
-                date = parseToDate(scan.nextLine());
 
                 System.out.println("Please choose shiftType by id:");
                 List<String> ShiftTypes = systemInterfaceTransportations.Show_shiftTypeList();
@@ -245,18 +245,18 @@ public class TransportationMenu {
                 boolean hasKeeper = true;
                 for (Integer storeId1: stores)
                 {
-
-                    if (!systemInterfaceTransportations.isStoreKeeperAvailable(date,shift,storeId1))
+                    //TODO: send to workers
+                    if (!systemInterfaceTransportations.isStoreKeeperAvailable(orderDate,shift,storeId1,lastCheck))
                     {
                         System.out.println("There are no Store Keeper available for store "+storeId1.toString()+
-                                " in this date and shift");
+                                "this date and shift\ntry to change shift");
+                        lastCheck = true;
                         hasKeeper = false;
                     }
                 }
                 if(!hasKeeper)
                     continue;
-
-                List<String> freeTrucks = systemInterfaceTransportations.getFreeTrucks(date, shiftType);
+                List<String> freeTrucks = systemInterfaceTransportations.getFreeTrucks(orderDate, shiftType,lastCheck);
                 if (!freeTrucks.isEmpty()) {
                     System.out.println("The trucks available for the date are:");
                     freeTrucks.forEach(System.out::println);
@@ -264,9 +264,8 @@ public class TransportationMenu {
                     truckId = parseToNumber(scan.nextLine());
                     checkIdInList(freeTrucks,truckId.toString());
                     List<String> licenses = systemInterfaceTransportations.getTruckLicenseList(truckId);
-
-//                    List<String> freeDrivers = systemInterfaceTransportations.getDriverToTrucks(truckId, date);
-                    List<String> freeDrivers = systemInterfaceTransportations.getAllDrivers(date,shift,licenses);
+                    //TODO: send to workers
+                    List<String> freeDrivers = systemInterfaceTransportations.getAllDrivers(orderDate,shift,licenses,lastCheck);
                     if (!freeDrivers.isEmpty()) {
                         System.out.println("The Drivers available for the date are and truck:");
                         freeDrivers.forEach(System.out::println);
@@ -277,46 +276,231 @@ public class TransportationMenu {
 
 
                     } else {
-                        System.out.println("There are no Drivers available for the truck at this date");
+                        System.out.println("There are no Drivers available for the truck at this date\ntry to change shift");
+                        lastCheck = true;
                     }
                 } else {
-                    System.out.println("No trucks available on date");
+                    System.out.println("No trucks available on date\ntry to change shift");
+                    lastCheck = true;
                 }
             }
-
-            for (Integer suppller : supplier_list) {
-                System.out.println("For supplier " + suppller.toString() + " enter the next detalis");
-                for (Integer store : store_list) {
-                    System.out.println("Do you want that this supplier will supply products for stroe :" + store.toString() + " yes/no");
-                    String answer = scan.nextLine();
-                    if (checkYesNo(answer)) {
-                        boolean exit = false;
-                        List<Pair<String, Integer>> toAdd = new LinkedList<>();
-//                        HashMap<String, Integer> add = new HashMap<>();
-                        System.out.println("Please enter a product and the quantity required seperate by space");
-                        System.out.println("Enter end to the next store");
-                        while (!exit) {
-                            String[] items = scan.nextLine().split(" ");
-                            if (items.length<2) {
-                                exit = true;
-                            }
-                            else{
-                                toAdd.add(checkItem(items));
-//                                add.put(items[0], Integer.parseInt(items[1]));
-                            }
-                        }
-                        systemInterfaceTransportations.addItemFiletotransport(toAdd, store, suppller);
-
-                    }
-                }
-            }
-            systemInterfaceTransportations.createRegularTransportation(date, shiftType, driverId,
-                    truckId, supplier_list, store_list);
-            System.out.println("The transport was registered successfully\n");
+            systemInterfaceTransportations.createTransportation_Regular_Open_Order(orderDate, shiftType, driverId,
+                    truckId, supplier_list, stores);
+            System.out.println("The transport was registered successfully" + "\n");
         } catch (Buisness_Exception e) {
             System.out.println(Print_error(e));
         }
     }
+
+//    public static void Complete_Stock_Missing() {
+//        try {
+//            List<String> MissingItemsStores = systemInterfaceTransportations.getMissingItemsStores();
+//            MissingItemsStores.forEach(System.out::println);
+//            System.out.println("Please choose store to transportation by id");
+//            Integer storeId = parseToNumber(scan.nextLine());
+//            checkIdInList(MissingItemsStores,storeId.toString());
+//            List<Integer> stores = new LinkedList<Integer>();
+//            stores.add(storeId);
+//
+//            System.out.println("Please choose area to transportation from the following choices");
+//            List<String> SupplierAreaByStore = systemInterfaceTransportations.getSupplierAreaByStore(storeId);
+//            System.out.println(SupplierAreaByStore);
+//            String area = scan.nextLine();
+//            checkIdInList(SupplierAreaByStore,area);
+//
+//            System.out.println("Please choose suppliers to transportation from the following, if you want to choose more than one, please separate them by space");
+//            List<String> SupplierByStoreArea = systemInterfaceTransportations.getSupplierByStoreArea(storeId, area);
+//            SupplierByStoreArea.forEach(System.out::println);
+//            Integer [] suppliers = parseArrayToNumber(scan.nextLine().split(" "));
+//            for (Integer id : suppliers ) checkIdInList(SupplierByStoreArea, id.toString());
+//            List<Integer> supplier_list = Arrays.asList(suppliers);
+//
+//            boolean find_truck_driver = false;
+//            Date date = new Date();
+//            Integer driverId = 0;
+//            Integer truckId = 0;
+//            Integer shiftType = 0;
+//            while (!find_truck_driver) {
+//                System.out.println("Please choose date to transportation by the pattern dd-MM-yyyy");
+//                date = parseToDate(scan.nextLine());
+//
+//                System.out.println("Please choose shiftType by id:");
+//                //TODO: Upload shiftTypeList
+//                List<String> ShiftTypes = systemInterfaceTransportations.Show_shiftTypeList();
+//                ShiftTypes.forEach(System.out::println);
+//                shiftType = parseToNumber(scan.nextLine());
+//                checkIdInList(ShiftTypes,shiftType.toString());
+//                String shift = systemInterfaceTransportations.getShiftNameByID(shiftType);
+//                boolean hasKeeper = true;
+//                for (Integer storeId1: stores)
+//                {
+//                    //TODO: Upload StoreKeeper
+//                    if (!systemInterfaceTransportations.isStoreKeeperAvailable(date,shift,storeId1))
+//                    {
+//                        System.out.println("There are no Store Keeper available for store "+storeId1.toString()+
+//                                "this date and shift");
+//                        hasKeeper = false;
+//                    }
+//                }
+//                if(!hasKeeper)
+//                    continue;
+//                List<String> freeTrucks = systemInterfaceTransportations.getFreeTrucks(date, shiftType);
+//                if (!freeTrucks.isEmpty()) {
+//                    System.out.println("The trucks available for the date are:");
+//                    freeTrucks.forEach(System.out::println);
+//                    System.out.println("Please choose truck to transportation by it's id");
+//                    truckId = parseToNumber(scan.nextLine());
+//                    checkIdInList(freeTrucks,truckId.toString());
+//                    List<String> licenses = systemInterfaceTransportations.getTruckLicenseList(truckId);
+//
+////                    List<String> freeDrivers = systemInterfaceTransportations.getDriverToTrucks(truckId, date);
+//                    List<String> freeDrivers = systemInterfaceTransportations.getAllDrivers(date,shift,licenses);
+//                    if (!freeDrivers.isEmpty()) {
+//                        System.out.println("The Drivers available for the date are and truck:");
+//                        freeDrivers.forEach(System.out::println);
+//                        System.out.println("Please choose Driver to transportation by it's id");
+//                        driverId = parseToNumber(scan.nextLine());
+//                        checkIdInList(freeDrivers,driverId.toString());
+//                        find_truck_driver = true;
+//
+//
+//                    } else {
+//                        System.out.println("There are no Drivers available for the truck at this date");
+//                    }
+//                } else {
+//                    System.out.println("No trucks available on date");
+//                }
+//            }
+//
+//            systemInterfaceTransportations.createTransportation(date, shiftType, driverId,
+//                    truckId, supplier_list, stores);
+//            System.out.println("The transport was registered successfully" + "\n");
+//        } catch (Buisness_Exception e) {
+//            System.out.println(Print_error(e));
+//        }
+//    }
+//
+//    public static void Regular_stock_transport() {
+//        try {
+//            List<String> area_for_suppliers = systemInterfaceTransportations.get_area_for_suppliers();
+//            System.out.println(area_for_suppliers);
+//            System.out.println("Please choose area for the suppliers");
+//            String area = scan.nextLine();
+//            checkIdInList(area_for_suppliers,area);
+//
+//            List<String> Suppliersbyarea = systemInterfaceTransportations.getSuppliersbyarea(area);
+//            Suppliersbyarea.forEach(System.out::println);
+//            System.out.println("Please choose suppliers to transportation by id , if there are many please separate by space"); //choose supplier
+//            Integer [] supplier = parseArrayToNumber(scan.nextLine().split(" "));
+//            for (Integer id : supplier ) checkIdInList(Suppliersbyarea, id.toString());
+//
+//            List<String> area_for_stores = systemInterfaceTransportations.get_area_for_stores();
+//            System.out.println(area_for_stores);
+//            System.out.println("Please choose area for stors to transportation");
+//            String area1 = scan.nextLine();
+//            checkIdInList(area_for_stores,area1);
+//
+//            List<String> Stores_By_specific_area = systemInterfaceTransportations.get_Stores_By_specific_area(area1);
+//            Stores_By_specific_area.forEach(System.out::println);
+//            System.out.println("Please choose stores to transportation by id , if there are many please separate by space"); //choose supplier
+//            Integer [] stores = parseArrayToNumber(scan.nextLine().split(" "));
+//            for (Integer id : stores ) checkIdInList(Stores_By_specific_area, id.toString());
+//
+//
+//            List<Integer> store_list = Arrays.asList(stores);
+//            List<Integer> supplier_list = Arrays.asList(supplier);
+//
+//
+//            boolean find_truck_driver = false;
+//            Date date = new Date();
+//            Integer driverId = 0;
+//            Integer truckId = 0;
+//            Integer shiftType = 0;
+//            while (!find_truck_driver) {
+//                System.out.println("Please choose date to transportation by the pattern dd-MM-yyyy");
+//                date = parseToDate(scan.nextLine());
+//
+//                System.out.println("Please choose shiftType by id:");
+//                List<String> ShiftTypes = systemInterfaceTransportations.Show_shiftTypeList();
+//                ShiftTypes.forEach(System.out::println);
+//                shiftType = parseToNumber(scan.nextLine());
+//                checkIdInList(ShiftTypes,shiftType.toString());
+//                String shift = systemInterfaceTransportations.getShiftNameByID(shiftType);
+//                boolean hasKeeper = true;
+//                for (Integer storeId1: stores)
+//                {
+//
+//                    if (!systemInterfaceTransportations.isStoreKeeperAvailable(date,shift,storeId1))
+//                    {
+//                        System.out.println("There are no Store Keeper available for store "+storeId1.toString()+
+//                                " in this date and shift");
+//                        hasKeeper = false;
+//                    }
+//                }
+//                if(!hasKeeper)
+//                    continue;
+//
+//                List<String> freeTrucks = systemInterfaceTransportations.getFreeTrucks(date, shiftType);
+//                if (!freeTrucks.isEmpty()) {
+//                    System.out.println("The trucks available for the date are:");
+//                    freeTrucks.forEach(System.out::println);
+//                    System.out.println("Please choose truck to transportation by it's id");
+//                    truckId = parseToNumber(scan.nextLine());
+//                    checkIdInList(freeTrucks,truckId.toString());
+//                    List<String> licenses = systemInterfaceTransportations.getTruckLicenseList(truckId);
+//
+////                    List<String> freeDrivers = systemInterfaceTransportations.getDriverToTrucks(truckId, date);
+//                    List<String> freeDrivers = systemInterfaceTransportations.getAllDrivers(date,shift,licenses);
+//                    if (!freeDrivers.isEmpty()) {
+//                        System.out.println("The Drivers available for the date are and truck:");
+//                        freeDrivers.forEach(System.out::println);
+//                        System.out.println("Please choose Driver to transportation by it's id");
+//                        driverId = parseToNumber(scan.nextLine());
+//                        checkIdInList(freeDrivers,driverId.toString());
+//                        find_truck_driver = true;
+//
+//
+//                    } else {
+//                        System.out.println("There are no Drivers available for the truck at this date");
+//                    }
+//                } else {
+//                    System.out.println("No trucks available on date");
+//                }
+//            }
+//
+//            for (Integer suppller : supplier_list) {
+//                System.out.println("For supplier " + suppller.toString() + " enter the next detalis");
+//                for (Integer store : store_list) {
+//                    System.out.println("Do you want that this supplier will supply products for stroe :" + store.toString() + " yes/no");
+//                    String answer = scan.nextLine();
+//                    if (checkYesNo(answer)) {
+//                        boolean exit = false;
+//                        List<Pair<String, Integer>> toAdd = new LinkedList<>();
+////                        HashMap<String, Integer> add = new HashMap<>();
+//                        System.out.println("Please enter a product and the quantity required seperate by space");
+//                        System.out.println("Enter end to the next store");
+//                        while (!exit) {
+//                            String[] items = scan.nextLine().split(" ");
+//                            if (items.length<2) {
+//                                exit = true;
+//                            }
+//                            else{
+//                                toAdd.add(checkItem(items));
+////                                add.put(items[0], Integer.parseInt(items[1]));
+//                            }
+//                        }
+//                        systemInterfaceTransportations.addItemFiletotransport(toAdd, store, suppller);
+//
+//                    }
+//                }
+//            }
+//            systemInterfaceTransportations.createRegularTransportation(date, shiftType, driverId,
+//                    truckId, supplier_list, store_list);
+//            System.out.println("The transport was registered successfully\n");
+//        } catch (Buisness_Exception e) {
+//            System.out.println(Print_error(e));
+//        }
+//    }
 
     public static void Show_transports() {
         try {
@@ -380,7 +564,7 @@ public class TransportationMenu {
             Integer driverId = 0;
             Integer truckId = 0;
             while (!find_truck_driver) {
-                List<String> freeTrucks = systemInterfaceTransportations.getFreeTrucks(date, DepartureTime);
+                List<String> freeTrucks = systemInterfaceTransportations.getFreeTrucks(date, DepartureTime,false);
                 if (!freeTrucks.isEmpty()) {
                     System.out.println("The trucks available for the date are:");
                     freeTrucks.forEach(System.out::println);
@@ -391,7 +575,7 @@ public class TransportationMenu {
                     List<String> licenses = systemInterfaceTransportations.getTruckLicenseList(truckId);
 
 //                    List<String> freeDrivers = systemInterfaceTransportations.getDriverToTrucks(truckId, date);
-                    List<String> freeDrivers = systemInterfaceTransportations.getAllDrivers(date,shift,licenses);
+                    List<String> freeDrivers = systemInterfaceTransportations.getAllDrivers(date,shift,licenses,false);
 
 //                    List<String> freeDrivers = systemInterfaceTransportations.getDriverToTrucks(truckId, date);
                     if (!freeDrivers.isEmpty()) {
@@ -621,6 +805,20 @@ public class TransportationMenu {
         if (!ifExist)
             throw new Buisness_Exception("-incurrect value-\n");
 
+    }
+
+    public static void checkDateInList(List<String> ls, Date date) throws Buisness_Exception{
+        if(ls.isEmpty())
+            throw new Buisness_Exception("-empty list-\n");
+        boolean ifExist = false;
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        for(String s : ls)
+        {
+            if(formatter.format(date).equals(s))
+                ifExist = true;
+        }
+        if (!ifExist)
+            throw new Buisness_Exception("-incurrect value-\n");
     }
 
     public static Boolean checkYesNo(String str) throws Buisness_Exception{

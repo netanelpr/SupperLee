@@ -490,7 +490,7 @@ public class SupplierMapper extends AbstractMapper<Supplier> {
                     pstmtDay.clearParameters();
 
                     pstmtDay.setInt(1, StructUtils.getDayInt(day));
-                    pstmtDay.setInt(2, contract.getContractID());
+                    pstmtDay.setInt(2, supID);
 
                     pstmtDay.addBatch();
                 }

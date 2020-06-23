@@ -2,6 +2,7 @@ package ModulesConntectionInterfaces;
 
 import Sup_Inv.Suppliers.Service.*;
 import Sup_Inv.Suppliers.Structs.OrderStatus;
+import Trans_HR.Business_Layer.Transportations.Controllers.Transportation_Controller;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -15,6 +16,14 @@ public class TranspirationToSupplier {
     public TranspirationToSupplier(){
         orderAndProductCtrl = new OrderAndProductCtrl();
         supplierCtrl = new SupplierCtrl();
+    }
+
+    private static class Singelton_TranspirationToSupplier {
+        private static TranspirationToSupplier instance = new TranspirationToSupplier();
+    }
+
+    public static TranspirationToSupplier getInstance() {
+        return TranspirationToSupplier.Singelton_TranspirationToSupplier.instance;
     }
 
     /**

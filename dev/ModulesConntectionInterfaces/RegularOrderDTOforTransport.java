@@ -35,7 +35,7 @@ public class RegularOrderDTOforTransport {
         return shopID;
     }
 
-    public Date getDeliveryDate(){
+    public Date getDate(){
         return StructUtils.getTheNearestDate(daysCanSupply);
     }
 
@@ -43,4 +43,3 @@ public class RegularOrderDTOforTransport {
         return supplierArea;
     }
 }
-

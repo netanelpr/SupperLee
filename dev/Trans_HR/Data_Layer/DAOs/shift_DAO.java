@@ -145,10 +145,12 @@ public class shift_DAO {
                 return rs2.getInt("SN");
             }
 
-        } catch (SQLException e) {
 
+        } catch (SQLException e) {
+            return  1;
         }
         return 1;
+//        throw new NullPointerException();
 
     }
 

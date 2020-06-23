@@ -33,9 +33,9 @@ public class transportation_DAO {
 
     public void insert(dummy_Transportation transportation){
         String query_items="INSERT INTO \"main\".\"Transportations\"\n" +
-                "(\"SN\", \"Date\", \"DepartureTime\",\"TruckWeight\")\n" +
-                String.format("VALUES ('%d', '%s','%d', '%.2f');", transportation.getId(),simpleDateFormat.format(transportation.getDate()),
-                        transportation.getLeaving_time(), transportation.getTruck_weight());
+                "(\"SN\", \"Date\", \"DepartureTime\",\"TruckWeight\",\"Status\")\n" +
+                String.format("VALUES ('%d', '%s','%d', '%.2f','%s');", transportation.getId(),simpleDateFormat.format(transportation.getDate()),
+                        transportation.getLeaving_time(), transportation.getTruck_weight(), transportation.getStatus());
 
         try {
             PreparedStatement statement= SupInvDBConn.getInstance().getConn().prepareStatement(query_items);
@@ -116,6 +116,17 @@ public class transportation_DAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        String query_items2="UPDATE \"main\".\"Transportations\"\n" +
+                String.format("SET Status = '%s' " +
+                        "where SN = '%d';","Completed" ,SN);
+        try {
+            PreparedStatement statement= SupInvDBConn.getInstance().getConn().prepareStatement(query_items2);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -135,7 +146,7 @@ public class transportation_DAO {
             {
                 dummy_Transportation dummy_transportation = new dummy_Transportation(rs2.getInt("SN"),
                         parseToDate(rs2.getString("Date")),rs2.getInt("DepartureTime"),rs2.getDouble("TruckWeight"),
-                        rs2.getInt("TruckSN"),rs2.getInt("DriverSN"));
+                        rs2.getInt("TruckSN"),rs2.getInt("DriverSN"),rs2.getString("Status"));
 
 
                 dummy_transportation.setStores(select_stores(SN));
@@ -165,7 +176,7 @@ public class transportation_DAO {
                 String d = rs2.getString("Date");
                 dummy_Transportation dummy_transportation = new dummy_Transportation(rs2.getInt("SN"),
                         parseToDate(rs2.getString("Date")),rs2.getInt("DepartureTime"),rs2.getDouble("TruckWeight"),
-                        rs2.getInt("TruckSN"),rs2.getInt("DriverSN"));
+                        rs2.getInt("TruckSN"),rs2.getInt("DriverSN"),rs2.getString("Status"));
 
 
                 dummy_transportation.setStores(select_stores(dummy_transportation.getId()));
