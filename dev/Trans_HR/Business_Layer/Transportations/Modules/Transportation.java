@@ -20,13 +20,18 @@ public class Transportation {
     private Date date;
     private int DepartureTime;
     private Truck truck;
-    private List<Supplier> suppliers;
+    private List<Integer> suppliers;
     private List<Store> stores;
     private double weight_truck = -1;
     private Driver driver;
     private List<ItemsFile> itemsFiles;
+//    TODO: status
+//    Canceled
+//    InProcess
+//    Completed
+    private String status;
 
-    public Transportation(Date date, int DepartureTime, Driver drivers, Truck truck, List<Supplier> suppliers, List<Store> stores) {
+    public Transportation(Date date, int DepartureTime, Driver drivers, Truck truck, List<Integer> suppliers, List<Store> stores) {
         this.id = idcounter++;
         this.date = date;
         this.DepartureTime = DepartureTime;
@@ -35,9 +40,10 @@ public class Transportation {
         this.suppliers = suppliers;
         this.stores = stores;
         this.itemsFiles = new LinkedList<>();
+        this.status= "InProcess";
     }
 
-    public Transportation(int id, Date date, int DepartureTime, Driver drivers, Truck truck) {
+    public Transportation(int id, Date date, int DepartureTime, Driver drivers, Truck truck,String status) {
         this.id = id;
         this.date = date;
         this.DepartureTime = DepartureTime;
@@ -48,6 +54,7 @@ public class Transportation {
         this.itemsFiles = new LinkedList<>();
         if(id>idcounter)
             idcounter=id+1;
+        this.status = status;
     }
 
     public String toString() {
@@ -68,21 +75,19 @@ public class Transportation {
             output = output + sites.getName() + ", ";
         }
         output += "\n\tsuppliers: ";
-        for (Supplier sites : suppliers) {
-            output = output + sites.getName() + ", ";
+        for (Integer sites : suppliers) {
+            output = output + sites + ", ";
         }
         output += "\n\titemsFiles: ";
         for (ItemsFile itemsFile: itemsFiles) {
-            output = output +"\n\t"+ itemsFile.getSupplier().getName()+"->"+itemsFile.getStore().getName()+":";
-            for(Pair<String,Integer> pair : itemsFile.getItems_list())
-            {
-                output = output +"\n\t-"+ pair.getKey()+"-"+pair.getValue();
-            }
+            output = output +"\n\t"+itemsFile.getId()+". "+itemsFile.getSupplier()+"->"+itemsFile.getStore().getName()+":";
         }
         if(weight_truck!=-1)
         {
             output+="\ntruck weight= "+weight_truck;
         }
+        output+="\nStatus= "+this.status;
+
         return output;
 
     }
@@ -93,6 +98,23 @@ public class Transportation {
         if(idcounter<id)
             idcounter = id;
     }
+    public String getStatus()
+    {
+        return this.status;
+    }
+    public void setStatusToCanceled()
+    {
+        this.status="Canceled";
+    }
+    public void setStatusToInProcess()
+    {
+        this.status="InProcess";
+    }
+    public void setStatusToInCompleted()
+    {
+        this.status="Completed";
+    }
+
     public void setDriver(Driver driver)
     {
         this.driver=driver;
@@ -111,7 +133,7 @@ public class Transportation {
         return date;
     }
 
-    public List<Supplier> getSuppliers() {
+    public List<Integer> getSuppliers() {
         return suppliers;
     }
 

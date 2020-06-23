@@ -3,11 +3,11 @@ package Trans_HR.Business_Layer;
 import Trans_HR.Business_Layer.Controllers.Site_Controller;
 import Trans_HR.Business_Layer.Modules.*;
 import Trans_HR.Business_Layer.Transportations.Controllers.Drivers_Controller;
-import Trans_HR.Business_Layer.Transportations.Controllers.Missing_items_Controller;
+//import Trans_HR.Business_Layer.Transportations.Controllers.Missing_items_Controller;
 import Trans_HR.Business_Layer.Transportations.Controllers.Transportation_Controller;
 import Trans_HR.Business_Layer.Transportations.Controllers.Trucks_Controller;
 import Trans_HR.Business_Layer.Transportations.Modules.ItemsFile;
-import Trans_HR.Business_Layer.Transportations.Modules.MissingItems;
+//import Trans_HR.Business_Layer.Transportations.Modules.MissingItems;
 import Trans_HR.Business_Layer.Transportations.Modules.Transportation;
 import Trans_HR.Business_Layer.Transportations.Modules.Truck;
 import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
@@ -50,7 +50,7 @@ public class Service {
     public Trucks_Controller trucks_controller = Trucks_Controller.getInstance();
     public Site_Controller site_controller = Site_Controller.getInstance();
     public Transportation_Controller transportation_controller = Transportation_Controller.getInstance();
-    public Missing_items_Controller missing_items_controller = Missing_items_Controller.getInstance();
+//    public Missing_items_Controller missing_items_controller = Missing_items_Controller.getInstance();
     public Drivers_Controller drivers_controller = Drivers_Controller.getInstance();
     private ShiftController shiftController = new ShiftController();
     private WorkerController workerController = new WorkerController();
@@ -63,7 +63,7 @@ public class Service {
     private ConcurrentHashMap<Integer, ItemsFile> HashItemsFile = new ConcurrentHashMap<>();
 
     private ConcurrentHashMap<Integer, Transportation> HashTransportation= new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Integer, Trans_HR.Business_Layer.Transportations.Modules.MissingItems> MissingItems= new ConcurrentHashMap<>();
+//    private ConcurrentHashMap<Integer, Trans_HR.Business_Layer.Transportations.Modules.MissingItems> MissingItems= new ConcurrentHashMap<>();
     private HashMap<Integer, Shift> shiftHistory = new HashMap<>();
     private HashMap<Integer, Worker> workerList= new HashMap<>();
     public HashMap<Integer, License> license_list = new HashMap<>();
@@ -111,9 +111,9 @@ public class Service {
 
 
 
-    public ConcurrentHashMap<Integer, MissingItems> getMissing(){
-        return MissingItems;
-    }
+//    public ConcurrentHashMap<Integer, MissingItems> getMissing(){
+//        return MissingItems;
+//    }
 
     public ConcurrentHashMap<Integer,Supplier> getSuppliersMap()
     {
@@ -154,42 +154,43 @@ public class Service {
     }
 
 
-    public void remove_MissingItem(int SN){
-        if(MissingItems.containsKey(SN))
-        {
-            MissingItems.remove(SN);
-            Mapper.getInstance().deleteMissing_items(SN);
-        }
-    }
+//    public void remove_MissingItem(int SN){
+//        if(MissingItems.containsKey(SN))
+//        {
+//            MissingItems.remove(SN);
+//            Mapper.getInstance().deleteMissing_items(SN);
+//        }
+//    }
 
-    public void upload_MissingItems(){
-        if(MissingItems.isEmpty())
-        {
-            List<dummy_Missing_items> list = Mapper.getInstance().selectAllMissing_items();
-            for (dummy_Missing_items dummy_missing_item : list)
-            {
-                MissingItems missingItem = new MissingItems(dummy_missing_item.getSN(),dummy_missing_item.getStore_id(),
-                        dummy_missing_item.getSupplier_id(), dummy_missing_item.getItems());
-
-                upload_Supplier(missingItem.getSupplierId());
-                upload_Store(dummy_missing_item.getStore_id());
-
-                MissingItems.put(missingItem.getID(),missingItem);
-            }
-        }
-    }
+//    public void upload_MissingItems(){
+//        if(MissingItems.isEmpty())
+//        {
+//            List<dummy_Missing_items> list = Mapper.getInstance().selectAllMissing_items();
+//            for (dummy_Missing_items dummy_missing_item : list)
+//            {
+//                MissingItems missingItem = new MissingItems(dummy_missing_item.getSN(),dummy_missing_item.getStore_id(),
+//                        dummy_missing_item.getSupplier_id(), dummy_missing_item.getItems());
+//
+//                upload_Supplier(missingItem.getSupplierId());
+//                upload_Store(dummy_missing_item.getStore_id());
+//
+//                MissingItems.put(missingItem.getID(),missingItem);
+//            }
+//        }
+//    }
 
     public void upload_ItemFile(int SN){
 
         dummy_Items_File dummy_items_file = Mapper.getInstance().selectItemfile(SN);
         if (dummy_items_file!=null)
         {
-            upload_Supplier(dummy_items_file.getSupplier_id());
+//            upload_Supplier(dummy_items_file.getSupplier_id());
+            System.out.println(dummy_items_file.getStore_id());
             upload_Store(dummy_items_file.getStore_id());
             Store store = HashStore.get(dummy_items_file.getStore_id());
             Supplier supplier = HashSuppliers.get(dummy_items_file.getSupplier_id());
-            ItemsFile itemsFile = new ItemsFile(dummy_items_file.getSn(),dummy_items_file.getItems(),
-                    store,supplier);
+            ItemsFile itemsFile = new ItemsFile(dummy_items_file.getSn(),
+                    store,dummy_items_file.getSupplier_id(),dummy_items_file.getorderID());
             HashItemsFile.put(itemsFile.getId(),itemsFile);
         }
     }
@@ -223,8 +224,8 @@ public class Service {
         if(!HashItemsFile.containsKey(itemsFile.getId()))
         {
             HashItemsFile.put(itemsFile.getId(),itemsFile);
-            Mapper.getInstance().insertItemfile(itemsFile.getId(),itemsFile.getSupplier().getId(),itemsFile.getStore().getId(),
-                    itemsFile.getItems_list());
+            Mapper.getInstance().insertItemfile(itemsFile.getId(),itemsFile.getSupplier(),itemsFile.getStore().getId(),
+                    itemsFile.getorderID());
         }
     }
 
@@ -260,6 +261,7 @@ public class Service {
 
     public void setWeight_truck(int transportationId,double weight_truck){
         HashTransportation.get(transportationId).setWeight_truck(weight_truck);
+        HashTransportation.get(transportationId).setStatusToInCompleted();
         Mapper.getInstance().updateTruckWeightTransportation(transportationId,weight_truck);
     }
 
@@ -386,7 +388,7 @@ public class Service {
                 truck = HashTrucks.get(dummy_transportation.getTrucksn());
 
             Transportation transportation = new Transportation(dummy_transportation.getId(),dummy_transportation.getDate(),
-                    dummy_transportation.getLeaving_time(),driver,truck);
+                    dummy_transportation.getLeaving_time(),driver,truck,dummy_transportation.getStatus());
             HashTransportation.put(dummy_transportation.getId(),transportation);
             if (driver!=null)
                 driver.addDate(transportation);
@@ -396,11 +398,11 @@ public class Service {
                 upload_Store(id);
                 HashTransportation.get(transportation.getId()).getStores().add(HashStore.get(id));
             }
-            for(Integer id : dummy_transportation.getSuppliers())
-            {
-                upload_Supplier(id);
-                HashTransportation.get(transportation.getId()).getSuppliers().add(HashSuppliers.get(id));
-            }
+//            for(Integer id : dummy_transportation.getSuppliers())
+//            {
+//                upload_Supplier(id);
+//                HashTransportation.get(transportation.getId()).getSuppliers().add(HashSuppliers.get(id));
+//            }
 
             for(Integer id : dummy_transportation.getItemsFile())
             {
@@ -430,7 +432,7 @@ public class Service {
             if (!HashTransportation.containsKey(dummy_transportation.getId())) {
 
                 Transportation transportation = new Transportation(dummy_transportation.getId(), dummy_transportation.getDate(),
-                        dummy_transportation.getLeaving_time(), null, null);
+                        dummy_transportation.getLeaving_time(), null, null,dummy_transportation.getStatus());
                 HashTransportation.put(dummy_transportation.getId(),transportation);
 
                 Mapper.getInstance().getAllDrivers();
@@ -456,10 +458,10 @@ public class Service {
                     upload_Store(id);
                     HashTransportation.get(transportation.getId()).getStores().add(HashStore.get(id));
                 }
-                for (Integer id : dummy_transportation.getSuppliers()) {
-                    upload_Supplier(id);
-                    HashTransportation.get(transportation.getId()).getSuppliers().add(HashSuppliers.get(id));
-                }
+//                for (Integer id : dummy_transportation.getSuppliers()) {
+//                    upload_Supplier(id);
+//                    HashTransportation.get(transportation.getId()).getSuppliers().add(HashSuppliers.get(id));
+//                }
 
                 for (Integer id : dummy_transportation.getItemsFile()) {
                     upload_ItemFile(id);
@@ -480,11 +482,11 @@ public class Service {
         if(!HashTransportation.containsKey(transportation.getId()))
         {
             HashTransportation.put(transportation.getId(),transportation);
-            List<Integer> Suppliers = new LinkedList<>();
-            for(Supplier s:transportation.getSuppliers())
-            {
-                Suppliers.add(s.getId());
-            }
+//            List<Integer> Suppliers = new LinkedList<>();
+//            for(Supplier s:transportation.getSuppliers())
+//            {
+//                Suppliers.add(s.getId());
+//            }
             List<Integer> Stores = new LinkedList<>();
             for(Store s:transportation.getStores())
             {
@@ -497,7 +499,7 @@ public class Service {
             }
             Mapper.getInstance().insertTransportation(transportation.getId(),transportation.getDate(),transportation.getDepartureTime(),
                     transportation.getWeight_truck(),transportation.getTruck().getId(),transportation.getDriveId(),
-                    Suppliers,Stores,ItemFiles);
+                    transportation.getSuppliers(),Stores,ItemFiles,transportation.getStatus());
         }
 
     }

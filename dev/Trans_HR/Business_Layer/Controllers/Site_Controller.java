@@ -3,7 +3,6 @@ package Trans_HR.Business_Layer.Controllers;
 
 import Trans_HR.Business_Layer.Modules.*;
 import Trans_HR.Business_Layer.Service;
-import Trans_HR.Business_Layer.Transportations.Modules.MissingItems;
 import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
 import Trans_HR.Data_Layer.Mapper;
 
@@ -138,41 +137,41 @@ public class Site_Controller {
         return output;
     }
 
-    public List<String> getSupplierByStoreArea(int storeId, String area) {
-        Service service = Service.getInstance();
-        List<String> output = new LinkedList<String>();
-        for (MissingItems missingItems : service.getMissing().values()) {
-            int supplierId = missingItems.getSupplierId();
-            Area supplierArea = service.getSuppliersMap().get(supplierId).getArea();
-            if (storeId == missingItems.getStoreId() && area.equals(supplierArea.getAreaName())) {
-                String line = supplierId + ". " + service.getSuppliersMap().get(supplierId).getName() + ".";
-                if(!output.contains(line))
-                    output.add(line);
-            }
-        }
-        output.sort(String.CASE_INSENSITIVE_ORDER);
-        return output;
-    }
-
-
-    public List<String> getSupplierAreaByStore(int storeId) {
-        Service service = Service.getInstance();
-        List<Area> area_list = new LinkedList<Area>();
-        List<String> output = new LinkedList<String>();
-        for (MissingItems missingItems : service.getMissing().values()) {
-            if (storeId == missingItems.getStoreId()) {
-                int supplierId = missingItems.getSupplierId();
-                Area area = service.getSuppliersMap().get(supplierId).getArea();
-                if (!area_list.contains(area)) {
-                    area_list.add(area);
-                    output.add(area.getAreaName());
-                }
-            }
-        }
-
-        output.sort(String.CASE_INSENSITIVE_ORDER);
-        return output;
-    }
+//    public List<String> getSupplierByStoreArea(int storeId, String area) {
+//        Service service = Service.getInstance();
+//        List<String> output = new LinkedList<String>();
+//        for (MissingItems missingItems : service.getMissing().values()) {
+//            int supplierId = missingItems.getSupplierId();
+//            Area supplierArea = service.getSuppliersMap().get(supplierId).getArea();
+//            if (storeId == missingItems.getStoreId() && area.equals(supplierArea.getAreaName())) {
+//                String line = supplierId + ". " + service.getSuppliersMap().get(supplierId).getName() + ".";
+//                if(!output.contains(line))
+//                    output.add(line);
+//            }
+//        }
+//        output.sort(String.CASE_INSENSITIVE_ORDER);
+//        return output;
+//    }
+//
+//
+//    public List<String> getSupplierAreaByStore(int storeId) {
+//        Service service = Service.getInstance();
+//        List<Area> area_list = new LinkedList<Area>();
+//        List<String> output = new LinkedList<String>();
+//        for (MissingItems missingItems : service.getMissing().values()) {
+//            if (storeId == missingItems.getStoreId()) {
+//                int supplierId = missingItems.getSupplierId();
+//                Area area = service.getSuppliersMap().get(supplierId).getArea();
+//                if (!area_list.contains(area)) {
+//                    area_list.add(area);
+//                    output.add(area.getAreaName());
+//                }
+//            }
+//        }
+//
+//        output.sort(String.CASE_INSENSITIVE_ORDER);
+//        return output;
+//    }
 
     public String get_Store_id(String site) {
         Service service = Service.getInstance();

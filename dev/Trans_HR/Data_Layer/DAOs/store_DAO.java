@@ -78,6 +78,7 @@ public class store_DAO {
 
 
     public dummy_store select_by_storeId(int id){
+        System.out.println("------ "+id+" -----");
         String selectQuery = String.format("select * from Stores where Stores.SN = '%d'",id);
         try {
 
