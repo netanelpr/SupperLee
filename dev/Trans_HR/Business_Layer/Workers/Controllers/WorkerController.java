@@ -538,7 +538,7 @@ public class WorkerController {
         return infoObject;
     }
 
-    private Date parseDate(String dateToParse){
+    public static Date parseDate(String dateToParse){
         Date date;
         try {
             date = new SimpleDateFormat("d-MM-yyyy").parse(dateToParse);
