@@ -39,8 +39,8 @@ public class TransportationMenu {
                         System.out.println(i + 1 + ". " + transports_type[i]);
                     }
                     option2 = scan.nextLine();
-                    if (option2.equals("1"))Complete_Periodical_Order();
-                    else if (option2.equals("2"))Complete_Regular_Open_Order();
+                    if (option2.equals("1"))Complete_Regular_Open_Order();
+                    else if (option2.equals("2"))Complete_Periodical_Order();
                 }
                 else if (option.equals("2"))
                     Show_transports();
@@ -199,7 +199,7 @@ public class TransportationMenu {
         }
     }
 
-    public static void Complete_Regular_Open_Order() {
+    public static void  Complete_Regular_Open_Order() {
         try {
             List<String> Dates_Periodical_Order = systemInterfaceTransportations.get_Dates_Regular_Open_Order();
             Dates_Periodical_Order.forEach(System.out::println);

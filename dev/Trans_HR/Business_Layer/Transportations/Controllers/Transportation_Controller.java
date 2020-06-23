@@ -3,6 +3,7 @@ package Trans_HR.Business_Layer.Transportations.Controllers;
 import ModulesConntectionInterfaces.PeriodicalOrderDTOforTransport;
 import ModulesConntectionInterfaces.RegularOrderDTOforTransport;
 import ModulesConntectionInterfaces.TranspirationToSupplier;
+import Sup_Inv.Inventory.Logic.Item;
 import Trans_HR.Business_Layer.Modules.Site;
 import Trans_HR.Business_Layer.Modules.Store;
 import Trans_HR.Business_Layer.Modules.Supplier;
@@ -307,6 +308,11 @@ public class Transportation_Controller {
             service.getHashTrucks().get(truck_id).addDate(transportation);
             service.getDrivers().get(driver_id).addDate(transportation);
             service.add_Transportation(transportation);
+            for(ItemsFile itemsFile : transportation.getItemsFiles())
+            {
+                transpirationToSupplier.setOrderStatusAsShipped(itemsFile.getorderID(),transportation.getDate());
+            }
+
         }
         catch (Exception e)
         {
@@ -366,6 +372,10 @@ public class Transportation_Controller {
             service.getHashTrucks().get(truck_id).addDate(transportation);
             service.getDrivers().get(driver_id).addDate(transportation);
             service.add_Transportation(transportation);
+            for(ItemsFile itemsFile : transportation.getItemsFiles())
+            {
+                transpirationToSupplier.setOrderStatusAsShipped(itemsFile.getorderID(),transportation.getDate());
+            }
         }
         catch (Exception e)
         {
@@ -422,6 +432,7 @@ public class Transportation_Controller {
         try
         {
             Service service = Service.getInstance();
+            TranspirationToSupplier transpirationToSupplier = TranspirationToSupplier.getInstance();
             service.upload_Transportation(transport_id);
             if (service.getHashTransportation().size() == 0) {
                 throw new Buisness_Exception("There are no transportations to delete");
@@ -439,7 +450,12 @@ public class Transportation_Controller {
                     service.remove_truck_from_transport(transport_id,truck);
 //                    service.getHashTrucks().get(truck).Remove_date(transport_id);
 //                    service.getHashTransportation().remove(transport.getKey());
+                    List<ItemsFile> itemsFilesList =transport.getValue().getItemsFiles();
                     service.remove_transport(transport_id);
+                    for(ItemsFile itemsFile : itemsFilesList)
+                    {
+                        transpirationToSupplier.setOrderStatusBackToOpen(itemsFile.getorderID());
+                    }
                 }
             }
 
@@ -532,11 +548,11 @@ public class Transportation_Controller {
         List<String> output = new LinkedList<>();
 
         List<PeriodicalOrderDTOforTransport> orderList = transpirationToSupplier.getPeriodicalOpenOrders();
-        System.out.println("-----------"+orderList.size()+"-----------");
         if (orderList.size() == 0) {
             throw new Buisness_Exception("There are no Orders");
         } else {
             for (PeriodicalOrderDTOforTransport order : orderList) {
+//                System.out.println(formatter.format(order.getDate()));
                 if (!output.contains(formatter.format(order.getDate()))) {
                     output.add(formatter.format(order.getDate()));
                 }

@@ -239,7 +239,7 @@ public class Mapper {
 
     //Itemfile
     public void insertItemfile(int Sn, int supplier_id,int store_id, int orderID){
-        dummy_Items_File toAdd = new dummy_Items_File(Sn,supplier_id,store_id, orderID);
+        dummy_Items_File toAdd = new dummy_Items_File(Sn,store_id,supplier_id, orderID);
         itemFile_Mapper.insert(toAdd);
     }
 
