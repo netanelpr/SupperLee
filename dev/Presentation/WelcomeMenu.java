@@ -221,9 +221,9 @@ public class WelcomeMenu {
             if(ansStr.toUpperCase().equals("S") || ansStr.toUpperCase().equals("W")) {
 
                 if(ansStr.toUpperCase().equals("S")){
-                    //SystemInterfaceWorkers.getInstance().getShifts();
+                    SystemInterfaceWorkers.getInstance().printAllShiftFromThisShop();
                 } else {
-                    //SystemInterfaceWorkers.getInstance().getWorkers();
+                    SystemInterfaceWorkers.getInstance().printAllWorkersFromThisShop();
                 }
 
             }
