@@ -3,7 +3,9 @@ package Trans_HR.Interface_Layer.Workers;
 import Trans_HR.Business_Layer.Controllers.Site_Controller;
 import Trans_HR.Business_Layer.Service;
 import Trans_HR.Business_Layer.Transportations.Utils.Buisness_Exception;
+import Trans_HR.Business_Layer.Workers.Modules.Worker.Worker;
 import Trans_HR.Business_Layer.Workers.Utils.InfoObject;
+import Trans_HR.Data_Layer.Mapper;
 
 public class SystemInterfaceWorkers {
 
@@ -39,6 +41,13 @@ public class SystemInterfaceWorkers {
         Service.getInstance().getWorkerController().getWorkers();
     }
 
+    public void printAllWorkersFromThisShop(){
+        Service.getInstance().getWorkerController().printAllWorkerForThisStore();
+    }
+
+    public void printAllShiftFromThisShop(){
+        Service.getInstance().getShiftController().printAllShiftsForThisStore();
+    }
 
     public InfoObject printAllWorkers(){
         return Service.getInstance().getWorkerController().printAllWorker();

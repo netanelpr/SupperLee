@@ -652,4 +652,11 @@ public class WorkerController {
         int Sn = Mapper.getInstance().getWorkerSn();
         this.snFactory = ++Sn;
     }
+
+    public void printAllWorkerForThisStore() {
+        Mapper.getInstance().getAllWorkersByStore(getCurrentStoreSN());
+        for(Worker workerToPrint : Service.getInstance().getWorkerList(getCurrentStoreSN()).values()){
+            System.out.println(workerToPrint.getWorkerSn() + ". " + workerToPrint.getWorkerName() + " Job : " + workerToPrint.getWorkerJobTitle());
+        }
+    }
 }
