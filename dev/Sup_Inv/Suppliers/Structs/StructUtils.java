@@ -197,6 +197,8 @@ public class StructUtils {
         map.put("OPEN", OrderStatus.Open);
         map.put("CLOSE", OrderStatus.Close);
         map.put("WAITING_FOR_SHIPPING", OrderStatus.WaitingForShipping);
+        map.put("Scheduled", OrderStatus.Scheduled);
+
 
 
         return  map;
@@ -231,6 +233,10 @@ public class StructUtils {
             return OrderStatus.WaitingForShipping;
         }
 
+        if(orderStatus == 3) {
+            return OrderStatus.Scheduled;
+        }
+
         return null;
     }
 
@@ -245,6 +251,10 @@ public class StructUtils {
 
         if(orderStatus == OrderStatus.WaitingForShipping) {
             return 2;
+        }
+
+        if(orderStatus == OrderStatus.Scheduled) {
+            return 3;
         }
 
         return -1;

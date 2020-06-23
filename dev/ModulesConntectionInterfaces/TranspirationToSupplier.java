@@ -2,8 +2,12 @@ package ModulesConntectionInterfaces;
 
 import Sup_Inv.Suppliers.Service.*;
 import Sup_Inv.Suppliers.Structs.OrderStatus;
+import Sup_Inv.Suppliers.Structs.StructUtils;
 import Trans_HR.Business_Layer.Transportations.Controllers.Transportation_Controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,13 +58,18 @@ public class TranspirationToSupplier {
         List<Integer> orderIds = orderAndProductCtrl.getAllWaitingShippingPeriodicalOrders();
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
-            orders.add(new PeriodicalOrderDTOforTransport(
-                    orderShipDetails.supplier.supplierID,
-                    orderShipDetails.orderId,
-                    orderShipDetails.shopNumber,
-                    orderShipDetails.supplier.supplyDays,
-                    orderShipDetails.supplier.area
-            ));
+            DateFormat dateFormat = new SimpleDateFormat(StructUtils.dateFormat());
+            try {
+                orders.add(new PeriodicalOrderDTOforTransport(
+                        orderShipDetails.supplier.supplierID,
+                        orderShipDetails.orderId,
+                        orderShipDetails.shopNumber,
+                        orderShipDetails.supplier.supplyDays,
+                        orderShipDetails.supplier.area,
+                        dateFormat.parse(orderShipDetails.deliveryDate)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         return orders;
@@ -81,7 +90,7 @@ public class TranspirationToSupplier {
      * @param arrivalDate date that the order will arrive to the store
      */
     public void setOrderStatusAsShipped(int orderId, Date arrivalDate){
-        if(orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.Open)){
+        if(orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.Scheduled)){
             orderAndProductCtrl.updateOrderArrivalTime(orderId, arrivalDate);
         }
     }
@@ -91,4 +100,9 @@ public class TranspirationToSupplier {
         orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.WaitingForShipping);
     }
 
+    public void setOrderStatusAsScheduled(int orderId, Date arrivalDate){
+        if(orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.Open)){
+            orderAndProductCtrl.updateOrderArrivalTime(orderId, arrivalDate);
+        }
+    }
 }

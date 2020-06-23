@@ -94,7 +94,7 @@ public class TransportationMenu {
             }
         }
 
-        while (!choice.equals("4"));
+        while (!choice.equals("3"));
     }
 
     static String Print_error(Exception e) {
@@ -125,7 +125,7 @@ public class TransportationMenu {
             System.out.println("Please choose area to transportation from the following choices");
             List<String> SupplierAreaByStore = systemInterfaceTransportations.get_area_for_suppliers_by_date_store_Periodical_Order(orderDate, storeId);
             System.out.println(SupplierAreaByStore);
-            String area = scan.nextLine();
+            String area = scan.nextLine().toUpperCase();
             checkIdInList(SupplierAreaByStore,area);
 
             System.out.println("Please choose suppliers to transportation from the following, if you want to choose more than one, please separate them by space");
@@ -219,7 +219,7 @@ public class TransportationMenu {
             System.out.println("Please choose area to transportation from the following choices");
             List<String> SupplierAreaByStore = systemInterfaceTransportations.get_area_for_suppliers_by_date_store_Regular_Open_Order(orderDate, storeId);
             System.out.println(SupplierAreaByStore);
-            String area = scan.nextLine();
+            String area = scan.nextLine().toUpperCase();
             checkIdInList(SupplierAreaByStore,area);
 
             System.out.println("Please choose suppliers to transportation from the following, if you want to choose more than one, please separate them by space");

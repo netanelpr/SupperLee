@@ -198,8 +198,15 @@ public class Transportation_Controller {
         Service service = Service.getInstance();
         try {
             Transportation transportation = service.getHashTransportation().get(transportationId);
-            if(transportation.getTruck().getMax_weight()>truckWeight)
-                service.setWeight_truck(transportationId,truckWeight);
+            if (transportation.getTruck().getMax_weight() > truckWeight) {
+                service.setWeight_truck(transportationId, truckWeight);
+                for(ItemsFile itemsFile : transportation.getItemsFiles())
+                {
+                    TranspirationToSupplier.getInstance().setOrderStatusAsScheduled(itemsFile.getorderID(),transportation.getDate());
+                }
+
+            }
+
             else
                 throw new Buisness_Exception("-Truck weight exceeds the maximum allowed-\n");
         }
@@ -293,11 +300,9 @@ public class Transportation_Controller {
                         ItemsFile itemFile = new ItemsFile(
                                 service.getHashStoresMap().get(order.getShopId()),
                                 order.getSupplierId(),order.getOrderId());
-                        System.out.println("ItemsFile");
 
                         itemFile.setTransportationID(transportation.getId());
                         itemFile.setFrom_missing_items();
-                        System.out.println("ItemsFile2");
 
                         service.add_ItemFile(itemFile);
                         transportation.addItemFile(itemFile);
@@ -471,12 +476,13 @@ public class Transportation_Controller {
         Service service = Service.getInstance();
         service.upload__all_Transportation();
         if (service.getHashTransportation().size() == 0) {
-            throw new Buisness_Exception("There are no transportations to delete" + "\n");
+            throw new Buisness_Exception("There are no transportation's to delete" + "\n");
         } else {
             List<String> result = new LinkedList<>();
             for (Transportation transportation : service.getHashTransportation().values()) {
-                if(!transportation.getStatus().equals("Canceled"))
-                    result.add(transportation.getId().toString());
+                if(!transportation.getStatus().toLowerCase().equals("canceled") &&
+                        !transportation.getStatus().toLowerCase().equals("completed"))
+                         result.add(transportation.getId().toString());
             }
             return result;
         }

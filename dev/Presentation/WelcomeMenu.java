@@ -218,15 +218,25 @@ public class WelcomeMenu {
                 sc.next();
             }
             String ansStr = sc.next().toUpperCase();
-            if(ansStr.equals("S") || ansStr.equals("W")) {
-                //TODO HR
+            if(ansStr.toUpperCase().equals("S") || ansStr.toUpperCase().equals("W")) {
+
+                if(ansStr.toUpperCase().equals("S")){
+                    //SystemInterfaceWorkers.getInstance().getShifts();
+                } else {
+                    //SystemInterfaceWorkers.getInstance().getWorkers();
+                }
+
             }
             else if(ansStr.equals("GR") || ansStr.equals("GI") || ansStr.equals("GC") || ansStr.equals("GS") ||
                     ansStr.equals("RGR") || ansStr.equals("RGI") || ansStr.equals("DGR") || ansStr.equals("DGI")) {
                 inventoryMenu.invMngMenu(ansStr);
             }
-            else if(ansStr.equals("SS") || ansStr.equals("ST")) {
-                //TODO Transportation
+            else if(ansStr.toUpperCase().equals("SS") || ansStr.toLowerCase().equals("st")) {
+                if(ansStr.toLowerCase().equals("ss")){
+                    TransportationMenu.Show_transports();
+                } else {
+                    TransportationMenu.Show_trucks();
+                }
             }
             else if(ansStr.equals("GAS") || ansStr.equals("GAC") ||ansStr.equals("GPO") ||ansStr.equals("DR") ||
                     ansStr.equals("GASB") ||ansStr.equals("GASPD") ||ansStr.equals("GPH") ||ansStr.equals("GAODI") ||

@@ -148,7 +148,7 @@ public class OrderManager {
         Order order = getRegularOrder(orderId);
         if(order == null) {
             order = getPeriodicalOrder(orderId);
-            if(order != null) {
+            if(order == null) {
                 return Result.makeFailure("Invalid order id");
             }
         }
