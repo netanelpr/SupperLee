@@ -327,6 +327,10 @@ public class SupplierSystem {
         regularOrder.setDeliveryDay(supplier.getNextDeliveryDate());
         regularOrder.setContractId(contractId);
 
+        if(!supplier.isSelfDelivery()){
+            regularOrder.setStatus(OrderStatus.WaitingForShipping);
+        }
+
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){
             if(regularOrder.getOrderId() == -2){
@@ -366,6 +370,10 @@ public class SupplierSystem {
         RegularOrder regularOrder = RegularOrder.CreateRegularOrder(-1,products, shopNumber);
         regularOrder.setDeliveryDay(sup.getNextDeliveryDate());
         regularOrder.setContractId(sup.getContract().getContractID());
+
+        if(!sup.isSelfDelivery()){
+            regularOrder.setStatus(OrderStatus.WaitingForShipping);
+        }
 
         orderManager.createRegularOrder(regularOrder);
         if(regularOrder.getOrderId() < 0){
@@ -411,13 +419,9 @@ public class SupplierSystem {
         sup = supplierManager.getById(cheapestSupplierId);
         sup.setPricePerUnit(products);
         sup.fillWithCatalogNumber(products);
-        /*
-        PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1,products, days,
-                weekPeriod, shopNumber, sup.getNextDeliveryDate());
-        periodicalOrder.setContractId(sup.getContract().getContractID());*/
 
-
-        ordersId = orderManager.createPeriodicalOrder(products, days, weekPeriod, shopNumber, sup.getContract().getContractID());
+        ordersId = orderManager.createPeriodicalOrder(products, days, weekPeriod, shopNumber,
+                            sup.getContract().getContractID(), sup.isSelfDelivery());
         if(ordersId.isEmpty()){
             return Result.makeFailure("Orders wasnt created, week period can be 1 or 2");
         }

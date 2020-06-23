@@ -43,7 +43,8 @@ public class OrderManager {
         regularOrder.setOrderId(regularOrderMapper.insert(regularOrder));
     }
 
-    public List<Integer> createPeriodicalOrder(List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber, int contractID){
+    public List<Integer> createPeriodicalOrder(List<ProductInOrder> products, List<Days> days, int weekPeriod, int shopNumber,
+                                               int contractID, boolean isSupplierSelfDeliver){
         List<Integer> orderIds = new LinkedList<>();
         Date deliveryDate = StructUtils.getTheNearestDate(days);
         int orderToMake = days.size();
@@ -60,6 +61,9 @@ public class OrderManager {
             PeriodicalOrder periodicalOrder = PeriodicalOrder.CreatePeriodicalOrder(-1, products, shopNumber);
             periodicalOrder.setDeliveryDay(deliveryDate);
             periodicalOrder.setContractId(contractID);
+            if(!isSupplierSelfDeliver){
+                periodicalOrder.setStatus(OrderStatus.WaitingForShipping);
+            }
             int orderId = periodicalOrderMapper.insert(periodicalOrder);
             if(orderId > -1){
                 orderIds.add(orderId);
@@ -163,6 +167,15 @@ public class OrderManager {
 
     public List<Integer> getAllOpenPeriodicalOrder() {
         return periodicalOrderMapper.getAllOpenOrders();
+    }
+
+    public List<Integer> getAllWaitingShippingRegularOrders() {
+        return regularOrderMapper.getAllWaitingShippingRegularOrders();
+    }
+
+
+    public List<Integer> getAllWaitingShippingPeriodicalOrders() {
+        return periodicalOrderMapper.getAllWaitingShippingPeriodicalOrders();
     }
 
     /**

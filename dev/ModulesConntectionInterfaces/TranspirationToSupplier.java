@@ -32,23 +32,17 @@ public class TranspirationToSupplier {
      */
     public List<RegularOrderDTOforTransport> getRegularOpenOrders(){
         List<RegularOrderDTOforTransport> orders = new LinkedList<>();
-        List<Integer> orderIds = orderAndProductCtrl.getAllOpenOrders();
-
-        for(Integer periodicalOrderId: orderAndProductCtrl.getAllOpenPeriodicalOrder()){
-            orderIds.remove(periodicalOrderId);
-        }
+        List<Integer> orderIds = orderAndProductCtrl.getAllWaitingShippingRegularOrders();
 
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
-            if(!orderShipDetails.supplier.selfDelivery) {
-                orders.add(new RegularOrderDTOforTransport(
-                        orderShipDetails.supplier.supplierID,
-                        orderShipDetails.orderId,
-                        orderShipDetails.shopNumber,
-                        orderShipDetails.supplier.supplyDays,
-                        orderShipDetails.supplier.area
-                ));
-            }
+            orders.add(new RegularOrderDTOforTransport(
+                    orderShipDetails.supplier.supplierID,
+                    orderShipDetails.orderId,
+                    orderShipDetails.shopNumber,
+                    orderShipDetails.supplier.supplyDays,
+                    orderShipDetails.supplier.area
+            ));
         }
 
         return orders;
@@ -57,18 +51,16 @@ public class TranspirationToSupplier {
     public List<PeriodicalOrderDTOforTransport> getPeriodicalOpenOrders(){
 
         List<PeriodicalOrderDTOforTransport> orders = new LinkedList<>();
-        List<Integer> orderIds = orderAndProductCtrl.getAllOpenPeriodicalOrder();
+        List<Integer> orderIds = orderAndProductCtrl.getAllWaitingShippingPeriodicalOrders();
         for(Integer orderId: orderIds){
             OrderShipDetails orderShipDetails = orderAndProductCtrl.orderDetails(orderId);
-            if(!orderShipDetails.supplier.selfDelivery) {
-                orders.add(new PeriodicalOrderDTOforTransport(
-                        orderShipDetails.supplier.supplierID,
-                        orderShipDetails.orderId,
-                        orderShipDetails.shopNumber,
-                        orderShipDetails.supplier.supplyDays,
-                        orderShipDetails.supplier.area
-                ));
-            }
+            orders.add(new PeriodicalOrderDTOforTransport(
+                    orderShipDetails.supplier.supplierID,
+                    orderShipDetails.orderId,
+                    orderShipDetails.shopNumber,
+                    orderShipDetails.supplier.supplyDays,
+                    orderShipDetails.supplier.area
+            ));
         }
 
         return orders;
@@ -89,13 +81,14 @@ public class TranspirationToSupplier {
      * @param arrivalDate date that the order will arrive to the store
      */
     public void setOrderStatusAsShipped(int orderId, Date arrivalDate){
-        if(orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.WaitingForShipping)){
+        if(orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.Open)){
             orderAndProductCtrl.updateOrderArrivalTime(orderId, arrivalDate);
         }
     }
 
+    //TODO may change the name
     public void setOrderStatusBackToOpen(int orderId){
-        orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.Open);
+        orderAndProductCtrl.updateOrderStatus(orderId, OrderStatus.WaitingForShipping);
     }
 
 }
