@@ -41,7 +41,7 @@ public class WelcomeMenu {
         System.out.println("--------------\nWelcome to your Super-Lee!\n--------------\n");
         System.out.println("1. Choose store");
         System.out.println("2. Add new store");
-        System.out.println("3. Nevermind...");
+        System.out.println("3. Interurban");
         System.out.println("0. Exit");
         while (!sc.hasNextInt()) {
             System.out.println("Invalid input, please try again");
