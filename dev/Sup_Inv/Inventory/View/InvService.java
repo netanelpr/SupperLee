@@ -133,12 +133,13 @@ public class InvService implements myObservable {
         return terminate;
     }
 
-    private void enterStoreInv() {
+    private boolean enterStoreInv() {
         int currStore = CurrStore.getInstance().getStore_id();
         if(CurrStore.getInstance().getStore_id() < 0){
             terminateSys = true;
             terminateInv = true;
             System.out.println("no shops, think about open one....");
+            return false;
         }
         else if(superLeeInvs.containsKey(String.valueOf(currStore))) //register
             this.currInv = superLeeInvs.get(String.valueOf(currStore));
@@ -146,6 +147,7 @@ public class InvService implements myObservable {
             this.currInv = newShop(currStore);
             inventoriesMapper.insert(new InventoryDTO(currInv.getShopNum(), currInv.getShopName()));
         }
+        return true;
     }
 
 
@@ -483,52 +485,54 @@ public class InvService implements myObservable {
     }
 
     public void invMngMenu(String ansStr) {
-        enterStoreInv();
-
-        if (ansStr.equals("GR")) {
-            notifyObserver("--- All items report ---");
-            currInv.getItemReport();
+        if(!enterStoreInv())
+            System.out.println("You need to register to the store first.");
+        else
+        {
+            if (ansStr.equals("GR")) {
+                notifyObserver("--- All items report ---");
+                currInv.getItemReport();
+            }
+            else if (ansStr.equals("GI")) {
+                notifyObserver("enter id:");
+                ansStr = myScanner.nextLine();
+                notifyObserver(String.format("-- Item Report By Id : #%s--", ansStr));
+                currInv.getItemReportById(ansStr);
+            }
+            else if (ansStr.equals("GC")) {
+                notifyObserver("enter category:");
+                ansStr = myScanner.nextLine();
+                notifyObserver(String.format("--- Items Report By Category %s ---", ansStr));
+                currInv.getItemReportByCategory(ansStr);
+            }
+            else if (ansStr.equals("GS")) {
+                notifyObserver("--- Shortage Item Report ---");
+                currInv.getItemMissing();
+            }
+            else if (ansStr.equals("RGR")) {
+                notifyObserver("--- Cost & Price Item Report ---");
+                currInv.getGeneralRecordsReport();
+            }
+            else if (ansStr.equals("RGI")) {
+                notifyObserver("enter id:");
+                ansStr = myScanner.nextLine();
+                notifyObserver(String.format("--- Cost & Price Item Report By Id : %s --", ansStr));
+                currInv.getRecordsReportById(ansStr);
+            }
+            else if (ansStr.equals("DGR")) {
+                notifyObserver("--- General Defective Report ---");
+                currInv.getDefectivesReport();
+            }
+            else if (ansStr.equals("DGI")) {
+                notifyObserver("enter id:");
+                String id = myScanner.nextLine();
+                notifyObserver("-- Defective/Expired Report By Id : "+ id + "--");
+                currInv.getDefectivesReportById(id);
+            }
+            else {
+                notifyObserver("wrong order");
+            }
         }
-        else if (ansStr.equals("GI")) {
-            notifyObserver("enter id:");
-            ansStr = myScanner.nextLine();
-            notifyObserver(String.format("-- Item Report By Id : #%s--", ansStr));
-            currInv.getItemReportById(ansStr);
-        }
-        else if (ansStr.equals("GC")) {
-            notifyObserver("enter category:");
-            ansStr = myScanner.nextLine();
-            notifyObserver(String.format("--- Items Report By Category %s ---", ansStr));
-            currInv.getItemReportByCategory(ansStr);
-        }
-        else if (ansStr.equals("GS")) {
-            notifyObserver("--- Shortage Item Report ---");
-            currInv.getItemMissing();
-        }
-        else if (ansStr.equals("RGR")) {
-            notifyObserver("--- Cost & Price Item Report ---");
-            currInv.getGeneralRecordsReport();
-        }
-        else if (ansStr.equals("RGI")) {
-            notifyObserver("enter id:");
-            ansStr = myScanner.nextLine();
-            notifyObserver(String.format("--- Cost & Price Item Report By Id : %s --", ansStr));
-            currInv.getRecordsReportById(ansStr);
-        }
-        else if (ansStr.equals("DGR")) {
-            notifyObserver("--- General Defective Report ---");
-            currInv.getDefectivesReport();
-        }
-        else if (ansStr.equals("DGI")) {
-            notifyObserver("enter id:");
-            String id = myScanner.nextLine();
-            notifyObserver("-- Defective/Expired Report By Id : "+ id + "--");
-            currInv.getDefectivesReportById(id);
-        }
-        else {
-            notifyObserver("wrong order");
-        }
-
     }
     //endregion
 }

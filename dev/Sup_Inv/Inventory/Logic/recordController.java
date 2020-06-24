@@ -77,16 +77,20 @@ public class recordController implements myObservable {
         }
     }
 
-
-
-    public String[] getLastRecInfo(String id){
+    public String[] getLastRecInfo(String id) {
         String[] lastRecInfo = new String[2];
+        Record lastRec;
         List<Record> recList = records.get(id);
-        Record lastRec = recList.get(recList.size()-1);
+        if (recList != null && !recList.isEmpty()){
+            lastRec = recList.get(recList.size() - 1);
         lastRecInfo[0] = lastRec.getItemId();
-        lastRecInfo[1]= String.valueOf(lastRec.getPrice());
+        lastRecInfo[1] = String.valueOf(lastRec.getPrice());
         return lastRecInfo;
     }
+        System.out.println("wrong id");
+        return null;
+    }
+
     public void setNewPrice(String id, String newPrice, String nameLast, String priceLast) {
 
         double dNewPrice = Double.parseDouble(newPrice);

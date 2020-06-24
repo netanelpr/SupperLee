@@ -692,7 +692,7 @@ public class ShiftController {
     public void printAllShiftsForThisStore() {
             Mapper.getInstance().getAllShifts(getCurrentStoreSN());
             for(Shift shiftToPrint : Service.getInstance().getShiftHistory(getCurrentStoreSN()).values()){
-                System.out.println(shiftToPrint);
+                shiftToPrint.printShift();
             }
     }
 }

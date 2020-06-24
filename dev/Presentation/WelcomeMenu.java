@@ -8,6 +8,7 @@ import Trans_HR.Data_Layer.Mapper;
 import Trans_HR.Interface_Layer.Workers.SystemInterfaceWorkers;
 import Trans_HR.Presentation_Layer.Transportations.TransportationMenu;
 import Trans_HR.Presentation_Layer.Workers.HR;
+import com.sun.javafx.binding.StringFormatter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,10 +39,13 @@ public class WelcomeMenu {
         } catch (Exception e) {
 
         }
-        System.out.println("--------------\nWelcome to your Super-Lee!\n--------------\n");
-        System.out.println("1. Choose store");
+        System.out.println("--------------\nWelcome to SUPER LEE !");
+        printStoreId();
+        System.out.println("Stores:");
+        System.out.println("1. Choose your store");
         System.out.println("2. Add new store");
-        System.out.println("3. Interurban");
+        System.out.println("\t-------");
+        System.out.println("3. Choose Job Title");
         System.out.println("0. Exit");
         while (!sc.hasNextInt()) {
             System.out.println("Invalid input, please try again");
@@ -93,8 +97,10 @@ public class WelcomeMenu {
                 System.out.println("Input error\n");
                 chooseStore_start(sc);
             }
-        } else if (userChoose == 3) {
-            transportNoNeedShopNum();
+        }
+        else if (userChoose == 3) {
+            //transportNoNeedShopNum();
+            chooseJob(sc);
         }
         else if (userChoose == 0) {
             return;
@@ -104,30 +110,48 @@ public class WelcomeMenu {
         }
     }
 
+    private static void printStoreId() {
+        if(CurrStore.getInstance().getStore_id() != -1) {
+            int store_id = CurrStore.getInstance().getStore_id();
+            System.out.println("----------\nCurrent Store: " + store_id + "\n----------");
+        }
+        else
+            System.out.println("----------\nCurrent Store: no registered shop\n----------");
+    }
+
     public static void chooseJob(Scanner sc) throws Buisness_Exception {
 
         while (true) {
-            System.out.println("--------------\nPlease choose your job title:");
-            System.out.println("[h] HR\n[s] Storekeeper\n[m] Manager\n[b] back");
+            printStoreId();
+            System.out.println("Please choose your job title:");
+            System.out.println("[h] HR\n[s] Storekeeper\n[m] Manager\n[l] Logistic mg\n[b] back");
             System.out.print("Option: ");
             while (!sc.hasNext()) {
                 System.out.println("Invalid input, please try again");
                 sc.next();
             }
-            String ansStr = sc.next();
-            if(ansStr.equals("h") || ansStr.equals("H")) {
+            String ansStr = sc.next().toUpperCase();
+            if(ansStr.equals("H")) {
+                if(CurrStore.getInstance().getStore_id() == -1) {
+                    System.out.println("You need a registered shop to use HR manager actions.");
+                    chooseJob(sc);
+                }
                 HR.workingLoop(sc);
             }
-            else if(ansStr.equals("s") || ansStr.equals("S")){
+            else if(ansStr.equals("S")){
                 start_invSup();
             }
-            else if(ansStr.equals("m") || ansStr.equals("M")) {
+            else if(ansStr.equals("M")) {
+                if(CurrStore.getInstance().getStore_id() == -1) {
+                    System.out.println("You need a registered shop to use manager actions.");
+                    chooseJob(sc);
+                }
                 managerMenu();
             }
-//            else if(ansStr.equals("l") || ansStr.equals("L")) {
-//                TransportationMenu.Menu();
-//            }
-            else if(ansStr.equals("b") || ansStr.equals("B")) {
+            else if(ansStr.equals("L")) {
+                TransportationMenu.Menu();
+            }
+            else if(ansStr.equals("B")) {
                 chooseStore_start(sc);
             }
             else {
@@ -194,15 +218,15 @@ public class WelcomeMenu {
         while (true) {
             System.out.println("--------------MANAGER MENU-----------\n");
             System.out.println("\t[s] Shift report\n" +
-                            "\t[w] Workers report\n" +
+                            "\t[w] Workers report\n---\n" +
                             "\t[gr] Get All Items Report \n" +
                             "\t[gi] Get Item Report by id \n" +
                             "\t[gc] Get Item Report By Category \n" +
-                            "\t[gs] Get Shortage Item Report\n" +
+                            "\t[gs] Get Shortage Item Report\n---\n" +
                             "\t[ss] Show transportation\n" +
-                            "\t[st] Show trucks\n" +
+                            "\t[st] Show trucks\n---\n" +
                             "\t[gas] Get all suppliers\n" +
-                            "\t[gac] Get all supplier's contacts\n" +
+                            "\t[gasc] Get all supplier's contacts\n" +
                             "\t[gpo] Get payment options \n" +
                             "\t[dr]	Discount report\n" +
                             "\t[gasb] Get all supplier barcode\n" +
@@ -238,7 +262,7 @@ public class WelcomeMenu {
                     TransportationMenu.Show_trucks();
                 }
             }
-            else if(ansStr.equals("GAS") || ansStr.equals("GAC") ||ansStr.equals("GPO") ||ansStr.equals("DR") ||
+            else if(ansStr.equals("GAS") || ansStr.equals("GASC") ||ansStr.equals("GPO") ||ansStr.equals("DR") ||
                     ansStr.equals("GASB") ||ansStr.equals("GASPD") ||ansStr.equals("GPH") ||ansStr.equals("GAODI") ||
                     ansStr.equals("GAPOO") ||ansStr.equals("GORD")) {
                 supplierMenu.apply(ansStr.toLowerCase());
